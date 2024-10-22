@@ -1,7 +1,7 @@
 package com.ssafy.c107.main.common.jwt;
 
-import com.ssafy.c107.main.domain.members.entity.Members;
-import com.ssafy.c107.main.domain.members.repository.MembersRepository;
+import com.ssafy.c107.main.domain.members.entity.Member;
+import com.ssafy.c107.main.domain.members.repository.MemberRepository;
 import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -16,11 +16,11 @@ import org.springframework.web.filter.GenericFilterBean;
 
 public class CustomLogoutFilter extends GenericFilterBean {
     private final JWTUtil jwtUtil;
-    private final MembersRepository membersRepository;
+    private final MemberRepository memberRepository;
 
-    public CustomLogoutFilter(JWTUtil jwtUtil, MembersRepository membersRepository) {
+    public CustomLogoutFilter(JWTUtil jwtUtil, MemberRepository memberRepository) {
         this.jwtUtil = jwtUtil;
-        this.membersRepository = membersRepository;
+        this.memberRepository = memberRepository;
     }
 
     @Override
@@ -85,7 +85,7 @@ public class CustomLogoutFilter extends GenericFilterBean {
         }
 
         //DB에 저장되어 있는지 확인
-        Boolean isExist = membersRepository.existsByRefreshToken(refresh);
+        Boolean isExist = memberRepository.existsByRefreshToken(refresh);
         if (!isExist) {
             //response status code
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
@@ -94,9 +94,9 @@ public class CustomLogoutFilter extends GenericFilterBean {
 
         //로그아웃 진행
         //Refresh 토큰 DB에서 제거
-        Members member = membersRepository.findByRefreshToken(refresh);
+        Member member = memberRepository.findByRefreshToken(refresh);
         member.deleteRefreshToken();
-        membersRepository.save(member);
+        memberRepository.save(member);
 
         //Refresh 토큰 Cookie 값 0
         Cookie cookie = new Cookie("refresh", null);

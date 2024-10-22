@@ -4,7 +4,7 @@ import com.ssafy.c107.main.common.jwt.CustomLogoutFilter;
 import com.ssafy.c107.main.common.jwt.JWTFilter;
 import com.ssafy.c107.main.common.jwt.JWTUtil;
 import com.ssafy.c107.main.common.jwt.LoginFilter;
-import com.ssafy.c107.main.domain.members.repository.MembersRepository;
+import com.ssafy.c107.main.domain.members.repository.MemberRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.Arrays;
 import java.util.Collections;
@@ -28,13 +28,13 @@ public class SecurityConfig {
     //AuthenticationManager가 인자로 받을 AuthenticationConfiguraion 객체 생성자 주입
     private final AuthenticationConfiguration authenticationConfiguration;
     private final JWTUtil jwtUtil;
-    private final MembersRepository membersRepository;
+    private final MemberRepository memberRepository;
 
     public SecurityConfig(AuthenticationConfiguration authenticationConfiguration,
-        JWTUtil jwtUtil, MembersRepository membersRepository) {
+        JWTUtil jwtUtil, MemberRepository memberRepository) {
         this.jwtUtil = jwtUtil;
         this.authenticationConfiguration = authenticationConfiguration;
-        this.membersRepository = membersRepository;
+        this.memberRepository = memberRepository;
     }
 
     @Bean
@@ -98,11 +98,11 @@ public class SecurityConfig {
         http
             .addFilterAt(
                 new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil,
-                    membersRepository),
+                    memberRepository),
                 UsernamePasswordAuthenticationFilter.class);
 
         http
-            .addFilterBefore(new CustomLogoutFilter(jwtUtil, membersRepository),
+            .addFilterBefore(new CustomLogoutFilter(jwtUtil, memberRepository),
                 LogoutFilter.class);
 
         //세션 설정
