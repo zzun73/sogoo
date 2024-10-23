@@ -3,7 +3,7 @@ package com.ssafy.c107.main.domain.members.dto.request;
 import lombok.Data;
 
 @Data
-public class SignUpDto {
+public class SignUpRequest {
 
     private String name;
     private String email;
