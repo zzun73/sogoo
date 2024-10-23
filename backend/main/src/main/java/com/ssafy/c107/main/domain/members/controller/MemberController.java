@@ -1,8 +1,8 @@
 package com.ssafy.c107.main.domain.members.controller;
 
 import com.ssafy.c107.main.common.jwt.JWTUtil;
-import com.ssafy.c107.main.domain.members.dto.request.EmailCheckDto;
-import com.ssafy.c107.main.domain.members.dto.request.SignUpDto;
+import com.ssafy.c107.main.domain.members.dto.request.EmailCheckRequest;
+import com.ssafy.c107.main.domain.members.dto.request.SignUpRequest;
 import com.ssafy.c107.main.domain.members.entity.Member;
 import com.ssafy.c107.main.domain.members.entity.WithDrawalStatus;
 import com.ssafy.c107.main.domain.members.exception.MemberNotFoundException;
@@ -32,7 +32,7 @@ public class MemberController {
     private final JWTUtil jwtUtil;
 
     @PostMapping("/email-check")
-    public ResponseEntity<?> emailCheck(@RequestBody EmailCheckDto emailCheckDto) {
+    public ResponseEntity<?> emailCheck(@RequestBody EmailCheckRequest emailCheckDto) {
         boolean isExist = memberService.emailCheck(emailCheckDto.getEmail());
         if (isExist) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("이메일이 이미 존재합니다.");
@@ -41,7 +41,7 @@ public class MemberController {
     }
 
     @PostMapping("/sign-up")
-    public ResponseEntity<?> signUp(@RequestBody SignUpDto signUpDto) {
+    public ResponseEntity<?> signUp(@RequestBody SignUpRequest signUpDto) {
         memberService.signUp(Member
             .builder()
             .name(signUpDto.getName())

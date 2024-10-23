@@ -8,8 +8,8 @@ public enum MemberException {
     MEMBER_NOT_FOUND("해당 멤버를 찾지 못했습니다.", HttpStatus.NOT_FOUND.value()),
     ;
 
-    private String message;
-    private int code;
+    private final String message;
+    private final int code;
 
     MemberException(String message, int code) {
         this.message = message;
