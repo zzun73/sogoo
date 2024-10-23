@@ -25,6 +25,7 @@ import org.springframework.web.cors.CorsConfigurationSource;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
+
     //AuthenticationManager가 인자로 받을 AuthenticationConfiguraion 객체 생성자 주입
     private final AuthenticationConfiguration authenticationConfiguration;
     private final JWTUtil jwtUtil;
@@ -60,7 +61,7 @@ public class SecurityConfig {
                         CorsConfiguration configuration = new CorsConfiguration();
                         //프론트엔드 주소 넣을 것
                         configuration.setAllowedOrigins(
-                            Arrays.asList("http://localhost:5173", "https://j11c203.p.ssafy.io"));
+                            Arrays.asList("http://localhost:5173"));
                         configuration.setAllowedMethods(Collections.singletonList("*"));
                         configuration.setAllowCredentials(true);
                         configuration.setAllowedHeaders(Collections.singletonList("*"));
@@ -87,7 +88,8 @@ public class SecurityConfig {
         //경로별 인가 작업
         http
             .authorizeHttpRequests((auth) -> auth
-                .requestMatchers("/health-check")               //인가부분
+                .requestMatchers("/health-check", "/member/sign-up", "/member/login",
+                    "/member/logout", "/member/email-check")               //인가부분
                 .permitAll()
                 .anyRequest().authenticated());
 

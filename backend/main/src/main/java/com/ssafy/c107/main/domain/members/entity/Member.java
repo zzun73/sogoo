@@ -51,10 +51,9 @@ public class Member {
     private String role;
 
     @Builder
-    public Member(Long id, String name, String email, String password, String refreshToken,
+    public Member(String name, String email, String password, String refreshToken,
         String phoneNumber, String birth, String address, WithDrawalStatus withDrawalStatus,
         String role) {
-        this.id = id;
         this.name = name;
         this.email = email;
         this.password = password;
@@ -76,5 +75,9 @@ public class Member {
 
     public void deleteRefreshToken() {
         this.refreshToken = null;
+    }
+
+    public void updatePassword(String password) {
+        this.password = password;
     }
 }
