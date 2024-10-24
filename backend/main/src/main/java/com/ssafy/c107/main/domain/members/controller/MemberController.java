@@ -1,8 +1,10 @@
 package com.ssafy.c107.main.domain.members.controller;
 
 import com.ssafy.c107.main.common.jwt.JWTUtil;
+import com.ssafy.c107.main.domain.members.dto.CustomUserDetails;
 import com.ssafy.c107.main.domain.members.dto.request.EmailCheckRequest;
 import com.ssafy.c107.main.domain.members.dto.request.SignUpRequest;
+import com.ssafy.c107.main.domain.members.dto.request.UpdateAddressRequest;
 import com.ssafy.c107.main.domain.members.entity.Member;
 import com.ssafy.c107.main.domain.members.entity.WithDrawalStatus;
 import com.ssafy.c107.main.domain.members.exception.MemberNotFoundException;
@@ -16,7 +18,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -54,6 +58,14 @@ public class MemberController {
             .address(signUpDto.getAddress())
             .build());
         return ResponseEntity.ok("회원가입 완료!!");
+    }
+
+    @PutMapping("/update-address")
+    public ResponseEntity<?> updateAddress(@RequestBody UpdateAddressRequest updateAddressDto, @AuthenticationPrincipal
+        CustomUserDetails customUserDetails) {
+        Long userId = customUserDetails.getUserId();
+        memberService.changeAddress(userId, updateAddressDto.getAddress());
+        return ResponseEntity.ok("주소 변경을 완료했습니다.");
     }
 
     @PostMapping("/reissue")
