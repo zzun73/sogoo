@@ -2,9 +2,12 @@ package com.ssafy.c107.main.domain.members.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -12,8 +15,9 @@ import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
+@Table(name = "Members")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Members {
+public class Member {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -40,12 +44,16 @@ public class Members {
     @Column(nullable = false)
     private String address;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private WithDrawalStatus withDrawalStatus;
+
     private String role;
 
     @Builder
-    public Members(Long id, String name, String email, String password, String refreshToken,
-        String phoneNumber, String birth, String address, String role) {
-        this.id = id;
+    public Member(String name, String email, String password, String refreshToken,
+        String phoneNumber, String birth, String address, WithDrawalStatus withDrawalStatus,
+        String role) {
         this.name = name;
         this.email = email;
         this.password = password;
@@ -53,6 +61,7 @@ public class Members {
         this.phoneNumber = phoneNumber;
         this.birth = birth;
         this.address = address;
+        this.withDrawalStatus = withDrawalStatus;
         this.role = role;
     }
 
@@ -66,5 +75,9 @@ public class Members {
 
     public void deleteRefreshToken() {
         this.refreshToken = null;
+    }
+
+    public void updatePassword(String password) {
+        this.password = password;
     }
 }

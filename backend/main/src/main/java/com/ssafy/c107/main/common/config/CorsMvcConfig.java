@@ -10,7 +10,7 @@ public class CorsMvcConfig implements WebMvcConfigurer {
 
         //프론트 웹주소 넣어줄것
         corsRegistry.addMapping("/**")
-            .allowedOrigins("https://j11c203.p.ssafy.io", "http://localhost:5173")
+            .allowedOrigins("http://localhost:5173")
             .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
             .allowedHeaders("*");
     }

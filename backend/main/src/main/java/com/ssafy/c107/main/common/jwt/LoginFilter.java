@@ -1,7 +1,9 @@
 package com.ssafy.c107.main.common.jwt;
 
-import com.ssafy.c107.main.domain.members.entity.Members;
-import com.ssafy.c107.main.domain.members.repository.MembersRepository;
+import com.ssafy.c107.main.domain.members.entity.Member;
+import com.ssafy.c107.main.domain.members.entity.WithDrawalStatus;
+import com.ssafy.c107.main.domain.members.exception.MemberNotFoundException;
+import com.ssafy.c107.main.domain.members.repository.MemberRepository;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -20,14 +22,14 @@ import org.springframework.transaction.annotation.Transactional;
 public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
     private final AuthenticationManager authenticationManager;
-    private MembersRepository membersRepository;
+    private MemberRepository memberRepository;
     private final JWTUtil jwtUtil;
 
     public LoginFilter(AuthenticationManager authenticationManager, JWTUtil jwtUtil,
-        MembersRepository membersRepository) {
+        MemberRepository memberRepository) {
         this.authenticationManager = authenticationManager;
         this.jwtUtil = jwtUtil;
-        this.membersRepository = membersRepository;
+        this.memberRepository = memberRepository;
         setFilterProcessesUrl("/member/login");
     }
 
@@ -59,7 +61,9 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         GrantedAuthority auth = iterator.next();
         String role = auth.getAuthority();
 
-        Members member = membersRepository.findByEmail(username);
+        Member member = memberRepository.findByEmailAndWithDrawalStatus(username,
+            WithDrawalStatus.ACTIVE).orElseThrow(
+            MemberNotFoundException::new);
 
         //토큰 생성
         String access = jwtUtil.createJwt("access", username, role, 1800000L,
@@ -68,7 +72,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
             member.getId());
 
         member.updateRefreshToken(refresh);
-        membersRepository.save(member);
+        memberRepository.save(member);
 
         //응답 생성
         response.setHeader("access", access);

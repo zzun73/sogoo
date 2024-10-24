@@ -1,6 +1,6 @@
 package com.ssafy.c107.main.domain.members.dto;
 
-import com.ssafy.c107.main.domain.members.entity.Members;
+import com.ssafy.c107.main.domain.members.entity.Member;
 import java.util.ArrayList;
 import java.util.Collection;
 import org.springframework.security.core.GrantedAuthority;
@@ -8,9 +8,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 public class CustomUserDetails implements UserDetails {
 
-    private final Members userEntity;
+    private final Member userEntity;
 
-    public CustomUserDetails(Members userEntity) {
+    public CustomUserDetails(Member userEntity) {
         this.userEntity = userEntity;
     }
 
