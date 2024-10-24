@@ -1,5 +1,6 @@
 package com.ssafy.c107.main.domain.members.entity;
 
+import com.ssafy.c107.main.common.entity.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -17,7 +18,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @Table(name = "Members")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Member {
+public class Member extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
