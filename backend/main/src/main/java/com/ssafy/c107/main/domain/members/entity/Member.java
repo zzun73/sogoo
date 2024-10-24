@@ -80,4 +80,8 @@ public class Member {
     public void updatePassword(String password) {
         this.password = password;
     }
+
+    public void updateAddress(String address) {
+        this.address = address;
+    }
 }

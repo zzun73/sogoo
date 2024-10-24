@@ -7,4 +7,6 @@ public interface MemberService {
     boolean emailCheck(String email);
 
     void signUp(Member member);
+
+    void changeAddress(Long memberId, String address);
 }
