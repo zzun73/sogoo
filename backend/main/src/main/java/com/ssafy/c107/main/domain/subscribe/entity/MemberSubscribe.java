@@ -1,9 +1,7 @@
-package com.ssafy.c107.main.domain.membersubscribe.entity;
+package com.ssafy.c107.main.domain.subscribe.entity;
 
 import com.ssafy.c107.main.common.entity.BaseEntity;
 import com.ssafy.c107.main.domain.members.entity.Member;
-import com.ssafy.c107.main.domain.subscribe.entity.Subscribe;
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
