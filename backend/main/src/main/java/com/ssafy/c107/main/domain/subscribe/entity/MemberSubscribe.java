@@ -32,6 +32,9 @@ public class MemberSubscribe extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private SubscribeStatus status;
 
+    @Enumerated(EnumType.STRING)
+    private PaymentStatus paymentStatus;
+
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "member_id")
     private Member member;
