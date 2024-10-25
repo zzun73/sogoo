@@ -7,6 +7,7 @@ import com.ssafy.c107.main.domain.members.dto.request.SignUpRequest;
 import com.ssafy.c107.main.domain.members.dto.request.UpdateAddressRequest;
 import com.ssafy.c107.main.domain.members.entity.Member;
 import com.ssafy.c107.main.domain.members.entity.WithDrawalStatus;
+import com.ssafy.c107.main.domain.members.exception.MemberExistException;
 import com.ssafy.c107.main.domain.members.exception.MemberNotFoundException;
 import com.ssafy.c107.main.domain.members.repository.MemberRepository;
 import com.ssafy.c107.main.domain.members.service.MemberService;
@@ -39,7 +40,7 @@ public class MemberController {
     public ResponseEntity<?> emailCheck(@RequestBody EmailCheckRequest emailCheckDto) {
         boolean isExist = memberService.emailCheck(emailCheckDto.getEmail());
         if (isExist) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body("이메일이 이미 존재합니다.");
+            throw new MemberExistException();
         }
         return ResponseEntity.ok("사용 가능한 이메일입니다.");
     }
@@ -57,7 +58,7 @@ public class MemberController {
             .withDrawalStatus(WithDrawalStatus.ACTIVE)
             .address(signUpDto.getAddress())
             .build());
-        return ResponseEntity.ok("회원가입 완료!!");
+        return ResponseEntity.ok("회원가입 완료핑");
     }
 
     @PutMapping("/update-address")
