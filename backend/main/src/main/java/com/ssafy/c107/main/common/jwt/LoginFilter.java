@@ -1,5 +1,6 @@
 package com.ssafy.c107.main.common.jwt;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ssafy.c107.main.domain.members.entity.Member;
 import com.ssafy.c107.main.domain.members.entity.WithDrawalStatus;
 import com.ssafy.c107.main.domain.members.exception.MemberNotFoundException;
@@ -8,8 +9,10 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.Map;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -24,12 +27,14 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
     private final AuthenticationManager authenticationManager;
     private MemberRepository memberRepository;
     private final JWTUtil jwtUtil;
+    private final ObjectMapper objectMapper;
 
     public LoginFilter(AuthenticationManager authenticationManager, JWTUtil jwtUtil,
         MemberRepository memberRepository) {
         this.authenticationManager = authenticationManager;
         this.jwtUtil = jwtUtil;
         this.memberRepository = memberRepository;
+        this.objectMapper = new ObjectMapper();
         setFilterProcessesUrl("/member/login");
     }
 
@@ -37,9 +42,17 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
     public Authentication attemptAuthentication(HttpServletRequest request,
         HttpServletResponse response) throws AuthenticationException {
 
-        //클라이언트 요청에서 username, password 추출
-        String username = obtainUsername(request);
-        String password = obtainPassword(request);
+        String username;
+        String password;
+
+        try {
+            // JSON 요청 본문을 Map으로 파싱
+            Map<String, String> jsonRequest = objectMapper.readValue(request.getInputStream(), Map.class);
+            username = jsonRequest.get("username");
+            password = jsonRequest.get("password");
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to parse authentication request body", e);
+        }
 
         //스프링 시큐리티에서 username과 password를 검증하기 위해서는 token에 담아야함
         UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
@@ -78,14 +91,15 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         response.setHeader("Authorization", "Bearer " + access);
         response.addCookie(createCookie("refresh", refresh));
         response.setStatus(HttpStatus.OK.value());
+        response.setContentType("application/json");
     }
 
     //로그인 실패시 실행하는 메소드
     @Override
     protected void unsuccessfulAuthentication(HttpServletRequest request,
         HttpServletResponse response, AuthenticationException failed) {
-
         response.setStatus(401);
+        response.setContentType("application/json");
     }
 
     private Cookie createCookie(String key, String value) {
@@ -93,7 +107,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         cookie.setMaxAge(24 * 60 * 60);
         cookie.setSecure(true);
         cookie.setPath("/");
-        cookie.setAttribute("SameSite", "None"); // 이 속성 추가
+        cookie.setAttribute("SameSite", "None");
         cookie.setHttpOnly(true);
         return cookie;
     }
