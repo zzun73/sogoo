@@ -1,6 +1,7 @@
 import "./index.css";
 import Header from "./components/common/Header";
 import PageRoutes from "./routes/PageRoutes";
+import Footer from "./components/common/Footer";
 
 function App() {
   return (
@@ -9,6 +10,7 @@ function App() {
       <main className="flex-grow">
         <PageRoutes />
       </main>
+      <Footer />
     </div>
   );
 }
