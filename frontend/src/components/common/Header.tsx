@@ -5,7 +5,7 @@ import { MdOutlineShoppingCart } from "react-icons/md";
 
 const Header = () => {
   return (
-    <header className="flex flex-col items-center shadow-md">
+    <header className="reletive flex flex-col items-center shadow-md z-10">
       <div className="mt-10 mb-5">
         <img src={LogoImg} alt="소상한 구독" className="w-[120px] drop-shadow-lg" />
       </div>
