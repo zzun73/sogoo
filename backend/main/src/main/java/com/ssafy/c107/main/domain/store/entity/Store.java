@@ -31,6 +31,9 @@ public class Store extends BaseEntity {
     @Column(nullable = false)
     private String address;
 
+    @Column(nullable = false)
+    private String description;
+
     private String img;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)

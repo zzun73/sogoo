@@ -1,7 +1,6 @@
-package com.ssafy.c107.main.domain.foodtrade.entity;
+package com.ssafy.c107.main.domain.food.entity;
 
 import com.ssafy.c107.main.common.entity.BaseEntity;
-import com.ssafy.c107.main.domain.food.entity.Food;
 import com.ssafy.c107.main.domain.members.entity.Member;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
