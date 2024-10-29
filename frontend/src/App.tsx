@@ -4,10 +4,12 @@ import PageRoutes from "./routes/PageRoutes";
 
 function App() {
   return (
-    <>
+    <div className="min-h-screen flex flex-col">
       <Header />
-      <PageRoutes />
-    </>
+      <main className="flex-grow">
+        <PageRoutes />
+      </main>
+    </div>
   );
 }
 
