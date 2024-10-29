@@ -1,7 +1,13 @@
-import { Route, Routes, Navigate } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
+
+import SignPage from "../pages/Sign/SignPage";
 
 const PageRoutes = () => {
-  return <Routes></Routes>;
+  return (
+    <Routes>
+      <Route path="/sign" element={<SignPage />} />
+    </Routes>
+  );
 };
 
 export default PageRoutes;
