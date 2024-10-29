@@ -1,7 +1,10 @@
+import "./index.css"
+import Header from "./components/common/Header"
+
 function App() {
   return (
     <>
-      <div></div>
+      <Header />
     </>
   )
 }
