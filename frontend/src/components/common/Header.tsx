@@ -27,7 +27,7 @@ const Header = () => {
             <Link to="/cart">
               <MdOutlineShoppingCart className="w-5 h-5" />
             </Link>
-            <Link to="/auth">로그인/회원가입</Link>
+            <Link to="/sign">로그인/회원가입</Link>
           </div>
         </div>
       </nav>
