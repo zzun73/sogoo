@@ -42,13 +42,13 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
     public Authentication attemptAuthentication(HttpServletRequest request,
         HttpServletResponse response) throws AuthenticationException {
 
-        String username;
+        String email;
         String password;
 
         try {
             // JSON 요청 본문을 Map으로 파싱
             Map<String, String> jsonRequest = objectMapper.readValue(request.getInputStream(), Map.class);
-            username = jsonRequest.get("username");
+            email = jsonRequest.get("email");
             password = jsonRequest.get("password");
         } catch (IOException e) {
             throw new RuntimeException("Failed to parse authentication request body", e);
@@ -56,7 +56,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
         //스프링 시큐리티에서 username과 password를 검증하기 위해서는 token에 담아야함
         UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
-            username, password, null);
+            email, password, null);
 
         return authenticationManager.authenticate(authToken);
     }
@@ -67,21 +67,21 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
     protected void successfulAuthentication(HttpServletRequest request,
         HttpServletResponse response, FilterChain chain, Authentication authentication) {
         //유저 정보
-        String username = authentication.getName();
+        String email = authentication.getName();
 
         Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
         Iterator<? extends GrantedAuthority> iterator = authorities.iterator();
         GrantedAuthority auth = iterator.next();
         String role = auth.getAuthority();
 
-        Member member = memberRepository.findByEmailAndWithDrawalStatus(username,
+        Member member = memberRepository.findByEmailAndWithDrawalStatus(email,
             WithDrawalStatus.ACTIVE).orElseThrow(
             MemberNotFoundException::new);
 
         //토큰 생성
-        String access = jwtUtil.createJwt("access", username, role, 1800000L,
+        String access = jwtUtil.createJwt("access", email, role, 1800000L,
             member.getId());
-        String refresh = jwtUtil.createJwt("refresh", username, role, 86400000L,
+        String refresh = jwtUtil.createJwt("refresh", email, role, 86400000L,
             member.getId());
 
         member.updateRefreshToken(refresh);
