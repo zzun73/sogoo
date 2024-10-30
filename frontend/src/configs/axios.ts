@@ -2,7 +2,7 @@ import useRootStore from "../stores";
 import axios from "axios";
 
 const instance = axios.create({
-  baseURL: process.env.VITE_BASE_URL,
+  baseURL: import.meta.env.VITE_BASE_URL,
   timeout: 2500,
   withCredentials: true,
 });
