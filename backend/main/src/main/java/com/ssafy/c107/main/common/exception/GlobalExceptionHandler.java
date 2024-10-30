@@ -2,6 +2,7 @@ package com.ssafy.c107.main.common.exception;
 
 import com.ssafy.c107.main.domain.members.exception.MemberExistException;
 import com.ssafy.c107.main.domain.members.exception.MemberNotFoundException;
+import com.ssafy.c107.main.domain.members.exception.SellerNotFoundException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -16,6 +17,11 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(MemberExistException.class)
     public ResponseEntity<String> handleMemberExistException(MemberExistException e) {
+        return ResponseEntity.status(e.getStatus()).body(e.getMessage());
+    }
+
+    @ExceptionHandler(SellerNotFoundException.class)
+    public ResponseEntity<String> handleSellerNotFoundException(SellerNotFoundException e) {
         return ResponseEntity.status(e.getStatus()).body(e.getMessage());
     }
 }

@@ -3,12 +3,14 @@ package com.ssafy.c107.main.domain.members.controller;
 import com.ssafy.c107.main.common.jwt.JWTUtil;
 import com.ssafy.c107.main.domain.members.dto.CustomUserDetails;
 import com.ssafy.c107.main.domain.members.dto.request.EmailCheckRequest;
+import com.ssafy.c107.main.domain.members.dto.request.SellerCheckRequest;
 import com.ssafy.c107.main.domain.members.dto.request.SignUpRequest;
 import com.ssafy.c107.main.domain.members.dto.request.UpdateAddressRequest;
 import com.ssafy.c107.main.domain.members.entity.Member;
 import com.ssafy.c107.main.domain.members.entity.WithDrawalStatus;
 import com.ssafy.c107.main.domain.members.exception.MemberExistException;
 import com.ssafy.c107.main.domain.members.exception.MemberNotFoundException;
+import com.ssafy.c107.main.domain.members.exception.SellerNotFoundException;
 import com.ssafy.c107.main.domain.members.repository.MemberRepository;
 import com.ssafy.c107.main.domain.members.service.MemberService;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -59,6 +61,16 @@ public class MemberController {
             .address(signUpDto.getAddress())
             .build());
         return ResponseEntity.ok("회원가입 완료핑");
+    }
+
+    @PostMapping("/seller-check")
+    public ResponseEntity<?> checkSeller(@RequestBody SellerCheckRequest sellerCheckRequest) {
+        boolean isExist = memberService.sellerCheck(sellerCheckRequest.getSellerNumber());
+        if (isExist) {
+            return ResponseEntity.ok("사업자 인증 완료핑");
+        } else {
+            throw new SellerNotFoundException();
+        }
     }
 
     @PutMapping("/update-address")

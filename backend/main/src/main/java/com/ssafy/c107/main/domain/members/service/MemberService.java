@@ -9,4 +9,6 @@ public interface MemberService {
     void signUp(Member member);
 
     void changeAddress(Long memberId, String address);
+
+    boolean sellerCheck(String sellerNumber);
 }
