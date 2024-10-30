@@ -75,6 +75,12 @@ const LandingPage = () => {
           </div>
         </div>
       </section>
+
+      {/* 마지막 부분 */}
+      <section className="py-20 flex flex-col items-center text-lg">
+        <p>소상한 구독의 소식이 궁금하다면?</p>
+        <p>@sosanghan_9dog</p>
+      </section>
     </div>
   );
 };
