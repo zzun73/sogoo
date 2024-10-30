@@ -3,8 +3,13 @@ import { Link } from "react-router-dom";
 import LogoImg from "../../assets/logo.png";
 import { MdOutlinePerson } from "react-icons/md";
 import { MdOutlineShoppingCart } from "react-icons/md";
+import useRootStore from "../../stores";
 
 const Header = () => {
+  const store = useRootStore();
+  const isLogin = store.isLogin;
+  const isSeller = store.memberInfo?.role === "Seller";
+
   return (
     <>
       <header className="relative flex justify-center shadow-lg z-10">
@@ -23,13 +28,17 @@ const Header = () => {
           </div>
           {/* user 관련 */}
           <div className="flex items-center gap-8">
-            <Link to="/mypage">
-              <MdOutlinePerson className="w-5 h-5" />
-            </Link>
-            <Link to="/cart">
-              <MdOutlineShoppingCart className="w-5 h-5" />
-            </Link>
-            <Link to="/sign">로그인/회원가입</Link>
+            {isLogin && (
+              <Link to="/mypage">
+                <MdOutlinePerson className="w-5 h-5" />
+              </Link>
+            )}
+            {isLogin && isSeller && (
+              <Link to="/cart">
+                <MdOutlineShoppingCart className="w-5 h-5" />
+              </Link>
+            )}
+            {isLogin ? <button>로그아웃</button> : <Link to="/sign">로그인/회원가입</Link>}
           </div>
         </div>
       </nav>

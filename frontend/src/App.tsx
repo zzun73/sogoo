@@ -10,11 +10,13 @@ function App() {
   const queryClient = new QueryClient();
   const location: Location = useLocation();
 
+  console.log(location.pathname);
+
   return (
     <QueryClientProvider client={queryClient}>
       <div className="min-h-screen flex flex-col">
         {location.pathname !== "/sign" && <Header />}
-        <main className="flex-grow">
+        <main className={`flex-grow ${location.pathname === "/" ? "" : "px-[200px]"}`}>
           <PageRoutes />
         </main>
         <Footer />
