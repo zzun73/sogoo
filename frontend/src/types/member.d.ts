@@ -3,7 +3,7 @@ interface MemberInfo {
   name: string;
   email: string;
   phoneNumber: string;
-  birth: Date;
+  birth: string;
   address: string;
   role: string;
 }

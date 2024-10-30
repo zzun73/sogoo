@@ -1,7 +1,15 @@
-import { Route, Routes, Navigate } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
+import LandingPage from "../pages/LandingPage";
+import SignPage from "../pages/SignPage";
 
 const PageRoutes = () => {
-  return <Routes></Routes>;
+  return (
+    <Routes>
+      {/* Common Domain */}
+      <Route path="/" element={<LandingPage />} />
+      <Route path="/sign" element={<SignPage />} />
+    </Routes>
+  );
 };
 
 export default PageRoutes;
