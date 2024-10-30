@@ -35,6 +35,8 @@ public class Food extends BaseEntity {
 
     private String img;
 
+    private String summary;
+
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "store_id")
     private Store store;
