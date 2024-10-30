@@ -5,6 +5,10 @@ import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import FormControl from "@mui/material/FormControl";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import { Dayjs } from "dayjs";
 
 const SignUpBox = () => {
   const [name, setName] = useState<string>("");
@@ -16,6 +20,12 @@ const SignUpBox = () => {
   const [phone, setPhone] = useState<string>("");
   const [role, setRole] = useState<string>("buyer");
   const [businessNumber, setBusinessNumber] = useState<string>("");
+
+  const handleDateChange = (date: Dayjs | null) => {
+    if (date) {
+      setBirth(date.format("YYYYMMDD"));
+    }
+  };
 
   const handleRoleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setRole(event.target.value);
@@ -65,15 +75,13 @@ const SignUpBox = () => {
         onChange={(e) => setAddress(e.target.value)}
         sx={{ width: "100%", height: "50px", marginBottom: "20px" }}
       />
-      <TextField
-        required
-        id="signUpBirthInput"
-        label="생년월일"
-        variant="outlined"
-        placeholder="ex. 990101"
-        onChange={(e) => setBirth(e.target.value)}
-        sx={{ width: "100%", height: "50px", marginBottom: "20px" }}
-      />
+      <LocalizationProvider dateAdapter={AdapterDayjs}>
+        <DatePicker
+          label="생년월일"
+          onChange={handleDateChange}
+          sx={{ width: "100%", height: "50px", marginBottom: "20px" }}
+        />
+      </LocalizationProvider>
       <TextField
         required
         id="signUpPhoneInput"
