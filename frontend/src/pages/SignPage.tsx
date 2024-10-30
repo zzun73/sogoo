@@ -13,13 +13,14 @@ const SignPage = () => {
   };
 
   return (
-    <div className="h-screen flex flex-col justify-center items-center">
+    <div className="h-screen flex justify-center items-center">
       <img
         className="w-40 mb-10 cursor-pointer"
         src={LogoImg}
         alt="소상한 구독"
         onClick={goToLanding}
       />
+      <div className="w-20"></div>
       <div className="w-[450px] flex flex-col items-center">
         <div className="flex w-full justify-center mb-10">
           <div
