@@ -35,6 +35,10 @@ public class SubscribeWeek extends BaseEntity {
     @Column(nullable = false)
     private int round;
 
+    private LocalDate startDate;
+
+    private LocalDate endDate;
+
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "subscribe_id")
     private Subscribe subscribe;
