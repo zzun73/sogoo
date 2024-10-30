@@ -1,4 +1,3 @@
-// components/Carousel.tsx
 import React from "react";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
@@ -27,7 +26,7 @@ const CustomCarousel: React.FC<CustomCarouselProps> = ({ items, autoplay = true,
     slidesToScroll: 1,
     autoplay: autoplay,
     autoplaySpeed: autoplaySpeed,
-    arrows: true,
+    arrows: false,
     pauseOnHover: true,
   };
 
@@ -35,7 +34,7 @@ const CustomCarousel: React.FC<CustomCarouselProps> = ({ items, autoplay = true,
     <div className="relative">
       <Slider {...settings}>
         {items.map((item) => (
-          <div key={item.id} className="relative h-[500px]">
+          <div key={item.id} className="relative h-[600px]">
             <img src={item.image} alt={item.title} className="w-full h-full object-cover" />
             {item.description && (
               <div className="absolute bottom-0 left-0 right-0 p-5 bg-gradient-to-t from-black/70 to-transparent text-white">
