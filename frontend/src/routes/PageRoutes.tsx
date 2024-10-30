@@ -1,6 +1,6 @@
 import { Route, Routes } from "react-router-dom";
 import LandingPage from "../pages/LandingPage";
-import SignPage from "../pages/Sign/SignPage";
+import SignPage from "../pages/SignPage";
 
 const PageRoutes = () => {
   return (

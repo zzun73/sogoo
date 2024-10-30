@@ -1,14 +1,25 @@
 import { useState } from "react";
-import LogoImg from "../../assets/logo.png";
-import SignInBox from "./SignInBox";
-import SignUpBox from "./SignUpBox";
+import { useNavigate } from "react-router-dom";
+import LogoImg from "../assets/logo.png";
+import SignInBox from "../components/specific/Sign/SignInBox";
+import SignUpBox from "../components/specific/Sign/SignUpBox";
 
 const SignPage = () => {
+  const navigate = useNavigate();
   const [clickedLogin, setClickedLogin] = useState<boolean>(true);
+
+  const goToLanding = () => {
+    navigate("/");
+  };
 
   return (
     <div className="h-screen flex flex-col justify-center items-center">
-      <img className="w-40 mb-10" src={LogoImg} alt="소상한 구독" />
+      <img
+        className="w-40 mb-10 cursor-pointer"
+        src={LogoImg}
+        alt="소상한 구독"
+        onClick={goToLanding}
+      />
       <div className="w-[450px] flex flex-col items-center">
         <div className="flex w-full justify-center mb-10">
           <div
