@@ -1,5 +1,6 @@
 package com.ssafy.c107.main.domain.order.entity;
 
+import com.ssafy.c107.main.common.entity.BaseEntity;
 import com.ssafy.c107.main.domain.members.entity.Member;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -19,7 +20,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "order")
-public class Order {
+public class Order extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

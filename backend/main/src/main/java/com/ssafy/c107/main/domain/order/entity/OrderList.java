@@ -1,5 +1,6 @@
 package com.ssafy.c107.main.domain.order.entity;
 
+import com.ssafy.c107.main.common.entity.BaseEntity;
 import com.ssafy.c107.main.domain.food.entity.Food;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -17,7 +18,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @Table(name = "OrderList")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class OrderList {
+public class OrderList extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
