@@ -1,7 +1,7 @@
-package com.ssafy.c107.main.domain.food.entity;
+package com.ssafy.c107.main.domain.order.entity;
 
 import com.ssafy.c107.main.common.entity.BaseEntity;
-import com.ssafy.c107.main.domain.subscribe.entity.SubscribeWeek;
+import com.ssafy.c107.main.domain.food.entity.Food;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -16,19 +16,21 @@ import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
-@Table(name = "WeeklyFood")
+@Table(name = "OrderList")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class WeeklyFood extends BaseEntity {
+public class OrderList extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private int count;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "order_id")
+    private Order order;
+
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "food_id")
     private Food food;
-
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "subscribe_week_id")
-    private SubscribeWeek subscribeWeek;
 }
