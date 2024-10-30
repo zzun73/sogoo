@@ -1,8 +1,6 @@
 import type { StateCreator } from "zustand";
 
-export const createMemberSlice: StateCreator<RootState, [], [], MemberStore> = (
-  set
-) => ({
+export const createMemberSlice: StateCreator<RootState, [], [], MemberStore> = (set) => ({
   memberInfo: null,
   accessToken: null,
   isLogin: false,
