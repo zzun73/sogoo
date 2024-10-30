@@ -1,5 +1,6 @@
 package com.ssafy.c107.main.domain.members.service;
 
+import com.ssafy.c107.main.domain.members.dto.response.SellerResponse;
 import com.ssafy.c107.main.domain.members.entity.Member;
 import com.ssafy.c107.main.domain.members.entity.Seller;
 import com.ssafy.c107.main.domain.members.exception.MemberNotFoundException;
@@ -44,5 +45,10 @@ public class MemberServiceImpl implements MemberService{
     public boolean sellerCheck(String sellerNumber) {
         Optional<Seller> os = sellerRepository.findBySellerNumber(sellerNumber);
         return os.isPresent();
+    }
+
+    @Override
+    public SellerResponse getSellerMyPage() {
+        return null;
     }
 }

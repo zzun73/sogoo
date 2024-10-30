@@ -75,16 +75,12 @@ public class MemberController {
     }
 
     @PutMapping("/update-address")
-    public ResponseEntity<?> updateAddress(@RequestBody UpdateAddressRequest updateAddressDto, @AuthenticationPrincipal
+    public ResponseEntity<?> updateAddress(@RequestBody UpdateAddressRequest updateAddressDto,
+        @AuthenticationPrincipal
         CustomUserDetails customUserDetails) {
         Long userId = customUserDetails.getUserId();
         memberService.changeAddress(userId, updateAddressDto.getAddress());
         return ResponseEntity.ok("주소 변경을 완료했습니다.");
-    }
-
-    @GetMapping("/buyer/")
-    public ResponseEntity<?> getBuyerMyPage() {
-        return null;
     }
 
     @PostMapping("/reissue")
@@ -139,8 +135,9 @@ public class MemberController {
 
         //make new JWT
         String newAccess = jwtUtil.createJwt("access", email, role, 600000L,
-            member.getId());
-        String newRefresh = jwtUtil.createJwt("refresh", email, role, 86400000L, member.getId());
+            member.getId(), member.getRole());
+        String newRefresh = jwtUtil.createJwt("refresh", email, role, 86400000L, member.getId(),
+            member.getRole());
 
         member.updateRefreshToken(newRefresh);
         memberRepository.save(member);

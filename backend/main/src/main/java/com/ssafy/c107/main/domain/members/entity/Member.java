@@ -85,4 +85,8 @@ public class Member extends BaseEntity {
     public void updateAddress(String address) {
         this.address = address;
     }
+
+    public void updateRole(String role) {
+        this.role = role;
+    }
 }
