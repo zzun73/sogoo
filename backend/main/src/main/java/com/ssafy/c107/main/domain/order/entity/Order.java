@@ -1,9 +1,10 @@
-package com.ssafy.c107.main.domain.food.entity;
+package com.ssafy.c107.main.domain.order.entity;
 
 import com.ssafy.c107.main.common.entity.BaseEntity;
-import com.ssafy.c107.main.domain.store.entity.Store;
-import jakarta.persistence.Column;
+import com.ssafy.c107.main.domain.members.entity.Member;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -17,27 +18,18 @@ import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
-@Table(name = "Food")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Food extends BaseEntity {
+@Table(name = "order")
+public class Order extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    private String name;
-
-    @Column(nullable = false)
-    private int price;
-
-    private String description;
-
-    private String img;
-
-    private String summary;
+    @Enumerated(EnumType.STRING)
+    private OrderType orderType;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "store_id")
-    private Store store;
+    @JoinColumn(name = "member_id")
+    private Member member;
 }

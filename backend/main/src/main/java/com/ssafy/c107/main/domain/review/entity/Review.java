@@ -3,6 +3,7 @@ package com.ssafy.c107.main.domain.review.entity;
 import com.ssafy.c107.main.common.entity.BaseEntity;
 import com.ssafy.c107.main.domain.food.entity.Food;
 import com.ssafy.c107.main.domain.members.entity.Member;
+import com.ssafy.c107.main.domain.order.entity.OrderList;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -29,11 +30,11 @@ public class Review extends BaseEntity {
     @Column(nullable = false)
     private String comment;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "food_id")
-    private Food food;
+    private String img;
+
+    private boolean emotion;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "member_id")
-    private Member member;
+    @JoinColumn(name = "list_id")
+    private OrderList orderList;
 }
