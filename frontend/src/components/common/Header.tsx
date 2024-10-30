@@ -9,7 +9,9 @@ const Header = () => {
     <>
       <header className="relative flex justify-center shadow-lg z-10">
         <div className="mt-10 mb-5">
-          <img src={LogoImg} alt="소상한 구독" className="w-[120px] drop-shadow-lg" />
+          <Link to="/">
+            <img src={LogoImg} alt="소상한 구독" className="w-[120px] drop-shadow-lg" />
+          </Link>
         </div>
       </header>
       <nav className="sticky top-0 text-lg bg-white shadow-md z-10">
