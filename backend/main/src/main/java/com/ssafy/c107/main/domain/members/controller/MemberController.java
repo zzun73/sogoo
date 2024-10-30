@@ -22,6 +22,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -79,6 +80,11 @@ public class MemberController {
         Long userId = customUserDetails.getUserId();
         memberService.changeAddress(userId, updateAddressDto.getAddress());
         return ResponseEntity.ok("주소 변경을 완료했습니다.");
+    }
+
+    @GetMapping("/buyer/")
+    public ResponseEntity<?> getBuyerMyPage() {
+        return null;
     }
 
     @PostMapping("/reissue")
