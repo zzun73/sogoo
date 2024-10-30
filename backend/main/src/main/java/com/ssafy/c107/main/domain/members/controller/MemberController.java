@@ -44,7 +44,7 @@ public class MemberController {
         if (isExist) {
             throw new MemberExistException();
         }
-        return ResponseEntity.ok("사용 가능한 이메일입니다.");
+        return ResponseEntity.ok("사용 가능한 이메일핑");
     }
 
     @PostMapping("/sign-up")
