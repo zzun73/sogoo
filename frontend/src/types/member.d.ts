@@ -1,9 +1,9 @@
 interface MemberInfo {
-  memberId: number
+  memberId: number;
   name: string;
   email: string;
   phoneNumber: string;
-  birth: Date;
+  birth: string;
   address: string;
   role: string;
 }
