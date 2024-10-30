@@ -7,7 +7,7 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import FormControl from "@mui/material/FormControl";
 
 const SignUpBox = () => {
-  const [role, setRole] = useState<string>("소비자");
+  const [role, setRole] = useState<string>("buyer");
 
   const handleRoleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setRole(event.target.value);
@@ -68,12 +68,12 @@ const SignUpBox = () => {
           onChange={handleRoleChange}
           sx={{ marginBottom: "20px" }}
         >
-          <FormControlLabel value="소비자" control={<Radio />} label="소비자" />
-          <FormControlLabel value="판매자" control={<Radio />} label="판매자" />
+          <FormControlLabel value="buyer" control={<Radio />} label="소비자" />
+          <FormControlLabel value="seller" control={<Radio />} label="판매자" />
         </RadioGroup>
       </FormControl>
 
-      {role === "판매자" && (
+      {role === "seller" && (
         <div className="w-full flex justify-between items-center mb-5">
           <TextField
             id="signUpBusinessNumberInput"
