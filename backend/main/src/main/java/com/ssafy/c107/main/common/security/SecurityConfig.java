@@ -88,10 +88,10 @@ public class SecurityConfig {
         //경로별 인가 작업
         http
             .authorizeHttpRequests((auth) -> auth
-                .requestMatchers("/health-check", "/member/sign-up", "/member/login",
-                    "/member/logout", "/member/email-check", "/member/seller-check")               //인가부분
-                .permitAll()
-                .anyRequest().authenticated());
+                    .requestMatchers("/health-check", "/member/sign-up", "/member/login",
+                            "/member/logout", "/member/email-check", "/member/seller-check")               //인가부분
+                    .permitAll()
+                    .anyRequest().authenticated());
 
         http
             .addFilterBefore(new JWTFilter(jwtUtil), LoginFilter.class);
