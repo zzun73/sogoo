@@ -36,6 +36,8 @@ public class Store extends BaseEntity {
 
     private String img;
 
+    private String summary;
+
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "member_id")
     private Member member;

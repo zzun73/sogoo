@@ -1,10 +1,6 @@
-package com.ssafy.c107.main.domain.review.entity;
+package com.ssafy.c107.main.domain.order.entity;
 
-import com.ssafy.c107.main.common.entity.BaseEntity;
 import com.ssafy.c107.main.domain.food.entity.Food;
-import com.ssafy.c107.main.domain.members.entity.Member;
-import com.ssafy.c107.main.domain.order.entity.OrderList;
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -19,22 +15,21 @@ import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
-@Table(name = "Review")
+@Table(name = "OrderList")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Review extends BaseEntity {
+public class OrderList {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    private String comment;
-
-    private String img;
-
-    private boolean emotion;
+    private int count;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "list_id")
-    private OrderList orderList;
+    @JoinColumn(name = "order_id")
+    private Order order;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "food_id")
+    private Food food;
 }

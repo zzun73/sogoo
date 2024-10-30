@@ -1,6 +1,6 @@
-package com.ssafy.c107.main.domain.food.entity;
+package com.ssafy.c107.main.common.entity;
 
-import com.ssafy.c107.main.common.entity.BaseEntity;
+import com.ssafy.c107.main.domain.food.entity.Food;
 import com.ssafy.c107.main.domain.subscribe.entity.SubscribeWeek;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
