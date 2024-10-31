@@ -1,11 +1,12 @@
 package com.ssafy.c107.main.domain.members.controller;
 
 import com.ssafy.c107.main.domain.members.dto.CustomUserDetails;
+import com.ssafy.c107.main.domain.members.dto.response.BuyerResponse;
+import com.ssafy.c107.main.domain.members.service.BuyerService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,6 +18,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/member/buyer")
 public class BuyerConroller {
 
+    private final BuyerService buyerService;
+
     @GetMapping("/")
     public ResponseEntity<?> index(@AuthenticationPrincipal CustomUserDetails customUserDetails) {
         if (!customUserDetails.getUserRole().getRole().equals("BUYER")) {
@@ -24,6 +27,7 @@ public class BuyerConroller {
         }
 
         Long userId = customUserDetails.getUserId();
-        return null;
+        BuyerResponse buyerMyPage = buyerService.getBuyerMyPage(userId);
+        return ResponseEntity.ok(buyerMyPage);
     }
 }

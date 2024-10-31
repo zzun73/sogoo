@@ -10,7 +10,7 @@ public class SubscribesResponse {
 
     private Long subscribeId;
     private String subscribeName;
-    private String subscribePrice;
+    private int subscribePrice;
     private Long storeId;
     private String storeName;
     private LocalDateTime subscribePeriod;
