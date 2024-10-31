@@ -2,6 +2,7 @@ package com.ssafy.c107.main.common.jwt;
 
 import com.ssafy.c107.main.domain.members.dto.CustomUserDetails;
 import com.ssafy.c107.main.domain.members.entity.Member;
+import com.ssafy.c107.main.domain.members.entity.MemberRole;
 import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -64,13 +65,11 @@ public class JWTFilter extends OncePerRequestFilter {
 
 // email, role 값을 획득
         String email = jwtUtil.getEmail(accessToken);
-        String role = jwtUtil.getRole(accessToken);
+        MemberRole role = jwtUtil.getRole(accessToken);
         Long userId = jwtUtil.getUserId(accessToken);
-        String memberRole = jwtUtil.getMemberRole(accessToken);
 
         Member userEntity = Member.builder().email(email).role(role).build();
         userEntity.updateId(userId);
-        userEntity.updateRole(memberRole);
         CustomUserDetails customUserDetails = new CustomUserDetails(userEntity);
 
         Authentication authToken = new UsernamePasswordAuthenticationToken(customUserDetails, null,

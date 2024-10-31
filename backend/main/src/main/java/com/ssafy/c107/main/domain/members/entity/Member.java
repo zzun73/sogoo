@@ -49,12 +49,12 @@ public class Member extends BaseEntity {
     @Column(nullable = false)
     private WithDrawalStatus withDrawalStatus;
 
-    private String role;
+    private MemberRole role;
 
     @Builder
     public Member(String name, String email, String password, String refreshToken,
         String phoneNumber, String birth, String address, WithDrawalStatus withDrawalStatus,
-        String role) {
+        MemberRole role) {
         this.name = name;
         this.email = email;
         this.password = password;
@@ -86,7 +86,7 @@ public class Member extends BaseEntity {
         this.address = address;
     }
 
-    public void updateRole(String role) {
+    public void updateRole(MemberRole role) {
         this.role = role;
     }
 }

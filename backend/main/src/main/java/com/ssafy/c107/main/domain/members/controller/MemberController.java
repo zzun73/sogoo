@@ -7,6 +7,7 @@ import com.ssafy.c107.main.domain.members.dto.request.SellerCheckRequest;
 import com.ssafy.c107.main.domain.members.dto.request.SignUpRequest;
 import com.ssafy.c107.main.domain.members.dto.request.UpdateAddressRequest;
 import com.ssafy.c107.main.domain.members.entity.Member;
+import com.ssafy.c107.main.domain.members.entity.MemberRole;
 import com.ssafy.c107.main.domain.members.entity.WithDrawalStatus;
 import com.ssafy.c107.main.domain.members.exception.MemberExistException;
 import com.ssafy.c107.main.domain.members.exception.MemberNotFoundException;
@@ -55,7 +56,7 @@ public class MemberController {
             .name(signUpDto.getName())
             .birth(signUpDto.getBirth())
             .phoneNumber(signUpDto.getPhoneNumber())
-            .role(signUpDto.getRole())
+            .role(signUpDto.getRole().equals("Buyer") ? MemberRole.BUYER : MemberRole.SELLER)
             .password(signUpDto.getPassword())
             .email(signUpDto.getEmail())
             .withDrawalStatus(WithDrawalStatus.ACTIVE)
@@ -127,17 +128,16 @@ public class MemberController {
         }
 
         String email = jwtUtil.getEmail(refresh);
-        String role = jwtUtil.getRole(refresh);
+        MemberRole role = jwtUtil.getRole(refresh);
         Member member = memberRepository.findByEmailAndWithDrawalStatus(email,
                 WithDrawalStatus.ACTIVE)
             .orElseThrow(
                 MemberNotFoundException::new);
 
         //make new JWT
-        String newAccess = jwtUtil.createJwt("access", email, role, 600000L,
-            member.getId(), member.getRole());
-        String newRefresh = jwtUtil.createJwt("refresh", email, role, 86400000L, member.getId(),
-            member.getRole());
+        String newAccess = jwtUtil.createJwt("access", email, role.toString(), 600000L,
+            member.getId());
+        String newRefresh = jwtUtil.createJwt("refresh", email, role.toString(), 86400000L, member.getId());
 
         member.updateRefreshToken(newRefresh);
         memberRepository.save(member);

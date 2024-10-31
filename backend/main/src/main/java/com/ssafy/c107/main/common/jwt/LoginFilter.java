@@ -80,9 +80,11 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
         //토큰 생성
         String access = jwtUtil.createJwt("access", email, role, 1800000L,
-            member.getId(), member.getRole());
+            member.getId());
         String refresh = jwtUtil.createJwt("refresh", email, role, 86400000L,
-            member.getId(), member.getRole());
+            member.getId());
+
+        System.out.println("role : " + role.toString());
 
         member.updateRefreshToken(refresh);
         memberRepository.save(member);
