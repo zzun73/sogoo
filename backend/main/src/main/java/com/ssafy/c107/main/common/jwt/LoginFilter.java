@@ -79,9 +79,9 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
             MemberNotFoundException::new);
 
         //토큰 생성
-        String access = jwtUtil.createJwt("access", email, role, 1800000L,
+        String access = jwtUtil.createJwt("access", email, member.getRole(), 1800000L,
             member.getId());
-        String refresh = jwtUtil.createJwt("refresh", email, role, 86400000L,
+        String refresh = jwtUtil.createJwt("refresh", email, member.getRole(), 86400000L,
             member.getId());
 
         System.out.println("role : " + role.toString());

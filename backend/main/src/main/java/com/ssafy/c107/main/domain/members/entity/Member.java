@@ -49,6 +49,7 @@ public class Member extends BaseEntity {
     @Column(nullable = false)
     private WithDrawalStatus withDrawalStatus;
 
+    @Enumerated(EnumType.STRING)
     private MemberRole role;
 
     @Builder

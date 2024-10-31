@@ -1,6 +1,5 @@
 package com.ssafy.c107.main.domain.members.service;
 
-import com.ssafy.c107.main.domain.members.dto.response.SellerResponse;
 import com.ssafy.c107.main.domain.members.entity.Member;
 import com.ssafy.c107.main.domain.members.entity.Seller;
 import com.ssafy.c107.main.domain.members.exception.MemberNotFoundException;
@@ -16,7 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @Slf4j
 @RequiredArgsConstructor
-public class MemberServiceImpl implements MemberService{
+public class MemberServiceImpl implements MemberService {
 
     private final MemberRepository memberRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
@@ -45,10 +44,5 @@ public class MemberServiceImpl implements MemberService{
     public boolean sellerCheck(String sellerNumber) {
         Optional<Seller> os = sellerRepository.findBySellerNumber(sellerNumber);
         return os.isPresent();
-    }
-
-    @Override
-    public SellerResponse getSellerMyPage() {
-        return null;
     }
 }

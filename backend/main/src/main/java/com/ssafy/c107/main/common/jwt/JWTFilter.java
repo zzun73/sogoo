@@ -65,10 +65,13 @@ public class JWTFilter extends OncePerRequestFilter {
 
 // email, role 값을 획득
         String email = jwtUtil.getEmail(accessToken);
-        MemberRole role = jwtUtil.getRole(accessToken);
+        String role = jwtUtil.getRole(accessToken);
         Long userId = jwtUtil.getUserId(accessToken);
 
-        Member userEntity = Member.builder().email(email).role(role).build();
+        Member userEntity = Member
+            .builder()
+            .email(email)
+            .role(role.equals("BUYER") ? MemberRole.BUYER : MemberRole.SELLER).build();
         userEntity.updateId(userId);
         CustomUserDetails customUserDetails = new CustomUserDetails(userEntity);
 

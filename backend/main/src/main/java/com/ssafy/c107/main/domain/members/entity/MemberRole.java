@@ -6,12 +6,16 @@ import lombok.ToString;
 @Getter
 @ToString
 public enum MemberRole {
-    BUYER("Buyer"), SELLER("Seller"),
+    BUYER("BUYER"), SELLER("SELLER"),
     ;
 
     private final String role;
 
     MemberRole(String role) {
         this.role = role;
+    }
+
+    public String getRole(){
+        return this.role;
     }
 }

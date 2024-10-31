@@ -128,16 +128,16 @@ public class MemberController {
         }
 
         String email = jwtUtil.getEmail(refresh);
-        MemberRole role = jwtUtil.getRole(refresh);
+        String role = jwtUtil.getRole(refresh);
         Member member = memberRepository.findByEmailAndWithDrawalStatus(email,
                 WithDrawalStatus.ACTIVE)
             .orElseThrow(
                 MemberNotFoundException::new);
 
         //make new JWT
-        String newAccess = jwtUtil.createJwt("access", email, role.toString(), 600000L,
+        String newAccess = jwtUtil.createJwt("access", email, member.getRole(), 600000L,
             member.getId());
-        String newRefresh = jwtUtil.createJwt("refresh", email, role.toString(), 86400000L, member.getId());
+        String newRefresh = jwtUtil.createJwt("refresh", email, member.getRole(), 86400000L, member.getId());
 
         member.updateRefreshToken(newRefresh);
         memberRepository.save(member);
