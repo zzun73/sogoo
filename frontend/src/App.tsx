@@ -16,7 +16,7 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <div className="min-h-screen flex flex-col">
         {location.pathname !== "/sign" && <Header />}
-        <main className="flex flex-grow">
+        <main className="flex flex-grow justify-center">
           <PageRoutes />
         </main>
         {location.pathname !== "/sign" && <Footer />}
