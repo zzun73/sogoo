@@ -13,9 +13,11 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Entity
 @Getter
+@ToString
 @Table(name = "Members")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Member extends BaseEntity {
@@ -49,12 +51,15 @@ public class Member extends BaseEntity {
     @Column(nullable = false)
     private WithDrawalStatus withDrawalStatus;
 
-    private String role;
+    @Enumerated(EnumType.STRING)
+    private MemberRole role;
+
+    private String UUID;
 
     @Builder
     public Member(String name, String email, String password, String refreshToken,
         String phoneNumber, String birth, String address, WithDrawalStatus withDrawalStatus,
-        String role) {
+        MemberRole role, String UUID) {
         this.name = name;
         this.email = email;
         this.password = password;
@@ -64,6 +69,7 @@ public class Member extends BaseEntity {
         this.address = address;
         this.withDrawalStatus = withDrawalStatus;
         this.role = role;
+        this.UUID = UUID;
     }
 
     public void updateId(Long id) {
@@ -84,5 +90,9 @@ public class Member extends BaseEntity {
 
     public void updateAddress(String address) {
         this.address = address;
+    }
+
+    public void updateRole(MemberRole role) {
+        this.role = role;
     }
 }

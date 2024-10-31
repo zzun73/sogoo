@@ -1,6 +1,7 @@
 package com.ssafy.c107.main.common.jwt;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ssafy.c107.main.domain.members.dto.LoginResponse;
 import com.ssafy.c107.main.domain.members.entity.Member;
 import com.ssafy.c107.main.domain.members.entity.WithDrawalStatus;
 import com.ssafy.c107.main.domain.members.exception.MemberNotFoundException;
@@ -11,6 +12,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import org.springframework.http.HttpStatus;
@@ -47,7 +49,8 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
         try {
             // JSON 요청 본문을 Map으로 파싱
-            Map<String, String> jsonRequest = objectMapper.readValue(request.getInputStream(), Map.class);
+            Map<String, String> jsonRequest = objectMapper.readValue(request.getInputStream(),
+                Map.class);
             email = jsonRequest.get("email");
             password = jsonRequest.get("password");
         } catch (IOException e) {
@@ -65,7 +68,8 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
     @Transactional
     @Override
     protected void successfulAuthentication(HttpServletRequest request,
-        HttpServletResponse response, FilterChain chain, Authentication authentication) {
+        HttpServletResponse response, FilterChain chain, Authentication authentication)
+        throws IOException {
         //유저 정보
         String email = authentication.getName();
 
@@ -79,10 +83,12 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
             MemberNotFoundException::new);
 
         //토큰 생성
-        String access = jwtUtil.createJwt("access", email, role, 1800000L,
+        String access = jwtUtil.createJwt("access", email, member.getRole(), 1800000L,
             member.getId());
-        String refresh = jwtUtil.createJwt("refresh", email, role, 86400000L,
+        String refresh = jwtUtil.createJwt("refresh", email, member.getRole(), 86400000L,
             member.getId());
+
+        System.out.println("role : " + role.toString());
 
         member.updateRefreshToken(refresh);
         memberRepository.save(member);
@@ -92,6 +98,19 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         response.addCookie(createCookie("refresh", refresh));
         response.setStatus(HttpStatus.OK.value());
         response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        Map<String, Object> responseBody = new HashMap<>();
+        responseBody.put("userInfo", LoginResponse
+            .builder()
+            .name(member.getName())
+            .birth(member.getBirth())
+            .uuid(member.getUUID())
+            .phoneNumber(member.getPhoneNumber())
+            .address(member.getAddress())
+            .email(member.getEmail())
+            .role(member.getRole().getRole().equals("BUYER") ? "BUYER" : "SELLER")
+            .build());
+        response.getWriter().write(objectMapper.writeValueAsString(responseBody));
     }
 
     //로그인 실패시 실행하는 메소드

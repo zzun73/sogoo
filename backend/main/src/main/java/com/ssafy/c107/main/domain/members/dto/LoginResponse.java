@@ -1,13 +1,13 @@
-package com.ssafy.c107.main.domain.members.dto.request;
+package com.ssafy.c107.main.domain.members.dto;
 
+import lombok.Builder;
 import lombok.Data;
 
-@Data
-public class SignUpRequest {
+@Data @Builder
+public class LoginResponse {
 
     private String name;
     private String email;
-    private String password;
     private String phoneNumber;
     private String birth;
     private String address;
