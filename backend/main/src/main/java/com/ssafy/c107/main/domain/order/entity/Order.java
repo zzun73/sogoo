@@ -2,6 +2,7 @@ package com.ssafy.c107.main.domain.order.entity;
 
 import com.ssafy.c107.main.common.entity.BaseEntity;
 import com.ssafy.c107.main.domain.members.entity.Member;
+import com.ssafy.c107.main.domain.store.entity.Store;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -32,4 +33,8 @@ public class Order extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "member_id")
     private Member member;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "store_id")
+    private Store store;
 }
