@@ -87,8 +87,8 @@ public class SubscribeServiceImpl implements SubscribeService {
     }
 
     // 구독 상품 추가
-    public void AppendSubscribe(Long storeId, Long memberId, String memberRole,AppendSubscribeRequest requestDto) {
-        if(memberRole.equals("BUYER")){
+    public void AppendSubscribe(Long storeId, Long memberId, String memberRole, AppendSubscribeRequest requestDto) {
+        if (memberRole.equals("BUYER")) {
             throw new InvalidMemberRoleException();
         }
         // Store 정보 조회
