@@ -26,17 +26,9 @@ const TossPaymentsCheckoutFail = () => {
         </div>
 
         <div className="w-full mt-8 flex flex-col justify-center gap-4 text-center">
-          <a className="px-[22px] py-[11px] rounded-lg bg-[#f2f4f6] text-[#4e5968] font-semibold text-lg cursor-pointer" href="https://developers.tosspayments.com/sandbox" target="_blank" rel="noreferrer noopener">
+          <a className="px-[22px] py-[11px] rounded-lg min-w-[350px] bg-[#f2f4f6] text-[#4e5968] font-semibold text-lg cursor-pointer" href="https://developers.tosspayments.com/sandbox" target="_blank" rel="noreferrer noopener">
             다시 테스트하기
           </a>
-          <div className="flex" style={{ gap: "16px" }}>
-            <a className="w-full px-[22px] py-[11px] rounded-lg bg-[#f2f4f6] text-[#4e5968] font-semibold text-lg cursor-pointer" href="https://docs.tosspayments.com/reference/error-codes" target="_blank" rel="noreferrer noopener">
-              에러코드 문서보기
-            </a>
-            <a className="w-full px-[22px] py-[11px] rounded-lg bg-[#f2f4f6] text-[#4e5968] font-semibold text-lg cursor-pointer" href="https://techchat.tosspayments.com" target="_blank" rel="noreferrer noopener">
-              실시간 문의하기
-            </a>
-          </div>
         </div>
       </div>
     </div>
