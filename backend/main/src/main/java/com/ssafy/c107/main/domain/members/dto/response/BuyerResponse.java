@@ -6,7 +6,7 @@ import lombok.Data;
 
 @Data
 @Builder
-public class SellerResponse {
+public class BuyerResponse {
 
     private List<SubscribesResponse> subscribes;
     private List<FoodTradesResponse> foodTrades;
