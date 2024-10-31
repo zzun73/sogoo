@@ -12,14 +12,14 @@ const Header = () => {
 
   return (
     <>
-      <header className="relative flex justify-center shadow-lg z-10">
+      <header className="relative flex justify-center z-10">
         <div className="mt-10 mb-5">
           <Link to="/">
-            <img src={LogoImg} alt="소상한 구독" className="w-[120px] drop-shadow-lg" />
+            <img src={LogoImg} alt="소상한 구독" className="w-[120px] drop-shadow-2xl" />
           </Link>
         </div>
       </header>
-      <nav className="sticky top-0 text-lg bg-white shadow-md z-10">
+      <nav className="sticky top-0 text-lg bg-black-paper text-white shadow-kg z-10">
         <div className="flex flex-row justify-between items-center w-full h-14 px-16">
           {/* 페이지 이동 */}
           <div className="flex items-center gap-8">

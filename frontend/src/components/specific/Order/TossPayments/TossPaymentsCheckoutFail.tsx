@@ -1,9 +1,14 @@
-import { useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 
 const TossPaymentsCheckoutFail = () => {
+  const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const errorCode = searchParams.get("code");
   const errorMessage = searchParams.get("message");
+
+  const goToBeforePage = () => {
+    navigate(-1);
+  };
 
   return (
     <div className="flex flex-col items-center p-6 overflow-auto w-full">
@@ -26,9 +31,12 @@ const TossPaymentsCheckoutFail = () => {
         </div>
 
         <div className="w-full mt-8 flex flex-col justify-center gap-4 text-center">
-          <a className="px-[22px] py-[11px] rounded-lg min-w-[350px] bg-[#f2f4f6] text-[#4e5968] font-semibold text-lg cursor-pointer" href="https://developers.tosspayments.com/sandbox" target="_blank" rel="noreferrer noopener">
-            다시 테스트하기
-          </a>
+          <button
+            className="px-[22px] py-[11px] rounded-lg min-w-[350px] bg-[#f2f4f6] text-[#4e5968] font-semibold text-lg cursor-pointer"
+            onClick={goToBeforePage}
+          >
+            주문서 페이지로 돌아가기
+          </button>
         </div>
       </div>
     </div>

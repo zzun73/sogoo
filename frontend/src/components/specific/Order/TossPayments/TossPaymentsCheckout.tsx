@@ -4,12 +4,20 @@ import { loadTossPayments, ANONYMOUS, TossPaymentsWidgets } from "@tosspayments/
 const generateRandomString = () => window.btoa(Math.random().toString()).slice(0, 20);
 const clientKey = import.meta.env.VITE_TOSS_PAYMENTS_CLIENT_KEY;
 
-const TossPaymentsCheckout = () => {
+const TossPaymentsCheckout = ({
+  orderData = {
+    orderName: "토스 티셔츠 외 2건",
+    customerName: "김싸피",
+    customerEmail: "KimSSAFY@abcdeSSAFY.com",
+    amount: 20000,
+  },
+  returnPath = "/",
+}: TossPaymentsCheckoutProps) => {
   const [, setReady] = useState(false);
   const [widgets, setWidgets] = useState<TossPaymentsWidgets | null>(null);
   const [amount] = useState({
     currency: "KRW",
-    value: 50_000,
+    value: orderData.amount,
   });
 
   useEffect(() => {
@@ -24,7 +32,7 @@ const TossPaymentsCheckout = () => {
 
   useEffect(() => {
     async function renderPaymentWidgets() {
-      if (widgets == null) {
+      if (widgets === null) {
         return;
       }
 
@@ -47,10 +55,18 @@ const TossPaymentsCheckout = () => {
     renderPaymentWidgets();
   }, [widgets, amount]);
 
+  const createRedirectUrl = (type: "success" | "fail") => {
+    const baseUrl = window.location.origin;
+    const currentPath = encodeURIComponent(location.pathname); // 현재 경로 저장
+    const redirectPath = encodeURIComponent(returnPath); // 최종 목적지 경로 저장
+
+    return `${baseUrl}/orders/${type}?` + `currentPath=${currentPath}&` + `redirectPath=${redirectPath}&` + `orderId=${generateRandomString()}`; // 주문 ID도 함께 전달
+  };
+
   return (
-    <div className="wrapper w-100">
-      <div className="max-w-540 w-100">
-        <div className="p-4 rounded-2xl bg-white">
+    <div className="flex flex-col items-center overflow-auto w-full">
+      <div className="max-w-[650px] w-full">
+        <div>
           <div id="payment-method" className="w-full" />
           <div id="agreement" className="w-full" />
         </div>
@@ -61,16 +77,15 @@ const TossPaymentsCheckout = () => {
               try {
                 await widgets?.requestPayment({
                   orderId: generateRandomString(),
-                  orderName: "토스 티셔츠 외 2건",
-                  customerName: "김토스",
-                  customerEmail: "customer123@gmail.com",
-                  successUrl: window.location.origin + "/orders/success" + window.location.search,
-                  failUrl: window.location.origin + "/orders/fail" + window.location.search,
+                  orderName: orderData.orderName,
+                  customerName: orderData.customerName,
+                  customerEmail: orderData.customerEmail,
+                  successUrl: createRedirectUrl("success"),
+                  failUrl: createRedirectUrl("fail"),
                 });
               } catch (error) {
-                // TODO: 에러 처리
-                alert(error);
-                console.error(error);
+                console.error("Payment request failed:", error);
+                alert("결제 요청 중 오류가 발생했습니다.");
               }
             }}
           >
