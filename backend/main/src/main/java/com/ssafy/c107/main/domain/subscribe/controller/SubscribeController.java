@@ -29,7 +29,7 @@ public class SubscribeController {
     public ResponseEntity<?> appendSubscribe(@PathVariable Long storedId,
                                              @AuthenticationPrincipal CustomUserDetails customUserDetails,
                                              @RequestBody AppendSubscribeRequest requestDto) {
-        subscribeService.AppendSubscribe(storedId, customUserDetails.getUserId(), requestDto);
-        return ResponseEntity.ok("구독 신청이 완료 되었습니다.");
+        subscribeService.AppendSubscribe(storedId, customUserDetails.getUserId(),customUserDetails.getUserRole().getRole(), requestDto);
+        return ResponseEntity.ok("구독 추가가 완료되었습니다.");
     }
 }

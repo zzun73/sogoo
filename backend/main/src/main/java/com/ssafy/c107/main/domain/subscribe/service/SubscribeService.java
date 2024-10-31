@@ -6,5 +6,5 @@ import com.ssafy.c107.main.domain.subscribe.dto.response.GetSubscribeResponse;
 public interface SubscribeService {
     GetSubscribeResponse getSubscribe(Long id);
 
-    void AppendSubscribe(Long storeId, Long memberId, AppendSubscribeRequest requestDto);
+    void AppendSubscribe(Long storeId, Long memberId, String memberRole, AppendSubscribeRequest requestDto);
 }

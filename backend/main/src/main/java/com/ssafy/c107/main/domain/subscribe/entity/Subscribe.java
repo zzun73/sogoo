@@ -8,9 +8,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -41,23 +39,11 @@ public class Subscribe extends BaseEntity {
     private Set<SubscribeWeek> subscribeWeeks = new HashSet<>();
 
     @Builder
-    public Subscribe(String name, int price, String description, int rate, Store store, Set<SubscribeWeek> subscribeWeeks) {
+    public Subscribe(String name, int price, String description, int rate, Store store) {
         this.name = name;
         this.price = price;
         this.description = description;
         this.rate = rate;
         this.store = store;
-
-        if(subscribeWeeks != null) {
-            for(SubscribeWeek subscribeWeek : subscribeWeeks) {
-                addSubscribeWeek(subscribeWeek);
-            }
-        }
-    }
-
-    // 연관 관계 편의 메서드
-    public void addSubscribeWeek(SubscribeWeek subscribeWeek) {
-        this.subscribeWeeks.add(subscribeWeek);
-        subscribeWeek.setSubscribeWithoutSetter(this); // setter를 사용하지 않고 관계 설정
     }
 }

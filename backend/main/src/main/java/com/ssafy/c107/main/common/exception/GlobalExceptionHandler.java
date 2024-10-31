@@ -1,5 +1,7 @@
 package com.ssafy.c107.main.common.exception;
 
+import com.ssafy.c107.main.domain.food.exception.FoodNotFoundException;
+import com.ssafy.c107.main.domain.members.exception.InvalidMemberRoleException;
 import com.ssafy.c107.main.domain.members.exception.MemberExistException;
 import com.ssafy.c107.main.domain.members.exception.MemberNotFoundException;
 import com.ssafy.c107.main.domain.members.exception.SellerNotFoundException;
@@ -34,6 +36,16 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(SubscribeNotFoundException.class)
     public ResponseEntity<String> handleSubscribeNotFoundException(SubscribeNotFoundException e) {
+        return ResponseEntity.status(e.getStatus()).body(e.getMessage());
+    }
+
+    @ExceptionHandler(InvalidMemberRoleException.class)
+    public ResponseEntity<String> handleInstantiationException(InvalidMemberRoleException e) {
+        return ResponseEntity.status(e.getStatus()).body(e.getMessage());
+    }
+
+    @ExceptionHandler(FoodNotFoundException.class)
+    public ResponseEntity<String> handleFoodNotFoundException(FoodNotFoundException e) {
         return ResponseEntity.status(e.getStatus()).body(e.getMessage());
     }
 }

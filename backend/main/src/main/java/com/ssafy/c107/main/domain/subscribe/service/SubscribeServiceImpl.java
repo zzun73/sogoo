@@ -1,9 +1,11 @@
 package com.ssafy.c107.main.domain.subscribe.service;
 
+import com.ssafy.c107.main.common.entity.WeeklyFood;
 import com.ssafy.c107.main.domain.food.dto.FoodDto;
 import com.ssafy.c107.main.domain.food.entity.Food;
 import com.ssafy.c107.main.domain.food.exception.FoodNotFoundException;
 import com.ssafy.c107.main.domain.food.repository.FoodRepository;
+import com.ssafy.c107.main.domain.members.exception.InvalidMemberRoleException;
 import com.ssafy.c107.main.domain.store.entity.Store;
 import com.ssafy.c107.main.domain.store.exception.StoreNotFoundException;
 import com.ssafy.c107.main.domain.store.repository.StoreRepository;
@@ -15,6 +17,7 @@ import com.ssafy.c107.main.domain.subscribe.entity.Subscribe;
 import com.ssafy.c107.main.domain.subscribe.entity.SubscribeWeek;
 import com.ssafy.c107.main.domain.subscribe.exception.SubscribeNotFoundException;
 import com.ssafy.c107.main.domain.subscribe.repository.SubscribeRepository;
+import com.ssafy.c107.main.domain.subscribe.repository.SubscribeWeekRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -22,7 +25,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -32,6 +34,7 @@ public class SubscribeServiceImpl implements SubscribeService {
     private final SubscribeRepository subscribeRepository;
     private final StoreRepository storeRepository;
     private final FoodRepository foodRepository;
+    private final SubscribeWeekRepository subscribeWeekRepository;
 
     @Transactional(readOnly = true)
     public GetSubscribeResponse getSubscribe(Long id) {
@@ -81,13 +84,16 @@ public class SubscribeServiceImpl implements SubscribeService {
         return getSubscribeResponse;
     }
 
-    //구독 상품 추가
-    public void AppendSubscribe(Long storeId, Long memberId, AppendSubscribeRequest requestDto) {
-        //Store 조회
+    // 구독 상품 추가
+    public void AppendSubscribe(Long storeId, Long memberId, String memberRole,AppendSubscribeRequest requestDto) {
+        if(memberRole.equals("BUYER")){
+            throw new InvalidMemberRoleException();
+        }
+        // Store 정보 조회
         Store store = storeRepository.findById(storeId)
                 .orElseThrow(StoreNotFoundException::new);
 
-        //Subscribe 생성
+        // Subscribe 엔티티 생성
         Subscribe subscribe = Subscribe.builder()
                 .name(requestDto.getSubscribeName())
                 .price(requestDto.getSubscribePrice())
@@ -96,30 +102,39 @@ public class SubscribeServiceImpl implements SubscribeService {
                 .store(store)
                 .build();
 
-        //주차별 상품 정보 추가
-        Set<SubscribeWeek> subscribeWeeks = requestDto.getSubscribeProducts()
-                .stream()
+        // 구독 상품 저장
+        subscribeRepository.save(subscribe);
+
+        // 주차별 구독 상품 설정
+        List<SubscribeWeek> subscribeWeeks = requestDto.getSubscribeProducts().stream()
                 .map(subscribeProductsDto -> {
+                    //SubscribeWeek 엔티티 생성
                     SubscribeWeek subscribeWeek = SubscribeWeek.builder()
                             .date(LocalDate.parse(subscribeProductsDto.getSubscribeDate()))
                             .round(subscribeProductsDto.getSubscribeRound())
-                            .subscribe(subscribe) // 연관관계 설정
+                            .startDate(LocalDate.now())
+                            .endDate(LocalDate.now().plusWeeks(1))
+                            .subscribe(subscribe)
                             .build();
 
-                    //주차별 반찬 정보 추가
-                    List<Food> foods = subscribeProductsDto.getSubscribeFood()
-                            .stream()
-                            .map(foodId -> foodRepository.findById((long) foodId)
-                                    .orElseThrow(FoodNotFoundException::new))
-                            .collect(Collectors.toList());
+                    // 주차별 반찬 설정
+                    List<Food> foods = subscribeProductsDto.getSubscribeFood().stream()
+                            .map(foodId ->
+                                    foodRepository.findById((long) foodId)
+                                            .orElseThrow(FoodNotFoundException::new)
+                            ).collect(Collectors.toList());
 
-                    subscribeWeek.addFoods(foods);
+                    //주차별 반찬 정보 설정
+                    foods.forEach(food -> {
+                        WeeklyFood weeklyFood = new WeeklyFood(food, subscribeWeek);
+                        subscribeWeek.addWeeklyFood(weeklyFood);
+                    });
+
+
                     return subscribeWeek;
-                }).collect(Collectors.toSet());
+                }).collect(Collectors.toList());
 
-        //Subscribe에 주차별 상품 정보 추가
-        subscribeWeeks.forEach(subscribe::addSubscribeWeek);
-
-        subscribeRepository.save(subscribe);
+        //주차별 구독 상품 저장
+        subscribeWeekRepository.saveAll(subscribeWeeks);
     }
 }
