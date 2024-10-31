@@ -33,17 +33,17 @@ const OrderForm = () => {
 
   return (
     <>
-      <h2 className="text-3xl font-bold">주문서</h2>
+      <h2 className="text-3xl font-bold text-center">주문서</h2>
       <div className="min-w-[800px] my-10 flex flex-col gap-4">
         {/* 주문 상품 */}
-        <div className="flex flex-col gap-8 w-full bg-cyan-50 p-8 rounded-xl">
+        <div className="flex flex-col gap-8 w-full p-8 rounded-t-3xl bg-white">
           <h3 className="text-xl font-semibold">주문 상품</h3>
           <div>
             <DataGrid rows={rows} columns={columns} />
           </div>
         </div>
         {/* 수령인 정보 */}
-        <div className="flex flex-col gap-8 w-full bg-cyan-50 p-8 rounded-xl">
+        <div className="flex flex-col gap-8 w-full p-8 rounded-b-3xl bg-white">
           <h3 className="text-xl font-semibold">수령인 정보</h3>
           <div className="flex flex-col gap-x-8 gap-y-4">
             <div className="grid grid-cols-2 gap-x-4">
@@ -71,7 +71,7 @@ const OrderForm = () => {
           </div>
         </div>
         {/* 결제 수단 */}
-        <div className="flex flex-col gap-8 w-full bg-cyan-50 p-8 rounded-xl">
+        <div className="flex flex-col gap-8 w-full mt-4 p-8 rounded-3xl bg-white">
           <h3 className="text-xl font-semibold">결제 수단</h3>
           <div>
             <TossPaymentsCheckout />

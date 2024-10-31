@@ -1,4 +1,6 @@
 // dummyData.ts
+import DummyImg from "./DummyImg/dummy_img.jpg";
+
 export type Subscribe = {
   subscribeId: number;
   subscribeName: string;
@@ -46,35 +48,35 @@ export const dummyData: ApiResponse = {
       foodName: "장조림",
       foodDescription: "맛있는 장조림",
       foodPrice: 3000,
-      foodImg: "S3주소",
+      foodImg: DummyImg,
     },
     {
       foodId: 2,
       foodName: "파김치",
       foodDescription: "엄마손맛 파김치",
       foodPrice: 3000,
-      foodImg: "S3주소",
+      foodImg: DummyImg,
     },
     {
       foodId: 3,
       foodName: "제육볶음",
       foodDescription: "맛있는 제육볶음",
       foodPrice: 3000,
-      foodImg: "S3주소",
+      foodImg: DummyImg,
     },
     {
       foodId: 4,
       foodName: "불고기",
       foodDescription: "달달한 불고기",
       foodPrice: 3000,
-      foodImg: "S3주소",
+      foodImg: DummyImg,
     },
     {
       foodId: 5,
       foodName: "김치찌개",
       foodDescription: "칼칼한 김치찌개",
       foodPrice: 3000,
-      foodImg: "S3주소",
+      foodImg: DummyImg,
     },
   ],
 };

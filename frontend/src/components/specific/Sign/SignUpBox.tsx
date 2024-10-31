@@ -21,6 +21,17 @@ const SignUpBox = () => {
   const [role, setRole] = useState<string>("Buyer");
   const [businessNumber, setBusinessNumber] = useState<string>("");
 
+  console.log(
+    name,
+    email,
+    password1,
+    password2,
+    address,
+    birth,
+    phone,
+    businessNumber
+  );
+
   const handleDateChange = (date: Dayjs | null) => {
     if (date) {
       setBirth(date.format("YYYYMMDD"));
