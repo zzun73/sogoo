@@ -266,3 +266,8 @@ thumb
 sketch
 
 # End of https://www.toptal.com/developers/gitignore/api/windows,macos,node,dotenv,visualstudiocode
+
+# tsconfig 추가
+tsconfig.app.tsbuildinfo
+tsconfig.node.tsbuildinfo
+tsconfig.tsbuildinfo
