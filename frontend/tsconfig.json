@@ -2,10 +2,6 @@
   "files": [],
   "references": [{ "path": "./tsconfig.app.json" }, { "path": "./tsconfig.node.json" }],
   "compilerOptions": {
-    "typeRoots": ["./src/types"],
-    "skipLibCheck": true,
-    "noUnusedLocals": false, // 사용하지 않는 로컬 변수 에러 무시
-    "noUnusedParameters": false, // 사용하지 않는 파라미터 에러 무시
-    "noEmitOnError": false // 에러가 있어도 빌드 진행
+    "typeRoots": ["./src/types"]
   }
 }
