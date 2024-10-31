@@ -10,7 +10,7 @@ const TossPaymentsCheckoutSuccess = () => {
   const orderId = searchParams.get("orderId");
   const amount = searchParams.get("amount");
   const currentPath = searchParams.get("currentPath");
-  const redirectPath = searchParams.get("redirectPath");
+  // const redirectPath = searchParams.get("redirectPath");
 
   const confirmPayment = async () => {
     try {
