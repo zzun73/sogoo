@@ -16,10 +16,10 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <div className="min-h-screen flex flex-col">
         {location.pathname !== "/sign" && <Header />}
-        <main className={`flex-grow ${location.pathname === "/" ? "" : "px-[200px]"}`}>
+        <main className="flex flex-grow">
           <PageRoutes />
         </main>
-        <Footer />
+        {location.pathname !== "/sign" && <Footer />}
       </div>
       <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>
