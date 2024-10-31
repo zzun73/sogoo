@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import Stack from "@mui/material/Stack";
 import Button from "@mui/material/Button";
 import { dummyData } from "./MenuComponents/DummyMenus";
@@ -18,14 +18,8 @@ const Menus = () => {
   };
 
   const filteredMenus = {
-    subscribes:
-      activeView === "전체 보기" || activeView === "구독 상품"
-        ? menuLists.subscribes
-        : [],
-    foods:
-      activeView === "전체 보기" || activeView === "개별 상품"
-        ? menuLists.foods
-        : [],
+    subscribes: activeView === "전체 보기" || activeView === "구독 상품" ? menuLists.subscribes : [],
+    foods: activeView === "전체 보기" || activeView === "개별 상품" ? menuLists.foods : [],
   };
 
   return (
@@ -35,25 +29,13 @@ const Menus = () => {
           <h1 className="text-xl font-bold mb-7">내 상품 목록</h1>
           <div className="w-full flex justify-between">
             <Stack spacing={2} direction="row">
-              <Button
-                variant={activeView === "전체 보기" ? "contained" : "outlined"}
-                size="large"
-                onClick={() => handleButtonClick("전체 보기")}
-              >
+              <Button variant={activeView === "전체 보기" ? "contained" : "outlined"} size="large" onClick={() => handleButtonClick("전체 보기")}>
                 전체 보기
               </Button>
-              <Button
-                variant={activeView === "구독 상품" ? "contained" : "outlined"}
-                size="large"
-                onClick={() => handleButtonClick("구독 상품")}
-              >
+              <Button variant={activeView === "구독 상품" ? "contained" : "outlined"} size="large" onClick={() => handleButtonClick("구독 상품")}>
                 구독 상품
               </Button>
-              <Button
-                variant={activeView === "개별 상품" ? "contained" : "outlined"}
-                size="large"
-                onClick={() => handleButtonClick("개별 상품")}
-              >
+              <Button variant={activeView === "개별 상품" ? "contained" : "outlined"} size="large" onClick={() => handleButtonClick("개별 상품")}>
                 개별 상품
               </Button>
             </Stack>
@@ -90,10 +72,7 @@ const Menus = () => {
                         </Button>
                       }
                     >
-                      <ListItemText
-                        primary={`${food.subscribeName} (월 ${food.subscribePrice}원)`}
-                        secondary={food.subscribeDescription}
-                      />
+                      <ListItemText primary={`${food.subscribeName} (월 ${food.subscribePrice}원)`} secondary={food.subscribeDescription} />
                     </ListItem>
                     {index < filteredMenus.subscribes.length - 1 && <Divider />}
                   </div>
@@ -125,16 +104,10 @@ const Menus = () => {
                     >
                       <ListItemAvatar>
                         <Avatar>
-                          <img
-                            src={food.foodImg}
-                            alt={`${food.foodName} 이미지`}
-                          />
+                          <img src={food.foodImg} alt={`${food.foodName} 이미지`} />
                         </Avatar>
                       </ListItemAvatar>
-                      <ListItemText
-                        primary={`${food.foodName} (${food.foodPrice}원)`}
-                        secondary={food.foodDescription}
-                      />
+                      <ListItemText primary={`${food.foodName} (${food.foodPrice}원)`} secondary={food.foodDescription} />
                     </ListItem>
                     {index < filteredMenus.foods.length - 1 && <Divider />}
                   </div>
