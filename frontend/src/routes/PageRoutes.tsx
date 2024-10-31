@@ -3,6 +3,8 @@ import LandingPage from "../pages/LandingPage";
 import SignPage from "../pages/SignPage";
 import OrderCheckoutPage from "../pages/OrderCheckoutPage";
 import OrderForm from "../components/specific/Order/OrderForm";
+import TossPaymentsCheckoutSuccess from "../components/specific/Order/TossPayments/TossPaymentsCheckoutSuccess";
+import TossPaymentsCheckoutFail from "../components/specific/Order/TossPayments/TossPaymentsCheckoutFail";
 import SellerMyPage from "../pages/SellerMyPage";
 import Dashboard from "../components/specific/Seller/Dashboard";
 import Menus from "../components/specific/Seller/Menus";
@@ -16,6 +18,8 @@ const PageRoutes = () => {
       {/* Order Domain */}
       <Route path="/orders" element={<OrderCheckoutPage />}>
         <Route path="form" element={<OrderForm />} />
+        <Route path="success" element={<TossPaymentsCheckoutSuccess />} />
+        <Route path="fail" element={<TossPaymentsCheckoutFail />} />
       </Route>
       {/* Seller Domain */}
       <Route path="/seller" element={<SellerMyPage />}>
