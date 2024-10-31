@@ -18,7 +18,7 @@ const SignUpBox = () => {
   const [address, setAddress] = useState<string>("");
   const [birth, setBirth] = useState<string>("");
   const [phone, setPhone] = useState<string>("");
-  const [role, setRole] = useState<string>("buyer");
+  const [role, setRole] = useState<string>("Buyer");
   const [businessNumber, setBusinessNumber] = useState<string>("");
 
   const handleDateChange = (date: Dayjs | null) => {
@@ -100,12 +100,12 @@ const SignUpBox = () => {
           onChange={handleRoleChange}
           sx={{ marginBottom: "20px" }}
         >
-          <FormControlLabel value="buyer" control={<Radio />} label="소비자" />
-          <FormControlLabel value="seller" control={<Radio />} label="판매자" />
+          <FormControlLabel value="Buyer" control={<Radio />} label="소비자" />
+          <FormControlLabel value="Seller" control={<Radio />} label="판매자" />
         </RadioGroup>
       </FormControl>
 
-      {role === "seller" && (
+      {role === "Seller" && (
         <div className="w-full flex justify-between items-center mb-5">
           <TextField
             required

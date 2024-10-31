@@ -21,4 +21,10 @@ export default {
   logout: async () => {
     return axios.post("/api/member/logout");
   },
+  /**
+   * 이메일 유효성 체크
+   */
+  checkEmail: async (email: Email) => {
+    return axios.post("/api/member/email-check", { email });
+  },
 };

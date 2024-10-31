@@ -31,4 +31,4 @@ interface LoginResponseData {
   accessToken: AccessToken;
 }
 
-type LoginResponse = ArbaguetteResponse<LoginResponseData>;
+type LoginResponse = SogooResponse<LoginResponseData>;
