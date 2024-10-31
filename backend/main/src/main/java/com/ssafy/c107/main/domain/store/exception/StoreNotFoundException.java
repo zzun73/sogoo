@@ -7,7 +7,7 @@ public class StoreNotFoundException extends RuntimeException {
         return StoreException.STORE_NOT_FOUND.getMessage();
     }
 
-    public int getStatus(){
+    public int getStatus() {
         return StoreException.STORE_NOT_FOUND.getCode();
     }
 }

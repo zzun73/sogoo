@@ -1,5 +1,6 @@
 package com.ssafy.c107.main.common.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.ssafy.c107.main.domain.food.entity.Food;
 import com.ssafy.c107.main.domain.subscribe.entity.SubscribeWeek;
 import jakarta.persistence.Entity;
@@ -30,5 +31,13 @@ public class WeeklyFood extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "subscribe_week_id")
+    @JsonBackReference
     private SubscribeWeek subscribeWeek;
+
+    // 연관관계 편의 메서드 추가
+    public WeeklyFood(Food food, SubscribeWeek subscribeWeek) {
+        this.food = food;
+        this.subscribeWeek = subscribeWeek;
+        subscribeWeek.addWeeklyFood(this);
+    }
 }
