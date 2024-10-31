@@ -13,7 +13,7 @@ const OrderCheckoutPage = () => {
   }, [navigate, isLogin]);
 
   return (
-    <div className="flex flex-col items-center py-14">
+    <div className="flex flex-col items-center mx-[300px] py-14">
       <Outlet />
     </div>
   );
