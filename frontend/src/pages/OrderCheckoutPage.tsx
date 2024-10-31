@@ -1,13 +1,16 @@
 import { Outlet, useNavigate } from "react-router-dom";
 import useRootStore from "../stores";
+import { useEffect } from "react";
 
 const OrderCheckoutPage = () => {
   const navigate = useNavigate();
   const isLogin = useRootStore((state) => state.isLogin);
 
-  if (!isLogin) {
-    return navigate("/sign");
-  }
+  useEffect(() => {
+    if (!isLogin) {
+      navigate("/sign");
+    }
+  }, [navigate, isLogin]);
 
   return (
     <div className="flex flex-col items-center py-14">
