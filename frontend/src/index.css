@@ -11,3 +11,10 @@
   font-optical-sizing: auto;
   font-style: normal;
 }
+
+body {
+  -ms-overflow-style: none;
+}
+::-webkit-scrollbar {
+  display: none;
+}
