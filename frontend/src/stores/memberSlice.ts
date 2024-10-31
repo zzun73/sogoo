@@ -3,7 +3,7 @@ import type { StateCreator } from "zustand";
 export const createMemberSlice: StateCreator<RootState, [], [], MemberStore> = (set) => ({
   memberInfo: null,
   accessToken: null,
-  isLogin: true,
+  isLogin: false,
   setLogin: (memberInfo: Partial<MemberInfo>) => {
     set({
       memberInfo: {
