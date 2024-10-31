@@ -1,5 +1,6 @@
 package com.ssafy.c107.main.domain.members.service;
 
+import com.ssafy.c107.main.domain.members.dto.response.MonthlySalesResponse;
 import com.ssafy.c107.main.domain.members.dto.response.SalesStatusResponse;
 import com.ssafy.c107.main.domain.order.repository.OrderRepository;
 import com.ssafy.c107.main.domain.subscribe.entity.SubscribeStatus;
@@ -40,6 +41,11 @@ public class SellerServiceImpl implements SellerService {
             .todayTradeCnt(todayOrderCount)
             .subscribePeopleCnt(subscribeCount)
             .build();
+    }
+
+    @Override
+    public MonthlySalesResponse getMonthlySales(Long storeId) {
+        return null;
     }
 
 }
