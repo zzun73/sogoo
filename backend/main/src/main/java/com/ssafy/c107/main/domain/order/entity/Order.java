@@ -30,6 +30,8 @@ public class Order extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private OrderType orderType;
 
+    private int price;
+
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "member_id")
     private Member member;

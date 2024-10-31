@@ -13,6 +13,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -28,6 +29,8 @@ public class MemberSubscribe extends BaseEntity {
     private Long id;
 
     private LocalDate endDate;
+
+    private LocalDateTime recentPayDate;
 
     @Enumerated(EnumType.STRING)
     private SubscribeStatus status;

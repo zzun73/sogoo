@@ -23,7 +23,7 @@ public class BuyerConroller {
     @GetMapping("/")
     public ResponseEntity<?> getBuyerMyPage(@AuthenticationPrincipal CustomUserDetails customUserDetails) {
         if (!customUserDetails.getUserRole().getRole().equals("BUYER")) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("구매자는 접근 불가핑!");
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("구매자는 접근 불가핑!");
         }
 
         Long userId = customUserDetails.getUserId();

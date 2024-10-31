@@ -26,6 +26,8 @@ public class OrderList extends BaseEntity {
 
     private int count;
 
+    private int price;
+
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "order_id")
     private Order order;
