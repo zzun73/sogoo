@@ -7,6 +7,7 @@ import com.ssafy.c107.main.domain.members.dto.request.SellerCheckRequest;
 import com.ssafy.c107.main.domain.members.dto.request.SignUpRequest;
 import com.ssafy.c107.main.domain.members.dto.request.UpdateAddressRequest;
 import com.ssafy.c107.main.domain.members.entity.Member;
+import com.ssafy.c107.main.domain.members.entity.MemberRole;
 import com.ssafy.c107.main.domain.members.entity.WithDrawalStatus;
 import com.ssafy.c107.main.domain.members.exception.MemberExistException;
 import com.ssafy.c107.main.domain.members.exception.MemberNotFoundException;
@@ -22,6 +23,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -54,11 +56,12 @@ public class MemberController {
             .name(signUpDto.getName())
             .birth(signUpDto.getBirth())
             .phoneNumber(signUpDto.getPhoneNumber())
-            .role(signUpDto.getRole())
+            .role(signUpDto.getRole().equals("Buyer") ? MemberRole.BUYER : MemberRole.SELLER)
             .password(signUpDto.getPassword())
             .email(signUpDto.getEmail())
             .withDrawalStatus(WithDrawalStatus.ACTIVE)
             .address(signUpDto.getAddress())
+            .UUID(signUpDto.getUuid())
             .build());
         return ResponseEntity.ok("회원가입 완료핑");
     }
@@ -74,7 +77,8 @@ public class MemberController {
     }
 
     @PutMapping("/update-address")
-    public ResponseEntity<?> updateAddress(@RequestBody UpdateAddressRequest updateAddressDto, @AuthenticationPrincipal
+    public ResponseEntity<?> updateAddress(@RequestBody UpdateAddressRequest updateAddressDto,
+        @AuthenticationPrincipal
         CustomUserDetails customUserDetails) {
         Long userId = customUserDetails.getUserId();
         memberService.changeAddress(userId, updateAddressDto.getAddress());
@@ -132,9 +136,10 @@ public class MemberController {
                 MemberNotFoundException::new);
 
         //make new JWT
-        String newAccess = jwtUtil.createJwt("access", email, role, 600000L,
+        String newAccess = jwtUtil.createJwt("access", email, member.getRole(), 600000L,
             member.getId());
-        String newRefresh = jwtUtil.createJwt("refresh", email, role, 86400000L, member.getId());
+        String newRefresh = jwtUtil.createJwt("refresh", email, member.getRole(), 86400000L,
+            member.getId());
 
         member.updateRefreshToken(newRefresh);
         memberRepository.save(member);
