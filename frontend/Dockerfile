@@ -17,7 +17,7 @@ RUN npm run build
 FROM nginx:alpine
 
 # NGINX 설정 파일 복사
-COPY default.conf /etc/nginx/conf.d/default.conf
+COPY ./nginx.conf /etc/nginx/conf.d/default.conf
 
 # Node.js 빌드 단계에서 생성된 dist 폴더를 NGINX의 기본 경로로 복사
 COPY --from=build /app/dist /usr/share/nginx/html
