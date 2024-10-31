@@ -74,7 +74,15 @@ const OrderForm = () => {
         <div className="flex flex-col gap-8 w-full mt-4 p-8 rounded-3xl bg-white">
           <h3 className="text-xl font-semibold">결제 수단</h3>
           <div>
-            <TossPaymentsCheckout />
+            <TossPaymentsCheckout
+              orderData={{
+                orderName: "토스 티셔츠 외 2건",
+                customerName: "김싸피",
+                customerEmail: "KimSSAFY@abcdeSSAFY.com",
+                amount: 20000,
+              }}
+              returnPath="/"
+            />
           </div>
         </div>
       </div>
