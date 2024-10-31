@@ -10,9 +10,11 @@ import com.ssafy.c107.main.domain.store.entity.Store;
 import com.ssafy.c107.main.domain.store.exception.StoreNotFoundException;
 import com.ssafy.c107.main.domain.store.repository.StoreRepository;
 import com.ssafy.c107.main.domain.subscribe.dto.SubscribeDetailDto;
+import com.ssafy.c107.main.domain.subscribe.dto.SubscribeDetailWeekDto;
 import com.ssafy.c107.main.domain.subscribe.dto.SubscribeWeekDto;
 import com.ssafy.c107.main.domain.subscribe.dto.request.AppendSubscribeRequest;
 import com.ssafy.c107.main.domain.subscribe.dto.response.GetSubscribeResponse;
+import com.ssafy.c107.main.domain.subscribe.dto.response.SubscribeDetailResponse;
 import com.ssafy.c107.main.domain.subscribe.entity.Subscribe;
 import com.ssafy.c107.main.domain.subscribe.entity.SubscribeWeek;
 import com.ssafy.c107.main.domain.subscribe.exception.SubscribeNotFoundException;
@@ -136,5 +138,39 @@ public class SubscribeServiceImpl implements SubscribeService {
 
         //주차별 구독 상품 저장
         subscribeWeekRepository.saveAll(subscribeWeeks);
+    }
+
+    // 구독 상품 상세 보기
+    @Transactional(readOnly = true)
+    public SubscribeDetailResponse detailSubscribe(Long id) {
+        //구독 상품 조회
+        Subscribe subscribe = subscribeRepository.findById(id)
+                .orElseThrow(SubscribeNotFoundException::new);
+
+        // SubscribeDetailResponse 생성 및 기본 정보 설정
+        SubscribeDetailResponse subscribeDetailResponse = new SubscribeDetailResponse();
+        subscribeDetailResponse.setSubscribeId(subscribe.getId());
+        subscribeDetailResponse.setSubscribeName(subscribe.getName());
+        subscribeDetailResponse.setSubscribePrice(subscribe.getPrice());
+        subscribeDetailResponse.setSubscribeDescription(subscribe.getDescription());
+        subscribeDetailResponse.setSubscribeRate(subscribe.getRate());
+
+        // 주차별 구독 정보 설정
+        List<SubscribeDetailWeekDto> subscribeDetailWeeks = subscribe.getSubscribeWeeks().stream()
+                .map(subscribeWeek -> {
+                    SubscribeDetailWeekDto subscribeDetailWeekDto = new SubscribeDetailWeekDto();
+                    subscribeDetailWeekDto.setSubscribeDate(subscribeWeek.getDate().toString());
+                    subscribeDetailWeekDto.setSubscribeRound(subscribeWeek.getRound());
+
+                    List<String> foodImgs = subscribeWeek.getWeeklyFoods().stream()
+                            .map(weeklyFood -> weeklyFood.getFood().getImg())
+                            .collect(Collectors.toList());
+                    subscribeDetailWeekDto.setFoodImgs(foodImgs);
+
+                    return subscribeDetailWeekDto;
+                }).collect(Collectors.toList());
+
+        subscribeDetailResponse.setSubscribeProducts(subscribeDetailWeeks);
+        return subscribeDetailResponse;
     }
 }
