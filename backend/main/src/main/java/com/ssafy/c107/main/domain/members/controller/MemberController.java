@@ -61,6 +61,7 @@ public class MemberController {
             .email(signUpDto.getEmail())
             .withDrawalStatus(WithDrawalStatus.ACTIVE)
             .address(signUpDto.getAddress())
+            .UUID(signUpDto.getUuid())
             .build());
         return ResponseEntity.ok("회원가입 완료핑");
     }
@@ -137,7 +138,8 @@ public class MemberController {
         //make new JWT
         String newAccess = jwtUtil.createJwt("access", email, member.getRole(), 600000L,
             member.getId());
-        String newRefresh = jwtUtil.createJwt("refresh", email, member.getRole(), 86400000L, member.getId());
+        String newRefresh = jwtUtil.createJwt("refresh", email, member.getRole(), 86400000L,
+            member.getId());
 
         member.updateRefreshToken(newRefresh);
         memberRepository.save(member);

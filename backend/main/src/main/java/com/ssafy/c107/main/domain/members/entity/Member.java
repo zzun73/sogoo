@@ -52,10 +52,12 @@ public class Member extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private MemberRole role;
 
+    private String UUID;
+
     @Builder
     public Member(String name, String email, String password, String refreshToken,
         String phoneNumber, String birth, String address, WithDrawalStatus withDrawalStatus,
-        MemberRole role) {
+        MemberRole role, String UUID) {
         this.name = name;
         this.email = email;
         this.password = password;
@@ -65,6 +67,7 @@ public class Member extends BaseEntity {
         this.address = address;
         this.withDrawalStatus = withDrawalStatus;
         this.role = role;
+        this.UUID = UUID;
     }
 
     public void updateId(Long id) {
