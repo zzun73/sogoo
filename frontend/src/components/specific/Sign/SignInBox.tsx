@@ -6,6 +6,8 @@ const SignInBox = () => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
 
+  console.log(email, password);
+
   return (
     <div className="w-full flex flex-col justify-center items-center">
       <TextField
