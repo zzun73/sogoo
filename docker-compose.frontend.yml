@@ -3,12 +3,12 @@ services:
     image: zzun73/sogoo-front:latest
     container_name: sogoo-front
     ports:
-      - "5173:5173" 
+      - "5173:80" 
     networks:
       - sogoo-network
     restart: always
     healthcheck:
-      test: ["CMD-SHELL", "curl -f http://localhost:5173 || exit 1"]
+      test: ["CMD-SHELL", "curl -f http://localhost || exit 1"]
       interval: 30s
       timeout: 10s
       retries: 3
