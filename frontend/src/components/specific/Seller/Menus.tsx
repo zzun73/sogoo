@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import Stack from "@mui/material/Stack";
 import Button from "@mui/material/Button";
 import { dummyData } from "./MenuComponents/DummyMenus";
@@ -8,13 +8,33 @@ import ListItemText from "@mui/material/ListItemText";
 import ListItemAvatar from "@mui/material/ListItemAvatar";
 import Avatar from "@mui/material/Avatar";
 import Divider from "@mui/material/Divider";
+import FoodDetailModal from "./MenuComponents/FoodDetailModal";
+
+interface Food {
+  foodId: number;
+  foodName: string;
+  foodDescription: string;
+  foodPrice: number;
+  foodImg: string;
+}
 
 const Menus = () => {
   const menuLists = dummyData;
   const [activeView, setActiveView] = useState("전체 보기");
+  const [openFoodModal, setOpenFoodModal] = useState(false);
+  const [selectedFood, setSelectedFood] = useState<Food | null>(null);
 
   const handleButtonClick = (view: string) => {
     setActiveView(view);
+  };
+
+  const handleFoodModalOpen = (food: (typeof menuLists.foods)[0]) => {
+    setSelectedFood(food);
+    setOpenFoodModal(true);
+  };
+  const handleFoodModalClose = () => {
+    setSelectedFood(null);
+    setOpenFoodModal(false);
   };
 
   const filteredMenus = {
@@ -118,9 +138,20 @@ const Menus = () => {
                   <div key={food.foodId}>
                     <ListItem
                       secondaryAction={
-                        <Button variant="text" size="small">
-                          상세보기
-                        </Button>
+                        <>
+                          <Button
+                            variant="text"
+                            size="small"
+                            onClick={() => handleFoodModalOpen(food)}
+                          >
+                            상세보기
+                          </Button>
+                          <FoodDetailModal
+                            open={openFoodModal}
+                            onClose={handleFoodModalClose}
+                            food={selectedFood}
+                          />
+                        </>
                       }
                     >
                       <ListItemAvatar>
