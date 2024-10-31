@@ -26,7 +26,7 @@ const LandingPage = () => {
   ];
 
   return (
-    <div>
+    <div className="w-full">
       {/* Carousel 섹션 */}
       <section className="relative pb-20">
         <div className="w-full">
