@@ -21,7 +21,7 @@ public class BuyerConroller {
     private final BuyerService buyerService;
 
     @GetMapping("/")
-    public ResponseEntity<?> index(@AuthenticationPrincipal CustomUserDetails customUserDetails) {
+    public ResponseEntity<?> getBuyerMyPage(@AuthenticationPrincipal CustomUserDetails customUserDetails) {
         if (!customUserDetails.getUserRole().getRole().equals("BUYER")) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("구매자는 접근 불가핑!");
         }
