@@ -2,10 +2,17 @@ package com.ssafy.c107.main.domain.subscribe.service;
 
 import com.ssafy.c107.main.domain.food.dto.FoodDto;
 import com.ssafy.c107.main.domain.food.entity.Food;
+import com.ssafy.c107.main.domain.food.exception.FoodNotFoundException;
+import com.ssafy.c107.main.domain.food.repository.FoodRepository;
+import com.ssafy.c107.main.domain.store.entity.Store;
+import com.ssafy.c107.main.domain.store.exception.StoreNotFoundException;
+import com.ssafy.c107.main.domain.store.repository.StoreRepository;
 import com.ssafy.c107.main.domain.subscribe.dto.SubscribeDetailDto;
 import com.ssafy.c107.main.domain.subscribe.dto.SubscribeWeekDto;
+import com.ssafy.c107.main.domain.subscribe.dto.request.AppendSubscribeRequest;
 import com.ssafy.c107.main.domain.subscribe.dto.response.GetSubscribeResponse;
 import com.ssafy.c107.main.domain.subscribe.entity.Subscribe;
+import com.ssafy.c107.main.domain.subscribe.entity.SubscribeWeek;
 import com.ssafy.c107.main.domain.subscribe.exception.SubscribeNotFoundException;
 import com.ssafy.c107.main.domain.subscribe.repository.SubscribeRepository;
 import lombok.RequiredArgsConstructor;
@@ -13,8 +20,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -22,6 +30,8 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class SubscribeServiceImpl implements SubscribeService {
     private final SubscribeRepository subscribeRepository;
+    private final StoreRepository storeRepository;
+    private final FoodRepository foodRepository;
 
     @Transactional(readOnly = true)
     public GetSubscribeResponse getSubscribe(Long id) {
@@ -69,5 +79,47 @@ public class SubscribeServiceImpl implements SubscribeService {
         getSubscribeResponse.setSubscribes(List.of(subscribeDetailDto));
 
         return getSubscribeResponse;
+    }
+
+    //구독 상품 추가
+    public void AppendSubscribe(Long storeId, Long memberId, AppendSubscribeRequest requestDto) {
+        //Store 조회
+        Store store = storeRepository.findById(storeId)
+                .orElseThrow(StoreNotFoundException::new);
+
+        //Subscribe 생성
+        Subscribe subscribe = Subscribe.builder()
+                .name(requestDto.getSubscribeName())
+                .price(requestDto.getSubscribePrice())
+                .description(requestDto.getSubscribeDescription())
+                .rate(requestDto.getSubscribeRate())
+                .store(store)
+                .build();
+
+        //주차별 상품 정보 추가
+        Set<SubscribeWeek> subscribeWeeks = requestDto.getSubscribeProducts()
+                .stream()
+                .map(subscribeProductsDto -> {
+                    SubscribeWeek subscribeWeek = SubscribeWeek.builder()
+                            .date(LocalDate.parse(subscribeProductsDto.getSubscribeDate()))
+                            .round(subscribeProductsDto.getSubscribeRound())
+                            .subscribe(subscribe) // 연관관계 설정
+                            .build();
+
+                    //주차별 반찬 정보 추가
+                    List<Food> foods = subscribeProductsDto.getSubscribeFood()
+                            .stream()
+                            .map(foodId -> foodRepository.findById((long) foodId)
+                                    .orElseThrow(FoodNotFoundException::new))
+                            .collect(Collectors.toList());
+
+                    subscribeWeek.addFoods(foods);
+                    return subscribeWeek;
+                }).collect(Collectors.toSet());
+
+        //Subscribe에 주차별 상품 정보 추가
+        subscribeWeeks.forEach(subscribe::addSubscribeWeek);
+
+        subscribeRepository.save(subscribe);
     }
 }

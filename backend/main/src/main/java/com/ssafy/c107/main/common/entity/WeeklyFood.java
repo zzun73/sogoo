@@ -11,6 +11,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -31,4 +32,16 @@ public class WeeklyFood extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "subscribe_week_id")
     private SubscribeWeek subscribeWeek;
+
+    // WeeklyFood 엔티티에 빌더 추가
+    @Builder
+    public WeeklyFood(Food food, SubscribeWeek subscribeWeek) {
+        this.food = food;
+        this.subscribeWeek = subscribeWeek;
+    }
+
+    // 연관 관계 설정을 위한 메서드 추가
+    public void setSubscribeWeek(SubscribeWeek subscribeWeek) {
+        this.subscribeWeek = subscribeWeek;
+    }
 }
