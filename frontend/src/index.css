@@ -6,8 +6,58 @@
 @tailwind components;
 @tailwind utilities;
 
-* {
+/* 메인 폰트 */
+@font-face {
+  font-family: 'KoPubWorld_Dotum_Medium';
+  src: url('/fonts/KoPubWorld_Dotum_Medium.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'KoPubWorld_Dotum_Light';
+  src: url('/fonts/KoPubWorld_Dotum_Light.ttf') format('truetype');
+  font-weight: 300;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'KoPubWorld_Dotum_Bold';
+  src: url('/fonts/KoPubWorld_Dotum_Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+}
+
+/* 디자인 폰트 */
+@font-face {
+  font-family: 'Shilla_CultureB-Bold';
+  src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2206-02@1.0/Shilla_CultureB-Bold.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'dimibang_new';
+  src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2104@1.1/dimibang_new.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'ChosunCentennial';
+  src: url('https://gcore.jsdelivr.net/gh/projectnoonnu/noonfonts_2206-02@1.0/ChosunCentennial.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+}
+
+
+/* * {
   font-family: "Noto Sans KR", serif;
+  font-optical-sizing: auto;
+  font-style: normal;
+} */
+* {
+  font-family: "KoPubWorld_Dotum_Medium", serif;
   font-optical-sizing: auto;
   font-style: normal;
 }
@@ -15,6 +65,7 @@
 body {
   -ms-overflow-style: none;
 }
+
 ::-webkit-scrollbar {
   display: none;
 }
