@@ -4,7 +4,7 @@ import { loadTossPayments, ANONYMOUS, TossPaymentsWidgets } from "@tosspayments/
 const generateRandomString = () => window.btoa(Math.random().toString()).slice(0, 20);
 const clientKey = import.meta.env.VITE_TOSS_PAYMENTS_CLIENT_KEY;
 
-const Checkout = () => {
+const TossPaymentsCheckout = () => {
   const [, setReady] = useState(false);
   const [widgets, setWidgets] = useState<TossPaymentsWidgets | null>(null);
   const [amount] = useState({
@@ -64,8 +64,8 @@ const Checkout = () => {
                   orderName: "토스 티셔츠 외 2건",
                   customerName: "김토스",
                   customerEmail: "customer123@gmail.com",
-                  successUrl: window.location.origin + "/sandbox/success" + window.location.search,
-                  failUrl: window.location.origin + "/sandbox/fail" + window.location.search,
+                  successUrl: window.location.origin + "/orders/success" + window.location.search,
+                  failUrl: window.location.origin + "/orders/fail" + window.location.search,
                 });
               } catch (error) {
                 // TODO: 에러 처리
@@ -82,4 +82,4 @@ const Checkout = () => {
   );
 };
 
-export default Checkout;
+export default TossPaymentsCheckout;
