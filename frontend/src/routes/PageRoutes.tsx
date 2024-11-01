@@ -9,6 +9,7 @@ import TossPaymentsCheckoutFail from "../components/specific/Order/TossPayments/
 import SellerMyPage from "../pages/SellerMyPage";
 import Dashboard from "../components/specific/Seller/Dashboard";
 import Menus from "../components/specific/Seller/Menus";
+import AddFood from "../components/specific/Seller/AddFood";
 import BuyerMyPage from "../pages/BuyerMyPage";
 
 const PageRoutes = () => {
@@ -28,6 +29,7 @@ const PageRoutes = () => {
       <Route path="/seller" element={<SellerMyPage />}>
         <Route index element={<Dashboard />} />
         <Route path="menus" element={<Menus />} />
+        <Route path="add/food" element={<AddFood />} />
       </Route>
       {/* Store Domain */}
       <Route path="/store" element={<StorePage />} />
