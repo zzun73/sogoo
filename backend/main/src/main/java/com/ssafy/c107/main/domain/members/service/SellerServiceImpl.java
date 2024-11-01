@@ -1,6 +1,7 @@
 package com.ssafy.c107.main.domain.members.service;
 
 import com.ssafy.c107.main.domain.members.dto.response.MonthlySalesResponse;
+import com.ssafy.c107.main.domain.members.dto.response.NextWeekQuantityResponse;
 import com.ssafy.c107.main.domain.members.dto.response.SalesStatusResponse;
 import com.ssafy.c107.main.domain.order.repository.OrderRepository;
 import com.ssafy.c107.main.domain.subscribe.entity.SubscribeStatus;
@@ -88,6 +89,11 @@ public class SellerServiceImpl implements SellerService {
             .foodSales(foodMap)
             .subscribeSales(subscribeMap)
             .build();
+    }
+
+    @Override
+    public NextWeekQuantityResponse getNextCount(Long storeId) {
+        return null;
     }
 
 }
