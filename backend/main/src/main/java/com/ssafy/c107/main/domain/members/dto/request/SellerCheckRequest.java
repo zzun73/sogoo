@@ -5,6 +5,6 @@ import lombok.Data;
 @Data
 public class SellerCheckRequest {
 
-    private String sellerNumber;
+    private String businessNumber;
 
 }

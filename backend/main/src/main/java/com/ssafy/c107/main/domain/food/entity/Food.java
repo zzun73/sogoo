@@ -12,6 +12,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -40,4 +41,14 @@ public class Food extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "store_id")
     private Store store;
+
+    @Builder
+    public Food(String name, int price, String description, String img, String summary, Store store) {
+        this.name = name;
+        this.price = price;
+        this.description = description;
+        this.img = img;
+        this.summary = summary;
+        this.store = store;
+    }
 }

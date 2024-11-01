@@ -8,6 +8,7 @@ import com.ssafy.c107.main.domain.members.exception.MemberNotFoundException;
 import com.ssafy.c107.main.domain.members.exception.SellerNotFoundException;
 import com.ssafy.c107.main.domain.store.exception.StoreNotFoundException;
 import com.ssafy.c107.main.domain.subscribe.exception.SubscribeNotFoundException;
+import com.ssafy.c107.main.domain.subscribe.exception.SubscribeWeekNotFoundException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -47,6 +48,11 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(FoodNotFoundException.class)
     public ResponseEntity<String> handleFoodNotFoundException(FoodNotFoundException e) {
+        return ResponseEntity.status(e.getStatus()).body(e.getMessage());
+    }
+
+    @ExceptionHandler(SubscribeWeekNotFoundException.class)
+    public ResponseEntity<String> handleSubscribeWeekNotFoundException(SubscribeWeekNotFoundException e) {
         return ResponseEntity.status(e.getStatus()).body(e.getMessage());
     }
 
