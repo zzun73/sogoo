@@ -1,0 +1,26 @@
+package com.ssafy.c107.main.domain.food.controller;
+
+import com.ssafy.c107.main.domain.food.dto.request.AppendFoodRequest;
+import com.ssafy.c107.main.domain.food.service.FoodService;
+import com.ssafy.c107.main.domain.members.dto.CustomUserDetails;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.*;
+
+@Slf4j
+@RestController
+@RequestMapping("/food")
+@RequiredArgsConstructor
+public class FoodController {
+    private final FoodService foodService;
+
+    @PostMapping("/{storeId}")
+    public ResponseEntity<?> appendFood(@PathVariable Long storeId,
+                                        @RequestBody AppendFoodRequest request,
+                                        @AuthenticationPrincipal CustomUserDetails userDetails) {
+        foodService.appendFood(storeId, request, userDetails.getUserRole().getRole());
+        return ResponseEntity.ok("개별 반찬 등록 완료");
+    }
+}
