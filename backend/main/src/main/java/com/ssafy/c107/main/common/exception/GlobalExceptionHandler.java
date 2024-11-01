@@ -1,5 +1,6 @@
 package com.ssafy.c107.main.common.exception;
 
+import com.ssafy.c107.main.common.aws.InvalidS3Exception;
 import com.ssafy.c107.main.domain.food.exception.FoodNotFoundException;
 import com.ssafy.c107.main.domain.members.exception.InvalidMemberRoleException;
 import com.ssafy.c107.main.domain.members.exception.MemberExistException;
@@ -52,6 +53,11 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(SubscribeWeekNotFoundException.class)
     public ResponseEntity<String> handleSubscribeWeekNotFoundException(SubscribeWeekNotFoundException e) {
+        return ResponseEntity.status(e.getStatus()).body(e.getMessage());
+    }
+
+    @ExceptionHandler(InvalidS3Exception.class)
+    public ResponseEntity<String> handleS3Exception(InvalidS3Exception e) {
         return ResponseEntity.status(e.getStatus()).body(e.getMessage());
     }
 }
