@@ -27,4 +27,12 @@ export default {
   checkEmail: async (email: Email) => {
     return axios.post("/member/email-check", { email });
   },
+  /**
+   * 사업자 인증
+   */
+  checkSeller: async (businessNumber: BusinessNumber) => {
+    return axios.post("/member/seller-check", {
+      sellerNumber: businessNumber,
+    });
+  },
 };

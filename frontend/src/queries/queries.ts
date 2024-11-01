@@ -16,6 +16,23 @@ const useCheckEmail = (email: Email) => {
   return queryResponse;
 };
 
+/**
+ * 사업자 번호 인증
+ * @param businessNumber
+ */
+const useCheckSeller = (businessNumber: BusinessNumber) => {
+  const queryResponse = useQuery({
+    queryKey: keys.checkSeller(businessNumber),
+    queryFn: () => sogoo.checkSeller(businessNumber),
+    enabled: false,
+  });
+
+  return queryResponse;
+};
+
+/**
+ * 매장 목록 조회
+ */
 const useGetStoreList = () => {
   const { data } = useQuery({
     queryKey: keys.getStoreList(),
@@ -26,4 +43,4 @@ const useGetStoreList = () => {
   return stores;
 };
 
-export { useCheckEmail, useGetStoreList };
+export { useCheckEmail, useCheckSeller, useGetStoreList };

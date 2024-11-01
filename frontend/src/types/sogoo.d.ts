@@ -5,8 +5,9 @@ type Password = string;
 type phoneNumber = string;
 type Birth = string;
 type Address = string;
-type Role = "Buyer" | "Seller";
+type Role = string;
 type AccessToken = string;
+type BusinessNumber = string | null;
 
 type StoreId = number;
 type StoreName = string;
@@ -23,6 +24,7 @@ interface SignUpForm {
   birth: Birth;
   address: Address;
   role: Role;
+  businessNumber: BusinessNumber;
 }
 
 interface LoginForm {
