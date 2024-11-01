@@ -145,7 +145,7 @@ public class MemberController {
         memberRepository.save(member);
 
         //response
-        response.setHeader("access", newAccess);
+        response.setHeader("Authorization","Bearer " + newAccess);
         response.addCookie(createCookie("refresh", newRefresh));
         return ResponseEntity.ok().build();
     }
