@@ -1,6 +1,10 @@
 # 1단계: Node.js 이미지를 사용하여 React 애플리케이션을 빌드
 FROM node:20.18.0 AS build
 
+# VITE_BASE_URL을 빌드 인자로 받아 설정
+ARG VITE_BASE_URL
+ENV VITE_BASE_URL=$VITE_BASE_URL
+
 # 작업 디렉토리를 /app으로 설정
 WORKDIR /app
 ENV TZ=Asia/Seoul
@@ -11,6 +15,7 @@ RUN npm install
 
 # 모든 소스 코드를 복사하여 빌드 실행
 COPY . .
+
 RUN npm run build
 
 # 2단계: NGINX 이미지를 사용하여 빌드된 정적 파일 서빙
