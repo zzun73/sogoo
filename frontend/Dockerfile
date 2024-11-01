@@ -9,6 +9,10 @@ ENV TZ=Asia/Seoul
 COPY package.json package-lock.json* ./
 RUN npm install
 
+# 빌드 시 필요한 환경 변수 설정
+ARG VITE_BASE_URL
+ENV VITE_BASE_URL=$VITE_BASE_URL
+
 # 모든 소스 코드를 복사하여 빌드 실행
 COPY . .
 RUN npm run build
