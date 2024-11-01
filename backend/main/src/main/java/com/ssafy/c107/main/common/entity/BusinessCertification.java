@@ -1,4 +1,4 @@
-package com.ssafy.c107.main.domain.members.entity;
+package com.ssafy.c107.main.common.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -11,13 +11,14 @@ import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
+@Table(name = "BusinessCertification")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name = "Seller")
-public class Seller {
+public class BusinessCertification {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String sellerNumber;
+
 }

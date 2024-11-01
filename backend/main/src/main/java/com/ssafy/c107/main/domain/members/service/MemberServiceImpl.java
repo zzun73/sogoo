@@ -1,11 +1,9 @@
 package com.ssafy.c107.main.domain.members.service;
 
 import com.ssafy.c107.main.domain.members.entity.Member;
-import com.ssafy.c107.main.domain.members.entity.Seller;
 import com.ssafy.c107.main.domain.members.exception.MemberNotFoundException;
+import com.ssafy.c107.main.domain.members.repository.BusinessCertificationRepository;
 import com.ssafy.c107.main.domain.members.repository.MemberRepository;
-import com.ssafy.c107.main.domain.members.repository.SellerRepository;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -19,7 +17,7 @@ public class MemberServiceImpl implements MemberService {
 
     private final MemberRepository memberRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
-    private final SellerRepository sellerRepository;
+    private final BusinessCertificationRepository businessCertificationRepository;
 
     @Override
     public boolean emailCheck(String email) {
@@ -42,7 +40,6 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public boolean sellerCheck(String sellerNumber) {
-        Optional<Seller> os = sellerRepository.findBySellerNumber(sellerNumber);
-        return os.isPresent();
+        return businessCertificationRepository.existsBySellerNumber(sellerNumber);
     }
 }

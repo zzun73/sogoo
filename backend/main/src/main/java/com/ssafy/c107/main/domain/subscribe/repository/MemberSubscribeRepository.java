@@ -13,10 +13,5 @@ public interface MemberSubscribeRepository extends JpaRepository<MemberSubscribe
     @Query("SELECT COALESCE(COUNT(o), 0) FROM MemberSubscribe o WHERE o.subscribe.store.id = :storeId AND o.status IN :statuses")
     int getSubscribeMembers(Long storeId, @Param("statuses") List<SubscribeStatus> statuses);
 
-    @Query("SELECT COALESCE(SUM(s.price), 0) " +
-        "FROM MemberSubscribe ms " +
-        "JOIN ms.subscribe s " +
-        "WHERE s.store.id = :storeId " +
-        "AND CAST(ms.recentPayDate AS date) = CURRENT_DATE")  // DATE() 대신 CAST AS date 사용
-    int findTodayTotalPaymentByStoreId(@Param("storeId") Long storeId);
+
 }
