@@ -7,7 +7,7 @@ public class SubscribeNotFoundException extends RuntimeException {
         return SubscribeException.SUBSCRIBE_NOT_FOUND.getMessage();
     }
 
-    public int getStatus(){
+    public int getStatus() {
         return SubscribeException.SUBSCRIBE_NOT_FOUND.getCode();
     }
 }

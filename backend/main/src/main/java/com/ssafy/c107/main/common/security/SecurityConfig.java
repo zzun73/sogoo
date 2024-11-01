@@ -63,7 +63,7 @@ public class SecurityConfig {
                         CorsConfiguration configuration = new CorsConfiguration();
                         //프론트엔드 주소 넣을 것
                         configuration.setAllowedOrigins(
-                            Arrays.asList("http://localhost:5173"));
+                            Arrays.asList("http://localhost:5173", "https://www.sogoo.kr"));
                         configuration.setAllowedMethods(Collections.singletonList("*"));
                         configuration.setAllowCredentials(true);
                         configuration.setAllowedHeaders(Collections.singletonList("*"));
