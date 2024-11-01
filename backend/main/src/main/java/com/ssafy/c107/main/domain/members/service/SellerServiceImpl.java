@@ -60,20 +60,34 @@ public class SellerServiceImpl implements SellerService {
         List<Object[]> monthlySumForLastYear = orderRepository.findMonthlySumForLastYear(startDate,
             storeId);
 
-        Map<String, Long> map = new HashMap<>();
+        Map<String, Long> foodMap = new HashMap<>();
 
         for (Object[] result : monthlySumForLastYear) {
             YearMonth ym = YearMonth.parse((String) result[0]);
             String monthName = ym.format(formatter);
             Long total = ((Number) result[1]).longValue();
 
-            map.put(monthName, total);
+            foodMap.put(monthName, total);
         }
 
         // 1-2. 구독 금액 가져오기
+        List<Object[]> monthlyRevenueByStoreId = subscribePayRepository.findMonthlyRevenueByStoreId(
+            storeId);
 
+        Map<String, Long> subscribeMap = new HashMap<>();
 
-        return null;
+        for (Object[] result : monthlyRevenueByStoreId) {
+            YearMonth ym = YearMonth.parse((String) result[0]);
+            String monthName = ym.format(formatter);
+            Long total = ((Number) result[1]).longValue();
+            subscribeMap.put(monthName, total);
+        }
+
+        return MonthlySalesResponse
+            .builder()
+            .foodSales(foodMap)
+            .subscribeSales(subscribeMap)
+            .build();
     }
 
 }
