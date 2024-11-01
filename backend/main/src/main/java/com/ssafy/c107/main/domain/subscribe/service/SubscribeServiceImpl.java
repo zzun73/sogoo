@@ -38,6 +38,7 @@ public class SubscribeServiceImpl implements SubscribeService {
     private final FoodRepository foodRepository;
     private final SubscribeWeekRepository subscribeWeekRepository;
 
+    // 반찬가게 상세페이지(구독 상품 목록 조회)
     @Transactional(readOnly = true)
     public GetSubscribeResponse getSubscribe(Long id) {
         // 조인 쿼리를 사용해 구독 상품과 연관된 모든 데이터를 한 번에 가져옴.
