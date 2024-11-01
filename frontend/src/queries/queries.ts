@@ -10,7 +10,7 @@ const useCheckEmail = (email: Email) => {
   const queryResponse = useQuery({
     queryKey: keys.checkEmail(email),
     queryFn: () => sogoo.checkEmail(email),
-    enabled: !!email, // email 값이 있을 때만 쿼리 실행
+    enabled: false,
   });
 
   return queryResponse;

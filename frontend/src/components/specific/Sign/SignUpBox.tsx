@@ -9,10 +9,11 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { Dayjs } from "dayjs";
+import { useCheckEmail } from "../../../queries/queries";
 
 const SignUpBox = () => {
   const [name, setName] = useState<string>("");
-  const [email, setEamil] = useState<string>("");
+  const [email, setEmail] = useState<string>("");
   const [password1, setPassword1] = useState<string>("");
   const [password2, setPassword2] = useState<string>("");
   const [address, setAddress] = useState<string>("");
@@ -20,6 +21,20 @@ const SignUpBox = () => {
   const [phone, setPhone] = useState<string>("");
   const [role, setRole] = useState<string>("Buyer");
   const [businessNumber, setBusinessNumber] = useState<string>("");
+  const [isEmailValid, setIsEmailValid] = useState<boolean | null>(null);
+
+  const { refetch } = useCheckEmail(email);
+
+  console.log(
+    name,
+    email,
+    password1,
+    password2,
+    address,
+    birth,
+    phone,
+    businessNumber
+  );
 
   const handleDateChange = (date: Dayjs | null) => {
     if (date) {
@@ -29,6 +44,18 @@ const SignUpBox = () => {
 
   const handleRoleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setRole(event.target.value);
+  };
+
+  const handleEmailCheck = async () => {
+    const result = await refetch();
+    console.log(result);
+    setIsEmailValid(String(result.data!.data) === "사용 가능한 이메일핑");
+  };
+
+  const handleKeyDown = (event: React.KeyboardEvent) => {
+    if (event.key === "Enter") {
+      handleEmailCheck();
+    }
   };
 
   return (
@@ -41,14 +68,29 @@ const SignUpBox = () => {
         onChange={(e) => setName(e.target.value)}
         sx={{ width: "100%", height: "50px", marginBottom: "20px" }}
       />
-      <TextField
-        required
-        id="signUpEmailInput"
-        label="이메일"
-        variant="outlined"
-        onChange={(e) => setEamil(e.target.value)}
-        sx={{ width: "100%", height: "50px", marginBottom: "20px" }}
-      />
+      <div className="w-full flex justify-between items-center mb-5">
+        <TextField
+          required
+          id="signUpEmailInput"
+          label="이메일"
+          variant="outlined"
+          onChange={(e) => setEmail(e.target.value)}
+          sx={{ width: "80%", height: "50px" }}
+        />
+        <Button
+          variant="outlined"
+          sx={{ width: "17%", height: "42px" }}
+          onClick={handleEmailCheck}
+        >
+          확인
+        </Button>
+      </div>
+      {isEmailValid === true && (
+        <p className="text-green-500 mb-3">사용 가능한 이메일입니다.</p>
+      )}
+      {isEmailValid === false && (
+        <p className="text-red-500 mb-3">이 이메일은 이미 사용 중입니다.</p>
+      )}
       <TextField
         required
         id="signUpPasswordInput1"
@@ -56,6 +98,7 @@ const SignUpBox = () => {
         variant="outlined"
         type="password"
         onChange={(e) => setPassword1(e.target.value)}
+        onKeyDown={handleKeyDown}
         sx={{ width: "100%", height: "50px", marginBottom: "20px" }}
       />
       <TextField

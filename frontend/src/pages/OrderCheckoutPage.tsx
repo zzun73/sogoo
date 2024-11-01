@@ -1,9 +1,22 @@
-import { Outlet } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
+import useRootStore from "../stores";
+import { useEffect } from "react";
 
 const OrderCheckoutPage = () => {
+  const navigate = useNavigate();
+  const isLogin = useRootStore((state) => state.isLogin);
+
+  useEffect(() => {
+    if (!isLogin) {
+      navigate("/sign");
+    }
+  }, [navigate, isLogin]);
+
   return (
-    <div className="flex flex-col items-center py-14">
-      <Outlet />
+    <div className="w-full flex flex-col justify-center items-center bg-slate-200">
+      <div className="my-10 mx-[200px]">
+        <Outlet />
+      </div>
     </div>
   );
 };
