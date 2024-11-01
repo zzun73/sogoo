@@ -29,7 +29,7 @@ public class Subscribe extends BaseEntity {
 
     private String description;
 
-    private int rate;
+    private int beforePrice;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "store_id")
@@ -39,11 +39,11 @@ public class Subscribe extends BaseEntity {
     private Set<SubscribeWeek> subscribeWeeks = new HashSet<>();
 
     @Builder
-    public Subscribe(String name, int price, String description, int rate, Store store) {
+    public Subscribe(String name, int price, String description, int beforePrice, Store store) {
         this.name = name;
         this.price = price;
         this.description = description;
-        this.rate = rate;
+        this.beforePrice = beforePrice;
         this.store = store;
     }
 }

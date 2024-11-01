@@ -11,6 +11,6 @@ public class SubscribeDetailResponse {
     private String subscribeName;
     private int subscribePrice;
     private String subscribeDescription;
-    private int subscribeRate;
+    private int subscribeBeforePrice;
     private List<SubscribeDetailWeekDto> subscribeProducts;
 }

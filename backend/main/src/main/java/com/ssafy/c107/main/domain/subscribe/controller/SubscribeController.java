@@ -2,6 +2,7 @@ package com.ssafy.c107.main.domain.subscribe.controller;
 
 import com.ssafy.c107.main.domain.members.dto.CustomUserDetails;
 import com.ssafy.c107.main.domain.subscribe.dto.request.AppendSubscribeRequest;
+import com.ssafy.c107.main.domain.subscribe.dto.response.AllSubscribeAndFoodResponse;
 import com.ssafy.c107.main.domain.subscribe.dto.response.GetSubscribeResponse;
 import com.ssafy.c107.main.domain.subscribe.dto.response.SubscribeDetailResponse;
 import com.ssafy.c107.main.domain.subscribe.entity.Subscribe;
@@ -21,8 +22,9 @@ public class SubscribeController {
 
     // 반찬가게 상세페이지(구독 상품 목록 조회)
     @GetMapping("/list/{storeId}")
-    public ResponseEntity<?> getSubscribe(@PathVariable Long storeId) {
-        GetSubscribeResponse response = subscribeService.getSubscribe(storeId);
+    public ResponseEntity<?> getSubscribe(@PathVariable Long storeId,
+                                          @AuthenticationPrincipal CustomUserDetails customUserDetails) {
+        GetSubscribeResponse response = subscribeService.getSubscribe(storeId, customUserDetails.getUserRole().getRole());
         return ResponseEntity.ok(response);
     }
 
@@ -39,6 +41,14 @@ public class SubscribeController {
     @GetMapping("/detail/{subscribeId}")
     public ResponseEntity<?> detailSubscribe(@PathVariable Long subscribeId) {
         SubscribeDetailResponse response = subscribeService.detailSubscribe(subscribeId);
+        return ResponseEntity.ok(response);
+    }
+
+    // 반찬가게 상세페이지[구매자용](개별반찬,구독 상품)
+    @GetMapping("/all/{storeId}")
+    public ResponseEntity<?> allSubscribeAndFood(@PathVariable Long storeId,
+                                          @AuthenticationPrincipal CustomUserDetails customUserDetails) {
+        AllSubscribeAndFoodResponse response = subscribeService.allSubscribeAndFood(storeId, customUserDetails.getUserRole().getRole());
         return ResponseEntity.ok(response);
     }
 }

@@ -2,18 +2,23 @@ package com.ssafy.c107.main.domain.subscribe.service;
 
 import com.ssafy.c107.main.common.entity.WeeklyFood;
 import com.ssafy.c107.main.domain.food.dto.FoodAllDto;
+import com.ssafy.c107.main.domain.food.dto.FoodAllSubscribeDto;
 import com.ssafy.c107.main.domain.food.dto.FoodDto;
+import com.ssafy.c107.main.domain.food.dto.response.FoodAllResponse;
 import com.ssafy.c107.main.domain.food.entity.Food;
 import com.ssafy.c107.main.domain.food.exception.FoodNotFoundException;
 import com.ssafy.c107.main.domain.food.repository.FoodRepository;
+import com.ssafy.c107.main.domain.food.service.FoodService;
 import com.ssafy.c107.main.domain.members.exception.InvalidMemberRoleException;
 import com.ssafy.c107.main.domain.store.entity.Store;
 import com.ssafy.c107.main.domain.store.exception.StoreNotFoundException;
 import com.ssafy.c107.main.domain.store.repository.StoreRepository;
+import com.ssafy.c107.main.domain.subscribe.dto.SubscribeAllDto;
 import com.ssafy.c107.main.domain.subscribe.dto.SubscribeDetailDto;
 import com.ssafy.c107.main.domain.subscribe.dto.SubscribeDetailWeekDto;
 import com.ssafy.c107.main.domain.subscribe.dto.SubscribeWeekDto;
 import com.ssafy.c107.main.domain.subscribe.dto.request.AppendSubscribeRequest;
+import com.ssafy.c107.main.domain.subscribe.dto.response.AllSubscribeAndFoodResponse;
 import com.ssafy.c107.main.domain.subscribe.dto.response.GetSubscribeResponse;
 import com.ssafy.c107.main.domain.subscribe.dto.response.SubscribeDetailResponse;
 import com.ssafy.c107.main.domain.subscribe.entity.Subscribe;
@@ -41,9 +46,12 @@ public class SubscribeServiceImpl implements SubscribeService {
 
     // 반찬가게 상세페이지(구독 상품 목록 조회)
     @Transactional(readOnly = true)
-    public GetSubscribeResponse getSubscribe(Long id) {
+    public GetSubscribeResponse getSubscribe(Long storeId, String memberRole) {
+        if(memberRole.equals("Seller")) {
+            throw new InvalidMemberRoleException();
+        }
         // 조인 쿼리를 사용해 구독 상품과 연관된 모든 데이터를 한 번에 가져옴.
-        Subscribe subscribe = subscribeRepository.findSubscribeWithDetails(id)
+        Subscribe subscribe = subscribeRepository.findSubscribeWithDetails(storeId)
                 .orElseThrow(SubscribeNotFoundException::new);
 
         // SubscribeDetailDto 생성 및 기본 정보 설정
@@ -52,7 +60,7 @@ public class SubscribeServiceImpl implements SubscribeService {
         subscribeDetailDto.setSubscribeName(subscribe.getName());
         subscribeDetailDto.setSubscribePrice(subscribe.getPrice());
         subscribeDetailDto.setSubscribeDescription(subscribe.getDescription());
-        subscribeDetailDto.setSubscribeRate(subscribe.getRate());
+        subscribeDetailDto.setSubscribeBeforePrice(subscribe.getBeforePrice());
 
         // 주차별 구독 정보 설정
         List<SubscribeWeekDto> subscribeWeeks = subscribe.getSubscribeWeeks()
@@ -102,7 +110,7 @@ public class SubscribeServiceImpl implements SubscribeService {
                 .name(requestDto.getSubscribeName())
                 .price(requestDto.getSubscribePrice())
                 .description(requestDto.getSubscribeDescription())
-                .rate(requestDto.getSubscribeRate())
+                .beforePrice(requestDto.getSubscribeBeforePrice())
                 .store(store)
                 .build();
 
@@ -155,7 +163,7 @@ public class SubscribeServiceImpl implements SubscribeService {
         subscribeDetailResponse.setSubscribeName(subscribe.getName());
         subscribeDetailResponse.setSubscribePrice(subscribe.getPrice());
         subscribeDetailResponse.setSubscribeDescription(subscribe.getDescription());
-        subscribeDetailResponse.setSubscribeRate(subscribe.getRate());
+        subscribeDetailResponse.setSubscribeBeforePrice(subscribe.getBeforePrice());
 
         // 주차별 구독 정보 설정
         List<SubscribeDetailWeekDto> subscribeDetailWeeks = subscribe.getSubscribeWeeks().stream()
@@ -182,5 +190,46 @@ public class SubscribeServiceImpl implements SubscribeService {
 
         subscribeDetailResponse.setSubscribeProducts(subscribeDetailWeeks);
         return subscribeDetailResponse;
+    }
+
+    // 반찬가게 상세페이지[구매자용](개별반찬,구독 상품)
+    public AllSubscribeAndFoodResponse allSubscribeAndFood(Long storeId, String memberRole) {
+        if(memberRole.equals("Seller")) {
+            throw new InvalidMemberRoleException();
+        }
+
+        Store store = storeRepository.findById(storeId)
+                .orElseThrow(StoreNotFoundException::new);
+        // 구독 상품 가져오기
+        List<Subscribe> subscribes = subscribeRepository.findByStore(store);
+
+        List<SubscribeAllDto> allSubscribeDto = subscribes.stream()
+                .map(subscribe -> {
+                    SubscribeAllDto dto= new SubscribeAllDto();
+                    dto.setSubscribeId(subscribe.getId());
+                    dto.setSubscribeName(subscribe.getName());
+                    dto.setSubscribePrice(subscribe.getPrice());
+                    dto.setSubscribeBeforePrice(subscribe.getBeforePrice());
+                    return dto;
+                }).collect(Collectors.toList());
+
+        // 개별 반찬 가져오기
+        List<Food> foods = foodRepository.findByStore(store);
+
+        List<FoodAllSubscribeDto> foodAllSubscribeDto = foods.stream()
+                .map(food -> {
+                    FoodAllSubscribeDto dto = new FoodAllSubscribeDto();
+                    dto.setFoodId(food.getId());
+                    dto.setFoodName(food.getName());
+                    dto.setFoodPrice(food.getPrice());
+
+                    return dto;
+                }).collect(Collectors.toList());
+
+        // Response
+        AllSubscribeAndFoodResponse response = new AllSubscribeAndFoodResponse();
+        response.setSubscribe(allSubscribeDto);
+        response.setFoods(foodAllSubscribeDto);
+        return response;
     }
 }

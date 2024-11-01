@@ -9,7 +9,7 @@ import java.util.List;
 public class AppendSubscribeRequest {
     private String subscribeName;
     private String subscribeDescription;
-    private int subscribeRate;
+    private int subscribeBeforePrice;
     private int subscribePrice;
     List<SubscribeProductsDto> subscribeProducts;
 }
