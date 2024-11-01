@@ -5,7 +5,6 @@ import com.ssafy.c107.main.domain.subscribe.dto.request.AppendSubscribeRequest;
 import com.ssafy.c107.main.domain.subscribe.dto.response.AllSubscribeAndFoodResponse;
 import com.ssafy.c107.main.domain.subscribe.dto.response.GetSubscribeResponse;
 import com.ssafy.c107.main.domain.subscribe.dto.response.SubscribeDetailResponse;
-import com.ssafy.c107.main.domain.subscribe.entity.Subscribe;
 import com.ssafy.c107.main.domain.subscribe.service.SubscribeService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -33,7 +32,7 @@ public class SubscribeController {
     public ResponseEntity<?> appendSubscribe(@PathVariable Long storedId,
                                              @AuthenticationPrincipal CustomUserDetails customUserDetails,
                                              @RequestBody AppendSubscribeRequest requestDto) {
-        subscribeService.AppendSubscribe(storedId, customUserDetails.getUserId(),customUserDetails.getUserRole().getRole(), requestDto);
+        subscribeService.AppendSubscribe(storedId, customUserDetails.getUserId(), customUserDetails.getUserRole().getRole(), requestDto);
         return ResponseEntity.ok("구독 추가가 완료되었습니다.");
     }
 
@@ -47,7 +46,7 @@ public class SubscribeController {
     // 반찬가게 상세페이지[구매자용](개별반찬,구독 상품)
     @GetMapping("/all/{storeId}")
     public ResponseEntity<?> allSubscribeAndFood(@PathVariable Long storeId,
-                                          @AuthenticationPrincipal CustomUserDetails customUserDetails) {
+                                                 @AuthenticationPrincipal CustomUserDetails customUserDetails) {
         AllSubscribeAndFoodResponse response = subscribeService.allSubscribeAndFood(storeId, customUserDetails.getUserRole().getRole());
         return ResponseEntity.ok(response);
     }

@@ -12,6 +12,7 @@ import com.ssafy.c107.main.domain.store.repository.StoreRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -47,6 +48,7 @@ public class FoodServiceImpl implements FoodService {
     }
 
     // 가게 전체 반찬 조회하기
+    @Transactional(readOnly = true)
     public FoodAllResponse findAllFood(Long storeId, String memberRole){
         // 구매자 접근 제한
         if(memberRole.equals("Buyer")){
@@ -59,6 +61,7 @@ public class FoodServiceImpl implements FoodService {
     }
 
     // 반찬가게 상세페이지[구매자용](개별반찬)
+    @Transactional(readOnly = true)
     public FoodAllResponse detailFoodAll(Long storeId, String memberRole){
         // 판매자 접근 제한
         if(memberRole.equals("Seller")){

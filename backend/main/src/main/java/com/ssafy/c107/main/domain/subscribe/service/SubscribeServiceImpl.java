@@ -4,11 +4,9 @@ import com.ssafy.c107.main.common.entity.WeeklyFood;
 import com.ssafy.c107.main.domain.food.dto.FoodAllDto;
 import com.ssafy.c107.main.domain.food.dto.FoodAllSubscribeDto;
 import com.ssafy.c107.main.domain.food.dto.FoodDto;
-import com.ssafy.c107.main.domain.food.dto.response.FoodAllResponse;
 import com.ssafy.c107.main.domain.food.entity.Food;
 import com.ssafy.c107.main.domain.food.exception.FoodNotFoundException;
 import com.ssafy.c107.main.domain.food.repository.FoodRepository;
-import com.ssafy.c107.main.domain.food.service.FoodService;
 import com.ssafy.c107.main.domain.members.exception.InvalidMemberRoleException;
 import com.ssafy.c107.main.domain.store.entity.Store;
 import com.ssafy.c107.main.domain.store.exception.StoreNotFoundException;
@@ -47,7 +45,7 @@ public class SubscribeServiceImpl implements SubscribeService {
     // 반찬가게 상세페이지(구독 상품 목록 조회)
     @Transactional(readOnly = true)
     public GetSubscribeResponse getSubscribe(Long storeId, String memberRole) {
-        if(memberRole.equals("Seller")) {
+        if (memberRole.equals("Seller")) {
             throw new InvalidMemberRoleException();
         }
         // 조인 쿼리를 사용해 구독 상품과 연관된 모든 데이터를 한 번에 가져옴.
@@ -193,8 +191,9 @@ public class SubscribeServiceImpl implements SubscribeService {
     }
 
     // 반찬가게 상세페이지[구매자용](개별반찬,구독 상품)
+    @Transactional(readOnly = true)
     public AllSubscribeAndFoodResponse allSubscribeAndFood(Long storeId, String memberRole) {
-        if(memberRole.equals("Seller")) {
+        if (memberRole.equals("Seller")) {
             throw new InvalidMemberRoleException();
         }
 
@@ -205,7 +204,7 @@ public class SubscribeServiceImpl implements SubscribeService {
 
         List<SubscribeAllDto> allSubscribeDto = subscribes.stream()
                 .map(subscribe -> {
-                    SubscribeAllDto dto= new SubscribeAllDto();
+                    SubscribeAllDto dto = new SubscribeAllDto();
                     dto.setSubscribeId(subscribe.getId());
                     dto.setSubscribeName(subscribe.getName());
                     dto.setSubscribePrice(subscribe.getPrice());

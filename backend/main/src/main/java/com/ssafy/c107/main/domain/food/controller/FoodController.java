@@ -30,7 +30,7 @@ public class FoodController {
     @GetMapping("/all/{storeId}")
     public ResponseEntity<?> foodAll(@PathVariable Long storeId,
                                      @AuthenticationPrincipal CustomUserDetails userDetails) {
-        FoodAllResponse response = foodService.findAllFood(storeId,userDetails.getUserRole().getRole());
+        FoodAllResponse response = foodService.findAllFood(storeId, userDetails.getUserRole().getRole());
         return ResponseEntity.ok(response);
     }
 
@@ -38,9 +38,7 @@ public class FoodController {
     @GetMapping("/dishes/{storeId}")
     public ResponseEntity<?> detailFoodAll(@PathVariable Long storeId,
                                            @AuthenticationPrincipal CustomUserDetails userDetails) {
-        FoodAllResponse response = foodService.detailFoodAll(storeId,userDetails.getUserRole().getRole());
+        FoodAllResponse response = foodService.detailFoodAll(storeId, userDetails.getUserRole().getRole());
         return ResponseEntity.ok(response);
     }
-
-
 }
