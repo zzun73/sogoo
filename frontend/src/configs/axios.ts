@@ -9,6 +9,7 @@ const instance = axios.create({
 
 instance.interceptors.request.use(
   async (config) => {
+    console.log(import.meta.env.VITE_BASE_URL); // log 추가
     const { accessToken } = useRootStore.getState();
     if (accessToken) {
       config.headers["Authorization"] = `Bearer ${accessToken}`;
