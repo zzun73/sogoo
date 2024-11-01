@@ -53,6 +53,25 @@ public class FoodServiceImpl implements FoodService {
             throw new InvalidMemberRoleException();
         }
 
+        // 반찬 가져오기
+        FoodAllResponse response = getAllFood(storeId);
+        return response;
+    }
+
+    // 반찬가게 상세페이지[구매자용](개별반찬)
+    public FoodAllResponse detailFoodAll(Long storeId, String memberRole){
+        // 판매자 접근 제한
+        if(memberRole.equals("Seller")){
+            throw new InvalidMemberRoleException();
+        }
+
+        // 반찬 가져오기
+        FoodAllResponse response = getAllFood(storeId);
+        return response;
+    }
+
+    // 가게 전체 반찬 조회하기[판매자용], 반찬가게 상세페이지[구매자용](개별반찬) 반찬 가져오기
+    public FoodAllResponse getAllFood(Long storeId){
         // 가게 조회
         Store store = storeRepository.findById(storeId)
                 .orElseThrow(StoreNotFoundException::new);

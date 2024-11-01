@@ -7,4 +7,6 @@ public interface FoodService {
     void appendFood(Long storeId,AppendFoodRequest request, String memberRole);
 
     FoodAllResponse findAllFood(Long storeId, String memberRole);
+
+    FoodAllResponse detailFoodAll(Long storeId, String memberRole);
 }

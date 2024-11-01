@@ -20,7 +20,7 @@ public class SubscribeController {
     private final SubscribeService subscribeService;
 
     // 반찬가게 상세페이지(구독 상품 목록 조회)
-    @GetMapping("/{storeId}")
+    @GetMapping("/list/{storeId}")
     public ResponseEntity<?> getSubscribe(@PathVariable Long storeId) {
         GetSubscribeResponse response = subscribeService.getSubscribe(storeId);
         return ResponseEntity.ok(response);
