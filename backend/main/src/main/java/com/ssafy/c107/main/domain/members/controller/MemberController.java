@@ -61,14 +61,13 @@ public class MemberController {
             .email(signUpDto.getEmail())
             .withDrawalStatus(WithDrawalStatus.ACTIVE)
             .address(signUpDto.getAddress())
-            .UUID(signUpDto.getUuid())
             .build());
         return ResponseEntity.ok("회원가입 완료핑");
     }
 
     @PostMapping("/seller-check")
     public ResponseEntity<?> checkSeller(@RequestBody SellerCheckRequest sellerCheckRequest) {
-        boolean isExist = memberService.sellerCheck(sellerCheckRequest.getSellerNumber());
+        boolean isExist = memberService.sellerCheck(sellerCheckRequest.getBusinessNumber());
         if (isExist) {
             return ResponseEntity.ok("사업자 인증 완료핑");
         } else {

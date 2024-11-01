@@ -200,7 +200,7 @@ public class SubscribeServiceImpl implements SubscribeService {
         Store store = storeRepository.findById(storeId)
                 .orElseThrow(StoreNotFoundException::new);
         // 구독 상품 가져오기
-        List<Subscribe> subscribes = subscribeRepository.findByStore(store);
+        List<Subscribe> subscribes = subscribeRepository.findAllByStore_Id(store.getId());
 
         List<SubscribeAllDto> allSubscribeDto = subscribes.stream()
                 .map(subscribe -> {

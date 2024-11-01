@@ -104,7 +104,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
             .builder()
             .name(member.getName())
             .birth(member.getBirth())
-            .uuid(member.getUUID())
+            .uuid(member.getUuid())
             .phoneNumber(member.getPhoneNumber())
             .address(member.getAddress())
             .email(member.getEmail())

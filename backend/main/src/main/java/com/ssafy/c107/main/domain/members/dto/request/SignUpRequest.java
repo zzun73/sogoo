@@ -12,5 +12,5 @@ public class SignUpRequest {
     private String birth;
     private String address;
     private String role;
-    private String uuid;
+    private String businessNumber;
 }

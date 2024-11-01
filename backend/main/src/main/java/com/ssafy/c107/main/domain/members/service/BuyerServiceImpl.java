@@ -117,7 +117,7 @@ public class BuyerServiceImpl implements BuyerService {
                         .foodId(food.getId())
                         .foodName(food.getName())
                         .foodImg(food.getImg())
-                        .reviewStatus("Written")
+                        .reviewStatus(true)
                         .build());
                 } else {
                     //리뷰가 없는데 구매일 7일 이내일 경우
@@ -127,15 +127,7 @@ public class BuyerServiceImpl implements BuyerService {
                             .foodId(food.getId())
                             .foodName(food.getName())
                             .foodImg(food.getImg())
-                            .reviewStatus("Must Write")
-                            .build());
-                    } else {
-                        reviews.add(ReviewsResponse
-                            .builder()
-                            .foodId(food.getId())
-                            .foodName(food.getName())
-                            .foodImg(food.getImg())
-                            .reviewStatus("Expired")
+                            .reviewStatus(false)
                             .build());
                     }
                 }

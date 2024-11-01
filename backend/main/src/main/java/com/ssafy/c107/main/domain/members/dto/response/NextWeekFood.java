@@ -5,11 +5,9 @@ import lombok.Data;
 
 @Data
 @Builder
-public class ReviewsResponse {
+public class NextWeekFood {
 
     private Long foodId;
     private String foodName;
-    private String foodImg;
-    private String subscribeName;
-    private boolean reviewStatus;
+    private int foodCnt;
 }

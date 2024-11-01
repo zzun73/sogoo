@@ -27,6 +27,7 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public void signUp(Member member) {
         member.updatePassword(bCryptPasswordEncoder.encode(member.getPassword()));
+        member.updateUUID();
         memberRepository.save(member);
     }
 
@@ -40,6 +41,6 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public boolean sellerCheck(String sellerNumber) {
-        return businessCertificationRepository.existsBySellerNumber(sellerNumber);
+        return businessCertificationRepository.existsByBusinessNumber(sellerNumber);
     }
 }
