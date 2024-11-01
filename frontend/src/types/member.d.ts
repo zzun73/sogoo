@@ -6,6 +6,7 @@ interface MemberInfo {
   birth: string;
   address: string;
   role: string;
+  uuid: string;
 }
 
 interface MemberStore {
