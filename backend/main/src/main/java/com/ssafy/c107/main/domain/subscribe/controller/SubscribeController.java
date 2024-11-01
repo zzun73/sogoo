@@ -3,6 +3,7 @@ package com.ssafy.c107.main.domain.subscribe.controller;
 import com.ssafy.c107.main.domain.members.dto.CustomUserDetails;
 import com.ssafy.c107.main.domain.subscribe.dto.request.AppendSubscribeRequest;
 import com.ssafy.c107.main.domain.subscribe.dto.response.GetSubscribeResponse;
+import com.ssafy.c107.main.domain.subscribe.dto.response.SubscribeDetailResponse;
 import com.ssafy.c107.main.domain.subscribe.entity.Subscribe;
 import com.ssafy.c107.main.domain.subscribe.service.SubscribeService;
 import lombok.RequiredArgsConstructor;
@@ -25,11 +26,18 @@ public class SubscribeController {
     }
 
     //구독 상품 추가
-    @PostMapping("/{storedId}")
+    @PostMapping("/store/{storedId}")
     public ResponseEntity<?> appendSubscribe(@PathVariable Long storedId,
                                              @AuthenticationPrincipal CustomUserDetails customUserDetails,
                                              @RequestBody AppendSubscribeRequest requestDto) {
         subscribeService.AppendSubscribe(storedId, customUserDetails.getUserId(),customUserDetails.getUserRole().getRole(), requestDto);
         return ResponseEntity.ok("구독 추가가 완료되었습니다.");
+    }
+
+    //구독 상품 상세 보기
+    @GetMapping("/detail/{subscribeId}")
+    public ResponseEntity<?> detailSubscribe(@PathVariable Long subscribeId) {
+        SubscribeDetailResponse response = subscribeService.detailSubscribe(subscribeId);
+        return ResponseEntity.ok(response);
     }
 }
