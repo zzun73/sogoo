@@ -71,7 +71,7 @@ public class SellerServiceImpl implements SellerService {
         }
 
         // 1-2. 구독 금액 가져오기
-        
+
 
         return null;
     }
