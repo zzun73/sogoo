@@ -6,8 +6,9 @@ type Password = string;
 type phoneNumber = string;
 type Birth = string;
 type Address = string;
-type Role = "Buyer" | "Seller";
+type Role = string;
 type AccessToken = string;
+type BusinessNumber = string | null;
 
 // request, response 변수에 대한 type 정의
 
@@ -19,6 +20,7 @@ interface SignUpForm {
   birth: Birth;
   address: Address;
   role: Role;
+  businessNumber: BusinessNumber;
 }
 
 interface LoginForm {
