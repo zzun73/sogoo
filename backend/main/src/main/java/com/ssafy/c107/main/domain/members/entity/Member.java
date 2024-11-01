@@ -9,11 +9,13 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import java.util.UUID;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import org.hibernate.annotations.GenericGenerator;
 
 @Entity
 @Getter
@@ -54,12 +56,12 @@ public class Member extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private MemberRole role;
 
-    private String UUID;
+    private String uuid;
 
     @Builder
     public Member(String name, String email, String password, String refreshToken,
         String phoneNumber, String birth, String address, WithDrawalStatus withDrawalStatus,
-        MemberRole role, String UUID) {
+        MemberRole role) {
         this.name = name;
         this.email = email;
         this.password = password;
@@ -69,7 +71,6 @@ public class Member extends BaseEntity {
         this.address = address;
         this.withDrawalStatus = withDrawalStatus;
         this.role = role;
-        this.UUID = UUID;
     }
 
     public void updateId(Long id) {
@@ -94,5 +95,9 @@ public class Member extends BaseEntity {
 
     public void updateRole(MemberRole role) {
         this.role = role;
+    }
+
+    public void updateUUID() {
+        this.uuid = UUID.randomUUID().toString();
     }
 }

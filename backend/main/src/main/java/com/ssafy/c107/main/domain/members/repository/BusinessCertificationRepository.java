@@ -6,6 +6,6 @@ import org.springframework.data.repository.CrudRepository;
 public interface BusinessCertificationRepository extends
     CrudRepository<BusinessCertification, Long> {
 
-    boolean existsBySellerNumber(String sellerNumber);
+    boolean existsByBusinessNumber(String businessNumber);
 
 }
