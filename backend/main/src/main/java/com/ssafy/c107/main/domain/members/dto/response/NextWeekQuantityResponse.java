@@ -1,5 +1,6 @@
 package com.ssafy.c107.main.domain.members.dto.response;
 
+import java.util.List;
 import lombok.Builder;
 import lombok.Data;
 
@@ -7,5 +8,5 @@ import lombok.Data;
 @Builder
 public class NextWeekQuantityResponse {
 
-    private NextWeekFood foods;
+    private List<NextWeekFood> foods;
 }

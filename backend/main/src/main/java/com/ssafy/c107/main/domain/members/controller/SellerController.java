@@ -43,7 +43,7 @@ public class SellerController {
         if (!customUserDetails.getUserRole().getRole().equals("SELLER")) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("구매자는 접근 불가핑!");
         }
-        return null;
+        return ResponseEntity.ok(sellerService.getNextCount(storeId));
     }
 
 }
