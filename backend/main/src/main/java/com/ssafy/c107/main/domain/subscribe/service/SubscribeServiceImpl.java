@@ -1,6 +1,7 @@
 package com.ssafy.c107.main.domain.subscribe.service;
 
 import com.ssafy.c107.main.common.entity.WeeklyFood;
+import com.ssafy.c107.main.domain.food.dto.FoodAllDto;
 import com.ssafy.c107.main.domain.food.dto.FoodDto;
 import com.ssafy.c107.main.domain.food.entity.Food;
 import com.ssafy.c107.main.domain.food.exception.FoodNotFoundException;
@@ -163,10 +164,18 @@ public class SubscribeServiceImpl implements SubscribeService {
                     subscribeDetailWeekDto.setSubscribeDate(subscribeWeek.getDate().toString());
                     subscribeDetailWeekDto.setSubscribeRound(subscribeWeek.getRound());
 
-                    List<String> foodImgs = subscribeWeek.getWeeklyFoods().stream()
-                            .map(weeklyFood -> weeklyFood.getFood().getImg())
-                            .collect(Collectors.toList());
-                    subscribeDetailWeekDto.setFoodImgs(foodImgs);
+                    List<FoodAllDto> foodData = subscribeWeek.getWeeklyFoods().stream()
+                            .map(weeklyFood -> {
+                                FoodAllDto foodAllDto = new FoodAllDto();
+                                foodAllDto.setFoodId(weeklyFood.getFood().getId());
+                                foodAllDto.setFoodName(weeklyFood.getFood().getName());
+                                foodAllDto.setFoodDescription(weeklyFood.getFood().getDescription());
+                                foodAllDto.setFoodPrice(weeklyFood.getFood().getPrice());
+                                foodAllDto.setFoodImg(weeklyFood.getFood().getImg());
+
+                                return foodAllDto;
+                            }).collect(Collectors.toList());
+                    subscribeDetailWeekDto.setFoodData(foodData);
 
                     return subscribeDetailWeekDto;
                 }).collect(Collectors.toList());

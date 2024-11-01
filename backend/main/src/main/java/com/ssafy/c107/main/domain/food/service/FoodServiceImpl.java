@@ -48,8 +48,8 @@ public class FoodServiceImpl implements FoodService {
 
     // 가게 전체 반찬 조회하기
     public FoodAllResponse findAllFood(Long storeId, String memberRole){
-        // 판매자 접근 제한
-        if(memberRole.equals("Seller")){
+        // 구매자 접근 제한
+        if(memberRole.equals("Buyer")){
             throw new InvalidMemberRoleException();
         }
 
