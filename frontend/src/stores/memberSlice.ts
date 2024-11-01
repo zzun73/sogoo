@@ -1,6 +1,8 @@
 import type { StateCreator } from "zustand";
 
-export const createMemberSlice: StateCreator<RootState, [], [], MemberStore> = (set) => ({
+export const createMemberSlice: StateCreator<RootState, [], [], MemberStore> = (
+  set
+) => ({
   memberInfo: null,
   accessToken: null,
   isLogin: false,
@@ -14,6 +16,7 @@ export const createMemberSlice: StateCreator<RootState, [], [], MemberStore> = (
         birth: memberInfo.birth!,
         address: memberInfo.address!,
         role: memberInfo.role!,
+        uuid: memberInfo.uuid!,
       },
       isLogin: true,
     });
@@ -22,7 +25,7 @@ export const createMemberSlice: StateCreator<RootState, [], [], MemberStore> = (
     set({ accessToken });
   },
   setLogout: () => {
-    set({ memberInfo: null, isLogin: false });
+    set({ memberInfo: null, accessToken: null, isLogin: false });
     localStorage.clear();
   },
   setIsLogin: (isLogin: boolean) => {
