@@ -11,5 +11,5 @@ public class ReviewsResponse {
     private String foodName;
     private String foodImg;
     private String subscribeName;
-    private String reviewStatus;
+    private boolean reviewStatus;
 }
