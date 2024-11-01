@@ -5,6 +5,7 @@ import com.ssafy.c107.main.domain.members.dto.response.SalesStatusResponse;
 import com.ssafy.c107.main.domain.order.repository.OrderRepository;
 import com.ssafy.c107.main.domain.subscribe.entity.SubscribeStatus;
 import com.ssafy.c107.main.domain.subscribe.repository.MemberSubscribeRepository;
+import com.ssafy.c107.main.domain.subscribe.repository.SubscribePayRepository;
 import java.util.Arrays;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +19,7 @@ public class SellerServiceImpl implements SellerService {
 
     private final OrderRepository orderRepository;
     private final MemberSubscribeRepository memberSubscribeRepository;
+    private final SubscribePayRepository subscribePayRepository;
 
     @Override
     public SalesStatusResponse getSalesStatus(Long storeId) {
@@ -25,7 +27,7 @@ public class SellerServiceImpl implements SellerService {
         int todayOrderPrice = orderRepository.getTodayTotalPriceByStore(storeId);
 
         //구독 거래금액 가져오기
-        int todaySubscribePrice = memberSubscribeRepository.findTodayTotalPaymentByStoreId(storeId);
+        int todaySubscribePrice = subscribePayRepository.findTodayTotalPaymentByStoreId(storeId);
 
         //주문 수량 가져오기
         int todayOrderCount = orderRepository.getTodayOrderCountByStore(storeId);
