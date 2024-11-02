@@ -10,8 +10,6 @@ function App() {
   const queryClient = new QueryClient();
   const location: Location = useLocation();
 
-  console.log(location.pathname);
-
   return (
     <QueryClientProvider client={queryClient}>
       <div className="min-h-screen flex flex-col">
