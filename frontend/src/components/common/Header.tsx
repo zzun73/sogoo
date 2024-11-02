@@ -19,26 +19,36 @@ const Header = () => {
           </Link>
         </div>
       </header>
-      <nav className="sticky top-0 text-lg bg-black-paper text-white shadow-kg z-10">
+      <nav className="sticky top-0 py-1 text-2xl bg-black-paper text-white shadow-lg z-10">
         <div className="flex flex-row justify-between items-center w-full h-14 px-16">
           {/* 페이지 이동 */}
           <div className="flex items-center gap-8">
-            <Link to="/">홈</Link>
-            <Link to="/store">매장 조회</Link>
+            <Link to="/" className="font-chosun">
+              홈
+            </Link>
+            <Link to="/store" className="font-chosun">
+              매장 조회
+            </Link>
           </div>
           {/* user 관련 */}
           <div className="flex items-center gap-8">
             {isLogin && (
               <Link to="/mypage">
-                <MdOutlinePerson className="w-5 h-5" />
+                <MdOutlinePerson className="w-6 h-6" />
               </Link>
             )}
-            {isLogin && isSeller && (
+            {isLogin && !isSeller && (
               <Link to="/cart">
-                <MdOutlineShoppingCart className="w-5 h-5" />
+                <MdOutlineShoppingCart className="w-6 h-6" />
               </Link>
             )}
-            {isLogin ? <button>로그아웃</button> : <Link to="/sign">로그인/회원가입</Link>}
+            {isLogin ? (
+              <button className="font-chosun">로그아웃</button>
+            ) : (
+              <Link to="/sign" className="font-chosun">
+                로그인/회원가입
+              </Link>
+            )}
           </div>
         </div>
       </nav>
