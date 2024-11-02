@@ -1,3 +1,5 @@
+import useRootStore from "../stores";
+
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
@@ -11,10 +13,27 @@ import AccordionDetails from "@mui/material/AccordionDetails";
 import Button from "@mui/material/Button";
 
 const BuyerMyPage = () => {
+  const memberInfo = useRootStore().memberInfo;
+
+  const formatPhoneNumber = (number: string | undefined): string => {
+    if (number === undefined) return "";
+    if (number.length !== 11) {
+      throw new Error("Input must be an 11-digit string");
+    }
+    if (!/^\d+$/.test(number)) {
+      throw new Error("Input must contain only numbers");
+    }
+    if (!number.startsWith("010")) {
+      throw new Error("Phone number must start with 010");
+    }
+
+    return `${number.slice(0, 3)}-${number.slice(3, 7)}-${number.slice(7)}`;
+  };
+
   return (
     <div className="w-full flex flex-col justify-center items-center bg-slate-200">
       <div className="my-10 mx-[200px]">
-        <h2 className="text-4xl font-shilla font-bold text-center mb-8">마이페이지</h2>
+        <h2 className="text-5xl font-shilla font-bold text-center mb-8">마이페이지</h2>
         <div className="min-w-[800px] grid grid-cols-2 gap-4">
           <div className="col-span-2 flex flex-col gap-2">
             {/* 사용자 정보 Title */}
@@ -26,19 +45,19 @@ const BuyerMyPage = () => {
               <div className="grid grid-cols-3 gap-4">
                 <div className="flex items-center">
                   <p className="w-24 font-bold">성명</p>
-                  <p>김싸피</p>
+                  <p>{memberInfo?.name}</p>
                 </div>
                 <div className="flex items-center">
                   <p className="w-24 font-bold">휴대폰</p>
-                  <p>010-1234-5678</p>
+                  <p>{formatPhoneNumber(memberInfo?.phoneNumber)}</p>
                 </div>
                 <div className="flex items-center">
                   <p className="w-24 font-bold">이메일</p>
-                  <div className="flex-1 w-full">kimSSAFY@ssafy.com</div>
+                  <div className="flex-1 w-full">{memberInfo?.email}</div>
                 </div>
                 <div className="col-span-3 flex items-center">
                   <p className="w-24 font-bold">주소</p>
-                  <div className="flex-1 w-full"></div>
+                  <div className="flex-1 w-full">{memberInfo?.address}</div>
                 </div>
               </div>
             </div>
