@@ -4,8 +4,10 @@ import Button from "@mui/material/Button";
 import { useMutation } from "@tanstack/react-query";
 import sogoo from "../../../services/sogoo";
 import useRootStore from "../../../stores";
+import { useNavigate } from "react-router-dom";
 
 const SignInBox = () => {
+  const navigate = useNavigate();
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
 
@@ -19,6 +21,7 @@ const SignInBox = () => {
       console.log("로그인 성공:", response);
       alert("로그인 성공");
       console.log(memberInfo);
+      navigate("/");
     },
     onError: (error) => {
       console.error("로그인 실패:", error);
@@ -53,11 +56,7 @@ const SignInBox = () => {
         onChange={(e) => setPassword(e.target.value)}
         sx={{ width: "100%", height: "56px", marginBottom: "40px" }}
       />
-      <Button
-        variant="contained"
-        sx={{ width: "95px", height: "42px" }}
-        onClick={initiateLogin}
-      >
+      <Button variant="contained" sx={{ width: "95px", height: "42px" }} onClick={initiateLogin}>
         로그인
       </Button>
     </div>
