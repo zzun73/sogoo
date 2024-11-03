@@ -13,7 +13,7 @@ const StoreDetail = () => {
     <div>
       <StoreInfo />
       <TabBar selectedTab={selectedTab} handleTab={handleTab} />
-      <StoreContent />
+      <StoreContent selectedTab={selectedTab} />
     </div>
   );
 };
