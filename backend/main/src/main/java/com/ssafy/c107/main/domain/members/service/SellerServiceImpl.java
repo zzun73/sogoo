@@ -2,11 +2,19 @@ package com.ssafy.c107.main.domain.members.service;
 
 import com.ssafy.c107.main.common.entity.WeeklyFood;
 import com.ssafy.c107.main.domain.food.entity.Food;
+import com.ssafy.c107.main.domain.food.exception.FoodNotFoundException;
+import com.ssafy.c107.main.domain.food.repository.FoodRepository;
+import com.ssafy.c107.main.domain.members.dto.ProductDto;
 import com.ssafy.c107.main.domain.members.dto.response.MonthlySalesResponse;
 import com.ssafy.c107.main.domain.members.dto.response.NextWeekFood;
 import com.ssafy.c107.main.domain.members.dto.response.NextWeekQuantityResponse;
 import com.ssafy.c107.main.domain.members.dto.response.SalesStatusResponse;
 import com.ssafy.c107.main.domain.members.dto.response.TodaySalesResponse;
+import com.ssafy.c107.main.domain.order.entity.Order;
+import com.ssafy.c107.main.domain.order.entity.OrderList;
+import com.ssafy.c107.main.domain.order.entity.OrderType;
+import com.ssafy.c107.main.domain.order.exception.OrderListNotFoundException;
+import com.ssafy.c107.main.domain.order.repository.OrderListRepository;
 import com.ssafy.c107.main.domain.order.repository.OrderRepository;
 import com.ssafy.c107.main.domain.subscribe.entity.Subscribe;
 import com.ssafy.c107.main.domain.subscribe.entity.SubscribeStatus;
@@ -44,6 +52,8 @@ public class SellerServiceImpl implements SellerService {
     private final SubscribePayRepository subscribePayRepository;
     private final SubscribeRepository subscribeRepository;
     private final SubscribeWeekRepository subscribeWeekRepository;
+    private final OrderListRepository orderListRepository;
+    private final FoodRepository foodRepository;
 
     @Override
     public SalesStatusResponse getSalesStatus(Long storeId) {
@@ -159,7 +169,45 @@ public class SellerServiceImpl implements SellerService {
 
     @Override
     public TodaySalesResponse getTodaySales(Long storeId) {
-        return null;
+        //초기설정
+        List<ProductDto> products = new ArrayList<>();
+
+        //해당 가게의 오늘날짜의 구독 상품 주문 개수 가져오기
+
+        //해당 구독 상품의 가격과 총 가격 가져오기
+
+        //해당 가게의 오늘날짜의 일반 상품 주문 가져오기
+        List<Order> orders = orderRepository.findByOrderTypeAndCreatedAtToday(OrderType.FOOD);
+
+        //해당 주문의 상품을 돌면서 반찬의 가격 가져와서 개수 곱해가주고 넣기
+        Map<String, Integer> map = new HashMap<>();
+        for (Order order : orders) {
+            List<OrderList> orderLists = orderListRepository.findAllByOrder_Id(order.getId());
+            for (OrderList orderList : orderLists) {
+                String foodName = orderList.getFood().getName();
+                if (!map.containsKey(foodName)) {
+                    map.put(foodName, orderList.getCount());
+                } else {
+                    map.put(foodName, map.get(foodName) + orderList.getCount());
+                }
+            }
+        }
+
+        for (String foodName : map.keySet()) {
+            Food food = foodRepository.findByName(foodName).orElseThrow(FoodNotFoundException::new);
+            products.add(ProductDto
+                .builder()
+                .productName(foodName)
+                .productCnt(map.get(foodName))
+                .price(food.getPrice())
+                .salesSum(food.getPrice() * map.get(foodName))
+                .build());
+        }
+
+        return TodaySalesResponse
+            .builder()
+            .products(products)
+            .build();
     }
 
     LocalDate getnextMonday() {
