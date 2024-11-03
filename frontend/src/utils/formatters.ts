@@ -11,6 +11,11 @@ const formatToDate = (date: Date, dateType: string): string => {
   }
 };
 
+const formatToCurrency = (amount: number): string => {
+  return amount.toLocaleString("ko-KR") + "원";
+};
+
 export default {
   formatToDate,
+  formatToCurrency,
 };
