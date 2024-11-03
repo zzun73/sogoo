@@ -16,6 +16,7 @@ public class SecurityConfig {
         http
                 .csrf(AbstractHttpConfigurer::disable);
 
+        
         http
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/actuator/health").permitAll()  // health 엔드포인트는 인증 없이 접근 가능
