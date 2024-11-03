@@ -1,7 +1,7 @@
 spring:
   config:
-    #    import: optional:configserver:http://localhost:8888  # Config Server address
-    import: optional:configserver:https://www.sogoo.kr/config  # Config Server address in production
+    #    import: optional:configserver:http://localhost:8888  # Local Config Server Address
+    import: optional:configserver:https://www.sogoo.kr/config  # prod Config Server Address
   cloud:
     config:
       fail-fast: true
