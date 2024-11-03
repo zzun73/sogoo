@@ -19,9 +19,8 @@ public class SecurityConfig {
         
         http
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/actuator/health").permitAll()  // health 엔드포인트는 인증 없이 접근 가능
-                        .requestMatchers("/actuator/**").hasRole("ADMIN")
-                        .anyRequest().authenticated()                     // 그 외의 모든 요청은 인증 필요
+                        .requestMatchers("/actuator/health").permitAll()
+                        .anyRequest().authenticated()
                 )
                 .httpBasic(Customizer.withDefaults()); // 기본 인증(Basic Auth) 설정
 
