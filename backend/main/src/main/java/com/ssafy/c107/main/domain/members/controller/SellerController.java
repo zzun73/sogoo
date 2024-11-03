@@ -46,4 +46,11 @@ public class SellerController {
         return ResponseEntity.ok(sellerService.getNextCount(storeId));
     }
 
+    @GetMapping("/today-sell/{storeId}")
+    public ResponseEntity<?> getTodaySales(@PathVariable(name = "storeId") Long storeId, @AuthenticationPrincipal CustomUserDetails customUserDetails) {
+        if (!customUserDetails.getUserRole().getRole().equals("SELLER")) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("구매자는 접근 불가핑!");
+        }
+        return null;
+    }
 }
