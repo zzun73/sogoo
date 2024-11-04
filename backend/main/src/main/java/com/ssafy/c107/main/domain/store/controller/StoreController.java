@@ -50,6 +50,6 @@ public class StoreController {
         if (customUserDetails.getUserRole().getRole().equals("Buyer")) {
             throw new InvalidMemberRoleException();
         }
-        return null;
+        return ResponseEntity.ok(storeService.getAllSellerStores(customUserDetails.getUserId()));
     }
 }
