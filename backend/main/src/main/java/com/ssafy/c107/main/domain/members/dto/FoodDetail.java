@@ -10,6 +10,6 @@ public class FoodDetail {
     private Long foodId;
     private String foodName;
     private String foodDescription;
-    private int price;
+    private int foodPrice;
     private String foodImg;
 }

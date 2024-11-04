@@ -27,5 +27,4 @@ public interface SubscribeRepository extends JpaRepository<Subscribe, Long> {
         + "AND DATE_TRUNC('day', sp.createdAt) = DATE_TRUNC('day', CURRENT_TIMESTAMP) "
         + "group by s.id ")
     List<Object[]> getTodaySubscribeSales(@Param("storeId") Long storeId);
-
 }
