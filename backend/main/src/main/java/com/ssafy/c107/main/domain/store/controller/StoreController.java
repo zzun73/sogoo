@@ -40,6 +40,8 @@ public class StoreController {
         if (customUserDetails.getUserRole().getRole().equals("Buyer")) {
             throw new InvalidMemberRoleException();
         }
-        return null;
+        Long userId = customUserDetails.getUserId();
+        storeService.addStore(addStoreRequest, userId);
+        return ResponseEntity.ok("등록완료핑");
     }
 }

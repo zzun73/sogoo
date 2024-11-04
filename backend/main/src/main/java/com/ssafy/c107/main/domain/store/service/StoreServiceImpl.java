@@ -1,18 +1,21 @@
 package com.ssafy.c107.main.domain.store.service;
 
+import com.ssafy.c107.main.common.aws.FileService;
+import com.ssafy.c107.main.domain.members.entity.Member;
+import com.ssafy.c107.main.domain.members.exception.MemberNotFoundException;
+import com.ssafy.c107.main.domain.members.repository.MemberRepository;
 import com.ssafy.c107.main.domain.store.dto.GetStoreDto;
 import com.ssafy.c107.main.domain.store.dto.request.AddStoreRequest;
 import com.ssafy.c107.main.domain.store.dto.response.GetStoreResponse;
 import com.ssafy.c107.main.domain.store.entity.Store;
 import com.ssafy.c107.main.domain.store.exception.StoreNotFoundException;
 import com.ssafy.c107.main.domain.store.repository.StoreRepository;
+import java.util.List;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -20,6 +23,8 @@ import java.util.stream.Collectors;
 public class StoreServiceImpl implements StoreService {
 
     private final StoreRepository storeRepository;
+    private final FileService fileService;
+    private final MemberRepository memberRepository;
 
     //메인 페이지 조회
     @Transactional(readOnly = true)
@@ -59,7 +64,21 @@ public class StoreServiceImpl implements StoreService {
     }
 
     @Override
-    public void addStore(AddStoreRequest addStoreRequest) {
-        
+    public void addStore(AddStoreRequest addStoreRequest, Long userId) {
+        Member member = memberRepository.findById(userId).orElseThrow(MemberNotFoundException::new);
+
+        //이미지 저장
+        String imgUrl = fileService.saveFile(addStoreRequest.getImg());
+
+        //가게 등록
+        storeRepository.save(Store
+            .builder()
+            .name(addStoreRequest.getName())
+            .address(addStoreRequest.getAddress())
+            .img(imgUrl)
+            .description(addStoreRequest.getDescription())
+            .member(member)
+            .summary("없음")
+            .build());
     }
 }

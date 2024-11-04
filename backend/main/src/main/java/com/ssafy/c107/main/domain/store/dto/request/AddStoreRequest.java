@@ -1,6 +1,5 @@
 package com.ssafy.c107.main.domain.store.dto.request;
 
-import com.ssafy.c107.main.domain.store.dto.StoreInformationDto;
 import lombok.Builder;
 import lombok.Data;
 import org.springframework.web.multipart.MultipartFile;
@@ -9,6 +8,8 @@ import org.springframework.web.multipart.MultipartFile;
 @Builder
 public class AddStoreRequest {
 
-    private StoreInformationDto store;
+    private String name;
+    private String address;
+    private String description;
     private MultipartFile img;
 }

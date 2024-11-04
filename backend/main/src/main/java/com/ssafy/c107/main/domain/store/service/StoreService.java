@@ -10,5 +10,5 @@ public interface StoreService {
 
     GetStoreDto getStoreById(Long id);
 
-    void addStore(AddStoreRequest addStoreRequest);
+    void addStore(AddStoreRequest addStoreRequest, Long userId);
 }
