@@ -1,6 +1,7 @@
 package com.ssafy.c107.main.domain.store.service;
 
 import com.ssafy.c107.main.domain.store.dto.GetStoreDto;
+import com.ssafy.c107.main.domain.store.dto.request.AddStoreRequest;
 import com.ssafy.c107.main.domain.store.dto.response.GetStoreResponse;
 import com.ssafy.c107.main.domain.store.entity.Store;
 import com.ssafy.c107.main.domain.store.exception.StoreNotFoundException;
@@ -55,5 +56,10 @@ public class StoreServiceImpl implements StoreService {
         dto.setImg(store.getImg());
 
         return dto;
+    }
+
+    @Override
+    public void addStore(AddStoreRequest addStoreRequest) {
+        
     }
 }
