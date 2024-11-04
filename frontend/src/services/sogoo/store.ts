@@ -14,4 +14,16 @@ export default {
   getMyStores: async () => {
     return axios.get("/store/mystore");
   },
+
+  /**
+   * (판매자) 가게 등록
+   * @param registerStoreForm
+   */
+  registerMyStore: async (registerStoreForm: RegisterStoreForm) => {
+    return axios.post("/store/add", registerStoreForm, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+  },
 };
