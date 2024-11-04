@@ -1,12 +1,30 @@
 spring:
   config:
     #    import: optional:configserver:http://localhost:8888  # Local Config Server Address
-    import: optional:configserver:https://www.sogoo.kr/config  # prod Config Server Address
+    import: optional:configserver:https://www.sogoo.kr/config # Prod Config Server Address
   cloud:
     config:
       fail-fast: true
       label: main  # branch name
       name: sogoo-main  # Config Server에 지정된 yml 파일 이름
-      profile: default
+      #      profile: default
       username: ${CONFIG_USERNAME}
       password: ${CONFIG_PASSWORD}
+
+---
+spring:
+  config:
+    activate:
+      on-profile: local
+  cloud:
+    config:
+      profile: local
+
+---
+spring:
+  config:
+    activate:
+      on-profile: prod
+  cloud:
+    config:
+      profile: prod

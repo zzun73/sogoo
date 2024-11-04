@@ -4,11 +4,17 @@ import com.ssafy.c107.main.common.entity.WeeklyFood;
 import com.ssafy.c107.main.domain.food.entity.Food;
 import com.ssafy.c107.main.domain.food.exception.FoodNotFoundException;
 import com.ssafy.c107.main.domain.food.repository.FoodRepository;
+import com.ssafy.c107.main.domain.members.dto.FoodDetail;
 import com.ssafy.c107.main.domain.members.dto.ProductDto;
+import com.ssafy.c107.main.domain.members.dto.ReviewChart;
+import com.ssafy.c107.main.domain.members.dto.ReviewDetail;
+import com.ssafy.c107.main.domain.members.dto.SubscribeDetail;
 import com.ssafy.c107.main.domain.members.dto.response.MonthlySalesResponse;
 import com.ssafy.c107.main.domain.members.dto.response.NextWeekFood;
 import com.ssafy.c107.main.domain.members.dto.response.NextWeekQuantityResponse;
+import com.ssafy.c107.main.domain.members.dto.response.ReviewDetailResponse;
 import com.ssafy.c107.main.domain.members.dto.response.SalesStatusResponse;
+import com.ssafy.c107.main.domain.members.dto.response.SellerMenuResponse;
 import com.ssafy.c107.main.domain.members.dto.response.SellerReviewAllResponse;
 import com.ssafy.c107.main.domain.members.dto.response.TodaySalesResponse;
 import com.ssafy.c107.main.domain.order.entity.Order;
@@ -17,7 +23,11 @@ import com.ssafy.c107.main.domain.order.entity.OrderType;
 import com.ssafy.c107.main.domain.order.exception.OrderListNotFoundException;
 import com.ssafy.c107.main.domain.order.repository.OrderListRepository;
 import com.ssafy.c107.main.domain.order.repository.OrderRepository;
+import com.ssafy.c107.main.domain.review.entity.Review;
 import com.ssafy.c107.main.domain.review.repository.ReviewRepository;
+import com.ssafy.c107.main.domain.store.entity.Store;
+import com.ssafy.c107.main.domain.store.exception.StoreNotFoundException;
+import com.ssafy.c107.main.domain.store.repository.StoreRepository;
 import com.ssafy.c107.main.domain.subscribe.entity.Subscribe;
 import com.ssafy.c107.main.domain.subscribe.entity.SubscribeStatus;
 import com.ssafy.c107.main.domain.subscribe.entity.SubscribeWeek;
@@ -57,6 +67,7 @@ public class SellerServiceImpl implements SellerService {
     private final OrderListRepository orderListRepository;
     private final FoodRepository foodRepository;
     private final ReviewRepository reviewRepository;
+    private final StoreRepository storeRepository;
 
     @Override
     public SalesStatusResponse getSalesStatus(Long storeId) {
@@ -233,6 +244,113 @@ public class SellerServiceImpl implements SellerService {
             .storeId(storeId)
             .positiveCnt(positiveCnt)
             .negativeCnt(negativeCnt)
+            .build();
+    }
+
+    @Override
+    public ReviewDetailResponse getProductReview(Long storeId, Long foodId) {
+        //전체 상품일 때
+        if (foodId == -1) {
+            //차트 정보 가져오기
+            int positiveCnt = reviewRepository.getCount(storeId, true);
+            int negativeCnt = reviewRepository.getCount(storeId, false);
+            Store store = storeRepository.findById(storeId)
+                .orElseThrow(StoreNotFoundException::new);
+
+            //리뷰 정보 가져오기
+            List<ReviewDetail> reviewDetails = new ArrayList<>();
+            List<Review> reviews = reviewRepository.findReviewByStoreId(storeId);
+            for (Review review : reviews) {
+                String memberEmail = review.getOrderList().getOrder().getMember().getEmail();
+                String foodName = review.getOrderList().getFood().getName();
+                reviewDetails.add(ReviewDetail
+                    .builder()
+                    .img(review.getImg())
+                    .comment(review.getComment())
+                    .foodName(foodName)
+                    .memberEmail(memberEmail)
+                    .build());
+            }
+
+            return ReviewDetailResponse
+                .builder()
+                .reviews(reviewDetails)
+                .chart(ReviewChart
+                    .builder()
+                    .positiveCnt(positiveCnt)
+                    .negativeCnt(negativeCnt)
+                    .aiSummary(store.getSummary())
+                    .build())
+                .build();
+        } else {
+            //상품일 때
+            //차트 정보 가져오기
+            int positiveCnt = reviewRepository.getCountFood(storeId, true, foodId);
+            int negativeCnt = reviewRepository.getCountFood(storeId, false, foodId);
+            Food food = foodRepository.findById(foodId).orElseThrow(FoodNotFoundException::new);
+
+            //리뷰 정보 가져오기
+            List<ReviewDetail> reviewDetails = new ArrayList<>();
+            List<Review> reviews = reviewRepository.findReviewByStoreIdAndFoodId(
+                storeId, foodId);
+            for (Review review : reviews) {
+                String memberEmail = review.getOrderList().getOrder().getMember().getEmail();
+                String foodName = review.getOrderList().getFood().getName();
+                reviewDetails.add(ReviewDetail
+                    .builder()
+                    .img(review.getImg())
+                    .foodName(foodName)
+                    .comment(review.getComment())
+                    .memberEmail(memberEmail)
+                    .build());
+            }
+            return ReviewDetailResponse
+                .builder()
+                .reviews(reviewDetails)
+                .chart(ReviewChart
+                    .builder()
+                    .positiveCnt(positiveCnt)
+                    .negativeCnt(negativeCnt)
+                    .aiSummary(food.getSummary())
+                    .build())
+                .build();
+        }
+    }
+
+    @Override
+    public SellerMenuResponse getAllProduct(Long storeId) {
+        //가게의 구독상품 가져오기
+        List<SubscribeDetail> subscribes = new ArrayList<>();
+        List<Subscribe> storeSubscribes = subscribeRepository.findAllByStore_Id(storeId);
+        for (Subscribe subscribe : storeSubscribes) {
+            subscribes.add(SubscribeDetail
+                .builder()
+                .subscribeId(subscribe.getId())
+                .subscribeBeforePrice(subscribe.getBeforePrice())
+                .subscribeDescription(subscribe.getDescription())
+                .subscribeName(subscribe.getName())
+                .subscribePrice(subscribe.getPrice())
+                .build());
+        }
+
+        //가게의 개별 반찬 가져오기
+        List<FoodDetail> foods = new ArrayList<>();
+        List<Food> storeFoods = foodRepository.findAllByStore_Id(storeId);
+        for (Food food : storeFoods) {
+            foods.add(FoodDetail
+                .builder()
+                .foodId(food.getId())
+                .foodDescription(food.getDescription())
+                .foodImg(food.getImg())
+                .foodPrice(food.getPrice())
+                .foodName(food.getName())
+                .build());
+        }
+
+        return SellerMenuResponse
+            .builder()
+            .subscribes(subscribes)
+            .foods(foods)
             .build();
     }
 
