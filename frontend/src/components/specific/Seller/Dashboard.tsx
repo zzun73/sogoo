@@ -1,5 +1,11 @@
+import ChoiceStore from "./MenuComponents/ChoiceStore";
+
 const Dashboard = () => {
-  return <div>대시보드</div>;
+  return (
+    <div>
+      <ChoiceStore />
+    </div>
+  );
 };
 
 export default Dashboard;
