@@ -5,6 +5,8 @@ import com.ssafy.c107.main.domain.food.entity.Food;
 import com.ssafy.c107.main.domain.food.exception.FoodNotFoundException;
 import com.ssafy.c107.main.domain.food.repository.FoodRepository;
 import com.ssafy.c107.main.domain.members.dto.ProductDto;
+import com.ssafy.c107.main.domain.members.dto.ReviewChart;
+import com.ssafy.c107.main.domain.members.dto.ReviewDetail;
 import com.ssafy.c107.main.domain.members.dto.response.MonthlySalesResponse;
 import com.ssafy.c107.main.domain.members.dto.response.NextWeekFood;
 import com.ssafy.c107.main.domain.members.dto.response.NextWeekQuantityResponse;
@@ -18,7 +20,11 @@ import com.ssafy.c107.main.domain.order.entity.OrderType;
 import com.ssafy.c107.main.domain.order.exception.OrderListNotFoundException;
 import com.ssafy.c107.main.domain.order.repository.OrderListRepository;
 import com.ssafy.c107.main.domain.order.repository.OrderRepository;
+import com.ssafy.c107.main.domain.review.entity.Review;
 import com.ssafy.c107.main.domain.review.repository.ReviewRepository;
+import com.ssafy.c107.main.domain.store.entity.Store;
+import com.ssafy.c107.main.domain.store.exception.StoreNotFoundException;
+import com.ssafy.c107.main.domain.store.repository.StoreRepository;
 import com.ssafy.c107.main.domain.subscribe.entity.Subscribe;
 import com.ssafy.c107.main.domain.subscribe.entity.SubscribeStatus;
 import com.ssafy.c107.main.domain.subscribe.entity.SubscribeWeek;
@@ -58,6 +64,7 @@ public class SellerServiceImpl implements SellerService {
     private final OrderListRepository orderListRepository;
     private final FoodRepository foodRepository;
     private final ReviewRepository reviewRepository;
+    private final StoreRepository storeRepository;
 
     @Override
     public SalesStatusResponse getSalesStatus(Long storeId) {
@@ -239,7 +246,47 @@ public class SellerServiceImpl implements SellerService {
 
     @Override
     public ReviewDetailResponse getProductReview(Long storeId, Long foodId) {
-        return null;
+        //전체 상품일 때
+        if (foodId == -1) {
+            //차트 정보 가져오기
+            int positiveCnt = reviewRepository.getCount(storeId, true);
+            int negativeCnt = reviewRepository.getCount(storeId, false);
+            Store store = storeRepository.findById(storeId)
+                .orElseThrow(StoreNotFoundException::new);
+
+            //리뷰 정보 가져오기
+            List<ReviewDetail> reviewDetails = new ArrayList<>();
+            List<Review> reviews = reviewRepository.findReviewByStoreId(storeId);
+            for (Review review : reviews) {
+                String memberEmail = review.getOrderList().getOrder().getMember().getEmail();
+                String foodName = review.getOrderList().getFood().getName();
+                reviewDetails.add(ReviewDetail
+                    .builder()
+                    .img(review.getImg())
+                    .comment(review.getComment())
+                    .foodName(foodName)
+                    .memberEmail(memberEmail)
+                    .build());
+            }
+
+            return ReviewDetailResponse
+                .builder()
+                .reviews(reviewDetails)
+                .chart(ReviewChart
+                    .builder()
+                    .positiveCnt(positiveCnt)
+                    .negativeCnt(negativeCnt)
+                    .aiSummary(store.getSummary())
+                    .build())
+                .build();
+        } else {
+            //상품일 때
+            //차트 정보 가져오기
+
+            //리뷰 정보 가져오기
+
+            return null;
+        }
     }
 
     LocalDate getnextMonday() {
