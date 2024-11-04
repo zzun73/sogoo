@@ -3,6 +3,9 @@ import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
+import { useMutation } from "@tanstack/react-query";
+import sogoo from "../../../../services/sogoo";
+import { AxiosError } from "axios";
 
 const style = {
   position: "absolute",
@@ -30,8 +33,6 @@ const RegisterStoreModal: React.FC<RegisterStoreModalProps> = ({
   const [storeImg, setStoreImg] = useState<File | null>(null);
   const [previewImage, setPreviewImage] = useState<string | null>(null);
 
-  console.log(storeName, storeImg, storeAddress, storeDescription);
-
   const handleImageUpload = (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
@@ -47,6 +48,37 @@ const RegisterStoreModal: React.FC<RegisterStoreModalProps> = ({
 
   const handleImageClick = () => {
     document.getElementById("imageUploadInput")?.click();
+  };
+
+  const { mutate: handleRegisterStore } = useMutation({
+    mutationFn: (registerStoreForm: RegisterStoreForm) =>
+      sogoo.registerMyStore(registerStoreForm),
+    onSuccess: async (response) => {
+      if (response.status === 200) {
+        console.log("가게 등록 성공");
+      }
+    },
+    onError: (error: AxiosError) => {
+      const status = error.response?.status;
+      if (status === 403) {
+        console.error("해당 작업을 수행할 권한이 없습니다.");
+      } else if (status === 404) {
+        console.error("해당 멤버를 찾지 못했습니다.");
+      } else {
+        console.error("가게 등록 실패", error);
+      }
+    },
+  });
+
+  const initiateRegisterStore = (): void => {
+    const registerStoreForm: RegisterStoreForm = {
+      name: storeName,
+      address: storeAddress,
+      description: storeDescription,
+      img: storeImg,
+    };
+
+    handleRegisterStore(registerStoreForm);
   };
 
   return (
@@ -116,6 +148,7 @@ const RegisterStoreModal: React.FC<RegisterStoreModalProps> = ({
         <Button
           variant="contained"
           sx={{ width: "fit-content", alignSelf: "center" }}
+          onClick={initiateRegisterStore}
         >
           등 록 하 기
         </Button>
