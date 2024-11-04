@@ -43,4 +43,16 @@ const useGetStoreList = () => {
   return stores;
 };
 
-export { useCheckEmail, useCheckSeller, useGetStoreList };
+/**
+ * 구매자 마이페이지 정보 조회
+ */
+const useGetBuyerMypage = () => {
+  const queryResponse = useQuery({
+    queryKey: keys.getBuyerMypage(),
+    queryFn: () => sogoo.getBuyerMyPage(),
+  });
+
+  return queryResponse;
+};
+
+export { useCheckEmail, useCheckSeller, useGetStoreList, useGetBuyerMypage };
