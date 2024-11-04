@@ -4,5 +4,5 @@ interface RegisterStoreForm {
   name: string;
   address: string;
   description: string;
-  img: File;
+  img: File | null;
 }
