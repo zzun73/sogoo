@@ -5,17 +5,28 @@ import CardActions from "@mui/material/CardActions";
 import Collapse from "@mui/material/Collapse";
 
 import IconButton, { IconButtonProps } from "@mui/material/IconButton";
-
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-
 import Carousel from "./Carousel";
+
+interface Sub {
+  subscribeId: number;
+  subscribeName: string;
+  subscribePrice: number;
+  subscribeDescription: string;
+  subscribeBeforePrice: number;
+  weeklyFood: any;
+}
+
+interface SubInfoProps {
+  sub: Sub;
+}
 
 interface ExpandMoreProps extends IconButtonProps {
   expand: boolean;
 }
 
 const ExpandMore = styled((props: ExpandMoreProps) => {
-  const { expand, ...other } = props;
+  const { ...other } = props;
   return <IconButton {...other} />;
 })(({ theme }) => ({
   marginLeft: "auto",
@@ -38,7 +49,7 @@ const ExpandMore = styled((props: ExpandMoreProps) => {
   ],
 }));
 
-const SubscribeInfo = ({ sub }) => {
+const SubscribeInfo = ({ sub }: SubInfoProps) => {
   const [expanded, setExpanded] = useState(false);
   const handleExpandClick = () => {
     setExpanded(!expanded);

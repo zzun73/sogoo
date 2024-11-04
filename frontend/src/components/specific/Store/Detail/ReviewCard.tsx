@@ -1,6 +1,6 @@
 import { Card } from "@mui/material";
 
-const ReviewCard = ({ review }) => {
+const ReviewCard = ({ review }: any) => {
   return (
     <Card className="flex flex-row px-2 gap-x-3">
       <img src={review.img} className="w-24 h-24" />

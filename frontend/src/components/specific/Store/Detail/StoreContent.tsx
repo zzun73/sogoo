@@ -1,5 +1,5 @@
 import SubscribeList from "./SubscribeList";
-import FoodList from "./FoodLIst";
+import FoodList from "./FoodList";
 import ReviewList from "./ReviewList";
 
 interface StoreContentProps {
