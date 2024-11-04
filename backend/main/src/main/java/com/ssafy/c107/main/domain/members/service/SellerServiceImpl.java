@@ -4,14 +4,17 @@ import com.ssafy.c107.main.common.entity.WeeklyFood;
 import com.ssafy.c107.main.domain.food.entity.Food;
 import com.ssafy.c107.main.domain.food.exception.FoodNotFoundException;
 import com.ssafy.c107.main.domain.food.repository.FoodRepository;
+import com.ssafy.c107.main.domain.members.dto.FoodDetail;
 import com.ssafy.c107.main.domain.members.dto.ProductDto;
 import com.ssafy.c107.main.domain.members.dto.ReviewChart;
 import com.ssafy.c107.main.domain.members.dto.ReviewDetail;
+import com.ssafy.c107.main.domain.members.dto.SubscribeDetail;
 import com.ssafy.c107.main.domain.members.dto.response.MonthlySalesResponse;
 import com.ssafy.c107.main.domain.members.dto.response.NextWeekFood;
 import com.ssafy.c107.main.domain.members.dto.response.NextWeekQuantityResponse;
 import com.ssafy.c107.main.domain.members.dto.response.ReviewDetailResponse;
 import com.ssafy.c107.main.domain.members.dto.response.SalesStatusResponse;
+import com.ssafy.c107.main.domain.members.dto.response.SellerMenuResponse;
 import com.ssafy.c107.main.domain.members.dto.response.SellerReviewAllResponse;
 import com.ssafy.c107.main.domain.members.dto.response.TodaySalesResponse;
 import com.ssafy.c107.main.domain.order.entity.Order;
@@ -312,6 +315,43 @@ public class SellerServiceImpl implements SellerService {
                     .build())
                 .build();
         }
+    }
+
+    @Override
+    public SellerMenuResponse getAllProduct(Long storeId) {
+        //가게의 구독상품 가져오기
+        List<SubscribeDetail> subscribes = new ArrayList<>();
+        List<Subscribe> storeSubscribes = subscribeRepository.findAllByStore_Id(storeId);
+        for (Subscribe subscribe : storeSubscribes) {
+            subscribes.add(SubscribeDetail
+                .builder()
+                .subscribeId(subscribe.getId())
+                .subscribeBeforePrice(subscribe.getBeforePrice())
+                .subscribeDescription(subscribe.getDescription())
+                .subscribeName(subscribe.getName())
+                .subscribePrice(subscribe.getPrice())
+                .build());
+        }
+
+        //가게의 개별 반찬 가져오기
+        List<FoodDetail> foods = new ArrayList<>();
+        List<Food> storeFoods = foodRepository.findAllByStore_Id(storeId);
+        for (Food food : storeFoods) {
+            foods.add(FoodDetail
+                .builder()
+                .foodId(food.getId())
+                .foodDescription(food.getDescription())
+                .foodImg(food.getImg())
+                .foodPrice(food.getPrice())
+                .foodName(food.getName())
+                .build());
+        }
+
+        return SellerMenuResponse
+            .builder()
+            .subscribes(subscribes)
+            .foods(foods)
+            .build();
     }
 
     LocalDate getnextMonday() {
