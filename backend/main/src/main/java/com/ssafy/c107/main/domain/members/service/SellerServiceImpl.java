@@ -282,10 +282,35 @@ public class SellerServiceImpl implements SellerService {
         } else {
             //상품일 때
             //차트 정보 가져오기
+            int positiveCnt = reviewRepository.getCountFood(storeId, true, foodId);
+            int negativeCnt = reviewRepository.getCountFood(storeId, false, foodId);
+            Food food = foodRepository.findById(foodId).orElseThrow(FoodNotFoundException::new);
 
             //리뷰 정보 가져오기
-
-            return null;
+            List<ReviewDetail> reviewDetails = new ArrayList<>();
+            List<Review> reviews = reviewRepository.findReviewByStoreIdAndFoodId(
+                storeId, foodId);
+            for (Review review : reviews) {
+                String memberEmail = review.getOrderList().getOrder().getMember().getEmail();
+                String foodName = review.getOrderList().getFood().getName();
+                reviewDetails.add(ReviewDetail
+                    .builder()
+                    .img(review.getImg())
+                    .foodName(foodName)
+                    .comment(review.getComment())
+                    .memberEmail(memberEmail)
+                    .build());
+            }
+            return ReviewDetailResponse
+                .builder()
+                .reviews(reviewDetails)
+                .chart(ReviewChart
+                    .builder()
+                    .positiveCnt(positiveCnt)
+                    .negativeCnt(negativeCnt)
+                    .aiSummary(food.getSummary())
+                    .build())
+                .build();
         }
     }
 
