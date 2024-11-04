@@ -6,6 +6,7 @@ import com.ssafy.c107.main.domain.food.service.FoodService;
 import com.ssafy.c107.main.domain.members.dto.CustomUserDetails;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -18,9 +19,9 @@ public class FoodController {
     private final FoodService foodService;
 
     // 개별 상품 추가
-    @PostMapping("/{storeId}")
+    @PostMapping(value = "/{storeId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> appendFood(@PathVariable Long storeId,
-                                        @RequestBody AppendFoodRequest request,
+                                        @ModelAttribute AppendFoodRequest request,
                                         @AuthenticationPrincipal CustomUserDetails userDetails) {
         foodService.appendFood(storeId, request, userDetails.getUserRole().getRole());
         return ResponseEntity.ok("개별 반찬 등록 완료");
