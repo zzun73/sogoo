@@ -4,18 +4,46 @@ import LogoImg from "../../assets/logo.png";
 import { MdOutlinePerson } from "react-icons/md";
 import { MdOutlineShoppingCart } from "react-icons/md";
 import useRootStore from "../../stores";
+import { useNavigate } from "react-router-dom";
+import sogoo from "../../services/sogoo";
+import { useMutation } from "@tanstack/react-query";
 
 const Header = () => {
+  const navigate = useNavigate();
+
   const store = useRootStore();
+  const { setLogout } = useRootStore();
   const isLogin = store.isLogin;
   const isSeller = store.memberInfo?.role === "Seller";
+
+  const { mutate: handleLogout } = useMutation({
+    mutationFn: sogoo.logout,
+    onSuccess: async (response) => {
+      setLogout();
+      console.log("로그아웃 성공", response);
+      alert("로그아웃 완료");
+      navigate("/sign");
+    },
+    onError: (error) => {
+      console.log("로그아웃 실패", error);
+      alert("로그아웃 실패");
+    },
+  });
+
+  const initiateLogout = (): void => {
+    handleLogout();
+  };
 
   return (
     <>
       <header className="relative flex justify-center z-10">
         <div className="mt-10 mb-5">
           <Link to="/">
-            <img src={LogoImg} alt="소상한 구독" className="w-[120px] drop-shadow-2xl" />
+            <img
+              src={LogoImg}
+              alt="소상한 구독"
+              className="w-[120px] drop-shadow-2xl"
+            />
           </Link>
         </div>
       </header>
@@ -43,7 +71,9 @@ const Header = () => {
               </Link>
             )}
             {isLogin ? (
-              <button className="font-chosun">로그아웃</button>
+              <button className="font-chosun" onClick={initiateLogout}>
+                로그아웃
+              </button>
             ) : (
               <Link to="/sign" className="font-chosun">
                 로그인/회원가입
