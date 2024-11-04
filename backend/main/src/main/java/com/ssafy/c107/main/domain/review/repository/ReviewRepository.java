@@ -27,4 +27,10 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
     List<Review> findReviewByStoreId(@Param("storeId") Long storeId);
 
     List<Review> findAllByOrderList_Food_Id(Long id);
+
+    @Query("SELECT COALESCE(COUNT(r), 0) "
+        + "FROM Review r "
+        + "WHERE r.orderList.order.store.id = :storeId "
+        + "AND r.emotion = :emotion ")
+    int getCount(@Param("storeId") Long storeId, @Param("emotion") boolean emotion);
 }

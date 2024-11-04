@@ -17,6 +17,7 @@ import com.ssafy.c107.main.domain.order.entity.OrderType;
 import com.ssafy.c107.main.domain.order.exception.OrderListNotFoundException;
 import com.ssafy.c107.main.domain.order.repository.OrderListRepository;
 import com.ssafy.c107.main.domain.order.repository.OrderRepository;
+import com.ssafy.c107.main.domain.review.repository.ReviewRepository;
 import com.ssafy.c107.main.domain.subscribe.entity.Subscribe;
 import com.ssafy.c107.main.domain.subscribe.entity.SubscribeStatus;
 import com.ssafy.c107.main.domain.subscribe.entity.SubscribeWeek;
@@ -55,6 +56,7 @@ public class SellerServiceImpl implements SellerService {
     private final SubscribeWeekRepository subscribeWeekRepository;
     private final OrderListRepository orderListRepository;
     private final FoodRepository foodRepository;
+    private final ReviewRepository reviewRepository;
 
     @Override
     public SalesStatusResponse getSalesStatus(Long storeId) {
@@ -224,7 +226,14 @@ public class SellerServiceImpl implements SellerService {
 
     @Override
     public SellerReviewAllResponse getAllReview(Long storeId) {
-        return null;
+        int positiveCnt = reviewRepository.getCount(storeId, true);
+        int negativeCnt = reviewRepository.getCount(storeId, false);
+        return SellerReviewAllResponse
+            .builder()
+            .storeId(storeId)
+            .positiveCnt(positiveCnt)
+            .negativeCnt(negativeCnt)
+            .build();
     }
 
     LocalDate getnextMonday() {

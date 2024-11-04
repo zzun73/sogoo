@@ -7,7 +7,7 @@ import lombok.Data;
 @Builder
 public class SellerReviewAllResponse {
 
-    private int storeId;
+    private Long storeId;
     private int positiveCnt;
     private int negativeCnt;
 }
