@@ -64,4 +64,12 @@ public class SellerController {
         }
         return ResponseEntity.ok(sellerService.getAllReview(storeId));
     }
+
+    @GetMapping("/detail-review/{storeId}/{foodId}")
+    public ResponseEntity<?> getProductReview(@PathVariable(name = "storeId") Long storeId, @PathVariable(name = "foodId") Long foodId, @AuthenticationPrincipal CustomUserDetails customUserDetails) {
+        if (!customUserDetails.getUserRole().getRole().equals("SELLER")) {
+            throw new InvalidMemberRoleException();
+        }
+        return null;
+    }
 }
