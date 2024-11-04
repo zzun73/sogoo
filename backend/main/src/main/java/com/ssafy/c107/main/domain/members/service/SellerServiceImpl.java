@@ -9,6 +9,7 @@ import com.ssafy.c107.main.domain.members.dto.response.MonthlySalesResponse;
 import com.ssafy.c107.main.domain.members.dto.response.NextWeekFood;
 import com.ssafy.c107.main.domain.members.dto.response.NextWeekQuantityResponse;
 import com.ssafy.c107.main.domain.members.dto.response.SalesStatusResponse;
+import com.ssafy.c107.main.domain.members.dto.response.SellerReviewAllResponse;
 import com.ssafy.c107.main.domain.members.dto.response.TodaySalesResponse;
 import com.ssafy.c107.main.domain.order.entity.Order;
 import com.ssafy.c107.main.domain.order.entity.OrderList;
@@ -219,6 +220,11 @@ public class SellerServiceImpl implements SellerService {
             .builder()
             .products(products)
             .build();
+    }
+
+    @Override
+    public SellerReviewAllResponse getAllReview(Long storeId) {
+        return null;
     }
 
     LocalDate getnextMonday() {
