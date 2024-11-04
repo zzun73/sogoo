@@ -7,6 +7,8 @@ import com.ssafy.c107.main.domain.members.exception.MemberExistException;
 import com.ssafy.c107.main.domain.members.exception.MemberNotFoundException;
 import com.ssafy.c107.main.domain.members.exception.SellerNotFoundException;
 import com.ssafy.c107.main.domain.order.exception.OrderListNotFoundException;
+import com.ssafy.c107.main.domain.review.exception.InvalidOrderListException;
+import com.ssafy.c107.main.domain.review.exception.MaxUploadSizeExceededException;
 import com.ssafy.c107.main.domain.store.exception.StoreNotFoundException;
 import com.ssafy.c107.main.domain.subscribe.exception.SubscribeNotFoundException;
 import com.ssafy.c107.main.domain.subscribe.exception.SubscribeWeekNotFoundException;
@@ -54,7 +56,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(SubscribeWeekNotFoundException.class)
     public ResponseEntity<String> handleSubscribeWeekNotFoundException(
-        SubscribeWeekNotFoundException e) {
+            SubscribeWeekNotFoundException e) {
         return ResponseEntity.status(e.getStatus()).body(e.getMessage());
     }
 
@@ -65,6 +67,16 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(OrderListNotFoundException.class)
     public ResponseEntity<String> handleOrderListNotFoundException(OrderListNotFoundException e) {
+        return ResponseEntity.status(e.getStatus()).body(e.getMessage());
+    }
+
+    @ExceptionHandler(MaxUploadSizeExceededException.class)
+    public ResponseEntity<String> handleMaxUploadSizeExceededException(MaxUploadSizeExceededException e) {
+        return ResponseEntity.status(e.getStatus()).body(e.getMessage());
+    }
+
+    @ExceptionHandler(InvalidOrderListException.class)
+    public ResponseEntity<String> handleInvalidOrderListExceptionException(InvalidOrderListException e) {
         return ResponseEntity.status(e.getStatus()).body(e.getMessage());
     }
 }

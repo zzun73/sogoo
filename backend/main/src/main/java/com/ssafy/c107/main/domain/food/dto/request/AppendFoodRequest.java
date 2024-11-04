@@ -1,10 +1,12 @@
 package com.ssafy.c107.main.domain.food.dto.request;
 
-import com.ssafy.c107.main.domain.food.dto.FoodDataDto;
 import lombok.Data;
+import org.springframework.web.multipart.MultipartFile;
 
 @Data
 public class AppendFoodRequest {
-    private FoodDataDto data;
-    private String img;
+    private String foodName;
+    private int foodPrice;
+    private String foodDescription;
+    private MultipartFile img;
 }

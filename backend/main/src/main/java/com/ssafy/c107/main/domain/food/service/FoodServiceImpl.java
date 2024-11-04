@@ -1,5 +1,6 @@
 package com.ssafy.c107.main.domain.food.service;
 
+import com.ssafy.c107.main.common.aws.FileService;
 import com.ssafy.c107.main.domain.food.dto.FoodAllDto;
 import com.ssafy.c107.main.domain.food.dto.request.AppendFoodRequest;
 import com.ssafy.c107.main.domain.food.dto.response.FoodAllResponse;
@@ -23,11 +24,12 @@ import java.util.stream.Collectors;
 public class FoodServiceImpl implements FoodService {
     private final FoodRepository foodRepository;
     private final StoreRepository storeRepository;
+    private final FileService fileService;
 
     // 개별 상품 추가
-    public void appendFood(Long storeId,AppendFoodRequest request, String memberRole){
+    public void appendFood(Long storeId, AppendFoodRequest request, String memberRole) {
         // 구매자 접근 제한
-        if(memberRole.equals("Buyer")){
+        if (memberRole.equals("Buyer")) {
             throw new InvalidMemberRoleException();
         }
 
@@ -35,12 +37,15 @@ public class FoodServiceImpl implements FoodService {
         Store store = storeRepository.findById(storeId)
                 .orElseThrow(StoreNotFoundException::new);
 
+
+        String S3imageUrl = fileService.saveFile(request.getImg());
+
         // food에 정보 등록
         Food food = Food.builder()
-                .name(request.getData().getFoodName())
-                .price(request.getData().getFoodPrice())
-                .description(request.getData().getFoodDescription())
-                .img(request.getImg())
+                .name(request.getFoodName())
+                .price(request.getFoodPrice())
+                .description(request.getFoodDescription())
+                .img(S3imageUrl)
                 .store(store)
                 .build();
 
@@ -49,9 +54,9 @@ public class FoodServiceImpl implements FoodService {
 
     // 가게 전체 반찬 조회하기
     @Transactional(readOnly = true)
-    public FoodAllResponse findAllFood(Long storeId, String memberRole){
+    public FoodAllResponse findAllFood(Long storeId, String memberRole) {
         // 구매자 접근 제한
-        if(memberRole.equals("Buyer")){
+        if (memberRole.equals("Buyer")) {
             throw new InvalidMemberRoleException();
         }
 
@@ -62,9 +67,9 @@ public class FoodServiceImpl implements FoodService {
 
     // 반찬가게 상세페이지[구매자용](개별반찬)
     @Transactional(readOnly = true)
-    public FoodAllResponse detailFoodAll(Long storeId, String memberRole){
+    public FoodAllResponse detailFoodAll(Long storeId, String memberRole) {
         // 판매자 접근 제한
-        if(memberRole.equals("Seller")){
+        if (memberRole.equals("Seller")) {
             throw new InvalidMemberRoleException();
         }
 
@@ -74,7 +79,7 @@ public class FoodServiceImpl implements FoodService {
     }
 
     // 가게 전체 반찬 조회하기[판매자용], 반찬가게 상세페이지[구매자용](개별반찬) 반찬 가져오기
-    public FoodAllResponse getAllFood(Long storeId){
+    public FoodAllResponse getAllFood(Long storeId) {
         // 가게 조회
         Store store = storeRepository.findById(storeId)
                 .orElseThrow(StoreNotFoundException::new);
