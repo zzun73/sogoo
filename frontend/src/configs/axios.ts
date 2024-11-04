@@ -26,18 +26,7 @@ instance.interceptors.response.use(
     return response;
   },
   async (error) => {
-    if (error.response.status === 401 && error.response.data.code === 418) {
-      try {
-        const { data } = await instance.post("/api/user/reissue");
-        const { accessToken } = data.data;
-        useRootStore.getState().setAccessToken(accessToken);
-        return instance.request(error.config);
-      } catch {
-        // useRootStore.getState().setLogout();
-        console.log("failed reissue");
-      }
-    }
-    console.log("error", error.response.data);
+    console.log("error", error);
     return Promise.reject(error);
   }
 );

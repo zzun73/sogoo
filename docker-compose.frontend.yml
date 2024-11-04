@@ -4,6 +4,7 @@ services:
     container_name: sogoo-front
     ports:
       - "5173:80" 
+    env_file: /home/ubuntu/sogoo/.env
     networks:
       - sogoo-network
     restart: always

@@ -16,6 +16,23 @@ const useCheckEmail = (email: Email) => {
   return queryResponse;
 };
 
+/**
+ * 사업자 번호 인증
+ * @param businessNumber
+ */
+const useCheckSeller = (businessNumber: BusinessNumber) => {
+  const queryResponse = useQuery({
+    queryKey: keys.checkSeller(businessNumber),
+    queryFn: () => sogoo.checkSeller(businessNumber),
+    enabled: false,
+  });
+
+  return queryResponse;
+};
+
+/**
+ * 매장 목록 조회
+ */
 const useGetStoreList = () => {
   const { data } = useQuery({
     queryKey: keys.getStoreList(),
@@ -26,4 +43,34 @@ const useGetStoreList = () => {
   return stores;
 };
 
-export { useCheckEmail, useGetStoreList };
+/**
+ * 구매자 마이페이지 정보 조회
+ */
+const useGetBuyerMypage = () => {
+  const queryResponse = useQuery({
+    queryKey: keys.getBuyerMypage(),
+    queryFn: () => sogoo.getBuyerMyPage(),
+  });
+
+  return queryResponse;
+};
+
+/**
+ * (판매자) 내 가게 가져오기
+ */
+const useGetMyStores = () => {
+  const queryResponse = useQuery({
+    queryKey: keys.getMyStores(),
+    queryFn: () => sogoo.getMyStores(),
+  });
+
+  return queryResponse;
+};
+
+export {
+  useCheckEmail,
+  useCheckSeller,
+  useGetStoreList,
+  useGetBuyerMypage,
+  useGetMyStores,
+};

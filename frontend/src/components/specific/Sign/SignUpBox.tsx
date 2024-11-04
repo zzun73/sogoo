@@ -9,9 +9,13 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { Dayjs } from "dayjs";
-import { useCheckEmail } from "../../../queries/queries";
+import { useCheckEmail, useCheckSeller } from "../../../queries/queries";
+import { useMutation } from "@tanstack/react-query";
+import sogoo from "../../../services/sogoo";
+import { useNavigate } from "react-router-dom";
 
 const SignUpBox = () => {
+  const navigate = useNavigate();
   const [name, setName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [password1, setPassword1] = useState<string>("");
@@ -22,19 +26,52 @@ const SignUpBox = () => {
   const [role, setRole] = useState<string>("Buyer");
   const [businessNumber, setBusinessNumber] = useState<string>("");
   const [isEmailValid, setIsEmailValid] = useState<boolean | null>(null);
+  const [isSellerValid, setIsSellerValid] = useState<boolean | null>(null);
 
   const { refetch } = useCheckEmail(email);
+  const { refetch: refetchSeller } = useCheckSeller(businessNumber);
 
-  console.log(
-    name,
-    email,
-    password1,
-    password2,
-    address,
-    birth,
-    phone,
-    businessNumber
-  );
+  const { mutate: handleSignUp } = useMutation({
+    mutationFn: sogoo.signup,
+    onSuccess: async (response) => {
+      console.log("회원가입 성공:", response);
+      alert("회원가입 성공");
+      navigate("/");
+    },
+    onError: (error) => {
+      console.error("회원가입 실패:", error);
+      alert("회원가입 실패");
+    },
+  });
+
+  const initiateSignUp = (): void => {
+    if (isEmailValid === false) {
+      alert("이 이메일은 이미 사용 중입니다.");
+      return;
+    }
+
+    if (role === "Seller" && isSellerValid === false) {
+      alert("해당 번호의 사업자를 찾지 못했습니다.");
+      return;
+    }
+
+    if (password1 !== password2) {
+      alert("비밀번호가 일치하지 않습니다.");
+      return;
+    }
+
+    const signUpForm: SignUpForm = {
+      name,
+      email,
+      password: password1,
+      phoneNumber: phone,
+      birth,
+      address,
+      role,
+      businessNumber: role === "Seller" ? businessNumber : null,
+    };
+    handleSignUp(signUpForm);
+  };
 
   const handleDateChange = (date: Dayjs | null) => {
     if (date) {
@@ -49,12 +86,24 @@ const SignUpBox = () => {
   const handleEmailCheck = async () => {
     const result = await refetch();
     console.log(result);
-    setIsEmailValid(String(result.data!.data) === "사용 가능한 이메일핑");
+    setIsEmailValid(String(result.data?.data) === "사용 가능한 이메일핑");
   };
 
-  const handleKeyDown = (event: React.KeyboardEvent) => {
+  const handleEmailKeyDown = (event: React.KeyboardEvent) => {
     if (event.key === "Enter") {
       handleEmailCheck();
+    }
+  };
+
+  const handleSellerCheck = async () => {
+    const result = await refetchSeller();
+    console.log(result);
+    setIsSellerValid(String(result.data?.data) === "사업자 인증 완료핑");
+  };
+
+  const handleSellerKeyDown = (event: React.KeyboardEvent) => {
+    if (event.key === "Enter") {
+      handleSellerCheck();
     }
   };
 
@@ -75,22 +124,15 @@ const SignUpBox = () => {
           label="이메일"
           variant="outlined"
           onChange={(e) => setEmail(e.target.value)}
+          onKeyDown={handleEmailKeyDown}
           sx={{ width: "80%", height: "50px" }}
         />
-        <Button
-          variant="outlined"
-          sx={{ width: "17%", height: "42px" }}
-          onClick={handleEmailCheck}
-        >
+        <Button variant="outlined" sx={{ width: "17%", height: "42px" }} onClick={handleEmailCheck}>
           확인
         </Button>
       </div>
-      {isEmailValid === true && (
-        <p className="text-green-500 mb-3">사용 가능한 이메일입니다.</p>
-      )}
-      {isEmailValid === false && (
-        <p className="text-red-500 mb-3">이 이메일은 이미 사용 중입니다.</p>
-      )}
+      {isEmailValid === true && <p className="text-green-500 mb-3">사용 가능한 이메일입니다.</p>}
+      {isEmailValid === false && <p className="text-red-500 mb-3">이 이메일은 이미 사용 중입니다.</p>}
       <TextField
         required
         id="signUpPasswordInput1"
@@ -98,7 +140,6 @@ const SignUpBox = () => {
         variant="outlined"
         type="password"
         onChange={(e) => setPassword1(e.target.value)}
-        onKeyDown={handleKeyDown}
         sx={{ width: "100%", height: "50px", marginBottom: "20px" }}
       />
       <TextField
@@ -119,11 +160,7 @@ const SignUpBox = () => {
         sx={{ width: "100%", height: "50px", marginBottom: "20px" }}
       />
       <LocalizationProvider dateAdapter={AdapterDayjs}>
-        <DatePicker
-          label="생년월일"
-          onChange={handleDateChange}
-          sx={{ width: "100%", height: "50px", marginBottom: "20px" }}
-        />
+        <DatePicker label="생년월일" onChange={handleDateChange} sx={{ width: "100%", height: "50px", marginBottom: "20px" }} />
       </LocalizationProvider>
       <TextField
         required
@@ -149,22 +186,27 @@ const SignUpBox = () => {
       </FormControl>
 
       {role === "Seller" && (
-        <div className="w-full flex justify-between items-center mb-5">
-          <TextField
-            required
-            id="signUpBusinessNumberInput"
-            label="사업자 등록 번호"
-            variant="outlined"
-            onChange={(e) => setBusinessNumber(e.target.value)}
-            sx={{ width: "80%", height: "50px" }}
-          />
-          <Button variant="outlined" sx={{ width: "17%", height: "42px" }}>
-            확인
-          </Button>
-        </div>
+        <>
+          <div className="w-full flex justify-between items-center mb-5">
+            <TextField
+              required
+              id="signUpBusinessNumberInput"
+              label="사업자 등록 번호"
+              variant="outlined"
+              onChange={(e) => setBusinessNumber(e.target.value)}
+              onKeyDown={handleSellerKeyDown}
+              sx={{ width: "80%", height: "50px" }}
+            />
+            <Button variant="outlined" sx={{ width: "17%", height: "42px" }} onClick={handleSellerCheck}>
+              확인
+            </Button>
+          </div>
+          {isSellerValid === true && <p className="text-green-500 mb-3">사업자 번호 인증에 성공하셨습니다.</p>}
+          {isSellerValid === false && <p className="text-red-500 mb-3">해당 번호의 사업자를 찾지 못했습니다.</p>}
+        </>
       )}
 
-      <Button variant="contained" sx={{ width: "95px", height: "42px" }}>
+      <Button variant="contained" sx={{ width: "95px", height: "42px" }} onClick={initiateSignUp}>
         가입하기
       </Button>
     </div>

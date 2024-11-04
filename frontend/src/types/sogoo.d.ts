@@ -5,9 +5,9 @@ type Password = string;
 type phoneNumber = string;
 type Birth = string;
 type Address = string;
-type Role = "Buyer" | "Seller";
+type Role = string;
 type AccessToken = string;
-
+type BusinessNumber = string | null;
 type StoreId = number;
 type StoreName = string;
 type StoreDescription = string;
@@ -23,6 +23,7 @@ interface SignUpForm {
   birth: Birth;
   address: Address;
   role: Role;
+  businessNumber: BusinessNumber;
 }
 
 interface LoginForm {
@@ -38,7 +39,7 @@ interface SogooResponse<T> {
 }
 
 interface LoginResponseData {
-  accessToken: AccessToken;
+  userInfo: MemberInfo;
 }
 
 interface Store {
@@ -52,5 +53,5 @@ interface GetStoreLIstResponseData {
   stores: Store[] | [];
 }
 
-type LoginResponse = SogooResponse<LoginResponseData>;
+type LoginResponse = LoginResponseData;
 type GetStoreListResponse = SogooResponse<GetStoreLIstResponseData>;
