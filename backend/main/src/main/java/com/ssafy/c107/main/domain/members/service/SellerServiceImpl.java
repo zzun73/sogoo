@@ -173,11 +173,22 @@ public class SellerServiceImpl implements SellerService {
         List<ProductDto> products = new ArrayList<>();
 
         //해당 가게의 오늘날짜의 구독 상품 주문 개수 가져오기
+        List<Object[]> todaySubscribeSales = subscribeRepository.getTodaySubscribeSales(storeId);
 
         //해당 구독 상품의 가격과 총 가격 가져오기
+        for (Object[] object : todaySubscribeSales) {
+            products.add(ProductDto
+                .builder()
+                .price((int) object[1])
+                .productCnt((int) object[0])
+                .productName((String) object[2])
+                .salesSum((int) object[0] * (int) object[1])
+                .build());
+        }
 
         //해당 가게의 오늘날짜의 일반 상품 주문 가져오기
-        List<Order> orders = orderRepository.findByOrderTypeAndCreatedAtToday(OrderType.FOOD);
+        List<Order> orders = orderRepository.findByOrderTypeAndCreatedAtToday(OrderType.FOOD,
+            storeId);
 
         //해당 주문의 상품을 돌면서 반찬의 가격 가져와서 개수 곱해가주고 넣기
         Map<String, Integer> map = new HashMap<>();

@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 public interface SubscribeRepository extends JpaRepository<Subscribe, Long> {
 
@@ -17,4 +18,14 @@ public interface SubscribeRepository extends JpaRepository<Subscribe, Long> {
     Optional<Subscribe> findSubscribeWithDetails(Long id);
 
     List<Subscribe> findAllByStore_Id(Long id);
+
+    @Query("SELECT coalesce(count(s), 0), s.price, s.name "
+        + "FROM Subscribe s "
+        + "JOIN MemberSubscribe ms on ms.subscribe = s "
+        + "JOIN SubscribePay sp on sp.memberSubscribe = ms "
+        + "WHERE s.store.id = :storeId "
+        + "AND DATE_TRUNC('day', sp.createdAt) = DATE_TRUNC('day', CURRENT_TIMESTAMP) "
+        + "group by s.id ")
+    List<Object[]> getTodaySubscribeSales(@Param("storeId") Long storeId);
+
 }
