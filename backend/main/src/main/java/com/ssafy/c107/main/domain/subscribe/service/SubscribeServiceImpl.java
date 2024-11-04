@@ -122,8 +122,8 @@ public class SubscribeServiceImpl implements SubscribeService {
                     SubscribeWeek subscribeWeek = SubscribeWeek.builder()
                             .date(LocalDate.parse(subscribeProductsDto.getSubscribeDate()))
                             .round(subscribeProductsDto.getSubscribeRound())
-                            .startDate(LocalDate.now())
-                            .endDate(LocalDate.now().plusWeeks(1))
+                            .startDate(LocalDate.parse(subscribeProductsDto.getSubscribeDate()))
+                            .endDate(LocalDate.parse(subscribeProductsDto.getSubscribeDate()).plusWeeks(1))
                             .subscribe(subscribe)
                             .build();
 
