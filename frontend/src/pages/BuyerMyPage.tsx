@@ -16,10 +16,13 @@ import AccordionDetails from "@mui/material/AccordionDetails";
 import Button from "@mui/material/Button";
 import { TextField } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import ImageUpload from "../components/common/ImageUpload";
 
 interface ReviewInputType {
   reviewId: number;
   comment: string;
+  img: File | null;
+  imgPreview: string | null;
 }
 
 const BuyerMyPage = () => {
@@ -73,12 +76,49 @@ const BuyerMyPage = () => {
               return {
                 reviewId: review.foodId,
                 comment: "",
+                img: null,
+                imgPreview: null,
               };
             })
           );
         });
     }
   }, [memberInfo]);
+
+  const handleImageSelect = (reviewId: number, file: File | null) => {
+    setReviewInput((prevInputs) => {
+      return prevInputs.map((input: ReviewInputType) => {
+        if (input.reviewId === reviewId) {
+          return {
+            ...input,
+            img: file,
+            imgPreview: file ? URL.createObjectURL(file) : null,
+          };
+        }
+        return input;
+      });
+    });
+  };
+
+  const handleReviewSubmit = async (reviewId: number) => {
+    const review = reviewInput.find((input) => input.reviewId === reviewId);
+    if (!review) return;
+
+    const formData = new FormData();
+    formData.append("comment", review.comment);
+    if (review.img) {
+      formData.append("image", review.img);
+    }
+
+    try {
+      // API 호출 예시
+      // await sogoo.postReview(reviewId, formData);
+      // 성공 처리
+    } catch (error) {
+      // 에러 처리
+      console.error("리뷰 등록 실패:", error);
+    }
+  };
 
   const formatPhoneNumber = (number: string | undefined): string => {
     if (number === undefined) return "";
@@ -262,41 +302,67 @@ const BuyerMyPage = () => {
                       </AccordionSummary>
                       <AccordionDetails>
                         {!item.reviewStatus && (
-                          <TextField
-                            fullWidth
-                            label="리뷰를 작성해 주세요. (300자 이내)"
-                            id="fullWidth"
-                            onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                              const newValue = event.target.value;
-                              if (newValue.length > 300) return;
+                          <>
+                            <TextField
+                              fullWidth
+                              label="리뷰를 작성해 주세요. (300자 이내)"
+                              id="fullWidth"
+                              onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                                const newValue = event.target.value;
+                                if (newValue.length > 300) return;
 
-                              setReviewInput((prevInputs) => {
-                                return prevInputs.map((input: ReviewInputType) => {
-                                  return input.reviewId === item.foodId ? { ...input, comment: newValue } : input;
+                                setReviewInput((prevInputs) => {
+                                  return prevInputs.map((input: ReviewInputType) => {
+                                    return input.reviewId === item.foodId ? { ...input, comment: newValue } : input;
+                                  });
                                 });
-                              });
-                            }}
-                            helperText={`${reviewInput.find((input) => input.reviewId === item.foodId)?.comment.length || 0}/300자`}
-                            error={(reviewInput.find((input) => input.reviewId === item.foodId)?.comment.length || 0) === 300}
-                            slotProps={{
-                              formHelperText: {
-                                sx: {
-                                  textAlign: "right",
-                                  marginRight: "0",
-                                  color:
-                                    (reviewInput.find((input) => input.reviewId === item.foodId)?.comment.length || 0) === 300
-                                      ? "error.main"
-                                      : "text.secondary",
+                              }}
+                              helperText={`${reviewInput.find((input) => input.reviewId === item.foodId)?.comment.length || 0}/300자`}
+                              error={(reviewInput.find((input) => input.reviewId === item.foodId)?.comment.length || 0) === 300}
+                              slotProps={{
+                                formHelperText: {
+                                  sx: {
+                                    textAlign: "right",
+                                    marginRight: "0",
+                                    color:
+                                      (reviewInput.find((input) => input.reviewId === item.foodId)?.comment.length || 0) === 300
+                                        ? "error.main"
+                                        : "text.secondary",
+                                  },
                                 },
-                              },
-                            }}
-                            multiline
-                          />
+                              }}
+                              // 붙여넣기 이벤트 처리
+                              onPaste={(event: React.ClipboardEvent) => {
+                                event.preventDefault();
+                                const pastedText = event.clipboardData.getData("text");
+                                const currentText = reviewInput.find((input) => input.reviewId === item.foodId)?.comment || "";
+
+                                // 붙여넣을 텍스트와 현재 텍스트의 합이 300자를 초과하는지 확인
+                                if (currentText.length + pastedText.length > 300) {
+                                  // 300자까지만 잘라서 붙여넣기
+                                  const allowedText = pastedText.slice(0, 300 - currentText.length);
+                                  setReviewInput((prevInputs) =>
+                                    prevInputs.map((input) => (input.reviewId === item.foodId ? { ...input, comment: currentText + allowedText } : input))
+                                  );
+                                } else {
+                                  // 300자 이내면 전체 텍스트 붙여넣기
+                                  setReviewInput((prevInputs) =>
+                                    prevInputs.map((input) => (input.reviewId === item.foodId ? { ...input, comment: currentText + pastedText } : input))
+                                  );
+                                }
+                              }}
+                              multiline
+                            />
+                            <ImageUpload
+                              onImageSelect={(file) => handleImageSelect(item.foodId, file)}
+                              selectedImage={reviewInput.find((input) => input.reviewId === item.foodId)?.imgPreview || null}
+                            />
+                          </>
                         )}
                       </AccordionDetails>
                       {!item.reviewStatus && (
                         <AccordionActions>
-                          <Button>등록하기</Button>
+                          <Button onClick={() => handleReviewSubmit(item.foodId)}>등록하기</Button>
                         </AccordionActions>
                       )}
                     </Accordion>
@@ -335,6 +401,10 @@ const BuyerMyPage = () => {
                   </AccordionSummary>
                   <AccordionDetails>
                     <TextField fullWidth label="리뷰를 작성해 주세요. (300자 이내)" id="fullWidth" multiline />
+                    {/* <ImageUpload
+                      onImageSelect={(file) => handleImageSelect(item.foodId, file)}
+                      selectedImage={reviewInput.find((input) => input.reviewId === item.foodId)?.imgPreview || null}
+                    /> */}
                   </AccordionDetails>
                   <AccordionActions sx={{ display: "flex", justifyContent: "center" }}>
                     <Button sx={{ width: "80px" }}>등록하기</Button>
