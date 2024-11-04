@@ -1,16 +1,21 @@
 package com.ssafy.c107.main.domain.review.service;
 
+import com.ssafy.c107.main.common.aws.FileService;
 import com.ssafy.c107.main.domain.food.entity.Food;
 import com.ssafy.c107.main.domain.food.exception.FoodNotFoundException;
 import com.ssafy.c107.main.domain.food.repository.FoodRepository;
 import com.ssafy.c107.main.domain.members.entity.Member;
 import com.ssafy.c107.main.domain.order.entity.OrderList;
+import com.ssafy.c107.main.domain.order.repository.OrderListRepository;
 import com.ssafy.c107.main.domain.review.dto.FoodReviewDto;
 import com.ssafy.c107.main.domain.review.dto.ReviewDto;
+import com.ssafy.c107.main.domain.review.dto.request.CreateReviewInfoRequest;
 import com.ssafy.c107.main.domain.review.dto.response.FoodDetailResponse;
 import com.ssafy.c107.main.domain.review.dto.response.ReviewInfoResponse;
 import com.ssafy.c107.main.domain.review.dto.response.StoreReviewResponse;
 import com.ssafy.c107.main.domain.review.entity.Review;
+import com.ssafy.c107.main.domain.review.exception.InvalidOrderListException;
+import com.ssafy.c107.main.domain.review.exception.MaxUploadSizeExceededException;
 import com.ssafy.c107.main.domain.review.repository.ReviewRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,6 +31,41 @@ import java.util.stream.Collectors;
 public class ReviewServiceImpl implements ReviewService {
     private final ReviewRepository reviewRepository;
     private final FoodRepository foodRepository;
+    private final OrderListRepository orderListRepository;
+    private final FileService fileService;
+
+    // 리뷰 작성
+    @Override
+    public void writeReview(Long orderListId, CreateReviewInfoRequest createReviewInfoRequest) {
+
+        // 주문 항목 확인
+        OrderList orderList = orderListRepository.findById(orderListId)
+                .orElseThrow(InvalidOrderListException::new);
+
+//        String S3imageUrl = fileService.saveFile(createReviewInfoRequest.getImg());
+//
+//        Review review = Review.builder()
+//                .orderList(orderList)
+//                .comment(createReviewInfoRequest.getComment())
+//                .img(S3imageUrl)
+//                .emotion(false)
+//                .build();
+//        reviewRepository.save(review);
+
+        try {
+            String S3imageUrl = fileService.saveFile(createReviewInfoRequest.getImg());
+            Review review = Review.builder()
+                    .orderList(orderList)
+                    .comment(createReviewInfoRequest.getComment())
+                    .img(S3imageUrl)
+                    .emotion(false)
+                    .build();
+            reviewRepository.save(review);
+        } catch (org.springframework.web.multipart.MaxUploadSizeExceededException e) {
+            throw new MaxUploadSizeExceededException();
+        }
+
+    }
 
     // 반찬가게 상세 페이지[구매자용](긍/부정, 한 줄 요약)
     @Transactional(readOnly = true)
