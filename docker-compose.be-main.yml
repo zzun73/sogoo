@@ -8,6 +8,8 @@ services:
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/sosang
       SPRING_DATASOURCE_USERNAME: ${DB_USERNAME}
       SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD}
+      CONFIG_USERNAME: ${CONFIG_USERNAME}
+      CONFIG_PASSWORD: ${CONFIG_PASSWORD}
     depends_on:
       - postgres
     networks:
