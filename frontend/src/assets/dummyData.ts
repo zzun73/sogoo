@@ -339,4 +339,67 @@ const totalReview = [
   },
 ];
 
-export { subscribeData, menuData, foodData, summaryData, totalReview };
+const MenuData = {
+  subscribe: [
+    {
+      subscribeId: 1,
+      subscribeName: "고기패키지1",
+      subscribePrice: 13000,
+      subscribeBeforePrice: 0,
+    },
+    {
+      subscribeId: 2,
+      subscribeName: "고기패키지2",
+      subscribePrice: 13000,
+      subscribeBeforePrice: 15000,
+    },
+    {
+      subscribeId: 3,
+      subscribeName: "고기패키지3",
+      subscribePrice: 13000,
+      subscribeBeforePrice: 18000,
+    },
+    {
+      subscribeId: 4,
+      subscribeName: "고기패키지4",
+      subscribePrice: 13000,
+      subscribeBeforePrice: 17000,
+    },
+    {
+      subscribeId: 5,
+      subscribeName: "고기패키지5",
+      subscribePrice: 13000,
+      subscribeBeforePrice: 15000,
+    },
+  ],
+  foods: [
+    {
+      foodId: 1,
+      foodName: "감자탕",
+      foodPrice: 10000,
+    },
+    {
+      foodId: 2,
+      foodName: "김치찌개",
+      foodPrice: 8000,
+    },
+    {
+      foodId: 3,
+      foodName: "된장국",
+      foodPrice: 10000,
+    },
+    {
+      foodId: 4,
+      foodName: "고구마",
+      foodPrice: 8000,
+    },
+  ],
+};
+export {
+  subscribeData,
+  menuData,
+  foodData,
+  summaryData,
+  totalReview,
+  MenuData,
+};
