@@ -1,6 +1,7 @@
 package com.ssafy.c107.main.domain.members.controller;
 
 import com.ssafy.c107.main.domain.members.dto.CustomUserDetails;
+import com.ssafy.c107.main.domain.members.exception.InvalidMemberRoleException;
 import com.ssafy.c107.main.domain.members.service.SellerService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,15 +25,16 @@ public class SellerController {
     public ResponseEntity<?> getSellerSellStatus(@PathVariable(name = "storeId") Long storeId,
         @AuthenticationPrincipal CustomUserDetails customUserDetails) {
         if (!customUserDetails.getUserRole().getRole().equals("SELLER")) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("구매자는 접근 불가핑!");
+            throw new InvalidMemberRoleException();
         }
         return ResponseEntity.ok(sellerService.getSalesStatus(storeId));
     }
 
     @GetMapping("/monthly-sales/{storeId}")
-    public ResponseEntity<?> getMonthlySales(@PathVariable(name = "storeId") Long storeId, @AuthenticationPrincipal CustomUserDetails customUserDetails) {
+    public ResponseEntity<?> getMonthlySales(@PathVariable(name = "storeId") Long storeId,
+        @AuthenticationPrincipal CustomUserDetails customUserDetails) {
         if (!customUserDetails.getUserRole().getRole().equals("SELLER")) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("구매자는 접근 불가핑!");
+            throw new InvalidMemberRoleException();
         }
         return ResponseEntity.ok(sellerService.getMonthlySales(storeId));
     }
@@ -41,9 +43,17 @@ public class SellerController {
     public ResponseEntity<?> getNextCount(@PathVariable(name = "storeId") Long storeId,
         @AuthenticationPrincipal CustomUserDetails customUserDetails) {
         if (!customUserDetails.getUserRole().getRole().equals("SELLER")) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("구매자는 접근 불가핑!");
+            throw new InvalidMemberRoleException();
         }
         return ResponseEntity.ok(sellerService.getNextCount(storeId));
     }
 
+    @GetMapping("/today-sell/{storeId}")
+    public ResponseEntity<?> getTodaySales(@PathVariable(name = "storeId") Long storeId,
+        @AuthenticationPrincipal CustomUserDetails customUserDetails) {
+        if (!customUserDetails.getUserRole().getRole().equals("SELLER")) {
+            throw new InvalidMemberRoleException();
+        }
+        return ResponseEntity.ok(sellerService.getTodaySales(storeId));
+    }
 }

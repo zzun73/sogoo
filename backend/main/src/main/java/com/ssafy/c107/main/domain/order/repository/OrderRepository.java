@@ -1,8 +1,10 @@
 package com.ssafy.c107.main.domain.order.repository;
 
 import com.ssafy.c107.main.domain.order.entity.Order;
+import com.ssafy.c107.main.domain.order.entity.OrderType;
 import java.time.LocalDateTime;
 import java.util.List;
+import org.aspectj.weaver.ast.Or;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -27,4 +29,11 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
         @Param("startDate") LocalDateTime startDate,
         @Param("storeId") Long storeId
     );
+
+    @Query("SELECT o "
+        + "FROM Order o "
+        + "WHERE o.orderType = :orderType " +
+        "AND DATE_TRUNC('day', o.createdAt) = DATE_TRUNC('day', CURRENT_TIMESTAMP)"
+        + "AND o.store.id = :storeId ")
+    List<Order> findByOrderTypeAndCreatedAtToday(@Param("orderType") OrderType orderType, @Param("storeId") Long storeId);
 }

@@ -2,6 +2,7 @@ package com.ssafy.c107.main.domain.members.controller;
 
 import com.ssafy.c107.main.domain.members.dto.CustomUserDetails;
 import com.ssafy.c107.main.domain.members.dto.response.BuyerResponse;
+import com.ssafy.c107.main.domain.members.exception.InvalidMemberRoleException;
 import com.ssafy.c107.main.domain.members.service.BuyerService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,7 +24,7 @@ public class BuyerConroller {
     @GetMapping("/")
     public ResponseEntity<?> getBuyerMyPage(@AuthenticationPrincipal CustomUserDetails customUserDetails) {
         if (!customUserDetails.getUserRole().getRole().equals("BUYER")) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("구매자는 접근 불가핑!");
+            throw new InvalidMemberRoleException();
         }
 
         Long userId = customUserDetails.getUserId();

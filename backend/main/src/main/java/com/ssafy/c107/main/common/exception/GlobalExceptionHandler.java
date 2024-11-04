@@ -6,6 +6,7 @@ import com.ssafy.c107.main.domain.members.exception.InvalidMemberRoleException;
 import com.ssafy.c107.main.domain.members.exception.MemberExistException;
 import com.ssafy.c107.main.domain.members.exception.MemberNotFoundException;
 import com.ssafy.c107.main.domain.members.exception.SellerNotFoundException;
+import com.ssafy.c107.main.domain.order.exception.OrderListNotFoundException;
 import com.ssafy.c107.main.domain.store.exception.StoreNotFoundException;
 import com.ssafy.c107.main.domain.subscribe.exception.SubscribeNotFoundException;
 import com.ssafy.c107.main.domain.subscribe.exception.SubscribeWeekNotFoundException;
@@ -52,12 +53,18 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(SubscribeWeekNotFoundException.class)
-    public ResponseEntity<String> handleSubscribeWeekNotFoundException(SubscribeWeekNotFoundException e) {
+    public ResponseEntity<String> handleSubscribeWeekNotFoundException(
+        SubscribeWeekNotFoundException e) {
         return ResponseEntity.status(e.getStatus()).body(e.getMessage());
     }
 
     @ExceptionHandler(InvalidS3Exception.class)
     public ResponseEntity<String> handleS3Exception(InvalidS3Exception e) {
+        return ResponseEntity.status(e.getStatus()).body(e.getMessage());
+    }
+
+    @ExceptionHandler(OrderListNotFoundException.class)
+    public ResponseEntity<String> handleOrderListNotFoundException(OrderListNotFoundException e) {
         return ResponseEntity.status(e.getStatus()).body(e.getMessage());
     }
 }
