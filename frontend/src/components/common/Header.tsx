@@ -14,7 +14,7 @@ const Header = () => {
   const store = useRootStore();
   const { setLogout } = useRootStore();
   const isLogin = store.isLogin;
-  const isSeller = store.memberInfo?.role === "Seller";
+  const isSeller = store.memberInfo?.role === "SELLER";
 
   const { mutate: handleLogout } = useMutation({
     mutationFn: sogoo.logout,
@@ -39,11 +39,7 @@ const Header = () => {
       <header className="relative flex justify-center z-10">
         <div className="mt-10 mb-5">
           <Link to="/">
-            <img
-              src={LogoImg}
-              alt="소상한 구독"
-              className="w-[120px] drop-shadow-2xl"
-            />
+            <img src={LogoImg} alt="소상한 구독" className="w-[120px] drop-shadow-2xl" />
           </Link>
         </div>
       </header>
