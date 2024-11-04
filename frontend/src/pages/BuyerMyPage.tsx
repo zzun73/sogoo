@@ -1,11 +1,14 @@
+import { useEffect, useState } from "react";
+import sogoo from "../services/sogoo";
 import useRootStore from "../stores";
 
+// MUI - Card
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
 import CardActionArea from "@mui/material/CardActionArea";
-
+// MUI - Accordion
 import Accordion from "@mui/material/Accordion";
 import AccordionActions from "@mui/material/AccordionActions";
 import AccordionSummary from "@mui/material/AccordionSummary";
@@ -14,6 +17,22 @@ import Button from "@mui/material/Button";
 
 const BuyerMyPage = () => {
   const memberInfo = useRootStore().memberInfo;
+  const [subcribes, setSubcribes] = useState<SubscribeItem[]>([]);
+  const [foodTrades, setFoodTrades] = useState<FoodTradeItem[]>([]);
+  const [, setReviews] = useState<ReviewItem[]>([]);
+
+  useEffect(() => {
+    if (memberInfo) {
+      sogoo.getBuyerMyPage().then((res) => {
+        if (res.status === 200) {
+          const data = res.data;
+          setSubcribes(data.subscribes);
+          setFoodTrades(data.foodTrades);
+          setReviews(data.reviews);
+        }
+      });
+    }
+  }, [memberInfo]);
 
   const formatPhoneNumber = (number: string | undefined): string => {
     if (number === undefined) return "";
@@ -71,24 +90,28 @@ const BuyerMyPage = () => {
             <div className="flex flex-col gap-8 w-full p-8 rounded-b-3xl bg-white">
               <div className="max-h-[600px] p-1 flex flex-col gap-y-2 overflow-y-auto">
                 {/* 단일 카드 영역 */}
-                <Card sx={{ width: "100%", minHeight: "150px", boxShadow: "0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23)" }}>
-                  <CardActionArea sx={{ display: "flex" }}>
-                    <CardMedia
-                      component="img"
-                      image="https://plus.unsplash.com/premium_photo-1670513725769-a048102828ad?q=80&w=2670&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                      alt="green iguana"
-                      sx={{ width: "180px", height: "150px", objectFit: "cover" }}
-                    />
-                    <CardContent>
-                      <Typography gutterBottom variant="h5" component="div">
-                        Lizard
-                      </Typography>
-                      <Typography variant="body2" sx={{ color: "text.secondary" }}>
-                        Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging across all continents except Antarctica
-                      </Typography>
-                    </CardContent>
-                  </CardActionArea>
-                </Card>
+                {subcribes.map((item: SubscribeItem) => {
+                  return (
+                    <Card sx={{ width: "100%", minHeight: "150px", boxShadow: "0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23)" }}>
+                      <CardActionArea sx={{ display: "flex" }}>
+                        <CardContent>
+                          <Typography gutterBottom variant="h5" component="div">
+                            {item.subscribeName}
+                          </Typography>
+                          <Typography variant="body2" sx={{ color: "text.secondary" }}>
+                            매장명 | {item.storeName}
+                          </Typography>
+                          <Typography variant="body2" sx={{ color: "text.secondary" }}>
+                            구독 기간 | {item.SubscribePeriod}
+                          </Typography>
+                          <Typography variant="body2" sx={{ color: "text.secondary" }}>
+                            결제 금액 | {item.subscribePrice}
+                          </Typography>
+                        </CardContent>
+                      </CardActionArea>
+                    </Card>
+                  );
+                })}
               </div>
             </div>
           </div>
@@ -101,24 +124,29 @@ const BuyerMyPage = () => {
             <div className="flex flex-col gap-8 w-full p-8 rounded-b-3xl bg-white">
               <div className="max-h-[600px] p-1 flex flex-col gap-y-2 overflow-y-auto">
                 {/* 단일 카드 영역 */}
-                <Card sx={{ width: "100%", minHeight: "150px", boxShadow: "0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23)" }}>
-                  <CardActionArea sx={{ display: "flex" }}>
-                    <CardMedia
-                      component="img"
-                      image="https://plus.unsplash.com/premium_photo-1670513725769-a048102828ad?q=80&w=2670&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                      alt="green iguana"
-                      sx={{ width: "180px", height: "150px", objectFit: "cover" }}
-                    />
-                    <CardContent>
-                      <Typography gutterBottom variant="h5" component="div">
-                        Lizard
-                      </Typography>
-                      <Typography variant="body2" sx={{ color: "text.secondary" }}>
-                        Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging across all continents except Antarctica
-                      </Typography>
-                    </CardContent>
-                  </CardActionArea>
-                </Card>
+                {foodTrades.map((item: FoodTradeItem) => {
+                  return (
+                    <Card sx={{ width: "100%", minHeight: "150px", boxShadow: "0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23)" }}>
+                      <CardActionArea sx={{ display: "flex" }}>
+                        <CardMedia component="img" image={item.foodImg} alt={item.foodName} sx={{ width: "180px", height: "150px", objectFit: "cover" }} />
+                        <CardContent>
+                          <Typography gutterBottom variant="h5" component="div">
+                            {item.foodName}
+                          </Typography>
+                          <Typography variant="body2" sx={{ color: "text.secondary" }}>
+                            매장명 | {item.storeName}
+                          </Typography>
+                          <Typography variant="body2" sx={{ color: "text.secondary" }}>
+                            주문상태 | {item.orderStatus}
+                          </Typography>
+                          <Typography variant="body2" sx={{ color: "text.secondary" }}>
+                            결제 금액 | {item.price}원
+                          </Typography>
+                        </CardContent>
+                      </CardActionArea>
+                    </Card>
+                  );
+                })}
               </div>
             </div>
           </div>
