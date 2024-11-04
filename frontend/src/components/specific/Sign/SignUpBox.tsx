@@ -12,8 +12,10 @@ import { Dayjs } from "dayjs";
 import { useCheckEmail, useCheckSeller } from "../../../queries/queries";
 import { useMutation } from "@tanstack/react-query";
 import sogoo from "../../../services/sogoo";
+import { useNavigate } from "react-router-dom";
 
 const SignUpBox = () => {
+  const navigate = useNavigate();
   const [name, setName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [password1, setPassword1] = useState<string>("");
@@ -34,6 +36,7 @@ const SignUpBox = () => {
     onSuccess: async (response) => {
       console.log("회원가입 성공:", response);
       alert("회원가입 성공");
+      navigate("/");
     },
     onError: (error) => {
       console.error("회원가입 실패:", error);
@@ -124,20 +127,12 @@ const SignUpBox = () => {
           onKeyDown={handleEmailKeyDown}
           sx={{ width: "80%", height: "50px" }}
         />
-        <Button
-          variant="outlined"
-          sx={{ width: "17%", height: "42px" }}
-          onClick={handleEmailCheck}
-        >
+        <Button variant="outlined" sx={{ width: "17%", height: "42px" }} onClick={handleEmailCheck}>
           확인
         </Button>
       </div>
-      {isEmailValid === true && (
-        <p className="text-green-500 mb-3">사용 가능한 이메일입니다.</p>
-      )}
-      {isEmailValid === false && (
-        <p className="text-red-500 mb-3">이 이메일은 이미 사용 중입니다.</p>
-      )}
+      {isEmailValid === true && <p className="text-green-500 mb-3">사용 가능한 이메일입니다.</p>}
+      {isEmailValid === false && <p className="text-red-500 mb-3">이 이메일은 이미 사용 중입니다.</p>}
       <TextField
         required
         id="signUpPasswordInput1"
@@ -165,11 +160,7 @@ const SignUpBox = () => {
         sx={{ width: "100%", height: "50px", marginBottom: "20px" }}
       />
       <LocalizationProvider dateAdapter={AdapterDayjs}>
-        <DatePicker
-          label="생년월일"
-          onChange={handleDateChange}
-          sx={{ width: "100%", height: "50px", marginBottom: "20px" }}
-        />
+        <DatePicker label="생년월일" onChange={handleDateChange} sx={{ width: "100%", height: "50px", marginBottom: "20px" }} />
       </LocalizationProvider>
       <TextField
         required
@@ -206,32 +197,16 @@ const SignUpBox = () => {
               onKeyDown={handleSellerKeyDown}
               sx={{ width: "80%", height: "50px" }}
             />
-            <Button
-              variant="outlined"
-              sx={{ width: "17%", height: "42px" }}
-              onClick={handleSellerCheck}
-            >
+            <Button variant="outlined" sx={{ width: "17%", height: "42px" }} onClick={handleSellerCheck}>
               확인
             </Button>
           </div>
-          {isSellerValid === true && (
-            <p className="text-green-500 mb-3">
-              사업자 번호 인증에 성공하셨습니다.
-            </p>
-          )}
-          {isSellerValid === false && (
-            <p className="text-red-500 mb-3">
-              해당 번호의 사업자를 찾지 못했습니다.
-            </p>
-          )}
+          {isSellerValid === true && <p className="text-green-500 mb-3">사업자 번호 인증에 성공하셨습니다.</p>}
+          {isSellerValid === false && <p className="text-red-500 mb-3">해당 번호의 사업자를 찾지 못했습니다.</p>}
         </>
       )}
 
-      <Button
-        variant="contained"
-        sx={{ width: "95px", height: "42px" }}
-        onClick={initiateSignUp}
-      >
+      <Button variant="contained" sx={{ width: "95px", height: "42px" }} onClick={initiateSignUp}>
         가입하기
       </Button>
     </div>
