@@ -5,11 +5,14 @@ import com.ssafy.c107.main.domain.members.entity.Member;
 import com.ssafy.c107.main.domain.members.exception.MemberNotFoundException;
 import com.ssafy.c107.main.domain.members.repository.MemberRepository;
 import com.ssafy.c107.main.domain.store.dto.GetStoreDto;
+import com.ssafy.c107.main.domain.store.dto.SellerStoreDto;
 import com.ssafy.c107.main.domain.store.dto.request.AddStoreRequest;
 import com.ssafy.c107.main.domain.store.dto.response.GetStoreResponse;
+import com.ssafy.c107.main.domain.store.dto.response.SellerStoresResponse;
 import com.ssafy.c107.main.domain.store.entity.Store;
 import com.ssafy.c107.main.domain.store.exception.StoreNotFoundException;
 import com.ssafy.c107.main.domain.store.repository.StoreRepository;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -80,5 +83,22 @@ public class StoreServiceImpl implements StoreService {
             .member(member)
             .summary("없음")
             .build());
+    }
+
+    @Override
+    public SellerStoresResponse getAllSellerStores(Long userId) {
+        List<SellerStoreDto> result = new ArrayList<>();
+        List<Store> stores = storeRepository.findAllByMember_Id(userId);
+        for (Store store : stores) {
+            result.add(SellerStoreDto
+                .builder()
+                .storeId(store.getId())
+                .storeName(store.getName())
+                .build());
+        }
+        return SellerStoresResponse
+            .builder()
+            .stores(result)
+            .build();
     }
 }
