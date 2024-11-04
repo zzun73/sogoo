@@ -44,4 +44,12 @@ public class StoreController {
         storeService.addStore(addStoreRequest, userId);
         return ResponseEntity.ok("등록완료핑");
     }
+
+    @GetMapping("/mystore")
+    public ResponseEntity<?> getMyStore(@AuthenticationPrincipal CustomUserDetails customUserDetails) {
+        if (customUserDetails.getUserRole().getRole().equals("Buyer")) {
+            throw new InvalidMemberRoleException();
+        }
+        return null;
+    }
 }
