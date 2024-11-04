@@ -32,7 +32,7 @@ export default {
    */
   checkSeller: async (businessNumber: BusinessNumber) => {
     return axios.post("/member/seller-check", {
-      sellerNumber: businessNumber,
+      businessNumber: businessNumber,
     });
   },
 };

@@ -6,8 +6,8 @@ const TossPaymentsCheckoutFail = () => {
   const errorCode = searchParams.get("code");
   const errorMessage = searchParams.get("message");
 
-  const goToBeforePage = () => {
-    navigate(-1);
+  const goToCartPage = () => {
+    navigate("/cart");
   };
 
   return (
@@ -33,9 +33,9 @@ const TossPaymentsCheckoutFail = () => {
         <div className="w-full mt-8 flex flex-col justify-center gap-4 text-center">
           <button
             className="px-[22px] py-[11px] rounded-lg min-w-[350px] bg-[#f2f4f6] text-[#4e5968] font-semibold text-lg cursor-pointer"
-            onClick={goToBeforePage}
+            onClick={goToCartPage}
           >
-            주문서 페이지로 돌아가기
+            장바구니로 돌아가기
           </button>
         </div>
       </div>
