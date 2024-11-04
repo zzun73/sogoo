@@ -71,14 +71,14 @@ const MenuSelect = () => {
   const renderOptions = () => {
     if (choice === "subscribe") {
       return data.subscribe.map((item) => (
-        <MenuItem key={item.subscribeId} value={item.subscribeId}>
+        <MenuItem key={item.subscribeName} value={item.subscribeId}>
           {item.subscribeName}
         </MenuItem>
       ));
     }
     if (choice === "foods") {
       return data.foods.map((item) => (
-        <MenuItem key={item.foodId} value={item.foodId}>
+        <MenuItem key={`food${item.foodId}`} value={item.foodId}>
           {item.foodName}
         </MenuItem>
       ));
@@ -124,7 +124,11 @@ const MenuSelect = () => {
       <List>
         {selectedItems.map((item) => (
           <ListItem
-            key={choice === "subscribe" ? item.subscribeId : item.foodId}
+            key={
+              choice === "subscribe"
+                ? `item${item.subscribeId}`
+                : `item${item.foodId}`
+            }
           >
             <ListItemText
               primary={

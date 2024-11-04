@@ -66,7 +66,7 @@ const StoreList = () => {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-4 gap-y-8">
       {dummy.map((store) => (
-        <StoreCard store={store} key={store.storeId} />
+        <StoreCard store={store} key={`store-${store.storeId}`} />
       ))}
     </div>
   );
