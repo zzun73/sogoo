@@ -55,4 +55,22 @@ const useGetBuyerMypage = () => {
   return queryResponse;
 };
 
-export { useCheckEmail, useCheckSeller, useGetStoreList, useGetBuyerMypage };
+/**
+ * (판매자) 내 가게 가져오기
+ */
+const useGetMyStores = () => {
+  const queryResponse = useQuery({
+    queryKey: keys.getMyStores(),
+    queryFn: () => sogoo.getMyStores(),
+  });
+
+  return queryResponse;
+};
+
+export {
+  useCheckEmail,
+  useCheckSeller,
+  useGetStoreList,
+  useGetBuyerMypage,
+  useGetMyStores,
+};
