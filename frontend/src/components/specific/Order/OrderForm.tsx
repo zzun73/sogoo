@@ -11,7 +11,7 @@ const OrderForm = () => {
   const memberInfo = useRootStore().memberInfo;
   const [recipientAddress, setRecipientAddress] = useState<string>("");
   const [request, setRequest] = useState<string>("");
-  const [isSubscription] = useState(true);
+  const [isSubscription, setIsSubscription] = useState(true);
 
   // 주문 상품 목록 DataGrid 관련 데이터(rows, columns)
   const rows: GridRowsProp = [
@@ -38,7 +38,7 @@ const OrderForm = () => {
 
   return (
     <>
-      <h2 className="text-3xl font-bold text-center">주문서</h2>
+      <h2 className="text-5xl font-shilla text-center">주문서</h2>
       <div className="min-w-[800px] my-10 flex flex-col gap-4">
         {/* 주문 상품 */}
         <div className="flex flex-col gap-8 w-full p-8 rounded-t-3xl bg-white">
@@ -84,6 +84,7 @@ const OrderForm = () => {
         {/* 결제 수단 */}
         <div className="flex flex-col gap-8 w-full mt-4 p-8 rounded-3xl bg-white">
           <h3 className="text-xl font-semibold">결제 수단</h3>
+          <button onClick={() => setIsSubscription((prev) => !prev)}>임시 버튼(추후 삭제)</button>
           {isSubscription ? (
             <TossPaymentsBillingCheckout />
           ) : (
