@@ -373,7 +373,8 @@ const buyerMyPageData: BuyerDetailInfo = {
     {
       foodId: 1,
       foodName: "크로와상 세트",
-      foodImg: "/images/croissant-set.jpg",
+      foodImg:
+        "https://images.unsplash.com/photo-1457785097656-8ac31dcf679f?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
       storeId: 1,
       storeName: "마리앤베이커리",
       price: 12000,
@@ -382,7 +383,8 @@ const buyerMyPageData: BuyerDetailInfo = {
     {
       foodId: 2,
       foodName: "케일 치킨 샐러드",
-      foodImg: "/images/kale-chicken-salad.jpg",
+      foodImg:
+        "https://plus.unsplash.com/premium_photo-1673590981774-d9f534e0c617?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
       storeId: 2,
       storeName: "그린키친",
       price: 9900,
@@ -391,7 +393,8 @@ const buyerMyPageData: BuyerDetailInfo = {
     {
       foodId: 3,
       foodName: "불고기 도시락",
-      foodImg: "/images/bulgogi-lunch.jpg",
+      foodImg:
+        "https://images.unsplash.com/photo-1564836235910-c3055ca0f912?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
       storeId: 3,
       storeName: "맛있는도시락",
       price: 8500,
@@ -402,21 +405,24 @@ const buyerMyPageData: BuyerDetailInfo = {
     {
       foodId: 1,
       foodName: "크로와상 세트",
-      foodImg: "/images/croissant-set.jpg",
+      foodImg:
+        "https://images.unsplash.com/photo-1457785097656-8ac31dcf679f?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
       reviewStatus: true,
       orderListId: 1001,
     },
     {
       foodId: 2,
       foodName: "케일 치킨 샐러드",
-      foodImg: "/images/kale-chicken-salad.jpg",
+      foodImg:
+        "https://plus.unsplash.com/premium_photo-1673590981774-d9f534e0c617?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
       reviewStatus: false,
       orderListId: 1002,
     },
     {
       foodId: 3,
       foodName: "불고기 도시락",
-      foodImg: "/images/bulgogi-lunch.jpg",
+      foodImg:
+        "https://images.unsplash.com/photo-1564836235910-c3055ca0f912?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
       reviewStatus: false,
       orderListId: 1003,
     },
