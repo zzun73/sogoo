@@ -42,6 +42,13 @@ public class Food extends BaseEntity {
     @JoinColumn(name = "store_id")
     private Store store;
 
+    public void setStore(Store store) {
+        this.store = store;
+        if (store.getFoods().contains(this)) {
+            store.getFoods().add(this);
+        }
+    }
+
     @Builder
     public Food(String name, int price, String description, String img, String summary, Store store) {
         this.name = name;
