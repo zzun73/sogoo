@@ -9,8 +9,7 @@ import ListItemAvatar from "@mui/material/ListItemAvatar";
 import Avatar from "@mui/material/Avatar";
 import Divider from "@mui/material/Divider";
 import FoodDetailModal from "./MenuComponents/FoodDetailModal";
-import { useNavigate } from "react-router-dom";
-import { useLocation } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 interface Food {
   foodId: number;
@@ -58,7 +57,7 @@ const Menus: React.FC = () => {
   };
 
   const goToAddFood = () => {
-    navigate("/seller/add/food");
+    navigate("/seller/add/food", { state: { storeId: storeId } });
   };
 
   return (
