@@ -19,9 +19,12 @@ import com.ssafy.c107.main.domain.review.exception.MaxUploadSizeExceededExceptio
 import com.ssafy.c107.main.domain.review.exception.ReviewNotFoundException;
 import com.ssafy.c107.main.domain.review.exception.SummeryNotFoundException;
 import com.ssafy.c107.main.domain.review.repository.ReviewRepository;
+import com.ssafy.c107.main.domain.store.entity.Store;
+import com.ssafy.c107.main.domain.store.repository.StoreRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.chat.client.ChatClient;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -37,6 +40,7 @@ public class ReviewServiceImpl implements ReviewService {
     private final OrderListRepository orderListRepository;
     private final FileService fileService;
     private final ChatClient chatClient;
+    private final StoreRepository storeRepository;
 
     // 리뷰 작성
     @Override
@@ -71,6 +75,39 @@ public class ReviewServiceImpl implements ReviewService {
 
     }
 
+    // 매일 새벽 4시에 AI 요약 생성 및 저장
+    @Scheduled(cron = "0 0 4 * * *")
+    @Transactional
+    public void updateDailyReviewSummary(){
+        List<Store> stores = storeRepository.findAll();
+
+        for(Store store : stores){
+            Long storeId = store.getId();
+
+            // 해당 Store의 모든 리뷰 조회 (Fetch Join 사용 가능)
+            List<Review> reviews = reviewRepository.findAllByStoreId(storeId);
+
+            // 리뷰가 없으면 다음 Store로 이동
+            if(reviews.isEmpty()){
+                continue;
+            }
+
+            // 리뷰 코멘트를 하나의 문자열로 결합
+            String reviewContent = reviews.stream()
+                    .map(Review::getComment)
+                    .collect(Collectors.joining(" "));
+
+            // AI를 통해 한 줄 요약 생성
+            String summary = createSummaryWithAI(reviewContent);
+
+            // Store 엔티티의 summary 필드에 업데이트하고 저장
+            store.updateSummary(summary);
+
+            // Store 엔티티 저장
+            storeRepository.save(store);
+        }
+    }
+
     // 반찬가게 상세 페이지[구매자용](긍/부정, 한 줄 요약)
     @Transactional(readOnly = true)
     public ReviewInfoResponse getReviewInfo(Long storeId) {
@@ -82,14 +119,10 @@ public class ReviewServiceImpl implements ReviewService {
         long positiveCount = reviews.stream().filter(Review::isEmotion).count();
         long negativeCount = totalReviewCount - positiveCount;
 
-        // 리뷰 코멘트 전체를 결합하여 하나의 문자열로 생성
-        String reviewContent = reviews.stream()
-                .map(Review::getComment)
-                .reduce((comment1, comment2) -> comment1 + " " + comment2)
-                .orElseThrow(ReviewNotFoundException::new);
-
-        // AI를 통해 한 줄 요약 생성
-        String summary = createSummaryWithAI(reviewContent);
+        // AI 요약 결과
+        Store store = storeRepository.findById(storeId)
+                .orElseThrow(SummeryNotFoundException::new);
+        String summary = store.getSummary();
 
         // 응답 객체 생성
         ReviewInfoResponse reviewInfoResponse = new ReviewInfoResponse();
