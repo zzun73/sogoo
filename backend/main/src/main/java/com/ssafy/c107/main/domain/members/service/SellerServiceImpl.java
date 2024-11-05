@@ -24,6 +24,7 @@ import com.ssafy.c107.main.domain.order.exception.OrderListNotFoundException;
 import com.ssafy.c107.main.domain.order.repository.OrderListRepository;
 import com.ssafy.c107.main.domain.order.repository.OrderRepository;
 import com.ssafy.c107.main.domain.review.entity.Review;
+import com.ssafy.c107.main.domain.review.exception.SummeryNotFoundException;
 import com.ssafy.c107.main.domain.review.repository.ReviewRepository;
 import com.ssafy.c107.main.domain.store.entity.Store;
 import com.ssafy.c107.main.domain.store.exception.StoreNotFoundException;
@@ -52,6 +53,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -68,6 +70,7 @@ public class SellerServiceImpl implements SellerService {
     private final FoodRepository foodRepository;
     private final ReviewRepository reviewRepository;
     private final StoreRepository storeRepository;
+    private final ChatClient chatClient;
 
     @Override
     public SalesStatusResponse getSalesStatus(Long storeId) {
@@ -260,6 +263,8 @@ public class SellerServiceImpl implements SellerService {
             //리뷰 정보 가져오기
             List<ReviewDetail> reviewDetails = new ArrayList<>();
             List<Review> reviews = reviewRepository.findReviewByStoreId(storeId);
+            StringBuilder reviewContentBuilder = new StringBuilder();
+
             for (Review review : reviews) {
                 String memberEmail = review.getOrderList().getOrder().getMember().getEmail();
                 String foodName = review.getOrderList().getFood().getName();
@@ -270,7 +275,11 @@ public class SellerServiceImpl implements SellerService {
                     .foodName(foodName)
                     .memberEmail(memberEmail)
                     .build());
+
+                reviewContentBuilder.append(review.getComment()).append(" ");
             }
+
+            String summery = createSummaryWithAI(reviewContentBuilder.toString());
 
             return ReviewDetailResponse
                 .builder()
@@ -279,7 +288,7 @@ public class SellerServiceImpl implements SellerService {
                     .builder()
                     .positiveCnt(positiveCnt)
                     .negativeCnt(negativeCnt)
-                    .aiSummary(store.getSummary())
+                    .aiSummary(summery)
                     .build())
                 .build();
         } else {
@@ -293,6 +302,8 @@ public class SellerServiceImpl implements SellerService {
             List<ReviewDetail> reviewDetails = new ArrayList<>();
             List<Review> reviews = reviewRepository.findReviewByStoreIdAndFoodId(
                 storeId, foodId);
+            StringBuilder reviewContentBuilder = new StringBuilder();
+
             for (Review review : reviews) {
                 String memberEmail = review.getOrderList().getOrder().getMember().getEmail();
                 String foodName = review.getOrderList().getFood().getName();
@@ -303,7 +314,12 @@ public class SellerServiceImpl implements SellerService {
                     .comment(review.getComment())
                     .memberEmail(memberEmail)
                     .build());
+
+                reviewContentBuilder.append(review.getComment()).append(" ");
             }
+
+            String summery = createSummaryWithAI(reviewContentBuilder.toString());
+
             return ReviewDetailResponse
                 .builder()
                 .reviews(reviewDetails)
@@ -311,7 +327,7 @@ public class SellerServiceImpl implements SellerService {
                     .builder()
                     .positiveCnt(positiveCnt)
                     .negativeCnt(negativeCnt)
-                    .aiSummary(food.getSummary())
+                    .aiSummary(summery)
                     .build())
                 .build();
         }
@@ -357,5 +373,20 @@ public class SellerServiceImpl implements SellerService {
     LocalDate getnextMonday() {
         LocalDate today = LocalDate.now();
         return today.with(TemporalAdjusters.next(DayOfWeek.MONDAY));
+    }
+
+    // ChatModel을 사용해 요약 생성
+    private String createSummaryWithAI(String content) {
+        // ChatModel을 통해 AI 호출 및 요약 생성
+        String summary = chatClient
+                .prompt()
+                .system("반찬을 시켜먹는 사람들이 쓴 리뷰 입니다. 이 리뷰들을 간단하게 한줄로 요약 해주세요")
+                .user(content)
+                .call()
+                .content();
+        if (summary.isEmpty()) {
+            throw new SummeryNotFoundException();
+        }
+        return summary;
     }
 }

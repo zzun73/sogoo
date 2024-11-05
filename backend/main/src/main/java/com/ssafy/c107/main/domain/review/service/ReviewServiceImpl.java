@@ -16,9 +16,12 @@ import com.ssafy.c107.main.domain.review.dto.response.StoreReviewResponse;
 import com.ssafy.c107.main.domain.review.entity.Review;
 import com.ssafy.c107.main.domain.review.exception.InvalidOrderListException;
 import com.ssafy.c107.main.domain.review.exception.MaxUploadSizeExceededException;
+import com.ssafy.c107.main.domain.review.exception.ReviewNotFoundException;
+import com.ssafy.c107.main.domain.review.exception.SummeryNotFoundException;
 import com.ssafy.c107.main.domain.review.repository.ReviewRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,6 +36,7 @@ public class ReviewServiceImpl implements ReviewService {
     private final FoodRepository foodRepository;
     private final OrderListRepository orderListRepository;
     private final FileService fileService;
+    private final ChatClient chatClient;
 
     // 리뷰 작성
     @Override
@@ -78,10 +82,14 @@ public class ReviewServiceImpl implements ReviewService {
         long positiveCount = reviews.stream().filter(Review::isEmotion).count();
         long negativeCount = totalReviewCount - positiveCount;
 
-        // 한 줄 요약 (예시로 단순히 가장 최근 리뷰의 댓글을 가져와 사용) 나중에 추가 구현
-        String summary = reviews.stream().findFirst()
+        // 리뷰 코멘트 전체를 결합하여 하나의 문자열로 생성
+        String reviewContent = reviews.stream()
                 .map(Review::getComment)
-                .orElse("리뷰가 없습니다.");
+                .reduce((comment1, comment2) -> comment1 + " " + comment2)
+                .orElseThrow(ReviewNotFoundException::new);
+
+        // AI를 통해 한 줄 요약 생성
+        String summary = createSummaryWithAI(reviewContent);
 
         // 응답 객체 생성
         ReviewInfoResponse reviewInfoResponse = new ReviewInfoResponse();
@@ -154,5 +162,20 @@ public class ReviewServiceImpl implements ReviewService {
         foodDetailResponse.setReviews(reviewDtos);
 
         return foodDetailResponse;
+    }
+
+    // ChatModel을 사용해 요약 생성
+    private String createSummaryWithAI(String content) {
+        // ChatModel을 통해 AI 호출 및 요약 생성
+        String summary = chatClient
+                .prompt()
+                .system("반찬을 시켜먹는 사람들이 쓴 리뷰 입니다. 이 리뷰들을 간단하게 한줄로 요약 해주세요")
+                .user(content)
+                .call()
+                .content();
+        if (summary.isEmpty()) {
+            throw new SummeryNotFoundException();
+        }
+        return summary;
     }
 }

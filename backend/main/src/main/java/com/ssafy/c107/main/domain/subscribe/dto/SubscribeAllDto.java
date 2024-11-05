@@ -4,8 +4,8 @@ import lombok.Data;
 
 @Data
 public class SubscribeAllDto {
-    private Long subscribeId;
-    private String subscribeName;
-    private int subscribePrice;
-    private int subscribeBeforePrice;
+    private Long id;
+    private String name;
+    private int price;
+    private int beforePrice;
 }
