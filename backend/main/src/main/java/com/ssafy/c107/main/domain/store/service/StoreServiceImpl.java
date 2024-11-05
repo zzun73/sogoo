@@ -1,6 +1,8 @@
 package com.ssafy.c107.main.domain.store.service;
 
 import com.ssafy.c107.main.common.aws.FileService;
+import com.ssafy.c107.main.domain.elasticsearch.entity.StoreSearchDocument;
+import com.ssafy.c107.main.domain.elasticsearch.repository.StoreSearchRepository;
 import com.ssafy.c107.main.domain.members.entity.Member;
 import com.ssafy.c107.main.domain.members.exception.MemberNotFoundException;
 import com.ssafy.c107.main.domain.members.repository.MemberRepository;
@@ -28,6 +30,7 @@ public class StoreServiceImpl implements StoreService {
     private final StoreRepository storeRepository;
     private final FileService fileService;
     private final MemberRepository memberRepository;
+    private final StoreSearchRepository storeSearchRepository;
 
     //메인 페이지 조회
     @Transactional(readOnly = true)
@@ -74,7 +77,7 @@ public class StoreServiceImpl implements StoreService {
         String imgUrl = fileService.saveFile(addStoreRequest.getImg());
 
         //가게 등록
-        storeRepository.save(Store
+        Store store = storeRepository.save(Store
             .builder()
             .name(addStoreRequest.getName())
             .address(addStoreRequest.getAddress())
@@ -82,6 +85,16 @@ public class StoreServiceImpl implements StoreService {
             .description(addStoreRequest.getDescription())
             .member(member)
             .summary("없음")
+            .build());
+
+        storeSearchRepository.save(StoreSearchDocument
+            .builder()
+            .id(store.getId())
+            .storeName(addStoreRequest.getName())
+            .address(addStoreRequest.getAddress())
+            .img(imgUrl)
+            .description(addStoreRequest.getDescription())
+            .foods(new ArrayList<>())
             .build());
     }
 
