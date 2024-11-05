@@ -47,7 +47,7 @@ interface ReviewItem {
 }
 
 interface BuyerDetailInfo {
-  subscribe: SubscribeItem[] | null;
-  foodTraces: FoodTradeItem[] | null;
+  subscribes: SubscribeItem[] | null;
+  foodTrades: FoodTradeItem[] | null;
   reviews: ReviewItem[] | null;
 }
