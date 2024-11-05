@@ -2,8 +2,15 @@ import { useState } from "react";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import SubscribeCard from "./MenuComponents/SubscribeCard";
+import { useLocation } from "react-router-dom";
 
 const AddSubscribe: React.FC = () => {
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const storeId = Number(queryParams.get("store"));
+
+  console.log(storeId);
+
   const [subscribeName, setSubscribeName] = useState<string>("");
   const [subscribeDescription, setSubscribeDescription] = useState<string>("");
   const [subscribeBeforePrice, setSubscribeBeforePrice] = useState<number>(0);

@@ -7,7 +7,10 @@ import { useNavigate, useLocation } from "react-router-dom";
 
 const AddFood: React.FC = () => {
   const location = useLocation();
-  const storeId = location.state?.storeId;
+  const queryParams = new URLSearchParams(location.search);
+  const storeId = Number(queryParams.get("store"));
+
+  console.log(storeId);
 
   const navigate = useNavigate();
 
