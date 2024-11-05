@@ -14,6 +14,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -27,7 +28,7 @@ public class Review extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 1000)
     private String comment;
 
     private String img;
@@ -37,4 +38,12 @@ public class Review extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "list_id")
     private OrderList orderList;
+
+    @Builder
+    public Review(String comment, String img, boolean emotion, OrderList orderList) {
+        this.comment = comment;
+        this.img = img;
+        this.emotion = emotion;
+        this.orderList = orderList;
+    }
 }
