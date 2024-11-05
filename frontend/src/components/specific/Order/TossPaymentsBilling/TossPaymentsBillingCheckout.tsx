@@ -41,9 +41,11 @@ const TossPaymentsBillingCheckout = () => {
     });
   };
   return (
-    <button className="button" onClick={() => requestBillingAuth()}>
-      구독 결제하기
-    </button>
+    <div className="w-full flex justify-center">
+      <button className="w-2/3 px-[22px] py-[11px] rounded-lg bg-[#3282f6] text-[#f9fcff]" onClick={() => requestBillingAuth()}>
+        구독 결제하기
+      </button>
+    </div>
   );
 };
 
