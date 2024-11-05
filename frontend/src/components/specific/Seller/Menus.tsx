@@ -60,6 +60,10 @@ const Menus: React.FC = () => {
     navigate("/seller/add/food", { state: { storeId: storeId } });
   };
 
+  const goToAddSubscribe = () => {
+    navigate("/seller/add/subscribe", { state: { storeId: storeId } });
+  };
+
   return (
     <div className="w-full flex flex-col flex-grow bg-slate-200">
       <div className="my-10 mx-[200px]">
@@ -90,7 +94,11 @@ const Menus: React.FC = () => {
               </Button>
             </Stack>
             <Stack spacing={2} direction="row">
-              <Button variant="outlined" size="large">
+              <Button
+                variant="outlined"
+                size="large"
+                onClick={goToAddSubscribe}
+              >
                 구독 상품 추가
               </Button>
               <Button variant="outlined" size="large" onClick={goToAddFood}>

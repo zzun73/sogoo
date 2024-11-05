@@ -12,6 +12,7 @@ import Menus from "../components/specific/Seller/Menus";
 import StoreList from "../components/specific/Store/StoreList";
 import StoreDetail from "../components/specific/Store/StoreDetail";
 import AddFood from "../components/specific/Seller/AddFood";
+import AddSubscribe from "../components/specific/Seller/AddSubscribe";
 import BuyerMyPage from "../pages/BuyerMyPage";
 import NotFoundPage from "../pages/NotFoundPage";
 
@@ -33,6 +34,7 @@ const PageRoutes = () => {
         <Route index element={<Dashboard />} />
         <Route path="menus" element={<Menus />} />
         <Route path="add/food" element={<AddFood />} />
+        <Route path="add/subscribe" element={<AddSubscribe />} />
       </Route>
       {/* Store Domain */}
       <Route path="/store" element={<StorePage />}>
