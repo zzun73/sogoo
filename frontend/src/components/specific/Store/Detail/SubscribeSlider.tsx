@@ -15,7 +15,7 @@ interface WeeklyFood {
 }
 
 interface WeeklyProps {
-  week: WeeklyFood; // Updated to array of WeeklyFood
+  week: WeeklyFood;
 }
 
 const SubscribeSlider = ({ week }: WeeklyProps) => {
