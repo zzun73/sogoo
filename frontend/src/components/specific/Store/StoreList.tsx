@@ -14,13 +14,19 @@ const StoreList = () => {
 
   const dummy = [
     {
-      storeId: 5,
+      storeId: 1,
       name: "혁준이네 반찬가게",
       description: "ㄹㅇ밥도둑",
       img: "https://cdn.pixabay.com/photo/2019/01/25/21/35/restaurant-3955372_1280.jpg",
     },
     {
-      storeId: 4,
+      storeId: 2,
+      name: "승현이네 반찬가게",
+      description: "고기반찬 ~ 고기반찬 ~ 고기반찬이 너무 좋아 ~ !",
+      img: "https://cdn.pixabay.com/photo/2019/01/25/21/35/restaurant-3955372_1280.jpg",
+    },
+    {
+      storeId: 3,
       name: "승현이네 반찬가게",
       description: "고기반찬 ~ 고기반찬 ~ 고기반찬이 너무 좋아 ~ !",
       img: "https://cdn.pixabay.com/photo/2019/01/25/21/35/restaurant-3955372_1280.jpg",
@@ -32,31 +38,25 @@ const StoreList = () => {
       img: "https://cdn.pixabay.com/photo/2019/01/25/21/35/restaurant-3955372_1280.jpg",
     },
     {
-      storeId: 4,
+      storeId: 5,
       name: "승현이네 반찬가게",
       description: "고기반찬 ~ 고기반찬 ~ 고기반찬이 너무 좋아 ~ !",
       img: "https://cdn.pixabay.com/photo/2019/01/25/21/35/restaurant-3955372_1280.jpg",
     },
     {
-      storeId: 4,
+      storeId: 6,
       name: "승현이네 반찬가게",
       description: "고기반찬 ~ 고기반찬 ~ 고기반찬이 너무 좋아 ~ !",
       img: "https://cdn.pixabay.com/photo/2019/01/25/21/35/restaurant-3955372_1280.jpg",
     },
     {
-      storeId: 4,
+      storeId: 7,
       name: "승현이네 반찬가게",
       description: "고기반찬 ~ 고기반찬 ~ 고기반찬이 너무 좋아 ~ !",
       img: "https://cdn.pixabay.com/photo/2019/01/25/21/35/restaurant-3955372_1280.jpg",
     },
     {
-      storeId: 4,
-      name: "승현이네 반찬가게",
-      description: "고기반찬 ~ 고기반찬 ~ 고기반찬이 너무 좋아 ~ !",
-      img: "https://cdn.pixabay.com/photo/2019/01/25/21/35/restaurant-3955372_1280.jpg",
-    },
-    {
-      storeId: 4,
+      storeId: 8,
       name: "승현이네 반찬가게",
       description: "고기반찬 ~ 고기반찬 ~ 고기반찬이 너무 좋아 ~ !",
       img: "https://cdn.pixabay.com/photo/2019/01/25/21/35/restaurant-3955372_1280.jpg",
