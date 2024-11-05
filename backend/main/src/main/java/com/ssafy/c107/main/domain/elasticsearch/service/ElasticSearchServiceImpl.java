@@ -21,7 +21,7 @@ public class ElasticSearchServiceImpl implements ElasticSearchService {
     @PostConstruct
     void postConstruct() {
         storeSearchRepository.deleteAll();
-        
+
         List<Store> stores = storeRepository.findFoods();
         for (Store store : stores) {
             List<Food> foods = store.getFoods();
