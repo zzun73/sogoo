@@ -3,13 +3,9 @@ const keys = {
   member: () => [keys.all, "member"],
   store: () => [keys.all, "store"],
   checkEmail: (email: Email) => [...keys.member(), "email", email],
-  checkSeller: (businessNumber: BusinessNumber) => [
-    ...keys.member(),
-    "businessNumber",
-    businessNumber,
-  ],
+  checkSeller: (businessNumber: BusinessNumber) => [...keys.member(), "businessNumber", businessNumber],
   getStoreList: () => [...keys.store(), "storeList"],
-  getBuyerMypage: () => [...keys.member(), "buyerMypage"],
+  getBuyerMypage: () => [...keys.member(), "buyerMyPage"],
   getMyStores: () => [...keys.store(), "myStores"],
 };
 
