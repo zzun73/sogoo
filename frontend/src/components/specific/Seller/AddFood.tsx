@@ -3,9 +3,12 @@ import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import { useMutation } from "@tanstack/react-query";
 import sogoo from "../../../services/sogoo";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
-const AddFood = () => {
+const AddFood: React.FC = () => {
+  const location = useLocation();
+  const storeId = location.state?.storeId;
+
   const navigate = useNavigate();
 
   const [foodName, setFoodName] = useState<string>("");
@@ -13,8 +16,6 @@ const AddFood = () => {
   const [foodPrice, setFoodPrice] = useState<number>(0);
   const [foodImg, setFoodImg] = useState<File | null>(null);
   const [previewImage, setPreviewImage] = useState<string | null>(null);
-
-  const storeId: StoreId = 1;
 
   const handleImageUpload = (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -52,11 +53,9 @@ const AddFood = () => {
 
   const initiateAddFood = (): void => {
     const addFoodForm: AddFoodForm = {
-      data: {
-        foodName,
-        foodPrice,
-        foodDescription,
-      },
+      foodName,
+      foodPrice,
+      foodDescription,
       img: foodImg,
     };
 
