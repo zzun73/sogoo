@@ -13,7 +13,7 @@ const Dashboard: React.FC = () => {
   };
 
   const handleNavigate = () => {
-    navigate("/seller/menus", { state: { storeId: selectedStoreId } });
+    navigate(`/seller/menus?store=${selectedStoreId}`);
   };
 
   return (

@@ -21,7 +21,8 @@ interface Food {
 
 const Menus: React.FC = () => {
   const location = useLocation();
-  const storeId = location.state?.storeId;
+  const queryParams = new URLSearchParams(location.search);
+  const storeId = queryParams.get("store");
 
   console.log(storeId);
 
@@ -57,11 +58,11 @@ const Menus: React.FC = () => {
   };
 
   const goToAddFood = () => {
-    navigate("/seller/add/food", { state: { storeId: storeId } });
+    navigate(`/seller/add/food?store=${storeId}`);
   };
 
   const goToAddSubscribe = () => {
-    navigate("/seller/add/subscribe", { state: { storeId: storeId } });
+    navigate(`/seller/add/subscribe?store=${storeId}`);
   };
 
   return (
