@@ -69,4 +69,24 @@ const useGetMyStores = () => {
   return stores;
 };
 
-export { useCheckEmail, useCheckSeller, useGetStoreList, useGetBuyerMyPage, useGetMyStores };
+/**
+ * 구독 상품에 넣기 위해 해당 가게의 반찬 목록 불러오기
+ */
+const useGetFoodListForSubscribe = (storeId: StoreId) => {
+  const { data } = useQuery({
+    queryKey: keys.getFoodListForSubscribe(),
+    queryFn: () => sogoo.getFoodListForSubscribe(storeId),
+  });
+
+  const foods = data ? data.data : [];
+  return foods;
+};
+
+export {
+  useCheckEmail,
+  useCheckSeller,
+  useGetStoreList,
+  useGetBuyerMyPage,
+  useGetMyStores,
+  useGetFoodListForSubscribe,
+};
