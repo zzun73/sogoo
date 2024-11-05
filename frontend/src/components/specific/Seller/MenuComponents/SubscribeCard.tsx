@@ -5,7 +5,11 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import PlusFood from "./PlusFood";
 
-const SubscribeCard: React.FC = () => {
+interface SubscribeCardProps {
+  storeId: number;
+}
+
+const SubscribeCard: React.FC<SubscribeCardProps> = ({ storeId }) => {
   const [openPlusFood, setOpenPlusFood] = useState<boolean>(false);
 
   const handlePlusFoodOpen = () => {
@@ -15,6 +19,8 @@ const SubscribeCard: React.FC = () => {
   const handlePlusFoodClose = () => {
     setOpenPlusFood(false);
   };
+
+  console.log(storeId);
 
   return (
     <div className="w-full flex flex-col p-2 justify-center">
@@ -38,7 +44,11 @@ const SubscribeCard: React.FC = () => {
       >
         <p className="text-base">반찬 추가하기</p>
       </div>
-      <PlusFood open={openPlusFood} onClose={handlePlusFoodClose} />
+      <PlusFood
+        open={openPlusFood}
+        onClose={handlePlusFoodClose}
+        storeId={Number(storeId)}
+      />
     </div>
   );
 };

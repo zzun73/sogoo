@@ -45,10 +45,10 @@ const AddSubscribe: React.FC = () => {
             sx={{ width: "100%", marginBottom: "20px" }}
           />
           <div className="w-full flex flex-col mb-5 p-2 border-[1px] border-gray-300 rounded">
-            <SubscribeCard />
-            <SubscribeCard />
-            <SubscribeCard />
-            <SubscribeCard />
+            <SubscribeCard storeId={storeId} />
+            <SubscribeCard storeId={storeId} />
+            <SubscribeCard storeId={storeId} />
+            <SubscribeCard storeId={storeId} />
           </div>
           <TextField
             required

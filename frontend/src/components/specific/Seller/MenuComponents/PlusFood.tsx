@@ -12,12 +12,15 @@ const style = {
   p: 4,
 };
 
-interface RegisterStoreModalProps {
+interface PlusFoodProps {
   open: boolean;
   onClose: () => void;
+  storeId: number;
 }
 
-const PlusFood: React.FC<RegisterStoreModalProps> = ({ open, onClose }) => {
+const PlusFood: React.FC<PlusFoodProps> = ({ open, onClose, storeId }) => {
+  console.log(storeId);
+
   return (
     <Modal
       open={open}
