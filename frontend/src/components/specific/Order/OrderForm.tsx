@@ -3,10 +3,15 @@ import { TextField } from "@mui/material";
 import { DataGrid, GridColDef, GridRowsProp } from "@mui/x-data-grid";
 
 import TossPaymentsCheckout from "./TossPayments/TossPaymentsCheckout";
+import TossPaymentsBillingCheckout from "./TossPaymentsBilling/TossPaymentsBillingCheckout";
+import useRootStore from "../../../stores";
+import formatters from "../../../utils/formatters";
 
 const OrderForm = () => {
+  const memberInfo = useRootStore().memberInfo;
   const [recipientAddress, setRecipientAddress] = useState<string>("");
   const [request, setRequest] = useState<string>("");
+  const [isSubscription] = useState(true);
 
   // 주문 상품 목록 DataGrid 관련 데이터(rows, columns)
   const rows: GridRowsProp = [
@@ -49,17 +54,23 @@ const OrderForm = () => {
             <div className="grid grid-cols-2 gap-x-4">
               <div className="flex items-center">
                 <p className="w-32">받는 분</p>
-                <p>김싸피</p>
+                <p>{memberInfo!.name}</p>
               </div>
               <div className="flex items-center">
                 <p className="w-32">휴대폰</p>
-                <p>010-1234-5678</p>
+                <p>{formatters.formatPhoneNumber(memberInfo!.phoneNumber)}</p>
               </div>
             </div>
             <div className="flex items-center">
               <p className="w-32">배송지</p>
               <div className="flex-1 w-full">
-                <TextField fullWidth id="recipientAddress" placeholder="배송지 주소" onChange={handleRecipientAddressChange} />
+                <TextField
+                  fullWidth
+                  id="recipientAddress"
+                  placeholder="배송지 주소"
+                  defaultValue={memberInfo!.address}
+                  onChange={handleRecipientAddressChange}
+                />
               </div>
             </div>
             <div className="flex items-center">
@@ -73,17 +84,19 @@ const OrderForm = () => {
         {/* 결제 수단 */}
         <div className="flex flex-col gap-8 w-full mt-4 p-8 rounded-3xl bg-white">
           <h3 className="text-xl font-semibold">결제 수단</h3>
-          <div>
+          {isSubscription ? (
+            <TossPaymentsBillingCheckout />
+          ) : (
             <TossPaymentsCheckout
               orderData={{
                 orderName: "토스 티셔츠 외 2건",
-                customerName: "김싸피",
-                customerEmail: "KimSSAFY@abcdeSSAFY.com",
+                customerName: memberInfo!.name,
+                customerEmail: memberInfo!.email,
                 amount: 20000,
               }}
               returnPath="/"
             />
-          </div>
+          )}
         </div>
       </div>
     </>
