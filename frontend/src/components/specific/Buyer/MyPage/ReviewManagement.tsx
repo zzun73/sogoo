@@ -3,6 +3,7 @@ import { Accordion, AccordionSummary, AccordionDetails, AccordionActions, Button
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import sogoo from "../../../../services/sogoo";
 import ImageUpload from "../../../common/ImageUpload";
+import EmptySection from "./EmptySection";
 
 interface ReviewInputType {
   reviewId: number;
@@ -102,82 +103,88 @@ const ReviewManagement = ({ reviews }: ReviewManagementProps) => {
       </div>
       <div className="flex flex-col gap-8 w-full p-8 rounded-b-3xl bg-white">
         <div>
-          {reviews.map((item) => (
-            <Accordion key={item.orderListId}>
-              <AccordionSummary
-                expandIcon={handleReviewButton(item.reviewStatus)}
-                aria-controls="panel1-content"
-                id="panel1-header"
-                sx={{
-                  "& .MuiAccordionSummary-expandIconWrapper": {
-                    transition: "none",
-                    "&.Mui-expanded": {
-                      transform: "none",
+          {reviews.length > 0 ? (
+            reviews.map((item) => (
+              <Accordion key={item.orderListId}>
+                <AccordionSummary
+                  expandIcon={handleReviewButton(item.reviewStatus)}
+                  aria-controls="panel1-content"
+                  id="panel1-header"
+                  sx={{
+                    "& .MuiAccordionSummary-expandIconWrapper": {
+                      transition: "none",
+                      "&.Mui-expanded": {
+                        transform: "none",
+                      },
                     },
-                  },
-                }}
-              >
-                {item.foodName}
-              </AccordionSummary>
-              <AccordionDetails>
-                {!item.reviewStatus && (
-                  <>
-                    <TextField
-                      fullWidth
-                      label="리뷰를 작성해 주세요. (300자 이내)"
-                      value={reviewInput.find((input) => input.reviewId === item.orderListId)?.comment || ""}
-                      onChange={(event) => {
-                        const newValue = event.target.value;
-                        if (newValue.length > 300) return;
-                        setReviewInput((prevInputs) =>
-                          prevInputs.map((input) => (input.reviewId === item.orderListId ? { ...input, comment: newValue } : input))
-                        );
-                      }}
-                      helperText={`${reviewInput.find((input) => input.reviewId === item.orderListId)?.comment.length || 0}/300자`}
-                      error={(reviewInput.find((input) => input.reviewId === item.orderListId)?.comment.length || 0) === 300}
-                      slotProps={{
-                        formHelperText: {
-                          sx: {
-                            textAlign: "right",
-                            marginRight: "0",
-                            color:
-                              (reviewInput.find((input) => input.reviewId === item.orderListId)?.comment.length || 0) === 300 ? "error.main" : "text.secondary",
+                  }}
+                >
+                  {item.foodName}
+                </AccordionSummary>
+                <AccordionDetails>
+                  {!item.reviewStatus && (
+                    <>
+                      <TextField
+                        fullWidth
+                        label="리뷰를 작성해 주세요. (300자 이내)"
+                        value={reviewInput.find((input) => input.reviewId === item.orderListId)?.comment || ""}
+                        onChange={(event) => {
+                          const newValue = event.target.value;
+                          if (newValue.length > 300) return;
+                          setReviewInput((prevInputs) =>
+                            prevInputs.map((input) => (input.reviewId === item.orderListId ? { ...input, comment: newValue } : input))
+                          );
+                        }}
+                        helperText={`${reviewInput.find((input) => input.reviewId === item.orderListId)?.comment.length || 0}/300자`}
+                        error={(reviewInput.find((input) => input.reviewId === item.orderListId)?.comment.length || 0) === 300}
+                        slotProps={{
+                          formHelperText: {
+                            sx: {
+                              textAlign: "right",
+                              marginRight: "0",
+                              color:
+                                (reviewInput.find((input) => input.reviewId === item.orderListId)?.comment.length || 0) === 300
+                                  ? "error.main"
+                                  : "text.secondary",
+                            },
                           },
-                        },
-                      }}
-                      onPaste={(event) => {
-                        event.preventDefault();
-                        const pastedText = event.clipboardData.getData("text");
-                        const currentInput = reviewInput.find((input) => input.reviewId === item.orderListId);
-                        const currentText = currentInput?.comment || "";
+                        }}
+                        onPaste={(event) => {
+                          event.preventDefault();
+                          const pastedText = event.clipboardData.getData("text");
+                          const currentInput = reviewInput.find((input) => input.reviewId === item.orderListId);
+                          const currentText = currentInput?.comment || "";
 
-                        if (currentText.length + pastedText.length > 300) {
-                          const allowedText = pastedText.slice(0, 300 - currentText.length);
-                          setReviewInput((prevInputs) =>
-                            prevInputs.map((input) => (input.reviewId === item.orderListId ? { ...input, comment: currentText + allowedText } : input))
-                          );
-                        } else {
-                          setReviewInput((prevInputs) =>
-                            prevInputs.map((input) => (input.reviewId === item.orderListId ? { ...input, comment: currentText + pastedText } : input))
-                          );
-                        }
-                      }}
-                      multiline
-                    />
-                    <ImageUpload
-                      onImageSelect={(file) => handleImageSelect(item.orderListId, file)}
-                      selectedImage={reviewInput.find((input) => input.reviewId === item.orderListId)?.imgPreview || null}
-                    />
-                  </>
+                          if (currentText.length + pastedText.length > 300) {
+                            const allowedText = pastedText.slice(0, 300 - currentText.length);
+                            setReviewInput((prevInputs) =>
+                              prevInputs.map((input) => (input.reviewId === item.orderListId ? { ...input, comment: currentText + allowedText } : input))
+                            );
+                          } else {
+                            setReviewInput((prevInputs) =>
+                              prevInputs.map((input) => (input.reviewId === item.orderListId ? { ...input, comment: currentText + pastedText } : input))
+                            );
+                          }
+                        }}
+                        multiline
+                      />
+                      <ImageUpload
+                        onImageSelect={(file) => handleImageSelect(item.orderListId, file)}
+                        selectedImage={reviewInput.find((input) => input.reviewId === item.orderListId)?.imgPreview || null}
+                      />
+                    </>
+                  )}
+                </AccordionDetails>
+                {!item.reviewStatus && (
+                  <AccordionActions>
+                    <Button onClick={() => handleReviewSubmit(item.orderListId)}>등록하기</Button>
+                  </AccordionActions>
                 )}
-              </AccordionDetails>
-              {!item.reviewStatus && (
-                <AccordionActions>
-                  <Button onClick={() => handleReviewSubmit(item.orderListId)}>등록하기</Button>
-                </AccordionActions>
-              )}
-            </Accordion>
-          ))}
+              </Accordion>
+            ))
+          ) : (
+            <EmptySection type="review" />
+          )}
         </div>
       </div>
     </div>
