@@ -13,4 +13,11 @@ export default {
       },
     });
   },
+
+  /**
+   * 구독 상품에 등록하기 위해 개별 상품 목록 불러오기
+   */
+  getFoodListForSubscribe: async (storeId: StoreId) => {
+    return axios.get(`/food/all/${storeId}`);
+  },
 };

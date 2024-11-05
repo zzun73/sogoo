@@ -1,5 +1,6 @@
 import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
+import { useGetFoodListForSubscribe } from "../../../../queries/queries";
 
 const style = {
   position: "absolute",
@@ -20,6 +21,10 @@ interface PlusFoodProps {
 
 const PlusFood: React.FC<PlusFoodProps> = ({ open, onClose, storeId }) => {
   console.log(storeId);
+
+  const { foods } = useGetFoodListForSubscribe(storeId);
+
+  console.log(foods);
 
   return (
     <Modal
