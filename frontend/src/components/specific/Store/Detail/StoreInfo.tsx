@@ -16,7 +16,7 @@ const StoreInfo = () => {
   };
 
   return (
-    <div className="grid grid-cols-2 h-[600px] gap-x-6">
+    <div className="grid grid-cols-2 h-[700px] gap-x-6">
       <img src={info.img} className="inline-block h-[400px] w-full" />
       <div className="flex flex-col gap-y-3 py-4">
         <p className="text-2xl font-bold">{info.name}</p>
