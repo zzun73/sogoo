@@ -57,7 +57,7 @@ const Header = () => {
           {/* user 관련 */}
           <div className="flex items-center gap-8">
             {isLogin && (
-              <Link to="/mypage">
+              <Link to={isSeller ? "/seller" : "/mypage"}>
                 <MdOutlinePerson className="w-6 h-6" />
               </Link>
             )}
