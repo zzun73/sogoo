@@ -47,7 +47,7 @@ const AddFood: React.FC = () => {
     }) => sogoo.requestAddFood(addFoodForm, storeId),
     onSuccess: async (response) => {
       console.log("개별상품 등록 성공", response);
-      navigate("/seller/menus");
+      navigate(`/seller/menus?store=${storeId}`);
     },
     onError: (error) => {
       console.error("개별상품 등록 실패", error);
