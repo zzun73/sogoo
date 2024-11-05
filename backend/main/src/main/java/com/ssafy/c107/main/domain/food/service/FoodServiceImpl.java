@@ -12,14 +12,12 @@ import com.ssafy.c107.main.domain.members.exception.InvalidMemberRoleException;
 import com.ssafy.c107.main.domain.store.entity.Store;
 import com.ssafy.c107.main.domain.store.exception.StoreNotFoundException;
 import com.ssafy.c107.main.domain.store.repository.StoreRepository;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.elasticsearch.client.elc.ElasticsearchTemplate;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import java.util.List;
 import java.util.stream.Collectors;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @Service
@@ -30,7 +28,6 @@ public class FoodServiceImpl implements FoodService {
     private final StoreRepository storeRepository;
     private final FileService fileService;
     private final StoreSearchRepository storeSearchRepository;
-    private final ElasticsearchTemplate elasticsearchTemplate;
 
     // 개별 상품 추가
     public void appendFood(Long storeId, AppendFoodRequest request, String memberRole) {
