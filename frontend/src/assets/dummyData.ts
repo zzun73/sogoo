@@ -3,8 +3,7 @@ const subscribeData = [
     subscribeId: 1,
     subscribeName: "고기패키지",
     subscribePrice: 13000,
-    subscribeDescription:
-      "고기 전용 패키지 설명가 여기에 들어갑니다. 맛있는 고기패키지 너무너무 좋아요오오오오오오오오오오오오",
+    subscribeDescription: "고기 전용 패키지 설명가 여기에 들어갑니다. 맛있는 고기패키지 너무너무 좋아요오오오오오오오오오오오오",
     subscribeBeforePrice: 0,
     weeklyFood: [
       {
@@ -14,22 +13,19 @@ const subscribeData = [
           {
             foodId: 1,
             foodName: "감자탕",
-            foodImg:
-              "https://cdn.pixabay.com/photo/2019/01/25/21/35/restaurant-3955372_1280.jpg",
+            foodImg: "https://cdn.pixabay.com/photo/2019/01/25/21/35/restaurant-3955372_1280.jpg",
             foodDescription: "매콤한 감자탕",
           },
           {
             foodId: 2,
             foodName: "김치찌개",
-            foodImg:
-              "https://cdn.pixabay.com/photo/2019/01/25/21/35/restaurant-3955372_1280.jpg",
+            foodImg: "https://cdn.pixabay.com/photo/2019/01/25/21/35/restaurant-3955372_1280.jpg",
             foodDescription: "칼칼한 김치찌개",
           },
           {
             foodId: 2,
             foodName: "김치찌개",
-            foodImg:
-              "https://cdn.pixabay.com/photo/2019/01/25/21/35/restaurant-3955372_1280.jpg",
+            foodImg: "https://cdn.pixabay.com/photo/2019/01/25/21/35/restaurant-3955372_1280.jpg",
             foodDescription: "칼칼한 김치찌개",
           },
         ],
@@ -41,22 +37,19 @@ const subscribeData = [
           {
             foodId: 1,
             foodName: "감자탕",
-            foodImg:
-              "https://cdn.pixabay.com/photo/2019/01/25/21/35/restaurant-3955372_1280.jpg",
+            foodImg: "https://cdn.pixabay.com/photo/2019/01/25/21/35/restaurant-3955372_1280.jpg",
             foodDescription: "매콤한 감자탕",
           },
           {
             foodId: 2,
             foodName: "김치찌개",
-            foodImg:
-              "https://cdn.pixabay.com/photo/2019/01/25/21/35/restaurant-3955372_1280.jpg",
+            foodImg: "https://cdn.pixabay.com/photo/2019/01/25/21/35/restaurant-3955372_1280.jpg",
             foodDescription: "칼칼한 김치찌개",
           },
           {
             foodId: 2,
             foodName: "김치찌개",
-            foodImg:
-              "https://cdn.pixabay.com/photo/2019/01/25/21/35/restaurant-3955372_1280.jpg",
+            foodImg: "https://cdn.pixabay.com/photo/2019/01/25/21/35/restaurant-3955372_1280.jpg",
             foodDescription: "칼칼한 김치찌개",
           },
         ],
@@ -68,22 +61,19 @@ const subscribeData = [
           {
             foodId: 1,
             foodName: "감자탕",
-            foodImg:
-              "https://cdn.pixabay.com/photo/2019/01/25/21/35/restaurant-3955372_1280.jpg",
+            foodImg: "https://cdn.pixabay.com/photo/2019/01/25/21/35/restaurant-3955372_1280.jpg",
             foodDescription: "매콤한 감자탕",
           },
           {
             foodId: 2,
             foodName: "김치찌개",
-            foodImg:
-              "https://cdn.pixabay.com/photo/2019/01/25/21/35/restaurant-3955372_1280.jpg",
+            foodImg: "https://cdn.pixabay.com/photo/2019/01/25/21/35/restaurant-3955372_1280.jpg",
             foodDescription: "칼칼한 김치찌개",
           },
           {
             foodId: 2,
             foodName: "김치찌개",
-            foodImg:
-              "https://cdn.pixabay.com/photo/2019/01/25/21/35/restaurant-3955372_1280.jpg",
+            foodImg: "https://cdn.pixabay.com/photo/2019/01/25/21/35/restaurant-3955372_1280.jpg",
             foodDescription: "칼칼한 김치찌개",
           },
         ],
@@ -95,22 +85,19 @@ const subscribeData = [
           {
             foodId: 1,
             foodName: "감자탕",
-            foodImg:
-              "https://cdn.pixabay.com/photo/2019/01/25/21/35/restaurant-3955372_1280.jpg",
+            foodImg: "https://cdn.pixabay.com/photo/2019/01/25/21/35/restaurant-3955372_1280.jpg",
             foodDescription: "매콤한 감자탕",
           },
           {
             foodId: 2,
             foodName: "김치찌개",
-            foodImg:
-              "https://cdn.pixabay.com/photo/2019/01/25/21/35/restaurant-3955372_1280.jpg",
+            foodImg: "https://cdn.pixabay.com/photo/2019/01/25/21/35/restaurant-3955372_1280.jpg",
             foodDescription: "칼칼한 김치찌개",
           },
           {
             foodId: 2,
             foodName: "김치찌개",
-            foodImg:
-              "https://cdn.pixabay.com/photo/2019/01/25/21/35/restaurant-3955372_1280.jpg",
+            foodImg: "https://cdn.pixabay.com/photo/2019/01/25/21/35/restaurant-3955372_1280.jpg",
             foodDescription: "칼칼한 김치찌개 칼칼한 김치찌개",
           },
         ],
@@ -121,8 +108,7 @@ const subscribeData = [
     subscribeId: 2,
     subscribeName: "채소패키지",
     subscribePrice: 13000,
-    subscribeDescription:
-      "채소 패키지 설명여기에 들어갑니다아 맛있는 채소 패키지를 즐겨보세요오오",
+    subscribeDescription: "채소 패키지 설명여기에 들어갑니다아 맛있는 채소 패키지를 즐겨보세요오오",
     subscribeBeforePrice: 0,
     weeklyFood: [
       {
@@ -132,15 +118,13 @@ const subscribeData = [
           {
             foodId: 1,
             foodName: "감자탕",
-            foodImg:
-              "https://cdn.pixabay.com/photo/2019/01/25/21/35/restaurant-3955372_1280.jpg",
+            foodImg: "https://cdn.pixabay.com/photo/2019/01/25/21/35/restaurant-3955372_1280.jpg",
             foodDescription: "매콤한 감자탕",
           },
           {
             foodId: 2,
             foodName: "김치찌개",
-            foodImg:
-              "https://cdn.pixabay.com/photo/2019/01/25/21/35/restaurant-3955372_1280.jpg",
+            foodImg: "https://cdn.pixabay.com/photo/2019/01/25/21/35/restaurant-3955372_1280.jpg",
             foodDescription: "칼칼한 김치찌개",
           },
         ],
@@ -152,15 +136,13 @@ const subscribeData = [
           {
             foodId: 1,
             foodName: "감자탕",
-            foodImg:
-              "https://cdn.pixabay.com/photo/2019/01/25/21/35/restaurant-3955372_1280.jpg",
+            foodImg: "https://cdn.pixabay.com/photo/2019/01/25/21/35/restaurant-3955372_1280.jpg",
             foodDescription: "매콤한 감자탕",
           },
           {
             foodId: 2,
             foodName: "김치찌개",
-            foodImg:
-              "https://cdn.pixabay.com/photo/2019/01/25/21/35/restaurant-3955372_1280.jpg",
+            foodImg: "https://cdn.pixabay.com/photo/2019/01/25/21/35/restaurant-3955372_1280.jpg",
             foodDescription: "칼칼한 김치찌개",
           },
         ],
@@ -172,15 +154,13 @@ const subscribeData = [
           {
             foodId: 1,
             foodName: "감자탕",
-            foodImg:
-              "https://cdn.pixabay.com/photo/2019/01/25/21/35/restaurant-3955372_1280.jpg",
+            foodImg: "https://cdn.pixabay.com/photo/2019/01/25/21/35/restaurant-3955372_1280.jpg",
             foodDescription: "매콤한 감자탕",
           },
           {
             foodId: 2,
             foodName: "김치찌개",
-            foodImg:
-              "https://cdn.pixabay.com/photo/2019/01/25/21/35/restaurant-3955372_1280.jpg",
+            foodImg: "https://cdn.pixabay.com/photo/2019/01/25/21/35/restaurant-3955372_1280.jpg",
             foodDescription: "칼칼한 김치찌개",
           },
         ],
@@ -192,15 +172,13 @@ const subscribeData = [
           {
             foodId: 1,
             foodName: "감자탕",
-            foodImg:
-              "https://cdn.pixabay.com/photo/2019/01/25/21/35/restaurant-3955372_1280.jpg",
+            foodImg: "https://cdn.pixabay.com/photo/2019/01/25/21/35/restaurant-3955372_1280.jpg",
             foodDescription: "매콤한 감자탕",
           },
           {
             foodId: 2,
             foodName: "김치찌개",
-            foodImg:
-              "https://cdn.pixabay.com/photo/2019/01/25/21/35/restaurant-3955372_1280.jpg",
+            foodImg: "https://cdn.pixabay.com/photo/2019/01/25/21/35/restaurant-3955372_1280.jpg",
             foodDescription: "칼칼한 김치찌개",
           },
         ],
@@ -272,80 +250,70 @@ const foodData = [
     foodName: "감자탕",
     foodDescription: "매콤한 감자탕",
     foodPrice: 10000,
-    foodImg:
-      "https://cdn.pixabay.com/photo/2019/01/25/21/35/restaurant-3955372_1280.jpg",
+    foodImg: "https://cdn.pixabay.com/photo/2019/01/25/21/35/restaurant-3955372_1280.jpg",
   },
   {
     foodId: 2,
     foodName: "김치찌개",
     foodDescription: "칼칼한 김치찌개",
     foodPrice: 8000,
-    foodImg:
-      "https://cdn.pixabay.com/photo/2019/01/25/21/35/restaurant-3955372_1280.jpg",
+    foodImg: "https://cdn.pixabay.com/photo/2019/01/25/21/35/restaurant-3955372_1280.jpg",
   },
   {
     foodId: 3,
     foodName: "된장찌개",
     foodDescription: "구수한 된장찌개",
     foodPrice: 7500,
-    foodImg:
-      "https://cdn.pixabay.com/photo/2019/01/25/21/35/restaurant-3955372_1280.jpg",
+    foodImg: "https://cdn.pixabay.com/photo/2019/01/25/21/35/restaurant-3955372_1280.jpg",
   },
   {
     foodId: 4,
     foodName: "순두부찌개",
     foodDescription: "부드러운 순두부찌개",
     foodPrice: 8500,
-    foodImg:
-      "https://cdn.pixabay.com/photo/2019/01/25/21/35/restaurant-3955372_1280.jpg",
+    foodImg: "https://cdn.pixabay.com/photo/2019/01/25/21/35/restaurant-3955372_1280.jpg",
   },
   {
     foodId: 5,
     foodName: "비빔밥",
     foodDescription: "신선한 야채가 가득한 비빔밥",
     foodPrice: 9000,
-    foodImg:
-      "https://cdn.pixabay.com/photo/2019/01/25/21/35/restaurant-3955372_1280.jpg",
+    foodImg: "https://cdn.pixabay.com/photo/2019/01/25/21/35/restaurant-3955372_1280.jpg",
   },
   {
     foodId: 6,
     foodName: "불고기",
     foodDescription: "달콤한 불고기",
     foodPrice: 12000,
-    foodImg:
-      "https://cdn.pixabay.com/photo/2019/01/25/21/35/restaurant-3955372_1280.jpg",
+    foodImg: "https://cdn.pixabay.com/photo/2019/01/25/21/35/restaurant-3955372_1280.jpg",
   },
   {
     foodId: 7,
     foodName: "갈비탕",
     foodDescription: "진한 갈비탕",
     foodPrice: 13000,
-    foodImg:
-      "https://cdn.pixabay.com/photo/2019/01/25/21/35/restaurant-3955372_1280.jpg",
+    foodImg: "https://cdn.pixabay.com/photo/2019/01/25/21/35/restaurant-3955372_1280.jpg",
   },
   {
     foodId: 8,
     foodName: "오징어볶음",
     foodDescription: "매콤한 오징어볶음 매콤한 오징어볶음",
     foodPrice: 9500,
-    foodImg:
-      "https://cdn.pixabay.com/photo/2019/01/25/21/35/restaurant-3955372_1280.jpg",
+    foodImg: "https://cdn.pixabay.com/photo/2019/01/25/21/35/restaurant-3955372_1280.jpg",
   },
   {
     foodId: 9,
     foodName: "닭갈비",
     foodDescription: "달콤하고 매콤한 닭갈비",
     foodPrice: 11000,
-    foodImg:
-      "https://cdn.pixabay.com/photo/2019/01/25/21/35/restaurant-3955372_1280.jpg",
+    foodImg: "https://cdn.pixabay.com/photo/2019/01/25/21/35/restaurant-3955372_1280.jpg",
   },
   {
     foodId: 10,
     foodName: "떡볶이",
     foodDescription: "매콤달콤한 떡볶이",
     foodPrice: 7000,
-    foodImg:
-      "https://cdn.pixabay.com/photo/2019/01/25/21/35/restaurant-3955372_1280.jpg",
+    foodImg: "https://cdn.pixabay.com/photo/2019/01/25/21/35/restaurant-3955372_1280.jpg",
   },
 ];
 
@@ -373,4 +341,86 @@ const totalReview = [
   },
 ];
 
-export { subscribeData, menuData, foodData, summaryData, totalReview };
+// 구매자 마이페이지
+const buyerMyPageData = {
+  subscribe: [
+    {
+      subscribeId: 1,
+      subscribeName: "월간 프리미엄 베이커리 박스",
+      subscribePrice: 35000,
+      storeId: 1,
+      storeName: "마리앤베이커리",
+      SubscribePeriod: "MONTH",
+    },
+    {
+      subscribeId: 2,
+      subscribeName: "주간 샐러드 정기배송",
+      subscribePrice: 48000,
+      storeId: 2,
+      storeName: "그린키친",
+      SubscribePeriod: "WEEK",
+    },
+    {
+      subscribeId: 3,
+      subscribeName: "일일 수제 도시락",
+      subscribePrice: 89000,
+      storeId: 3,
+      storeName: "맛있는도시락",
+      SubscribePeriod: "DAY",
+    },
+  ],
+  foodTraces: [
+    {
+      foodId: 1,
+      foodName: "크로와상 세트",
+      foodImg: "/images/croissant-set.jpg",
+      storeId: 1,
+      storeName: "마리앤베이커리",
+      price: 12000,
+      orderStatus: "COMPLETED",
+    },
+    {
+      foodId: 2,
+      foodName: "케일 치킨 샐러드",
+      foodImg: "/images/kale-chicken-salad.jpg",
+      storeId: 2,
+      storeName: "그린키친",
+      price: 9900,
+      orderStatus: "PREPARING",
+    },
+    {
+      foodId: 3,
+      foodName: "불고기 도시락",
+      foodImg: "/images/bulgogi-lunch.jpg",
+      storeId: 3,
+      storeName: "맛있는도시락",
+      price: 8500,
+      orderStatus: "DELIVERING",
+    },
+  ],
+  reviews: [
+    {
+      foodId: 1,
+      foodName: "크로와상 세트",
+      foodImg: "/images/croissant-set.jpg",
+      reviewStatus: true,
+      orderListId: 1001,
+    },
+    {
+      foodId: 2,
+      foodName: "케일 치킨 샐러드",
+      foodImg: "/images/kale-chicken-salad.jpg",
+      reviewStatus: false,
+      orderListId: 1002,
+    },
+    {
+      foodId: 3,
+      foodName: "불고기 도시락",
+      foodImg: "/images/bulgogi-lunch.jpg",
+      reviewStatus: false,
+      orderListId: 1003,
+    },
+  ],
+};
+
+export { subscribeData, menuData, foodData, summaryData, totalReview, buyerMyPageData };
