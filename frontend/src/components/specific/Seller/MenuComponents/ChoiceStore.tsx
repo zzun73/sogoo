@@ -42,7 +42,7 @@ const ChoiceStore: React.FC<ChoiceStoreProps> = ({ onStoreSelect }) => {
   };
 
   return (
-    <div className="w-screen p-5">
+    <div className="w-screen mb-5">
       <div className="flex space-x-2">
         {stores && stores.length > 0 ? (
           stores.map((store) => (

@@ -10,6 +10,7 @@ import Avatar from "@mui/material/Avatar";
 import Divider from "@mui/material/Divider";
 import FoodDetailModal from "./MenuComponents/FoodDetailModal";
 import { useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 
 interface Food {
   foodId: number;
@@ -19,7 +20,12 @@ interface Food {
   foodImg: string;
 }
 
-const Menus = () => {
+const Menus: React.FC = () => {
+  const location = useLocation();
+  const storeId = location.state?.storeId;
+
+  console.log(storeId);
+
   const menuLists = dummyData;
   const [activeView, setActiveView] = useState("전체 보기");
   const [openFoodModal, setOpenFoodModal] = useState(false);
