@@ -8,6 +8,6 @@ import lombok.Data;
 public class FoodInfoDetail {
 
     private String foodName;
-    private String foodPrice;
+    private int foodPrice;
     private String foodDescription;
 }
