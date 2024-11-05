@@ -23,4 +23,5 @@ public interface SellerService {
     ReviewDetailResponse getProductReview(Long storeId, Long foodId);
 
     SellerMenuResponse getAllProduct(Long storeId);
+
 }
