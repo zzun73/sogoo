@@ -31,7 +31,7 @@ const RegisterStoreModal: React.FC<RegisterStoreModalProps> = ({
   const [storeAddress, setStoreAddress] = useState<string>("");
   const [storeDescription, setStoreDescription] = useState<string>("");
   const [storeImg, setStoreImg] = useState<File | null>(null);
-  const [previewImage, setPreviewImage] = useState<string | null>(null);
+  const [previewImage, setPreviewImage] = useState<string>("");
 
   const handleImageUpload = (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -56,16 +56,22 @@ const RegisterStoreModal: React.FC<RegisterStoreModalProps> = ({
     onSuccess: async (response) => {
       if (response.status === 200) {
         console.log("가게 등록 성공");
+        handleModalClose();
+
+        window.location.reload();
       }
     },
     onError: (error: AxiosError) => {
       const status = error.response?.status;
       if (status === 403) {
         console.error("해당 작업을 수행할 권한이 없습니다.");
+        alert("해당 작업을 수행할 권한이 없습니다.");
       } else if (status === 404) {
         console.error("해당 멤버를 찾지 못했습니다.");
+        alert("해당 멤버를 찾지 못했습니다.");
       } else {
         console.error("가게 등록 실패", error);
+        alert("가게 등록 실패");
       }
     },
   });
@@ -79,6 +85,15 @@ const RegisterStoreModal: React.FC<RegisterStoreModalProps> = ({
     };
 
     handleRegisterStore(registerStoreForm);
+  };
+
+  const handleModalClose = () => {
+    setStoreName("");
+    setStoreAddress("");
+    setStoreDescription("");
+    setStoreImg(null);
+    setPreviewImage("");
+    onClose();
   };
 
   return (

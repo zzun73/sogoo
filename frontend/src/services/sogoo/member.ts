@@ -7,4 +7,11 @@ export default {
   getBuyerMyPage: async () => {
     return axios.get("/member/buyer/");
   },
+
+  /**
+   * 구매자 리뷰 등록
+   */
+  registerReview: async () => {
+    return axios.post("");
+  },
 };
