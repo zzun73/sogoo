@@ -57,7 +57,8 @@ const RegisterStoreModal: React.FC<RegisterStoreModalProps> = ({
       if (response.status === 200) {
         console.log("가게 등록 성공");
         handleModalClose();
-        alert("가게 등록 성공");
+
+        window.location.reload();
       }
     },
     onError: (error: AxiosError) => {
