@@ -78,6 +78,14 @@ public class SellerController {
         if (!customUserDetails.getUserRole().getRole().equals("SELLER")) {
             throw new InvalidMemberRoleException();
         }
-        return null;
+        return ResponseEntity.ok(sellerService.getAllProduct(storeId));
+    }
+
+    @GetMapping("/foods/{storeId}")
+    public ResponseEntity<?> getAllFoods(@PathVariable(name = "storeId") Long storeId, @AuthenticationPrincipal CustomUserDetails customUserDetails) {
+        if (!customUserDetails.getUserRole().getRole().equals("SELLER")) {
+            throw new InvalidMemberRoleException();
+        }
+        return ResponseEntity.ok(sellerService.getAllFood(storeId));
     }
 }

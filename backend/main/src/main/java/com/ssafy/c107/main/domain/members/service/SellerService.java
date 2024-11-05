@@ -1,5 +1,6 @@
 package com.ssafy.c107.main.domain.members.service;
 
+import com.ssafy.c107.main.domain.members.dto.response.FoodListResponse;
 import com.ssafy.c107.main.domain.members.dto.response.MonthlySalesResponse;
 import com.ssafy.c107.main.domain.members.dto.response.NextWeekQuantityResponse;
 import com.ssafy.c107.main.domain.members.dto.response.ReviewDetailResponse;
@@ -23,4 +24,6 @@ public interface SellerService {
     ReviewDetailResponse getProductReview(Long storeId, Long foodId);
 
     SellerMenuResponse getAllProduct(Long storeId);
+
+    FoodListResponse getAllFood(Long storeId);
 }
