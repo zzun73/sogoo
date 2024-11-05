@@ -68,4 +68,9 @@ public class Store extends BaseEntity {
         this.summary = summary;
         this.member = member;
     }
+
+    // summary 업데이트 메서드 추가
+    public void updateSummary(String summary) {
+        this.summary = summary;
+    }
 }

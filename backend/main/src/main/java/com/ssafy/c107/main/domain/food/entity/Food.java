@@ -58,4 +58,9 @@ public class Food extends BaseEntity {
         this.summary = summary;
         this.store = store;
     }
+
+    // summary 업데이트 메서드 추가
+    public void updateSummary(String summary) {
+        this.summary = summary;
+    }
 }
