@@ -24,9 +24,9 @@ const FoodTradeList = ({ foodTrades }: FoodTradeListProps) => {
                   boxShadow: "0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23)",
                 }}
               >
-                <CardActionArea sx={{ display: "flex" }}>
+                <CardActionArea sx={{ display: "flex", justifyContent: "space-between" }}>
                   <CardMedia component="img" image={item.foodImg} alt={item.foodName} sx={{ width: "180px", height: "150px", objectFit: "cover" }} />
-                  <CardContent>
+                  <CardContent sx={{ height: "150px", flex: "1 1 0%", display: "flex", flexDirection: "column", justifyContent: "center" }}>
                     <Typography gutterBottom variant="h5" component="div">
                       {item.foodName}
                     </Typography>

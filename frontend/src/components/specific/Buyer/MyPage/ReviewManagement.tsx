@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Accordion, AccordionSummary, AccordionDetails, AccordionActions, Button, TextField } from "@mui/material";
+import { Accordion, AccordionSummary, AccordionDetails, AccordionActions, Button, TextField, CardMedia, CardContent, Typography } from "@mui/material";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import sogoo from "../../../../services/sogoo";
 import ImageUpload from "../../../common/ImageUpload";
@@ -119,7 +119,12 @@ const ReviewManagement = ({ reviews }: ReviewManagementProps) => {
                     },
                   }}
                 >
-                  {item.foodName}
+                  <CardMedia component="img" image={item.foodImg} alt="green iguana" sx={{ width: "180px", height: "150px", objectFit: "cover" }} />
+                  <CardContent sx={{ display: "flex", alignItems: "center" }}>
+                    <Typography gutterBottom variant="h5" component="div">
+                      {item.foodName}
+                    </Typography>
+                  </CardContent>
                 </AccordionSummary>
                 <AccordionDetails>
                   {!item.reviewStatus && (
@@ -176,8 +181,10 @@ const ReviewManagement = ({ reviews }: ReviewManagementProps) => {
                   )}
                 </AccordionDetails>
                 {!item.reviewStatus && (
-                  <AccordionActions>
-                    <Button onClick={() => handleReviewSubmit(item.orderListId)}>등록하기</Button>
+                  <AccordionActions sx={{ display: "flex", justifyContent: "center" }}>
+                    <Button sx={{ width: "80px" }} onClick={() => handleReviewSubmit(item.orderListId)}>
+                      등록하기
+                    </Button>
                   </AccordionActions>
                 )}
               </Accordion>
