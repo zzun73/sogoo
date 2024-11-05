@@ -1,6 +1,7 @@
 import { useState } from "react";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
+import SubscribeCard from "./MenuComponents/SubscribeCard";
 
 const AddSubscribe: React.FC = () => {
   const [subscribeName, setSubscribeName] = useState<string>("");
@@ -36,6 +37,12 @@ const AddSubscribe: React.FC = () => {
             onChange={(e) => setSubscribeDescription(e.target.value)}
             sx={{ width: "100%", marginBottom: "20px" }}
           />
+          <div className="w-full flex flex-col mb-5 p-2 border-[1px] border-gray-300 rounded">
+            <SubscribeCard />
+            <SubscribeCard />
+            <SubscribeCard />
+            <SubscribeCard />
+          </div>
           <TextField
             required
             id="addSubscribeBeforePrice"
