@@ -35,8 +35,24 @@ const getDateAfterDays = (dateString: string, days: number): string => {
   return date.toISOString().split("T")[0];
 };
 
+const formatPhoneNumber = (number: string | undefined): string => {
+  if (number === undefined) return "";
+  if (number.length !== 11) {
+    throw new Error("Input must be an 11-digit string");
+  }
+  if (!/^\d+$/.test(number)) {
+    throw new Error("Input must contain only numbers");
+  }
+  if (!number.startsWith("010")) {
+    throw new Error("Phone number must start with 010");
+  }
+
+  return `${number.slice(0, 3)}-${number.slice(3, 7)}-${number.slice(7)}`;
+};
+
 export default {
   formatToDate,
   formatToCurrency,
   formatToSubDate,
+  formatPhoneNumber,
 };
