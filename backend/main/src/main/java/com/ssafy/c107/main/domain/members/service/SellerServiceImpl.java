@@ -5,10 +5,12 @@ import com.ssafy.c107.main.domain.food.entity.Food;
 import com.ssafy.c107.main.domain.food.exception.FoodNotFoundException;
 import com.ssafy.c107.main.domain.food.repository.FoodRepository;
 import com.ssafy.c107.main.domain.members.dto.FoodDetail;
+import com.ssafy.c107.main.domain.members.dto.FoodDetailDto;
 import com.ssafy.c107.main.domain.members.dto.ProductDto;
 import com.ssafy.c107.main.domain.members.dto.ReviewChart;
 import com.ssafy.c107.main.domain.members.dto.ReviewDetail;
 import com.ssafy.c107.main.domain.members.dto.SubscribeDetail;
+import com.ssafy.c107.main.domain.members.dto.response.FoodListResponse;
 import com.ssafy.c107.main.domain.members.dto.response.MonthlySalesResponse;
 import com.ssafy.c107.main.domain.members.dto.response.NextWeekFood;
 import com.ssafy.c107.main.domain.members.dto.response.NextWeekQuantityResponse;
@@ -350,6 +352,28 @@ public class SellerServiceImpl implements SellerService {
         return SellerMenuResponse
             .builder()
             .subscribes(subscribes)
+            .foods(foods)
+            .build();
+    }
+
+    @Override
+    public FoodListResponse getAllFood(Long storeId) {
+        List<FoodDetailDto> foods = new ArrayList<>();
+        foods.add(FoodDetailDto
+            .builder()
+            .foodId(-1L)
+            .foodName("전체")
+            .build());
+        List<Food> foodList = foodRepository.findAllByStore_Id(storeId);
+        for (Food food : foodList) {
+            foods.add(FoodDetailDto
+                .builder()
+                .foodId(food.getId())
+                .foodName(food.getName())
+                .build());
+        }
+        return FoodListResponse
+            .builder()
             .foods(foods)
             .build();
     }
