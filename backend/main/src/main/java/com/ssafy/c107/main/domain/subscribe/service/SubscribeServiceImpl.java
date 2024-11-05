@@ -28,6 +28,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.ai.chat.model.ChatModel;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -41,6 +42,7 @@ public class SubscribeServiceImpl implements SubscribeService {
     private final StoreRepository storeRepository;
     private final FoodRepository foodRepository;
     private final SubscribeWeekRepository subscribeWeekRepository;
+    private final ChatModel chatModel;
 
     // 반찬가게 상세페이지(구독 상품 목록 조회)
     @Transactional(readOnly = true)
