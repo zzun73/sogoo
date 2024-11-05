@@ -9,6 +9,8 @@ import com.ssafy.c107.main.domain.members.exception.SellerNotFoundException;
 import com.ssafy.c107.main.domain.order.exception.OrderListNotFoundException;
 import com.ssafy.c107.main.domain.review.exception.InvalidOrderListException;
 import com.ssafy.c107.main.domain.review.exception.MaxUploadSizeExceededException;
+import com.ssafy.c107.main.domain.review.exception.ReviewNotFoundException;
+import com.ssafy.c107.main.domain.review.exception.SummeryNotFoundException;
 import com.ssafy.c107.main.domain.store.exception.StoreNotFoundException;
 import com.ssafy.c107.main.domain.subscribe.exception.SubscribeNotFoundException;
 import com.ssafy.c107.main.domain.subscribe.exception.SubscribeWeekNotFoundException;
@@ -77,6 +79,16 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(InvalidOrderListException.class)
     public ResponseEntity<String> handleInvalidOrderListExceptionException(InvalidOrderListException e) {
+        return ResponseEntity.status(e.getStatus()).body(e.getMessage());
+    }
+
+    @ExceptionHandler(ReviewNotFoundException.class)
+    public ResponseEntity<String> handleReviewNotFoundException(ReviewNotFoundException e) {
+        return ResponseEntity.status(e.getStatus()).body(e.getMessage());
+    }
+
+    @ExceptionHandler(SummeryNotFoundException.class)
+    public ResponseEntity<String> handleSummeryNotFoundException(SummeryNotFoundException e) {
         return ResponseEntity.status(e.getStatus()).body(e.getMessage());
     }
 }
