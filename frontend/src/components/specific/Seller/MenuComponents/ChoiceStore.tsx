@@ -4,12 +4,16 @@ import Typography from "@mui/material/Typography";
 import RegisterStoreModal from "./RegisterStoreModal";
 import { useGetMyStores } from "../../../../queries/queries";
 
-interface Store {
+interface StoreInfo {
   storeId: string;
   storeName: string;
 }
 
-const ChoiceStore = () => {
+interface ChoiceStoreProps {
+  onStoreSelect: (storeId: string | null) => void;
+}
+
+const ChoiceStore: React.FC<ChoiceStoreProps> = ({ onStoreSelect }) => {
   const [openStoreModal, setOpenStoreModal] = useState<boolean>(false);
   const [selectedStoreId, setSelectedStoreId] = useState<string | null>(null);
 
@@ -22,17 +26,19 @@ const ChoiceStore = () => {
   };
 
   const results = useGetMyStores();
-  const stores: Store[] | undefined = results.stores;
+  const stores: StoreInfo[] | undefined = results.stores;
 
   useEffect(() => {
     if (stores && stores.length > 0) {
       const firstStoreId = stores[0].storeId;
       setSelectedStoreId(firstStoreId);
+      onStoreSelect(firstStoreId);
     }
   }, [stores]);
 
   const handleStoreClick = (storeId: string) => {
     setSelectedStoreId(storeId);
+    onStoreSelect(storeId);
   };
 
   return (
