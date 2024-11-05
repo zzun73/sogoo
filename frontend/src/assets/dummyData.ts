@@ -342,8 +342,8 @@ const totalReview = [
 ];
 
 // 구매자 마이페이지
-const buyerMyPageData = {
-  subscribe: [
+const buyerMyPageData: BuyerDetailInfo = {
+  subscribes: [
     {
       subscribeId: 1,
       subscribeName: "월간 프리미엄 베이커리 박스",
@@ -369,7 +369,7 @@ const buyerMyPageData = {
       SubscribePeriod: "DAY",
     },
   ],
-  foodTraces: [
+  foodTrades: [
     {
       foodId: 1,
       foodName: "크로와상 세트",
