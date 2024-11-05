@@ -4,7 +4,7 @@ import lombok.Data;
 
 @Data
 public class FoodAllSubscribeDto {
-    private Long foodId;
-    private String foodName;
-    private int foodPrice;
+    private Long id;
+    private String name;
+    private int price;
 }

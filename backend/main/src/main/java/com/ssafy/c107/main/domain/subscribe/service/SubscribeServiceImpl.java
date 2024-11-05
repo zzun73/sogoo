@@ -205,10 +205,10 @@ public class SubscribeServiceImpl implements SubscribeService {
         List<SubscribeAllDto> allSubscribeDto = subscribes.stream()
                 .map(subscribe -> {
                     SubscribeAllDto dto = new SubscribeAllDto();
-                    dto.setSubscribeId(subscribe.getId());
-                    dto.setSubscribeName(subscribe.getName());
-                    dto.setSubscribePrice(subscribe.getPrice());
-                    dto.setSubscribeBeforePrice(subscribe.getBeforePrice());
+                    dto.setId(subscribe.getId());
+                    dto.setName(subscribe.getName());
+                    dto.setPrice(subscribe.getPrice());
+                    dto.setBeforePrice(subscribe.getBeforePrice());
                     return dto;
                 }).collect(Collectors.toList());
 
@@ -218,9 +218,9 @@ public class SubscribeServiceImpl implements SubscribeService {
         List<FoodAllSubscribeDto> foodAllSubscribeDto = foods.stream()
                 .map(food -> {
                     FoodAllSubscribeDto dto = new FoodAllSubscribeDto();
-                    dto.setFoodId(food.getId());
-                    dto.setFoodName(food.getName());
-                    dto.setFoodPrice(food.getPrice());
+                    dto.setId(food.getId());
+                    dto.setName(food.getName());
+                    dto.setPrice(food.getPrice());
 
                     return dto;
                 }).collect(Collectors.toList());
