@@ -44,7 +44,7 @@ const useGetStoreList = () => {
 };
 
 /**
- * 구매자 마이페이지 정보 조회
+ * (구매자) 마이페이지 정보 조회
  */
 const useGetBuyerMypage = () => {
   const queryResponse = useQuery({
@@ -67,10 +67,4 @@ const useGetMyStores = () => {
   return queryResponse;
 };
 
-export {
-  useCheckEmail,
-  useCheckSeller,
-  useGetStoreList,
-  useGetBuyerMypage,
-  useGetMyStores,
-};
+export { useCheckEmail, useCheckSeller, useGetStoreList, useGetBuyerMypage, useGetMyStores };
