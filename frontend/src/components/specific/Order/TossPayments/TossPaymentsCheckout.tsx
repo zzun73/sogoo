@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import { loadTossPayments, ANONYMOUS, TossPaymentsWidgets } from "@tosspayments/tosspayments-sdk";
+import { loadTossPayments, TossPaymentsWidgets } from "@tosspayments/tosspayments-sdk";
+import useRootStore from "../../../../stores";
 
 const generateRandomString = () => window.btoa(Math.random().toString()).slice(0, 20);
 const clientKey = import.meta.env.VITE_TOSS_PAYMENTS_CLIENT_KEY;
@@ -13,6 +14,7 @@ const TossPaymentsCheckout = ({
   },
   returnPath = "/",
 }: TossPaymentsCheckoutProps) => {
+  const memberInfo = useRootStore().memberInfo;
   const [, setReady] = useState(false);
   const [widgets, setWidgets] = useState<TossPaymentsWidgets | null>(null);
   const [amount] = useState({
@@ -23,12 +25,12 @@ const TossPaymentsCheckout = ({
   useEffect(() => {
     async function fetchPaymentWidgets() {
       const tossPayments = await loadTossPayments(clientKey);
-      const widgets = tossPayments.widgets({ customerKey: ANONYMOUS });
+      const widgets = tossPayments.widgets({ customerKey: memberInfo!.uuid });
       setWidgets(widgets);
     }
 
     fetchPaymentWidgets();
-  }, []);
+  }, [memberInfo]);
 
   useEffect(() => {
     async function renderPaymentWidgets() {
