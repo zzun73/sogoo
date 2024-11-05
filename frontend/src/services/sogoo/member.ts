@@ -11,7 +11,11 @@ export default {
   /**
    * 구매자 리뷰 등록
    */
-  registerReview: async () => {
-    return axios.post("");
+  registerReview: async (orderListId: number, data: FormData) => {
+    return axios.post(`review/orders/${orderListId}`, data, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
   },
 };

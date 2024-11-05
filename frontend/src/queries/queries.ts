@@ -44,12 +44,13 @@ const useGetStoreList = () => {
 };
 
 /**
- * 구매자 마이페이지 정보 조회
+ * (구매자) 마이페이지 정보 조회
  */
-const useGetBuyerMypage = () => {
+const useGetBuyerMyPage = () => {
   const queryResponse = useQuery({
     queryKey: keys.getBuyerMypage(),
     queryFn: () => sogoo.getBuyerMyPage(),
+    select: (response) => response.data,
   });
 
   return queryResponse;
@@ -68,10 +69,4 @@ const useGetMyStores = () => {
   return stores;
 };
 
-export {
-  useCheckEmail,
-  useCheckSeller,
-  useGetStoreList,
-  useGetBuyerMypage,
-  useGetMyStores,
-};
+export { useCheckEmail, useCheckSeller, useGetStoreList, useGetBuyerMyPage, useGetMyStores };
