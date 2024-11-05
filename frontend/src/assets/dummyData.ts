@@ -2,7 +2,7 @@ const subscribeData = [
   {
     subscribeId: 1,
     subscribeName: "고기패키지",
-    price: 13000,
+    subscribePrice: 13000,
     subscribeDescription:
       "고기 전용 패키지 설명가 여기에 들어갑니다. 맛있는 고기패키지 너무너무 좋아요오오오오오오오오오오오오",
     subscribeBeforePrice: 0,
