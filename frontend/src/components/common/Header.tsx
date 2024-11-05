@@ -13,6 +13,7 @@ const Header = () => {
 
   const store = useRootStore();
   const { setLogout } = useRootStore();
+  const memberInfo = store.memberInfo;
   const isLogin = store.isLogin;
   const isSeller = store.memberInfo?.role === "SELLER";
 
@@ -56,6 +57,11 @@ const Header = () => {
           </div>
           {/* user 관련 */}
           <div className="flex items-center gap-8">
+            {memberInfo && (
+              <div className="font-chosun text-xl">
+                [{isSeller ? "판매자" : "고객"}] {memberInfo.name} 님
+              </div>
+            )}
             {isLogin && (
               <Link to={isSeller ? "/seller" : "/mypage"}>
                 <MdOutlinePerson className="w-6 h-6" />
