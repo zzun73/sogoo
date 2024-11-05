@@ -1,5 +1,6 @@
 import React from "react";
 import { Card, CardActionArea, CardContent, Typography } from "@mui/material";
+import EmptySection from "./EmptySection";
 
 interface SubscriptionListProps {
   subscriptions: SubscribeItem[];
@@ -13,33 +14,37 @@ const SubscriptionList = ({ subscriptions }: SubscriptionListProps) => {
       </div>
       <div className="flex flex-col gap-8 w-full p-8 rounded-b-3xl bg-white">
         <div className="max-h-[600px] p-1 flex flex-col gap-y-2 overflow-y-auto">
-          {subscriptions.map((item) => (
-            <Card
-              key={item.subscribeId}
-              sx={{
-                width: "100%",
-                minHeight: "150px",
-                boxShadow: "0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23)",
-              }}
-            >
-              <CardActionArea sx={{ display: "flex" }}>
-                <CardContent>
-                  <Typography gutterBottom variant="h5" component="div">
-                    {item.subscribeName}
-                  </Typography>
-                  <Typography variant="body2" sx={{ color: "text.secondary" }}>
-                    매장명 | {item.storeName}
-                  </Typography>
-                  <Typography variant="body2" sx={{ color: "text.secondary" }}>
-                    구독 기간 | {item.SubscribePeriod}
-                  </Typography>
-                  <Typography variant="body2" sx={{ color: "text.secondary" }}>
-                    결제 금액 | {item.subscribePrice}
-                  </Typography>
-                </CardContent>
-              </CardActionArea>
-            </Card>
-          ))}
+          {subscriptions.length > 0 ? (
+            subscriptions.map((item) => (
+              <Card
+                key={item.subscribeId}
+                sx={{
+                  width: "100%",
+                  minHeight: "150px",
+                  boxShadow: "0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23)",
+                }}
+              >
+                <CardActionArea sx={{ display: "flex" }}>
+                  <CardContent>
+                    <Typography gutterBottom variant="h5" component="div">
+                      {item.subscribeName}
+                    </Typography>
+                    <Typography variant="body2" sx={{ color: "text.secondary" }}>
+                      매장명 | {item.storeName}
+                    </Typography>
+                    <Typography variant="body2" sx={{ color: "text.secondary" }}>
+                      구독 기간 | {item.SubscribePeriod}
+                    </Typography>
+                    <Typography variant="body2" sx={{ color: "text.secondary" }}>
+                      결제 금액 | {item.subscribePrice}
+                    </Typography>
+                  </CardContent>
+                </CardActionArea>
+              </Card>
+            ))
+          ) : (
+            <EmptySection type="subscription" />
+          )}
         </div>
       </div>
     </div>
