@@ -59,12 +59,13 @@ const useGetBuyerMypage = () => {
  * (판매자) 내 가게 가져오기
  */
 const useGetMyStores = () => {
-  const queryResponse = useQuery({
+  const { data } = useQuery({
     queryKey: keys.getMyStores(),
     queryFn: () => sogoo.getMyStores(),
   });
 
-  return queryResponse;
+  const stores = data ? data.data : [];
+  return stores;
 };
 
 export {

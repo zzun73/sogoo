@@ -2,6 +2,7 @@ import { useState } from "react";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import RegisterStoreModal from "./RegisterStoreModal";
+import { useGetMyStores } from "../../../../queries/queries";
 
 const ChoiceStore = () => {
   const [openStoreModal, setOpenStoreModal] = useState<boolean>(false);
@@ -13,6 +14,11 @@ const ChoiceStore = () => {
   const handleStoreModalClose = () => {
     setOpenStoreModal(false);
   };
+
+  const results = useGetMyStores();
+  const stores = results.stores;
+
+  console.log(stores);
 
   return (
     <div className="w-screen p-5">
