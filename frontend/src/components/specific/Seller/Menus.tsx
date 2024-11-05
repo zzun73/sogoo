@@ -9,7 +9,7 @@ import ListItemAvatar from "@mui/material/ListItemAvatar";
 import Avatar from "@mui/material/Avatar";
 import Divider from "@mui/material/Divider";
 import FoodDetailModal from "./MenuComponents/FoodDetailModal";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 interface Food {
   foodId: number;
@@ -19,7 +19,13 @@ interface Food {
   foodImg: string;
 }
 
-const Menus = () => {
+const Menus: React.FC = () => {
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const storeId = queryParams.get("store");
+
+  console.log(storeId);
+
   const menuLists = dummyData;
   const [activeView, setActiveView] = useState("전체 보기");
   const [openFoodModal, setOpenFoodModal] = useState(false);
@@ -52,7 +58,11 @@ const Menus = () => {
   };
 
   const goToAddFood = () => {
-    navigate("/seller/add/food");
+    navigate(`/seller/add/food?store=${storeId}`);
+  };
+
+  const goToAddSubscribe = () => {
+    navigate(`/seller/add/subscribe?store=${storeId}`);
   };
 
   return (
@@ -85,7 +95,11 @@ const Menus = () => {
               </Button>
             </Stack>
             <Stack spacing={2} direction="row">
-              <Button variant="outlined" size="large">
+              <Button
+                variant="outlined"
+                size="large"
+                onClick={goToAddSubscribe}
+              >
                 구독 상품 추가
               </Button>
               <Button variant="outlined" size="large" onClick={goToAddFood}>

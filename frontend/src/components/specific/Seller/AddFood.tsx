@@ -3,9 +3,15 @@ import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import { useMutation } from "@tanstack/react-query";
 import sogoo from "../../../services/sogoo";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
-const AddFood = () => {
+const AddFood: React.FC = () => {
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const storeId = Number(queryParams.get("store"));
+
+  console.log(storeId);
+
   const navigate = useNavigate();
 
   const [foodName, setFoodName] = useState<string>("");
@@ -13,8 +19,6 @@ const AddFood = () => {
   const [foodPrice, setFoodPrice] = useState<number>(0);
   const [foodImg, setFoodImg] = useState<File | null>(null);
   const [previewImage, setPreviewImage] = useState<string | null>(null);
-
-  const storeId: StoreId = 1;
 
   const handleImageUpload = (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -43,7 +47,7 @@ const AddFood = () => {
     }) => sogoo.requestAddFood(addFoodForm, storeId),
     onSuccess: async (response) => {
       console.log("개별상품 등록 성공", response);
-      navigate("/seller/menus");
+      navigate(`/seller/menus?store=${storeId}`);
     },
     onError: (error) => {
       console.error("개별상품 등록 실패", error);
@@ -52,11 +56,9 @@ const AddFood = () => {
 
   const initiateAddFood = (): void => {
     const addFoodForm: AddFoodForm = {
-      data: {
-        foodName,
-        foodPrice,
-        foodDescription,
-      },
+      foodName,
+      foodPrice,
+      foodDescription,
       img: foodImg,
     };
 
