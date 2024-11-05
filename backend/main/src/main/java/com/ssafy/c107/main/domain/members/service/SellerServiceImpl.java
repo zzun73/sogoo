@@ -26,6 +26,7 @@ import com.ssafy.c107.main.domain.order.exception.OrderListNotFoundException;
 import com.ssafy.c107.main.domain.order.repository.OrderListRepository;
 import com.ssafy.c107.main.domain.order.repository.OrderRepository;
 import com.ssafy.c107.main.domain.review.entity.Review;
+import com.ssafy.c107.main.domain.review.exception.ReviewNotFoundException;
 import com.ssafy.c107.main.domain.review.exception.SummeryNotFoundException;
 import com.ssafy.c107.main.domain.review.repository.ReviewRepository;
 import com.ssafy.c107.main.domain.store.entity.Store;
@@ -56,7 +57,9 @@ import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.chat.client.ChatClient;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Slf4j
@@ -261,11 +264,9 @@ public class SellerServiceImpl implements SellerService {
             int negativeCnt = reviewRepository.getCount(storeId, false);
             Store store = storeRepository.findById(storeId)
                 .orElseThrow(StoreNotFoundException::new);
-
-            //리뷰 정보 가져오기
             List<ReviewDetail> reviewDetails = new ArrayList<>();
+            String aiSummery = store.getSummary();
             List<Review> reviews = reviewRepository.findReviewByStoreId(storeId);
-            StringBuilder reviewContentBuilder = new StringBuilder();
 
             for (Review review : reviews) {
                 String memberEmail = review.getOrderList().getOrder().getMember().getEmail();
@@ -277,12 +278,7 @@ public class SellerServiceImpl implements SellerService {
                     .foodName(foodName)
                     .memberEmail(memberEmail)
                     .build());
-
-                reviewContentBuilder.append(review.getComment()).append(" ");
             }
-
-            String summery = createSummaryWithAI(reviewContentBuilder.toString());
-
             return ReviewDetailResponse
                 .builder()
                 .reviews(reviewDetails)
@@ -290,7 +286,7 @@ public class SellerServiceImpl implements SellerService {
                     .builder()
                     .positiveCnt(positiveCnt)
                     .negativeCnt(negativeCnt)
-                    .aiSummary(summery)
+                    .aiSummary(aiSummery)
                     .build())
                 .build();
         } else {
@@ -302,9 +298,8 @@ public class SellerServiceImpl implements SellerService {
 
             //리뷰 정보 가져오기
             List<ReviewDetail> reviewDetails = new ArrayList<>();
-            List<Review> reviews = reviewRepository.findReviewByStoreIdAndFoodId(
-                storeId, foodId);
-            StringBuilder reviewContentBuilder = new StringBuilder();
+            String aiSummery = food.getSummary();
+            List<Review> reviews = reviewRepository.findReviewByStoreIdAndFoodId(storeId,foodId);
 
             for (Review review : reviews) {
                 String memberEmail = review.getOrderList().getOrder().getMember().getEmail();
@@ -316,12 +311,7 @@ public class SellerServiceImpl implements SellerService {
                     .comment(review.getComment())
                     .memberEmail(memberEmail)
                     .build());
-
-                reviewContentBuilder.append(review.getComment()).append(" ");
             }
-
-            String summery = createSummaryWithAI(reviewContentBuilder.toString());
-
             return ReviewDetailResponse
                 .builder()
                 .reviews(reviewDetails)
@@ -329,7 +319,7 @@ public class SellerServiceImpl implements SellerService {
                     .builder()
                     .positiveCnt(positiveCnt)
                     .negativeCnt(negativeCnt)
-                    .aiSummary(summery)
+                    .aiSummary(aiSummery)
                     .build())
                 .build();
         }
@@ -412,5 +402,69 @@ public class SellerServiceImpl implements SellerService {
             throw new SummeryNotFoundException();
         }
         return summary;
+    }
+
+    // 매주 월요일마다 모든 상품 리뷰 요약을 갱신하는 스케줄링 메소드
+    @Scheduled(cron = "0 0 4 * * MON")
+    @Transactional
+    public void updateWeeklyReviewSummary() {
+        List<Store> stores = storeRepository.findAll();
+
+        for (Store store : stores) {
+            Long storeId = store.getId();
+
+            // 전체 상품의 리뷰 요약을 갱신
+            updateWeeklyReviewSummaryForStore(storeId);
+
+            // 각 상품별 리뷰 요약을 갱신
+            List<Food> foods = foodRepository.findAllByStore_Id(storeId);
+            for(Food food : foods) {
+                updateWeeklyReviewSummaryForFood(storeId, food.getId());
+            }
+        }
+    }
+
+    // Store의 전체 리뷰 요약을 갱신하는 메소드
+    private void updateWeeklyReviewSummaryForStore(Long storeId) {
+        List<Review> reviews = reviewRepository.findReviewByStoreId(storeId);
+        if(reviews.isEmpty()) {
+            return;
+        }
+
+        // 리뷰 코멘트 결함
+        String reviewContent = reviews.stream()
+                .map(Review::getComment)
+                .collect(Collectors.joining(" "));
+
+        // AI 요약 생성
+        String summary = createSummaryWithAI(reviewContent);
+
+        // Store 엔티티의 summary 필드에 업데이트
+        Store store = storeRepository.findById(storeId)
+                .orElseThrow(StoreNotFoundException::new);
+        store.updateSummary(summary);
+        storeRepository.save(store);
+    }
+
+    // 각 Food별 리뷰 요약을 갱신하는 메소드
+    private void updateWeeklyReviewSummaryForFood(Long storeId, Long foodId) {
+        List<Review> reviews = reviewRepository.findReviewByStoreIdAndFoodId(storeId, foodId);
+        if(reviews.isEmpty()) {
+            return;
+        }
+
+        // 리뷰 코멘트 결합
+        String reviewContent = reviews.stream()
+                .map(Review::getComment)
+                .collect(Collectors.joining(" "));
+
+        // AI 요약 생성
+        String summary = createSummaryWithAI(reviewContent);
+
+        // Food 엔티티의 summary 필드에 업데이트
+        Food food = foodRepository.findById(foodId)
+                .orElseThrow(FoodNotFoundException::new);
+        food.updateSummary(summary);
+        foodRepository.save(food);
     }
 }
