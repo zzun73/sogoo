@@ -42,7 +42,8 @@ interface ReviewItem {
   foodId: number;
   foodName: string;
   foodImg: string;
-  reviewStatus: true;
+  reviewStatus: boolean;
+  orderListId: number;
 }
 
 interface BuyerDetailInfo {
