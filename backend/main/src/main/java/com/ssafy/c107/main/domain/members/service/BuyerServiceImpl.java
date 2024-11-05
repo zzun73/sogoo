@@ -118,6 +118,7 @@ public class BuyerServiceImpl implements BuyerService {
                         .foodName(food.getName())
                         .foodImg(food.getImg())
                         .reviewStatus(true)
+                        .orderListId(orderList.getId())
                         .build());
                 } else {
                     //리뷰가 없는데 구매일 7일 이내일 경우
@@ -128,6 +129,7 @@ public class BuyerServiceImpl implements BuyerService {
                             .foodName(food.getName())
                             .foodImg(food.getImg())
                             .reviewStatus(false)
+                            .orderListId(orderList.getId())
                             .build());
                     }
                 }

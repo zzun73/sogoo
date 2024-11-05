@@ -12,4 +12,5 @@ public class ReviewsResponse {
     private String foodImg;
     private String subscribeName;
     private boolean reviewStatus;
+    private Long orderListId;
 }
