@@ -43,6 +43,10 @@ public class StoreSearchDocument {
         private String description;
     }
 
+    public void addFood(FoodInfo food) {
+        this.foods.add(food);
+    }
+
     @Builder
     public StoreSearchDocument(Long id, String storeName, String address, String description,
         String img, List<FoodInfo> foods) {
