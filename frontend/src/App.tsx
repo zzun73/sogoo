@@ -5,8 +5,10 @@ import PageRoutes from "./routes/PageRoutes";
 import Footer from "./components/common/Footer";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import { LicenseInfo } from "@mui/x-license";
 
 function App() {
+  LicenseInfo.setLicenseKey(import.meta.env.VITE_MUI_LICENSE);
   const queryClient = new QueryClient({
     defaultOptions: {
       queries: {
