@@ -9,8 +9,6 @@ const AddSubscribe: React.FC = () => {
   const queryParams = new URLSearchParams(location.search);
   const storeId = Number(queryParams.get("store"));
 
-  console.log(storeId);
-
   const [subscribeName, setSubscribeName] = useState<string>("");
   const [subscribeDescription, setSubscribeDescription] = useState<string>("");
   const [subscribeBeforePrice, setSubscribeBeforePrice] = useState<number>(0);
@@ -45,10 +43,9 @@ const AddSubscribe: React.FC = () => {
             sx={{ width: "100%", marginBottom: "20px" }}
           />
           <div className="w-full flex flex-col mb-5 p-2 border-[1px] border-gray-300 rounded">
-            <SubscribeCard storeId={storeId} />
-            <SubscribeCard storeId={storeId} />
-            <SubscribeCard storeId={storeId} />
-            <SubscribeCard storeId={storeId} />
+            {[...Array(4)].map((_, index) => (
+              <SubscribeCard key={index} storeId={storeId} />
+            ))}
           </div>
           <TextField
             required
