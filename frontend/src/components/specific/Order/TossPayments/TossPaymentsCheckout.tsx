@@ -2,9 +2,6 @@ import { useEffect, useState } from "react";
 import { loadTossPayments, TossPaymentsWidgets } from "@tosspayments/tosspayments-sdk";
 import useRootStore from "../../../../stores";
 
-const generateRandomString = () => window.btoa(Math.random().toString()).slice(0, 20);
-const NORMAL_CLIENT_KEY = import.meta.env.VITE_TOSS_PAYMENTS_CLIENT_KEY;
-
 const TossPaymentsCheckout = ({
   orderData = {
     orderName: "토스 티셔츠 외 2건",
@@ -14,6 +11,9 @@ const TossPaymentsCheckout = ({
   },
   returnPath = "/",
 }: TossPaymentsCheckoutProps) => {
+  const generateRandomString = () => window.btoa(Math.random().toString()).slice(0, 20);
+  const NORMAL_CLIENT_KEY = import.meta.env.VITE_TOSS_PAYMENTS_CLIENT_KEY;
+
   const memberInfo = useRootStore().memberInfo;
   const [, setReady] = useState(false);
   const [widgets, setWidgets] = useState<TossPaymentsWidgets | null>(null);
