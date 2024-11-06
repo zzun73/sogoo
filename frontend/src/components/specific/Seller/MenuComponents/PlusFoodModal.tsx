@@ -15,27 +15,26 @@ const style = {
   p: 4,
 };
 
-interface Food {
-  foodId: number;
-  foodName: string;
-  foodDescription: string;
-  foodPrice: number;
-  foodImg: string;
-}
-
 interface PlusFoodProps {
   open: boolean;
   onClose: () => void;
   storeId: number;
+  selectedFoods: FoodInfo[];
+  setSelectedFoods: React.Dispatch<React.SetStateAction<FoodInfo[]>>;
 }
 
-const PlusFoodModal: React.FC<PlusFoodProps> = ({ open, onClose, storeId }) => {
+const PlusFoodModal: React.FC<PlusFoodProps> = ({
+  open,
+  onClose,
+  storeId,
+  selectedFoods = [],
+  setSelectedFoods,
+}) => {
   const { foods: initialFoods } = useGetFoodListForSubscribe(storeId);
 
   console.log(initialFoods);
 
-  const [foods, setFoods] = useState<Food[]>(initialFoods);
-  const [selectedFoods, setSelectedFoods] = useState<Food[]>([]);
+  const [foods, setFoods] = useState<FoodInfo[]>(initialFoods);
 
   useEffect(() => {
     if (initialFoods) {
@@ -43,7 +42,7 @@ const PlusFoodModal: React.FC<PlusFoodProps> = ({ open, onClose, storeId }) => {
     }
   }, [initialFoods]);
 
-  const handleDragStart = (event: React.DragEvent, food: Food) => {
+  const handleDragStart = (event: React.DragEvent, food: FoodInfo) => {
     event.dataTransfer.setData("foodId", String(food.foodId));
   };
 
@@ -54,7 +53,7 @@ const PlusFoodModal: React.FC<PlusFoodProps> = ({ open, onClose, storeId }) => {
     }
 
     const foodId = parseInt(event.dataTransfer.getData("foodId"));
-    const food = foods.find((f: Food) => f.foodId === foodId);
+    const food = foods.find((f: FoodInfo) => f.foodId === foodId);
 
     if (food && !selectedFoods.some((selected) => selected.foodId === foodId)) {
       setSelectedFoods((prev) => [...prev, food]);
@@ -103,7 +102,7 @@ const PlusFoodModal: React.FC<PlusFoodProps> = ({ open, onClose, storeId }) => {
           onDragOver={handleDragOver}
           className="w-full h-28 flex items-center border-2 border-slate-400 mb-5 px-5 space-x-5"
         >
-          {selectedFoods.map((food) => (
+          {(Array.isArray(selectedFoods) ? selectedFoods : []).map((food) => (
             <img
               key={food.foodId}
               src={food.foodImg}
@@ -113,7 +112,7 @@ const PlusFoodModal: React.FC<PlusFoodProps> = ({ open, onClose, storeId }) => {
             />
           ))}
         </div>
-        {foods?.map((food: Food) => (
+        {foods?.map((food: FoodInfo) => (
           <div
             key={food.foodId}
             draggable
@@ -125,7 +124,7 @@ const PlusFoodModal: React.FC<PlusFoodProps> = ({ open, onClose, storeId }) => {
               alt={`${food.foodName} 이미지`}
               className="w-20 h-20"
             />
-            <div className="w-full flex justify-between items-center">
+            <div className="w-full flex justify-between items-center ms-3">
               <div className="flex flex-col">
                 <p className="text-xl font-bold">{food.foodName}</p>
                 <p className="text-base text-slate-400">
@@ -136,7 +135,9 @@ const PlusFoodModal: React.FC<PlusFoodProps> = ({ open, onClose, storeId }) => {
             </div>
           </div>
         ))}
-        <Button variant="contained">등록하기</Button>
+        <Button variant="contained" onClick={onClose}>
+          등록완료
+        </Button>
       </Box>
     </Modal>
   );
