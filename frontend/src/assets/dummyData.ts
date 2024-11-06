@@ -409,6 +409,12 @@ const buyerMyPageData: BuyerDetailInfo = {
         "https://images.unsplash.com/photo-1457785097656-8ac31dcf679f?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
       reviewStatus: true,
       orderListId: 1001,
+      review: {
+        reviewId: 12,
+        reviewComment: "둘이 먹다 하나 죽어도 모를 이 맛!!",
+        reviewImg:
+          "https://plus.unsplash.com/premium_photo-1674593231084-d8b27596b134?q=80&w=2071&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      },
     },
     {
       foodId: 2,
