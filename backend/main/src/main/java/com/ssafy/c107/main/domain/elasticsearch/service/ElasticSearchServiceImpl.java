@@ -11,9 +11,12 @@ import com.ssafy.c107.main.domain.food.entity.Food;
 import com.ssafy.c107.main.domain.store.entity.Store;
 import com.ssafy.c107.main.domain.store.repository.StoreRepository;
 import jakarta.annotation.PostConstruct;
+import jakarta.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -23,7 +26,8 @@ public class ElasticSearchServiceImpl implements ElasticSearchService {
     private final StoreSearchRepository storeSearchRepository;
     private final StoreRepository storeRepository;
 
-    @PostConstruct
+    @EventListener(ApplicationReadyEvent.class)
+    @Transactional
     void postConstruct() {
         storeSearchRepository.deleteAll();
 
