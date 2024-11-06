@@ -1,37 +1,17 @@
 import Box from "../../../common/Box";
-import { DataGridPro } from "@mui/x-data-grid-pro";
 
 const TodaySalesStatus = () => {
   const data = {
     columns: [
-      { field: "id", headerName: "순위", width: 20, maxWidth: 30 },
-      {
-        field: "productName",
-        headerName: "상품",
-        width: 100,
-        maxWidth: 140,
-        editable: false,
-      },
-      {
-        field: "salesSum",
-        headerName: "매출액",
-        width: 100,
-        maxWidth: 140,
-        editable: false,
-      },
-      {
-        field: "price",
-        headerName: "개당 가격",
-        width: 100,
-        maxWidth: 140,
-        editable: false,
-      },
+      { field: "id", headerName: "순위" },
+      { field: "productName", headerName: "상품" },
+      { field: "salesSum", headerName: "매출액" },
+      { field: "price", headerName: "개당 가격" },
       {
         field: "productCnt",
         headerName: "수량 (단위 : 1개)",
         width: 140,
         maxWidth: 140,
-        editable: false,
       },
     ],
     rows: [
@@ -109,15 +89,36 @@ const TodaySalesStatus = () => {
   };
 
   return (
-    <Box className="w-full h-[500px] flex flex-col justify-end">
+    <Box className="w-full h-[300px] flex flex-col justify-between">
       <p className="text-xl text-center font-bold">당일 매출 현황</p>
-      <DataGridPro
-        {...data}
-        loading={data.rows.length === 0}
-        rowHeight={30}
-        disableColumnPinning
-        className="w-full"
-      />
+      <div className="max-h-[230px] overflow-y-auto w-full">
+        <table className="w-full" border={1} cellPadding="5" cellSpacing="0">
+          <thead className="sticky top-0 bg-gray-50">
+            <tr>
+              {data.columns.map((column) => (
+                <th key={column.field} className="text-base">
+                  {column.headerName}
+                </th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {data.rows.map((row) => (
+              <tr key={row.id} className="text-center">
+                <td className="text-center text-sm">{row.id}</td>
+                <td className="text-center text-sm">{row.productName}</td>
+                <td className="text-center text-sm">
+                  {row.salesSum.toLocaleString()} 원
+                </td>
+                <td className="text-center text-sm">
+                  {row.price.toLocaleString()} 원
+                </td>
+                <td className="text-center text-sm">{row.productCnt}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </Box>
   );
 };
