@@ -49,9 +49,16 @@ interface Store {
   img: ImageURL;
 }
 
-interface GetStoreLIstResponseData {
-  stores: Store[] | [];
+interface ProductReviewProps {
+  storeId: StoreId;
+  foodId: FoodId;
 }
 
+interface GetStoreListResponseData {
+  stores: Store[] | [];
+}
+interface GetSalesOverviewResponseData {}
+
 type LoginResponse = LoginResponseData;
-type GetStoreListResponse = SogooResponse<GetStoreLIstResponseData>;
+type GetStoreListResponse = SogooResponse<GetStoreiIstResponseData>;
+type GetSalesOverviewResponse = SogooResponse<GetSalesOverviewResponseData>;

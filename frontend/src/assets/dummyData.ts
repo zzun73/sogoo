@@ -193,7 +193,7 @@ const menuData = {
       id: 1,
       name: "고기패키지1",
       price: 13000,
-      beforePrice: 0,
+      beforePrice: 20000,
     },
     {
       id: 2,

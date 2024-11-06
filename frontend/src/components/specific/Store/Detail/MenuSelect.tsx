@@ -1,11 +1,13 @@
 import { useState } from "react";
-import MenuItem from "@mui/material/MenuItem";
-import FormControl from "@mui/material/FormControl";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
-import List from "@mui/material/List";
-import ListItem from "@mui/material/ListItem";
-import ListItemText from "@mui/material/ListItemText";
-import IconButton from "@mui/material/IconButton";
+import {
+  MenuItem,
+  FormControl,
+  List,
+  ListItem,
+  ListItemText,
+  IconButton,
+} from "@mui/material";
 import { Add, Remove, Close } from "@mui/icons-material";
 import { menuData } from "../../../../assets/dummyData";
 import Button from "@mui/material/Button";
@@ -13,7 +15,7 @@ import Stack from "@mui/material/Stack";
 
 interface Item {
   id: number;
-  name: Name;
+  name: string;
   price: number;
   beforePrice?: number;
 }
@@ -41,13 +43,35 @@ const MenuSelect = () => {
       (item: Item) => item.id === selectedId
     );
 
-    if (selectedItem && !selectedItems.find((item) => item.id === selectedId)) {
+    // 구독 상품은 하나만 선택 가능하도록 경고 표시
+    if (
+      category === "subscribe" &&
+      selectedItems.find((item) => item.category === "subscribe")
+    ) {
+      alert("구독 상품은 1개만 선택 가능합니다.");
+      setCategory("");
+      return;
+    }
+
+    if (
+      selectedItem &&
+      selectedItems.find(
+        (item) => item.id === selectedId && item.category === category
+      )
+    ) {
+      alert("이미 추가된 상품입니다.");
+      setCategory("");
+      return;
+    }
+
+    if (selectedItem) {
       setSelectedItems([
         ...selectedItems,
         { ...selectedItem, quantity: 1, category },
       ]);
     }
     setSelectedItemId("");
+    setCategory("");
   };
 
   const renderOptions = () => {
@@ -56,7 +80,7 @@ const MenuSelect = () => {
         <MenuItem
           key={item.name}
           value={item.id}
-          disabled={!!selectedItems.find((i) => i.category === "subscribe")}
+          // disabled={!!selectedItems.find((i) => i.category === "subscribe")}
         >
           {item.name}
         </MenuItem>
@@ -79,7 +103,8 @@ const MenuSelect = () => {
   ) => {
     setSelectedItems((prevItems) =>
       prevItems.map((item) =>
-        (item.id === id || item.category == category) &&
+        item.id === id &&
+        item.category === category &&
         item.quantity + amount > 0
           ? { ...item, quantity: item.quantity + amount }
           : item
@@ -89,7 +114,7 @@ const MenuSelect = () => {
 
   const handleRemoveItem = (id: number, category: string) => {
     setSelectedItems((prevItems) =>
-      prevItems.filter((item) => item.id !== id && item.category !== category)
+      prevItems.filter((item) => item.id !== id || item.category !== category)
     );
   };
 
@@ -127,15 +152,25 @@ const MenuSelect = () => {
           </Select>
         </FormControl>
       )}
-      <List className="h-[400px] ">
+      <List className="max-h-[300px] overflow-y-auto w-full overscroll-auto">
         {selectedItems.map((item) => (
           <ListItem
             key={`${item.category}${item.id}`}
-            className="flex items-center gap-4"
+            className="flex flex-row items-center"
           >
             <ListItemText
               primary={item.name}
-              secondary={`가격: ${item.price}원`}
+              secondary={
+                <p>
+                  <span>가격: </span>
+                  {item.category === "subscribe" ? (
+                    <span className="line-through mr-1 text-gray-500">
+                      {item.beforePrice}원
+                    </span>
+                  ) : null}
+                  <span>{item.price}원</span>
+                </p>
+              }
             />
             {item.category === "foods" && (
               <div className="flex items-center gap-2">
