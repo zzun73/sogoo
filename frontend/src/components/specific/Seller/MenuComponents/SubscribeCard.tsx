@@ -3,7 +3,7 @@ import TextField from "@mui/material/TextField";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import PlusFood from "./PlusFood";
+import PlusFoodModal from "./PlusFoodModal";
 
 interface SubscribeCardProps {
   storeId: number;
@@ -44,7 +44,7 @@ const SubscribeCard: React.FC<SubscribeCardProps> = ({ storeId }) => {
       >
         <p className="text-base">반찬 추가하기</p>
       </div>
-      <PlusFood
+      <PlusFoodModal
         open={openPlusFood}
         onClose={handlePlusFoodClose}
         storeId={Number(storeId)}
