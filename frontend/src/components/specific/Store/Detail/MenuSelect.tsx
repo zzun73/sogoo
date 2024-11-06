@@ -1,11 +1,13 @@
 import { useState } from "react";
-import MenuItem from "@mui/material/MenuItem";
-import FormControl from "@mui/material/FormControl";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
-import List from "@mui/material/List";
-import ListItem from "@mui/material/ListItem";
-import ListItemText from "@mui/material/ListItemText";
-import IconButton from "@mui/material/IconButton";
+import {
+  MenuItem,
+  FormControl,
+  List,
+  ListItem,
+  ListItemText,
+  IconButton,
+} from "@mui/material";
 import { Add, Remove, Close } from "@mui/icons-material";
 import { menuData } from "../../../../assets/dummyData";
 import Button from "@mui/material/Button";
@@ -41,13 +43,19 @@ const MenuSelect = () => {
       (item: Item) => item.id === selectedId
     );
 
-    if (selectedItem && !selectedItems.find((item) => item.id === selectedId)) {
+    if (
+      selectedItem &&
+      !selectedItems.find(
+        (item) => item.id === selectedId && item.category === category
+      )
+    ) {
       setSelectedItems([
         ...selectedItems,
         { ...selectedItem, quantity: 1, category },
       ]);
     }
     setSelectedItemId("");
+    setCategory("");
   };
 
   const renderOptions = () => {
@@ -79,7 +87,8 @@ const MenuSelect = () => {
   ) => {
     setSelectedItems((prevItems) =>
       prevItems.map((item) =>
-        (item.id === id || item.category == category) &&
+        item.id === id &&
+        item.category == category &&
         item.quantity + amount > 0
           ? { ...item, quantity: item.quantity + amount }
           : item
@@ -127,7 +136,7 @@ const MenuSelect = () => {
           </Select>
         </FormControl>
       )}
-      <List className="h-[400px] ">
+      <List className="max-h-[300px] overflow-y-auto w-full overscroll-auto">
         {selectedItems.map((item) => (
           <ListItem
             key={`${item.category}${item.id}`}
