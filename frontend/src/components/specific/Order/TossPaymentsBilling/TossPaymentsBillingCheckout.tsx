@@ -2,9 +2,9 @@ import { loadTossPayments, TossPaymentsPayment } from "@tosspayments/tosspayment
 import { useEffect, useState } from "react";
 import useRootStore from "../../../../stores";
 
-const BILLING_CLIENT_KEY = import.meta.env.VITE_TOSS_PAYMENTS_BILLING_CLIENT_KEY;
-
 const TossPaymentsBillingCheckout = () => {
+  const BILLING_CLIENT_KEY = import.meta.env.VITE_TOSS_PAYMENTS_BILLING_CLIENT_KEY;
+
   const memberInfo = useRootStore().memberInfo;
   const customerKey = memberInfo!.uuid; // 구매자 UUID
   const [payment, setPayment] = useState<TossPaymentsPayment | null>(null);
