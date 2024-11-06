@@ -2,6 +2,7 @@ package com.ssafy.c107.main.domain.members.service;
 
 
 import com.ssafy.c107.main.domain.food.entity.Food;
+import com.ssafy.c107.main.domain.members.dto.BuyerReviewDto;
 import com.ssafy.c107.main.domain.members.dto.response.BuyerResponse;
 import com.ssafy.c107.main.domain.members.dto.response.FoodTradesResponse;
 import com.ssafy.c107.main.domain.members.dto.response.ReviewsResponse;
@@ -112,6 +113,7 @@ public class BuyerServiceImpl implements BuyerService {
 
                 //리뷰가 써진 경우
                 if (or.isPresent()) {
+                    Review review = or.get();
                     reviews.add(ReviewsResponse
                         .builder()
                         .foodId(food.getId())
@@ -119,6 +121,12 @@ public class BuyerServiceImpl implements BuyerService {
                         .foodImg(food.getImg())
                         .reviewStatus(true)
                         .orderListId(orderList.getId())
+                        .review(BuyerReviewDto
+                            .builder()
+                            .reviewComment(review.getComment())
+                            .reviewId(review.getId())
+                            .reviewImg(review.getImg())
+                            .build())
                         .build());
                 } else {
                     //리뷰가 없는데 구매일 7일 이내일 경우

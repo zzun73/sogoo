@@ -1,1 +1,22 @@
 INSERT INTO business_certification(business_number) values ('11111111'), ('11111112'),('11111113'),('11111114'),('11111115'),('11111116'),('11111117'),('11111118'),('11111119'),('11111120');
+INSERT INTO members(address, birth, email, name, password, phone_number, role, with_drawal_status, created_at, updated_at)
+VALUES('광주광역시', '990101', 'example1@ssafy.com', '김싸피1', '1234', '01000000000','BUYER','ACTIVE', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+	('광주광역시', '990101', 'example2@ssafy.com', '김싸피2', '1234', '01000000001','BUYER','ACTIVE', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+	('광주광역시', '990101', 'example3@ssafy.com', '김싸피3', '1234', '01000000002','BUYER','ACTIVE', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+	('광주광역시', '990101', 'example4@ssafy.com', '김싸피4', '1234', '01000000003','BUYER','ACTIVE', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+	('광주광역시', '990101', 'example5@ssafy.com', '김싸피5', '1234', '01000000004','BUYER','ACTIVE', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+	('광주광역시', '990101', 'example6@ssafy.com', '김싸피6', '1234', '01000000005','BUYER','ACTIVE', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+	('광주광역시', '990101', 'example7@ssafy.com', '김싸피7', '1234', '01000000006','BUYER','ACTIVE', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+	('광주광역시', '990101', 'example8@ssafy.com', '김싸피8', '1234', '01000000007','BUYER','ACTIVE', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+	('광주광역시', '990101', 'example9@ssafy.com', '김싸피9', '1234', '01000000008','BUYER','ACTIVE', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+	('광주광역시', '990101', 'example10@ssafy.com', '김싸피10', '1234', '01000000009','BUYER','ACTIVE', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+	('광주광역시', '990101', 'example11@ssafy.com', '김싸피11', '1234', '01000000010','SELLER','ACTIVE', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+	('광주광역시', '990101', 'example12@ssafy.com', '김싸피12', '1234', '01000000011','SELLER','ACTIVE', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+	('광주광역시', '990101', 'example13@ssafy.com', '김싸피13', '1234', '01000000012','SELLER','ACTIVE', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+	('광주광역시', '990101', 'example14@ssafy.com', '김싸피14', '1234', '01000000013','SELLER','ACTIVE', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+	('광주광역시', '990101', 'example15@ssafy.com', '김싸피15', '1234', '01000000014','SELLER','ACTIVE', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+	('광주광역시', '990101', 'example16@ssafy.com', '김싸피16', '1234', '01000000015','SELLER','ACTIVE', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+	('광주광역시', '990101', 'example17@ssafy.com', '김싸피17', '1234', '01000000016','SELLER','ACTIVE', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+	('광주광역시', '990101', 'example18@ssafy.com', '김싸피18', '1234', '01000000017','SELLER','ACTIVE', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+	('광주광역시', '990101', 'example19@ssafy.com', '김싸피19', '1234', '01000000018','SELLER','ACTIVE', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+	('광주광역시', '990101', 'example20@ssafy.com', '김싸피20', '1234', '01000000019','SELLER','ACTIVE', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
