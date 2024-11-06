@@ -4,8 +4,12 @@ import com.ssafy.c107.main.domain.members.entity.Member;
 import com.ssafy.c107.main.domain.members.exception.MemberNotFoundException;
 import com.ssafy.c107.main.domain.members.repository.BusinessCertificationRepository;
 import com.ssafy.c107.main.domain.members.repository.MemberRepository;
+import jakarta.annotation.PostConstruct;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.context.event.EventListener;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -42,5 +46,14 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public boolean sellerCheck(String sellerNumber) {
         return businessCertificationRepository.existsByBusinessNumber(sellerNumber);
+    }
+
+    @EventListener(ApplicationReadyEvent.class)
+    @Transactional
+    public void init(){
+        List<Member> members = memberRepository.findAll();
+        for (Member member : members) {
+            member.updateUUID();
+        }
     }
 }
