@@ -1,4 +1,3 @@
-import { DataGridPro } from "@mui/x-data-grid-pro";
 import Box from "../../../common/Box";
 
 const ScheduledProducts = () => {
