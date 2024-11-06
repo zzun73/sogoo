@@ -95,7 +95,6 @@ const OrderForm = () => {
                 customerEmail: memberInfo!.email,
                 amount: 20000,
               }}
-              returnPath="/"
             />
           )}
         </div>

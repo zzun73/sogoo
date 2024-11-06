@@ -5,5 +5,4 @@ interface TossPaymentsCheckoutProps {
     customerEmail: string;
     amount: number;
   };
-  returnPath?: string;
 }
