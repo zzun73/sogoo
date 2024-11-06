@@ -8,6 +8,7 @@ interface SubscribeCardProps {
 
 const SubscribeCard: React.FC<SubscribeCardProps> = ({ storeId, round }) => {
   const [openPlusFood, setOpenPlusFood] = useState<boolean>(false);
+  const [selectedFoods, setSelectedFoods] = useState<FoodInfo[]>([]);
 
   const handlePlusFoodOpen = () => {
     setOpenPlusFood(true);
@@ -18,6 +19,8 @@ const SubscribeCard: React.FC<SubscribeCardProps> = ({ storeId, round }) => {
   };
 
   const roundValue = round + 1;
+
+  console.log(selectedFoods);
 
   return (
     <div className="w-full flex flex-col p-2 justify-center">
@@ -34,6 +37,8 @@ const SubscribeCard: React.FC<SubscribeCardProps> = ({ storeId, round }) => {
         open={openPlusFood}
         onClose={handlePlusFoodClose}
         storeId={Number(storeId)}
+        selectedFoods={selectedFoods} // 추가
+        setSelectedFoods={setSelectedFoods} // 추가
       />
     </div>
   );
