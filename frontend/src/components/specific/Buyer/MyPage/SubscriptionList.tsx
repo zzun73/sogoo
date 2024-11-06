@@ -24,8 +24,8 @@ const SubscriptionList = ({ subscriptions }: SubscriptionListProps) => {
                   boxShadow: "0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23)",
                 }}
               >
-                <CardActionArea sx={{ display: "flex" }}>
-                  <CardContent>
+                <CardActionArea sx={{ display: "flex", justifyContent: "left" }}>
+                  <CardContent sx={{ width: "100%", height: "150px", display: "flex", flexDirection: "column", justifyContent: "center" }}>
                     <Typography gutterBottom variant="h5" component="div">
                       {item.subscribeName}
                     </Typography>
@@ -36,7 +36,7 @@ const SubscriptionList = ({ subscriptions }: SubscriptionListProps) => {
                       구독 기간 | {item.SubscribePeriod}
                     </Typography>
                     <Typography variant="body2" sx={{ color: "text.secondary" }}>
-                      결제 금액 | {item.subscribePrice}
+                      결제 금액 | {item.subscribePrice}원
                     </Typography>
                   </CardContent>
                 </CardActionArea>

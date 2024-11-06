@@ -17,7 +17,7 @@ const TossPaymentsCheckoutSuccess = () => {
       // TODO: API를 호출해서 서버에게 paymentKey, orderId, amount를 넘겨주세요.
       // 서버에선 해당 데이터를 가지고 승인 API를 호출하면 결제가 완료됩니다.
       // https://docs.tosspayments.com/reference#%EA%B2%B0%EC%A0%9C-%EC%8A%B9%EC%9D%B8
-      const response = await fetch("/sandbox-dev/api/v1/payments/confirm", {
+      const response = await fetch("https://www.sogoo.kr/api/payments/confirm", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -89,21 +89,6 @@ const TossPaymentsCheckoutSuccess = () => {
           <button className="w-full px-[22px] py-[11px] rounded-lg text-[#3282f6] bg-[#f9fcff]" onClick={goToMypage}>
             마이페이지
           </button>
-          {/* <div className="w-full mt-8 flex flex-col justify-center gap-4">
-            <div className="flex" style={{ gap: "16px" }}>
-              <a className="w-full px-[22px] py-[11px] rounded-lg" href="https://developers.tosspayments.com/sandbox">
-                다시 테스트하기
-              </a>
-              <a
-                className="w-full px-[22px] py-[11px] rounded-lg"
-                href="https://docs.tosspayments.com/guides/v2/payment-widget/integration"
-                target="_blank"
-                rel="noopner noreferer"
-              >
-                결제 연동 문서가기
-              </a>
-            </div>
-          </div> */}
         </div>
       ) : (
         <div className="flex flex-col justify-between items-center mt-[72px] w-full h-[400px] max-w-[540px]">
