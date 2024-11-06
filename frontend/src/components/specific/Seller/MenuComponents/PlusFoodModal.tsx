@@ -48,8 +48,14 @@ const PlusFoodModal: React.FC<PlusFoodProps> = ({ open, onClose, storeId }) => {
   };
 
   const handleDrop = (event: React.DragEvent) => {
+    if (selectedFoods.length >= 3) {
+      alert("한 주차에 상품은 최대 3개까지만 등록할 수 있습니다.");
+      return;
+    }
+
     const foodId = parseInt(event.dataTransfer.getData("foodId"));
     const food = foods.find((f: Food) => f.foodId === foodId);
+
     if (food && !selectedFoods.some((selected) => selected.foodId === foodId)) {
       setSelectedFoods((prev) => [...prev, food]);
 
