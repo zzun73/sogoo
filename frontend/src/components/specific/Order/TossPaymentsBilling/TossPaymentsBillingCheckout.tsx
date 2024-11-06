@@ -2,7 +2,7 @@ import { loadTossPayments, TossPaymentsPayment } from "@tosspayments/tosspayment
 import { useEffect, useState } from "react";
 import useRootStore from "../../../../stores";
 
-const CLIENT_KEY = import.meta.env.VITE_TOSS_PAYMENTS_BILLING_CLIENT_KEY;
+const BILLING_CLIENT_KEY = import.meta.env.VITE_TOSS_PAYMENTS_BILLING_CLIENT_KEY;
 
 const TossPaymentsBillingCheckout = () => {
   const memberInfo = useRootStore().memberInfo;
@@ -14,7 +14,7 @@ const TossPaymentsBillingCheckout = () => {
   useEffect(() => {
     async function fetchPayment() {
       try {
-        const tossPayments = await loadTossPayments(CLIENT_KEY);
+        const tossPayments = await loadTossPayments(BILLING_CLIENT_KEY);
         const paymentInstance = tossPayments.payment({
           customerKey,
         });
