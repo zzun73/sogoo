@@ -24,8 +24,11 @@ const TossPaymentsCheckout = ({
 
   useEffect(() => {
     async function fetchPaymentWidgets() {
+      console.log("1번");
       const tossPayments = await loadTossPayments(clientKey);
+      console.log("2번 tossPayments", tossPayments);
       const widgets = tossPayments.widgets({ customerKey: memberInfo!.uuid });
+      console.log("3번 widgets", widgets);
       setWidgets(widgets);
     }
 

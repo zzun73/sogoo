@@ -15,10 +15,11 @@ const TossPaymentsBillingCheckout = () => {
     async function fetchPayment() {
       try {
         const tossPayments = await loadTossPayments(CLIENT_KEY);
-        const payment = tossPayments.payment({
+        const paymentInstance = tossPayments.payment({
           customerKey,
         });
-        setPayment(payment);
+        setPayment(paymentInstance);
+        console.log("Payment instance:", paymentInstance);
       } catch (error) {
         console.error("Error fetching payment:", error);
       }
