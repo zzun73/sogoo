@@ -127,6 +127,7 @@ const ReviewManagement = ({ reviews }: ReviewManagementProps) => {
                   </CardContent>
                 </AccordionSummary>
                 <AccordionDetails>
+                  <hr className="mb-5" />
                   {!item.reviewStatus && (
                     <>
                       <TextField
@@ -177,6 +178,15 @@ const ReviewManagement = ({ reviews }: ReviewManagementProps) => {
                         onImageSelect={(file) => handleImageSelect(item.orderListId, file)}
                         selectedImage={reviewInput.find((input) => input.reviewId === item.orderListId)?.imgPreview || null}
                       />
+                    </>
+                  )}
+                  {item.reviewStatus && (
+                    <>
+                      <h5>작성한 리뷰</h5>
+                      <div className="flex items-center">
+                        <img src={item.review?.reviewImg} alt={`리뷰 이미지 ${item.review?.reviewId}`} className="w-[200px]" />
+                        <p>{item.review?.reviewComment}</p>
+                      </div>
                     </>
                   )}
                 </AccordionDetails>
