@@ -12,18 +12,8 @@ import { Add, Remove, Close } from "@mui/icons-material";
 import { menuData } from "../../../../assets/dummyData";
 import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
-
-interface Item {
-  id: number;
-  name: string;
-  price: number;
-  beforePrice?: number;
-}
-
-interface SelectedItem extends Item {
-  quantity: number;
-  category: string;
-}
+import { useNavigate, useParams } from "react-router-dom";
+import useRootStore from "../../../../stores";
 
 const MenuSelect = () => {
   const [category, setCategory] = useState("");
@@ -43,7 +33,6 @@ const MenuSelect = () => {
       (item: Item) => item.id === selectedId
     );
 
-    // 구독 상품은 하나만 선택 가능하도록 경고 표시
     if (
       category === "subscribe" &&
       selectedItems.find((item) => item.category === "subscribe")
@@ -116,6 +105,47 @@ const MenuSelect = () => {
     setSelectedItems((prevItems) =>
       prevItems.filter((item) => item.id !== id || item.category !== category)
     );
+  };
+
+  // 여기부터는 장바구니!
+  const navigate = useNavigate();
+  const { id } = useParams();
+  const { storeId, subscribe, setFoodList, setSubscribe, setStoreId } =
+    useRootStore();
+
+  const goToCart = () => {
+    const currentStoreId = Number(id);
+
+    // 현재 장바구니에 담긴 상품의 storeId와 비교
+    if (storeId && storeId !== currentStoreId) {
+      alert("장바구니에는 한 가게의 상품만 담을 수 있습니다.");
+      return;
+    }
+    setFoodList([]);
+    // 장바구니에 상품이 없으면 현재 storeId로 설정
+    if (!storeId) {
+      setStoreId(currentStoreId);
+    }
+
+    // 구독 상품 추가
+    const subItem = selectedItems.find((item) => item.category === "subscribe");
+    if (subItem) {
+      if (subscribe) {
+        alert("구독 상품은 1개만 선택 가능합니다.");
+        return;
+      } else {
+        setSubscribe(subItem);
+      }
+      setStoreId(currentStoreId);
+    }
+
+    // 개별 상품(foodList) 추가
+    const foodItems = selectedItems.filter((item) => item.category === "foods");
+    if (foodItems.length) {
+      setFoodList(foodItems);
+    }
+    // 장바구니 페이지로 이동
+    navigate("/orders/cart");
   };
 
   return (
@@ -201,6 +231,7 @@ const MenuSelect = () => {
       </List>
       <Stack direction="row" spacing={5}>
         <Button
+          onClick={goToCart}
           variant="contained"
           className="w-full h-10"
           disabled={selectedItems.length === 0}
