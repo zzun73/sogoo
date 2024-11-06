@@ -7,6 +7,9 @@ import com.ssafy.c107.main.domain.members.exception.MemberExistException;
 import com.ssafy.c107.main.domain.members.exception.MemberNotFoundException;
 import com.ssafy.c107.main.domain.members.exception.SellerNotFoundException;
 import com.ssafy.c107.main.domain.order.exception.OrderListNotFoundException;
+import com.ssafy.c107.main.domain.pay.exception.BillingAuthFailedException;
+import com.ssafy.c107.main.domain.pay.exception.BillingChargeFailedException;
+import com.ssafy.c107.main.domain.pay.exception.ConfirmPaymentFailedException;
 import com.ssafy.c107.main.domain.review.exception.InvalidOrderListException;
 import com.ssafy.c107.main.domain.review.exception.MaxUploadSizeExceededException;
 import com.ssafy.c107.main.domain.review.exception.ReviewNotFoundException;
@@ -89,6 +92,21 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(SummeryNotFoundException.class)
     public ResponseEntity<String> handleSummeryNotFoundException(SummeryNotFoundException e) {
+        return ResponseEntity.status(e.getStatus()).body(e.getMessage());
+    }
+
+    @ExceptionHandler(BillingAuthFailedException.class)
+    public ResponseEntity<String> handleBillingAuthFailedException(BillingAuthFailedException e) {
+        return ResponseEntity.status(e.getStatus()).body(e.getMessage());
+    }
+
+    @ExceptionHandler(BillingChargeFailedException.class)
+    public ResponseEntity<String> handleBillingChargeFailedException(BillingChargeFailedException e) {
+        return ResponseEntity.status(e.getStatus()).body(e.getMessage());
+    }
+
+    @ExceptionHandler(ConfirmPaymentFailedException.class)
+    public ResponseEntity<String> handleConfirmPaymentFailedException(ConfirmPaymentFailedException e) {
         return ResponseEntity.status(e.getStatus()).body(e.getMessage());
     }
 }
