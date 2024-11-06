@@ -3,7 +3,7 @@ import { loadTossPayments, TossPaymentsWidgets } from "@tosspayments/tosspayment
 import useRootStore from "../../../../stores";
 
 const generateRandomString = () => window.btoa(Math.random().toString()).slice(0, 20);
-const clientKey = import.meta.env.VITE_TOSS_PAYMENTS_CLIENT_KEY;
+const NORMAL_CLIENT_KEY = import.meta.env.VITE_TOSS_PAYMENTS_CLIENT_KEY;
 
 const TossPaymentsCheckout = ({
   orderData = {
@@ -25,7 +25,7 @@ const TossPaymentsCheckout = ({
   useEffect(() => {
     async function fetchPaymentWidgets() {
       console.log("1번");
-      const tossPayments = await loadTossPayments(clientKey);
+      const tossPayments = await loadTossPayments(NORMAL_CLIENT_KEY);
       console.log("2번 tossPayments", tossPayments);
       const widgets = tossPayments.widgets({ customerKey: memberInfo!.uuid });
       console.log("3번 widgets", widgets);
