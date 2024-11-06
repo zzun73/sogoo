@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { loadTossPayments, TossPaymentsWidgets } from "@tosspayments/tosspayments-sdk";
 import useRootStore from "../../../../stores";
 
+const NORMAL_CLIENT_KEY = import.meta.env.VITE_TOSS_PAYMENTS_NORMAL_CLIENT_KEY;
+
 const TossPaymentsCheckout = ({
   orderData = {
     orderName: "토스 티셔츠 외 2건",
@@ -9,11 +11,7 @@ const TossPaymentsCheckout = ({
     customerEmail: "KimSSAFY@abcdeSSAFY.com",
     amount: 20000,
   },
-  returnPath = "/",
 }: TossPaymentsCheckoutProps) => {
-  const generateRandomString = () => window.btoa(Math.random().toString()).slice(0, 20);
-  const NORMAL_CLIENT_KEY = import.meta.env.VITE_TOSS_PAYMENTS_CLIENT_KEY;
-
   const memberInfo = useRootStore().memberInfo;
   const [, setReady] = useState(false);
   const [widgets, setWidgets] = useState<TossPaymentsWidgets | null>(null);
@@ -60,13 +58,7 @@ const TossPaymentsCheckout = ({
     renderPaymentWidgets();
   }, [widgets, amount]);
 
-  const createRedirectUrl = (type: "success" | "fail") => {
-    const baseUrl = window.location.origin;
-    const currentPath = encodeURIComponent(location.pathname); // 현재 경로 저장
-    const redirectPath = encodeURIComponent(returnPath); // 최종 목적지 경로 저장
-
-    return `${baseUrl}/orders/${type}?` + `currentPath=${currentPath}&` + `redirectPath=${redirectPath}&` + `orderId=${generateRandomString()}`; // 주문 ID도 함께 전달
-  };
+  const generateRandomString = () => window.btoa(Math.random().toString()).slice(0, 20);
 
   return (
     <div className="flex flex-col items-center overflow-auto w-full">
@@ -85,8 +77,8 @@ const TossPaymentsCheckout = ({
                   orderName: orderData.orderName,
                   customerName: orderData.customerName,
                   customerEmail: orderData.customerEmail,
-                  successUrl: createRedirectUrl("success"),
-                  failUrl: createRedirectUrl("fail"),
+                  successUrl: window.location.origin + "/orders/success",
+                  failUrl: window.location.origin + "/orders/fail",
                 });
               } catch (error) {
                 console.error("Payment request failed:", error);
