@@ -82,6 +82,65 @@ const useGetFoodListForSubscribe = (storeId: StoreId) => {
   return foods;
 };
 
+/**
+ * 판매자 마이페이지(판매 현황)
+ */
+const useGetSalesOverview = (storeId: StoreId) => {
+  const { data } = useQuery({
+    queryKey: keys.getSalesOverview(storeId),
+    queryFn: () => sogoo.getSalesOverview(storeId),
+  });
+
+  // const overview = data?.data;
+};
+/**
+ * 판매자 마이페이지(월별 매출)
+ */
+const useGetMonthlySales = (storeId: StoreId) => {
+  const { data } = useQuery({
+    queryKey: keys.getMonthlySales(storeId),
+    queryFn: () => sogoo.getMonthlySales(storeId),
+  });
+};
+/**
+ * 판매자 마이페이지(다음주 출고량)
+ */
+const useGetScheduledProduct = (storeId: StoreId) => {
+  const { data } = useQuery({
+    queryKey: keys.getScheduledProduct(storeId),
+    queryFn: () => sogoo.getScheduledProduct(storeId),
+  });
+};
+/**
+ * 판매자 마이페이지(당일 매출 현황)
+ */
+const useGetTodaySales = (storeId: StoreId) => {
+  const { data } = useQuery({
+    queryKey: keys.getTodaySales(storeId),
+    queryFn: () => sogoo.getTodaySales(storeId),
+  });
+};
+/**
+ * 판매자 마이페이지(전체 리뷰)
+ */
+const useGetReviewList = (storeId: StoreId) => {
+  const { data } = useQuery({
+    queryKey: keys.getReviewList(storeId),
+    queryFn: () => sogoo.getReviewList(storeId),
+  });
+};
+/**
+ * 판매자 마이페이지(상품 리뷰)
+ * @param storeId 가게 id
+ * @param foodId 상품 id
+ */
+const useGetProductReview = (storeId: StoreId, foodId: FoodId) => {
+  const { data } = useQuery({
+    queryKey: keys.getProductReview(storeId, foodId),
+    queryFn: () => sogoo.getProductReview(storeId, foodId),
+  });
+};
+
 export {
   useCheckEmail,
   useCheckSeller,
@@ -89,4 +148,10 @@ export {
   useGetBuyerMyPage,
   useGetMyStores,
   useGetFoodListForSubscribe,
+  useGetMonthlySales,
+  useGetSalesOverview,
+  useGetScheduledProduct,
+  useGetTodaySales,
+  useGetReviewList,
+  useGetProductReview,
 };

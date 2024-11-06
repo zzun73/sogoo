@@ -26,4 +26,11 @@ export default {
       },
     });
   },
+  /**
+   * 매장 상세 메뉴 조회
+   * @param storeId 가게 id
+   */
+  getStoreMenu: async (storeId: StoreId) => {
+    return axios.get(`/subscribe/all/${storeId}`);
+  },
 };

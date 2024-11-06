@@ -3,6 +3,7 @@ import member from "./member";
 import store from "./store";
 import food from "./food";
 import payment from "./payment";
+import seller from "./seller";
 
 export default {
   ...auth,
@@ -10,4 +11,5 @@ export default {
   ...member,
   ...food,
   ...payment,
+  ...seller,
 };
