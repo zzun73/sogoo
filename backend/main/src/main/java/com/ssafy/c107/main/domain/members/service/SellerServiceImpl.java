@@ -264,7 +264,7 @@ public class SellerServiceImpl implements SellerService {
     @Override
     public SellerReviewAllResponse getAllReview(Long storeId, Long userId) {
         memberValidator.validStoreAndMember(storeId, userId);
-        
+
         int positiveCnt = reviewRepository.getCount(storeId, true);
         int negativeCnt = reviewRepository.getCount(storeId, false);
         return SellerReviewAllResponse
@@ -276,7 +276,9 @@ public class SellerServiceImpl implements SellerService {
     }
 
     @Override
-    public ReviewDetailResponse getProductReview(Long storeId, Long foodId) {
+    public ReviewDetailResponse getProductReview(Long storeId, Long foodId, Long userId) {
+        memberValidator.validStoreAndMember(storeId, userId);
+
         //전체 상품일 때
         if (foodId == -1) {
             //차트 정보 가져오기

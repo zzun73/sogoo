@@ -77,7 +77,8 @@ public class SellerController {
         if (!customUserDetails.getUserRole().getRole().equals("SELLER")) {
             throw new InvalidMemberRoleException();
         }
-        return ResponseEntity.ok(sellerService.getProductReview(storeId, foodId));
+        Long userId = customUserDetails.getUserId();
+        return ResponseEntity.ok(sellerService.getProductReview(storeId, foodId, userId));
     }
 
     @GetMapping("/all-product/{storeId}")
