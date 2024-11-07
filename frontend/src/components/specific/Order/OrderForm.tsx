@@ -1,5 +1,5 @@
-import { ChangeEvent, useState } from "react";
-// import { useLocation } from "react-router-dom";
+import { ChangeEvent, useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 import { TextField } from "@mui/material";
 import { DataGrid, GridColDef, GridRowsProp } from "@mui/x-data-grid";
 
@@ -8,19 +8,64 @@ import TossPaymentsBillingCheckout from "./TossPaymentsBilling/TossPaymentsBilli
 import useRootStore from "../../../stores";
 import formatters from "../../../utils/formatters";
 
+// interface CartItemData {
+//   id: number;
+//   name: string;
+//   price: number;
+//   beforePrice?: number;
+//   quantity: number;
+//   category: string;
+//   image?: string;
+// }
+
 const OrderForm = () => {
-  // const location = useLocation();
-  const memberInfo = useRootStore().memberInfo;
+  const location = useLocation();
+  const { memberInfo, foodList, subscribe } = useRootStore();
   const [recipientAddress, setRecipientAddress] = useState<string>("");
   const [request, setRequest] = useState<string>("");
   const [isSubscription, setIsSubscription] = useState(false);
+  const [rows, setRows] = useState<GridRowsProp>([]);
+
+  const selectedItems = [1, 3];
+
+  useEffect(() => {
+    if (location.state?.isSubscription) {
+      setIsSubscription(true);
+    } else {
+      setIsSubscription(false);
+    }
+
+    if (isSubscription) {
+      const subscriptionItem = [
+        {
+          id: subscribe?.id,
+          productName: subscribe?.name,
+          productCount: 1,
+          productPrice: subscribe?.price,
+        },
+      ];
+
+      setRows(subscriptionItem);
+    } else {
+      const filteredFoodItems = foodList!.filter((item) => selectedItems.includes(item.id));
+      console.log(filteredFoodItems);
+      const foodItems = filteredFoodItems.map((item) => ({
+        id: item.id,
+        productName: item.name,
+        productCount: item.count,
+        productPrice: item.price,
+      }));
+
+      setRows(foodItems);
+    }
+  }, [location.state?.isSubscription]);
 
   // 주문 상품 목록 DataGrid 관련 데이터(rows, columns)
-  const rows: GridRowsProp = [
-    { id: 1, productName: "Hello", productCount: 1, productPrice: 10000 },
-    { id: 2, productName: "DataGridPro", productCount: 3, productPrice: 8000 },
-    { id: 3, productName: "MUI", productCount: 2, productPrice: 7000 },
-  ];
+  // const rows: GridRowsProp = [
+  //   { id: 1, productName: "Hello", productCount: 1, productPrice: 10000 },
+  //   { id: 2, productName: "DataGridPro", productCount: 3, productPrice: 8000 },
+  //   { id: 3, productName: "MUI", productCount: 2, productPrice: 7000 },
+  // ];
 
   const columns: GridColDef[] = [
     { field: "productName", headerName: "상품 명", type: "string", flex: 300 },
