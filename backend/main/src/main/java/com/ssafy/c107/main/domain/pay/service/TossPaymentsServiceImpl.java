@@ -91,7 +91,7 @@ public class TossPaymentsServiceImpl implements TossPaymentsService {
                         .order(savedOrder)
                         .food(food)
                         .count(item.getCount())
-                        .price(item.getPrice())
+                        .price(item.getCount() * food.getPrice()) // 개별 반찬별 결제 금액
                         .build());
             }
             return response.getBody();

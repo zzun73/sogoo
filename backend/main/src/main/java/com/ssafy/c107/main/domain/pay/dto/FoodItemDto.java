@@ -7,5 +7,4 @@ import lombok.Data;
 public class FoodItemDto {
     private Long foodId;
     private Integer count;  // 주문 수량
-    private Integer price;  // 개별 음식 가격
 }
