@@ -19,7 +19,7 @@ public interface SellerService {
 
     TodaySalesResponse getTodaySales(Long storeId, Long userId);
 
-    SellerReviewAllResponse getAllReview(Long storeId);
+    SellerReviewAllResponse getAllReview(Long storeId, Long userId);
 
     ReviewDetailResponse getProductReview(Long storeId, Long foodId);
 

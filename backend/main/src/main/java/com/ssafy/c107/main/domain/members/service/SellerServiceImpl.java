@@ -262,7 +262,9 @@ public class SellerServiceImpl implements SellerService {
     }
 
     @Override
-    public SellerReviewAllResponse getAllReview(Long storeId) {
+    public SellerReviewAllResponse getAllReview(Long storeId, Long userId) {
+        memberValidator.validStoreAndMember(storeId, userId);
+        
         int positiveCnt = reviewRepository.getCount(storeId, true);
         int negativeCnt = reviewRepository.getCount(storeId, false);
         return SellerReviewAllResponse
