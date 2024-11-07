@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
 import useRootStore from "../stores";
+import ChoiceStore from "../components/specific/Seller/MenuComponents/ChoiceStore";
 
 const SellerMyPage = () => {
   const navigate = useNavigate();
@@ -13,10 +14,12 @@ const SellerMyPage = () => {
       navigate("/");
     }
   }, [navigate, isLogin, memberInfo?.role]);
+
   return (
-    <>
+    <div className="min-h-dvh w-full bg-slate-200">
+      <ChoiceStore />
       <Outlet />
-    </>
+    </div>
   );
 };
 
