@@ -2,12 +2,16 @@ import { useMutation } from "@tanstack/react-query";
 import { useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import sogoo from "../../../../services/sogoo";
+import useRootStore from "../../../../stores";
+import formatters from "../../../../utils/formatters";
 
 const TossPaymentsCheckoutSuccess = () => {
+  const memberInfo = useRootStore().memberInfo;
   const [isConfirmed, setIsConfirmed] = useState(false);
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
 
+  const orderName = searchParams.get("orderName");
   const paymentKey = searchParams.get("paymentKey");
   const orderId = searchParams.get("orderId");
   const amount = Number(searchParams.get("amount"));
@@ -38,6 +42,7 @@ const TossPaymentsCheckoutSuccess = () => {
         paymentKey,
         orderId,
         amount,
+        foodItems: JSON.parse(searchParams.get("foodItems") || "[]"),
       };
 
       requestNormalPayment(data);
@@ -68,13 +73,7 @@ const TossPaymentsCheckoutSuccess = () => {
         >
           <img src="https://static.toss.im/illusts/check-blue-spot-ending-frame.png" className="w-[120px] h-[120px]" />
           <h2 className="mt-8 text-[#191f28] font-bold text-2xl">결제를 완료했어요</h2>
-          <div className="w-full mt-[60px] flex flex-col gap-4 text-xl">
-            <div className="flex justify-between">
-              <span className="font-semibold text-[#333d48] text-base">결제 금액</span>
-              <span id="amount" className="font-medium text-[#4e5968] text-base pl-4 break-words text-right">
-                {amount}
-              </span>
-            </div>
+          <div className="w-full my-[60px] flex flex-col gap-4 text-xl">
             <div className="flex justify-between">
               <span className="font-semibold text-[#333d48] text-base">주문번호</span>
               <span id="orderId" className="font-medium text-[#4e5968] text-base pl-4 break-words text-right">
@@ -82,9 +81,27 @@ const TossPaymentsCheckoutSuccess = () => {
               </span>
             </div>
             <div className="flex justify-between">
-              <span className="font-semibold text-[#333d48] text-base">paymentKey</span>
-              <span id="paymentKey" className="font-medium text-[#4e5968] text-base pl-4 break-words text-right">
-                {paymentKey}
+              <span className="font-semibold text-[#333d48] text-base">받는 분</span>
+              <span id="amount" className="font-medium text-[#4e5968] text-base pl-4 break-words text-right">
+                {memberInfo?.name}
+              </span>
+            </div>
+            <div className="flex justify-between">
+              <span className="font-semibold text-[#333d48] text-base">휴대폰</span>
+              <span id="amount" className="font-medium text-[#4e5968] text-base pl-4 break-words text-right">
+                {formatters.formatPhoneNumber(memberInfo?.phoneNumber)}
+              </span>
+            </div>
+            <div className="flex justify-between">
+              <span className="font-semibold text-[#333d48] text-base">구매 상품명</span>
+              <span id="amount" className="font-medium text-[#4e5968] text-base pl-4 break-words text-right">
+                {orderName}
+              </span>
+            </div>
+            <div className="flex justify-between">
+              <span className="font-semibold text-[#333d48] text-base">결제 금액</span>
+              <span id="amount" className="font-medium text-[#4e5968] text-base pl-4 break-words text-right">
+                {amount}원
               </span>
             </div>
           </div>
