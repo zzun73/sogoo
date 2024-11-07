@@ -4,19 +4,6 @@ import "slick-carousel/slick/slick-theme.css";
 import { Card } from "@mui/material";
 import SubscribeSlider from "./SubscribeSlider";
 
-interface FoodProps {
-  foodId: number;
-  foodName: string;
-  foodDescription: string;
-  foodImg: string;
-}
-
-interface WeeklyFood {
-  subscribeDate: string;
-  subscribeRound: number;
-  foods: FoodProps[];
-}
-
 interface WeeklyProps {
   weeklyFood: WeeklyFood[];
 }
