@@ -2,7 +2,6 @@ import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 import { createMemberSlice } from "./memberSlice";
 import { createCartSlice } from "./cartSlice";
-import { subscribe } from "diagnostics_channel";
 
 const useRootStore = create<RootState>()(
   persist(

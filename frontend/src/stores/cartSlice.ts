@@ -28,7 +28,7 @@ export const createCartSlice: StateCreator<RootState, [], [], CartStore> = (
         );
 
         if (existingItemIndex !== -1) {
-          updatedFoodList[existingItemIndex].quantity += newItem.quantity;
+          updatedFoodList[existingItemIndex].count += newItem.count;
         } else {
           updatedFoodList.push(newItem);
         }

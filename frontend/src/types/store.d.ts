@@ -22,7 +22,7 @@ interface Item {
 }
 
 interface SelectedItem extends Item {
-  quantity: number;
+  count: number;
   category: string;
 }
 
