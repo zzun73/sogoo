@@ -48,14 +48,27 @@ const SubscribeCard: React.FC<SubscribeCardProps> = ({
         className="w-full h-32 flex justify-center items-center border-[1px] border-gray-300 rounded px-2 cursor-pointer"
         onClick={handlePlusFoodOpen}
       >
-        <p className="text-base">반찬 추가하기</p>
+        {selectedFoods.length > 0 ? (
+          <div className="flex space-x-10">
+            {selectedFoods.map((food) => (
+              <img
+                key={food.foodId}
+                src={food.foodImg}
+                alt={food.foodName}
+                className="w-28 h-28 rounded"
+              />
+            ))}
+          </div>
+        ) : (
+          <p className="text-base">반찬 추가하기</p>
+        )}
       </div>
       <PlusFoodModal
         open={openPlusFood}
         onClose={handlePlusFoodClose}
         storeId={Number(storeId)}
-        selectedFoods={selectedFoods} // 추가
-        setSelectedFoods={setSelectedFoods} // 추가
+        selectedFoods={selectedFoods}
+        setSelectedFoods={setSelectedFoods}
       />
     </div>
   );
