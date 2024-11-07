@@ -12,7 +12,7 @@ interface StoreInfo {
 const StoreInfo = () => {
   const { id } = useParams();
   const info = useGetStoreDetail(Number(id));
-  console.log("info", info);
+  // console.log("info", info);
   if (!info) {
     return <div className="grid grid-cols-2 h-[500px] gap-x-6"></div>;
   }
