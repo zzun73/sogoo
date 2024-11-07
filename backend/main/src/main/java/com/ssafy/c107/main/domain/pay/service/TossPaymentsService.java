@@ -6,9 +6,10 @@ import com.ssafy.c107.main.domain.pay.dto.PayDto;
 
 public interface TossPaymentsService {
 
-    String confirmPayment(PayDto payDto);
+    String confirmPayment(Long memberId, PayDto payDto);
 
     String prepareBillingAuth(BillingDto billingDto);
 
     String chargeBilling(BillingChargeDto billingChargeDto);
+
 }

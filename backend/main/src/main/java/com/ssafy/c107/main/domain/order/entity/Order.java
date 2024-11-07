@@ -14,6 +14,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -39,4 +40,13 @@ public class Order extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "store_id")
     private Store store;
+
+
+    @Builder
+    public Order(OrderType orderType, int price, Member member, Store store) {
+        this.orderType = orderType;
+        this.price = price;
+        this.member = member;
+        this.store = store;
+    }
 }

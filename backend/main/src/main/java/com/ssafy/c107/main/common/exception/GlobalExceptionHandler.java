@@ -10,10 +10,7 @@ import com.ssafy.c107.main.domain.order.exception.OrderListNotFoundException;
 import com.ssafy.c107.main.domain.pay.exception.BillingAuthFailedException;
 import com.ssafy.c107.main.domain.pay.exception.BillingChargeFailedException;
 import com.ssafy.c107.main.domain.pay.exception.ConfirmPaymentFailedException;
-import com.ssafy.c107.main.domain.review.exception.InvalidOrderListException;
-import com.ssafy.c107.main.domain.review.exception.MaxUploadSizeExceededException;
-import com.ssafy.c107.main.domain.review.exception.ReviewNotFoundException;
-import com.ssafy.c107.main.domain.review.exception.SummeryNotFoundException;
+import com.ssafy.c107.main.domain.review.exception.*;
 import com.ssafy.c107.main.domain.store.exception.StoreNotFoundException;
 import com.ssafy.c107.main.domain.subscribe.exception.SubscribeNotFoundException;
 import com.ssafy.c107.main.domain.subscribe.exception.SubscribeWeekNotFoundException;
@@ -107,6 +104,21 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(ConfirmPaymentFailedException.class)
     public ResponseEntity<String> handleConfirmPaymentFailedException(ConfirmPaymentFailedException e) {
+        return ResponseEntity.status(e.getStatus()).body(e.getMessage());
+    }
+
+    @ExceptionHandler(ReviewAnalysisProcessingException.class)
+    public ResponseEntity<String> handleReviewAnalysisProcessingException(ReviewAnalysisProcessingException e) {
+        return ResponseEntity.status(e.getStatus()).body(e.getMessage());
+    }
+
+    @ExceptionHandler(ReviewInterruptedException.class)
+    public ResponseEntity<String> handleReviewInterruptedException(ReviewInterruptedException e) {
+        return ResponseEntity.status(e.getStatus()).body(e.getMessage());
+    }
+
+    @ExceptionHandler(FastApiCommunicationException.class)
+    public ResponseEntity<String> handleFastApiCommunicationException(FastApiCommunicationException e) {
         return ResponseEntity.status(e.getStatus()).body(e.getMessage());
     }
 }
