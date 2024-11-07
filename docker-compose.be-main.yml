@@ -53,9 +53,6 @@ services:
     ports:
       - "9200:9200"
       - "9300:9300"
-    volumes:
-      - esdata:/usr/share/elasticsearch/data
-      - ./elasticsearch/plugins:/usr/share/elasticsearch/plugins 
     networks:
       - sogoo-network
     restart: always
@@ -66,8 +63,7 @@ services:
       retries: 3
       start_period: 10s
     command: >
-      bash -c "chown -R elasticsearch:elasticsearch /usr/share/elasticsearch/plugins && 
-      ./bin/elasticsearch-plugin install analysis-nori || exit 1; 
+      bash -c "./bin/elasticsearch-plugin install analysis-nori || exit 1; 
       /usr/local/bin/docker-entrypoint.sh"
 
 networks:
@@ -76,4 +72,3 @@ networks:
 
 volumes:
   postgres-data:
-  esdata:
