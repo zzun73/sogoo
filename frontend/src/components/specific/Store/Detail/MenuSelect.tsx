@@ -56,7 +56,7 @@ const MenuSelect = () => {
     if (selectedItem) {
       setSelectedItems([
         ...selectedItems,
-        { ...selectedItem, quantity: 1, category },
+        { ...selectedItem, count: 1, category },
       ]);
     }
     setSelectedItemId("");
@@ -85,17 +85,11 @@ const MenuSelect = () => {
     return null;
   };
 
-  const handleQuantityChange = (
-    id: number,
-    category: string,
-    amount: number
-  ) => {
+  const handleCountChange = (id: number, category: string, amount: number) => {
     setSelectedItems((prevItems) =>
       prevItems.map((item) =>
-        item.id === id &&
-        item.category === category &&
-        item.quantity + amount > 0
-          ? { ...item, quantity: item.quantity + amount }
+        item.id === id && item.category === category && item.count + amount > 0
+          ? { ...item, count: item.count + amount }
           : item
       )
     );
@@ -144,8 +138,12 @@ const MenuSelect = () => {
     if (foodItems.length) {
       setFoodList(foodItems);
     }
+
+    if (confirm("페이지를 이동하시겠습니까?")) {
+      navigate("/orders/cart");
+    }
+
     // 장바구니 페이지로 이동
-    navigate("/orders/cart");
   };
 
   return (
@@ -205,17 +203,13 @@ const MenuSelect = () => {
             {item.category === "foods" && (
               <div className="flex items-center gap-2">
                 <IconButton
-                  onClick={() =>
-                    handleQuantityChange(item.id, item.category, -1)
-                  }
+                  onClick={() => handleCountChange(item.id, item.category, -1)}
                 >
                   <Remove />
                 </IconButton>
-                <span>{item.quantity}</span>
+                <span>{item.count}</span>
                 <IconButton
-                  onClick={() =>
-                    handleQuantityChange(item.id, item.category, 1)
-                  }
+                  onClick={() => handleCountChange(item.id, item.category, 1)}
                 >
                   <Add />
                 </IconButton>
