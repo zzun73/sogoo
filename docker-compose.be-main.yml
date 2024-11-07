@@ -65,6 +65,10 @@ services:
       timeout: 10s
       retries: 3
       start_period: 10s
+    command: >
+      bash -c "chown -R elasticsearch:elasticsearch /usr/share/elasticsearch/plugins && 
+      ./bin/elasticsearch-plugin install analysis-nori || exit 1; 
+      /usr/local/bin/docker-entrypoint.sh"
 
 networks:
   sogoo-network:
