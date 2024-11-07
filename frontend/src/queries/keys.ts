@@ -12,7 +12,11 @@ const keys = {
   getStoreList: () => [...keys.store(), "storeList"],
   getBuyerMypage: () => [...keys.member(), "buyerMyPage"],
   getMyStores: () => [...keys.store(), "myStores"],
-  getFoodListForSubscribe: () => [...keys.food(), "foodListForSubscribe"],
+  getFoodListForSubscribe: (storeId: StoreId) => [
+    ...keys.food(),
+    "foodListForSubscribe",
+    storeId,
+  ],
   getMonthlySales: (storeId: StoreId) => [
     ...keys.store(),
     "monthlySales",
@@ -36,6 +40,7 @@ const keys = {
     storeId,
     foodId,
   ],
+  getAllMenus: (storeId: StoreId) => [...keys.member(), "allMenus", storeId],
 };
 
 export default keys;
