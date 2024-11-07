@@ -131,7 +131,7 @@ const RegisterStoreModal: React.FC<RegisterStoreModalProps> = ({
             <img
               src={previewImage}
               alt="미리보기"
-              className="w-fit object-cover"
+              className="w-fit object-cover aspect-[1/1]"
             />
           ) : (
             <span className="text-gray-500">가게 이미지 등록</span>
