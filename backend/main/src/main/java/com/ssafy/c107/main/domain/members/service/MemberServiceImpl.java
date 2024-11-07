@@ -47,13 +47,4 @@ public class MemberServiceImpl implements MemberService {
     public boolean sellerCheck(String sellerNumber) {
         return businessCertificationRepository.existsByBusinessNumber(sellerNumber);
     }
-
-    @EventListener(ApplicationReadyEvent.class)
-    @Transactional
-    public void init(){
-        List<Member> members = memberRepository.findAll();
-        for (Member member : members) {
-            member.updateUUID();
-        }
-    }
 }
