@@ -41,11 +41,7 @@ const Header = () => {
       <header className="relative flex justify-center z-10">
         <div className="mt-10 mb-5">
           <Link to="/">
-            <img
-              src={LogoImg}
-              alt="소상한 구독"
-              className="w-[120px] drop-shadow-2xl"
-            />
+            <img src={LogoImg} alt="소상한 구독" className="w-[120px] drop-shadow-2xl" />
           </Link>
         </div>
       </header>
@@ -73,7 +69,7 @@ const Header = () => {
               </Link>
             )}
             {isLogin && !isSeller && (
-              <Link to="/cart">
+              <Link to="/orders/cart">
                 <MdOutlineShoppingCart className="w-6 h-6" />
               </Link>
             )}
