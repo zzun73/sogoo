@@ -65,11 +65,6 @@ services:
       timeout: 10s
       retries: 3
       start_period: 10s
-    command: >
-      bash -c "if [ ! -d /usr/share/elasticsearch/plugins/analysis-nori ]; then 
-      ./bin/elasticsearch-plugin install analysis-nori || exit 1; 
-      fi; 
-      /usr/local/bin/docker-entrypoint.sh"
 
 networks:
   sogoo-network:
