@@ -25,5 +25,5 @@ public interface SellerService {
 
     SellerMenuResponse getAllProduct(Long storeId, Long userId);
 
-    FoodListResponse getAllFood(Long storeId);
+    FoodListResponse getAllFood(Long storeId, Long userId);
 }

@@ -350,7 +350,7 @@ public class SellerServiceImpl implements SellerService {
     @Override
     public SellerMenuResponse getAllProduct(Long storeId, Long userId) {
         memberValidator.validStoreAndMember(storeId, userId);
-        
+
         //가게의 구독상품 가져오기
         List<SubscribeDetail> subscribes = new ArrayList<>();
         List<Subscribe> storeSubscribes = subscribeRepository.findAllByStore_Id(storeId);
@@ -387,7 +387,9 @@ public class SellerServiceImpl implements SellerService {
     }
 
     @Override
-    public FoodListResponse getAllFood(Long storeId) {
+    public FoodListResponse getAllFood(Long storeId, Long userId) {
+        memberValidator.validStoreAndMember(storeId, userId);
+        
         List<FoodDetailDto> foods = new ArrayList<>();
         foods.add(FoodDetailDto
             .builder()

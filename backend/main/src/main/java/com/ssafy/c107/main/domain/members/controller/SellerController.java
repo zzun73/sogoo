@@ -97,6 +97,7 @@ public class SellerController {
         if (!customUserDetails.getUserRole().getRole().equals("SELLER")) {
             throw new InvalidMemberRoleException();
         }
-        return ResponseEntity.ok(sellerService.getAllFood(storeId));
+        Long userId = customUserDetails.getUserId();
+        return ResponseEntity.ok(sellerService.getAllFood(storeId, userId));
     }
 }
