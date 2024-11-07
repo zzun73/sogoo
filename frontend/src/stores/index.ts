@@ -19,6 +19,7 @@ const useRootStore = create<RootState>()(
         foodList: state.foodList,
         storeId: state.storeId,
         subscribe: state.subscribe,
+        selectedId: state.selectedId,
       }),
     }
   )

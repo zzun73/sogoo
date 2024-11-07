@@ -6,6 +6,8 @@ import Button from "@mui/material/Button";
 import { useMutation } from "@tanstack/react-query";
 import sogoo from "../../../../services/sogoo";
 import { AxiosError } from "axios";
+import { useQueryClient } from "@tanstack/react-query";
+import keys from "../../../../queries/keys";
 
 const style = {
   position: "absolute",
@@ -33,6 +35,8 @@ const RegisterStoreModal: React.FC<RegisterStoreModalProps> = ({
   const [storeImg, setStoreImg] = useState<File | null>(null);
   const [previewImage, setPreviewImage] = useState<string>("");
 
+  const queryClient = useQueryClient();
+
   const handleImageUpload = (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
@@ -58,7 +62,7 @@ const RegisterStoreModal: React.FC<RegisterStoreModalProps> = ({
         console.log("가게 등록 성공");
         handleModalClose();
 
-        window.location.reload();
+        queryClient.invalidateQueries({ queryKey: keys.getMyStores() });
       }
     },
     onError: (error: AxiosError) => {
