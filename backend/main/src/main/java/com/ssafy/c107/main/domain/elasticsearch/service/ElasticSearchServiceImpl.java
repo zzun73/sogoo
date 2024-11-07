@@ -1,6 +1,5 @@
 package com.ssafy.c107.main.domain.elasticsearch.service;
 
-import co.elastic.clients.elasticsearch._types.query_dsl.QueryBuilders;
 import com.ssafy.c107.main.domain.elasticsearch.dto.FoodInfoDetail;
 import com.ssafy.c107.main.domain.elasticsearch.dto.SearchDetail;
 import com.ssafy.c107.main.domain.elasticsearch.dto.response.SearchResponse;
@@ -10,7 +9,6 @@ import com.ssafy.c107.main.domain.elasticsearch.repository.StoreSearchRepository
 import com.ssafy.c107.main.domain.food.entity.Food;
 import com.ssafy.c107.main.domain.store.entity.Store;
 import com.ssafy.c107.main.domain.store.repository.StoreRepository;
-import jakarta.annotation.PostConstruct;
 import jakarta.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,6 +23,44 @@ public class ElasticSearchServiceImpl implements ElasticSearchService {
 
     private final StoreSearchRepository storeSearchRepository;
     private final StoreRepository storeRepository;
+
+
+//    @EventListener(ApplicationReadyEvent.class)
+//    @Transactional
+//    void postConstruct() {
+//        if (isDevelopmentEnvironment()) { // 개발 환경에서만 실행
+//            storeSearchRepository.deleteAll();
+//            initializeStoreData();
+//        }
+//    }
+//
+//    private boolean isDevelopmentEnvironment() {
+//        return "dev".equals(System.getProperty("spring.profiles.active"));
+//    }
+//
+//    private void initializeStoreData() {
+//        List<Store> stores = storeRepository.findFoods();
+//        for (Store store : stores) {
+//            List<Food> foods = store.getFoods();
+//            List<FoodInfo> foodInfo = foods.stream().map(food -> FoodInfo.builder()
+//                            .foodName(food.getName())
+//                            .price(food.getPrice())
+//                            .description(food.getDescription())
+//                            .build())
+//                    .toList();
+//
+//            StoreSearchDocument document = StoreSearchDocument.builder()
+//                    .id(store.getId())
+//                    .storeName(store.getName())
+//                    .address(store.getAddress())
+//                    .description(store.getDescription())
+//                    .img(store.getImg())
+//                    .foods(foodInfo)
+//                    .build();
+//
+//            storeSearchRepository.save(document);
+//        }
+//    }
 
     @EventListener(ApplicationReadyEvent.class)
     @Transactional
