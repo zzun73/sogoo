@@ -100,15 +100,17 @@ const PlusFoodModal: React.FC<PlusFoodProps> = ({
           onDragOver={handleDragOver}
           className="w-full h-28 flex items-center border-2 border-slate-400 mb-5 px-5 space-x-5"
         >
-          {(Array.isArray(selectedFoods) ? selectedFoods : []).map((food) => (
-            <img
-              key={food.foodId}
-              src={food.foodImg}
-              alt={`${food.foodName} 이미지`}
-              className="w-20 h-20 cursor-pointer"
-              onClick={() => handleRemoveSelectedFood(food.foodId)}
-            />
-          ))}
+          {(Array.isArray(selectedFoods) ? selectedFoods : [])
+            .sort((a, b) => a.foodId - b.foodId)
+            .map((food) => (
+              <img
+                key={food.foodId}
+                src={food.foodImg}
+                alt={`${food.foodName} 이미지`}
+                className="w-20 h-20 cursor-pointer"
+                onClick={() => handleRemoveSelectedFood(food.foodId)}
+              />
+            ))}
         </div>
         {foods?.map((food: FoodInfo) => (
           <div
