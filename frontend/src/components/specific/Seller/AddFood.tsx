@@ -10,8 +10,6 @@ const AddFood: React.FC = () => {
   const queryParams = new URLSearchParams(location.search);
   const storeId = Number(queryParams.get("store"));
 
-  console.log(storeId);
-
   const navigate = useNavigate();
 
   const [foodName, setFoodName] = useState<string>("");
@@ -55,6 +53,21 @@ const AddFood: React.FC = () => {
   });
 
   const initiateAddFood = (): void => {
+    switch (true) {
+      case !foodName:
+        alert("상품명을 입력해 주세요.");
+        return;
+      case !foodImg:
+        alert("상품 이미지를 등록해 주세요");
+        return;
+      case !foodPrice:
+        alert("판매가를 입력해 주세요.");
+        return;
+      case !foodDescription:
+        alert("상품 설명을 입력해 주세요.");
+        return;
+    }
+
     const addFoodForm: AddFoodForm = {
       foodName,
       foodPrice,
@@ -64,8 +77,6 @@ const AddFood: React.FC = () => {
 
     handleAddFood({ addFoodForm, storeId });
   };
-
-  console.log(foodName, foodImg, foodPrice, foodDescription);
 
   return (
     <div className="w-full flex flex-col flex-grow bg-slate-200">
@@ -88,7 +99,7 @@ const AddFood: React.FC = () => {
               <img
                 src={previewImage}
                 alt="미리보기"
-                className="w-fit object-cover"
+                className="w-fit max-h-72"
               />
             ) : (
               <span className="text-gray-500">이미지 등록</span>
