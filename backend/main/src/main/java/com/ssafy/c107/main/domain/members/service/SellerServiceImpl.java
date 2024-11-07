@@ -102,7 +102,9 @@ public class SellerServiceImpl implements SellerService {
     }
 
     @Override
-    public MonthlySalesResponse getMonthlySales(Long storeId) {
+    public MonthlySalesResponse getMonthlySales(Long storeId, Long userId) {
+        memberValidator.validStoreAndMember(storeId, userId);
+
         List<String> monthsData = List.of("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug",
             "Sep", "Oct", "Nov", "Dec");
 

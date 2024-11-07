@@ -13,7 +13,7 @@ public interface SellerService {
 
     SalesStatusResponse getSalesStatus(Long storeId, Long userId);
 
-    MonthlySalesResponse getMonthlySales(Long storeId);
+    MonthlySalesResponse getMonthlySales(Long storeId, Long userId);
 
     NextWeekQuantityResponse getNextCount(Long storeId);
 
