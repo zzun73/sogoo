@@ -24,7 +24,7 @@ const Dashboard: React.FC = () => {
 
   return (
     <div className="flex flex-col gap-y-5 w-full px-[200px] bg-slate-200 py-10">
-      {/* <div className="w-full p-5">
+      <div className="w-full p-5">
         <ChoiceStore onStoreSelect={handleStoreSelect} />
         {selectedStoreId && (
           <p className="mb-5">현재 선택된 가게 ID: {selectedStoreId}</p>
@@ -32,7 +32,7 @@ const Dashboard: React.FC = () => {
         <Button onClick={handleNavigate} variant="contained" size="large">
           판매상품 관리
         </Button>
-      </div> */}
+      </div>
       <SalesOverview />
       <div className="grid grid-cols-2 gap-x-3 w-full">
         <MonthlySales />
