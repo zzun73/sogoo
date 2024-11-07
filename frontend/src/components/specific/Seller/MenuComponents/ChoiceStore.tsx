@@ -3,19 +3,19 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import RegisterStoreModal from "./RegisterStoreModal";
 import { useGetMyStores } from "../../../../queries/queries";
+import useRootStore from "../../../../stores";
 
 interface StoreInfo {
-  storeId: string;
+  storeId: number;
   storeName: string;
 }
 
-interface ChoiceStoreProps {
-  onStoreSelect: (storeId: string | null) => void;
-}
-
-const ChoiceStore: React.FC<ChoiceStoreProps> = ({ onStoreSelect }) => {
-  const [openStoreModal, setOpenStoreModal] = useState<boolean>(false);
-  const [selectedStoreId, setSelectedStoreId] = useState<string | null>(null);
+const ChoiceStore = () => {
+  const { selectedId, setSelectedId } = useRootStore();
+  const [openStoreModal, setOpenStoreModal] = useState(false);
+  const [selectedStoreId, setSelectedStoreId] = useState<number | null>(
+    selectedId
+  );
 
   const handleStoreModalOpen = () => {
     setOpenStoreModal(true);
@@ -32,17 +32,17 @@ const ChoiceStore: React.FC<ChoiceStoreProps> = ({ onStoreSelect }) => {
     if (stores && stores.length > 0) {
       const firstStoreId = stores[0].storeId;
       setSelectedStoreId(firstStoreId);
-      onStoreSelect(firstStoreId);
+      setSelectedId(firstStoreId);
     }
-  }, [stores]);
+  }, []);
 
-  const handleStoreClick = (storeId: string) => {
+  const handleStoreClick = (storeId: number | null) => {
     setSelectedStoreId(storeId);
-    onStoreSelect(storeId);
+    setSelectedId(storeId);
   };
 
   return (
-    <div className="w-screen mb-5">
+    <div className="gap-y-5 w-full py-5 px-[200px]">
       <div className="flex space-x-2">
         {stores && stores.length > 0 ? (
           stores.map((store) => (
@@ -51,7 +51,10 @@ const ChoiceStore: React.FC<ChoiceStoreProps> = ({ onStoreSelect }) => {
               variant={
                 selectedStoreId === store.storeId ? "contained" : "outlined"
               }
-              sx={{ minWidth: "200px", minHeight: "50px" }}
+              sx={{
+                minWidth: "100px",
+                minHeight: "50px",
+              }}
               onClick={() => handleStoreClick(store.storeId)}
             >
               <Typography sx={{ fontSize: "18px", margin: 0 }}>
@@ -65,7 +68,7 @@ const ChoiceStore: React.FC<ChoiceStoreProps> = ({ onStoreSelect }) => {
 
         <Button
           variant="outlined"
-          sx={{ minWidth: "200px", minHeight: "50px" }}
+          sx={{ minWidth: "150px", minHeight: "50px" }}
           onClick={handleStoreModalOpen}
         >
           <Typography sx={{ fontSize: "18px", fontWeight: "bold", margin: 0 }}>

@@ -2,15 +2,31 @@ import formatters from "../../../../utils/formatters";
 import { CiDeliveryTruck } from "react-icons/ci";
 import Box from "../../../common/Box";
 
+import Button from "@mui/material/Button";
+import useRootStore from "../../../../stores";
+import { useNavigate } from "react-router-dom";
+
 const SalesOverview = () => {
+  const { selectedId } = useRootStore();
+  const navigate = useNavigate();
+
+  const handleNavigate = () => {
+    navigate(`/seller/menus?store=${selectedId}`);
+  };
+
   const currentDate = formatters.formatToDate(new Date());
   return (
     <Box className="flex flex-col gap-y-4">
       <div className="flex flex-row gap-x-2">
         <CiDeliveryTruck className="w-8 h-8" />
-        <div className="flex flex-row gap-x-2 items-end">
-          <p className="text-xl font-bold">판매 현황</p>
-          <p className="text-sm text-gray-500">{currentDate}</p>
+        <div className="flex flex-row justify-between w-full items-end">
+          <div className="flex flex-row gap-x-2 items-end">
+            <p className="text-xl font-bold">판매 현황</p>
+            <p className="text-sm text-gray-500">{currentDate}</p>
+          </div>
+          <Button onClick={handleNavigate} variant="contained" size="small">
+            판매상품 관리
+          </Button>
         </div>
       </div>
       <div className="flex flex-row mx-2 justify-between gap-x-3 h-20">
