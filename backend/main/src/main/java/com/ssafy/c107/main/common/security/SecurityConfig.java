@@ -92,7 +92,7 @@ public class SecurityConfig {
             .authorizeHttpRequests((auth) -> auth
                     .requestMatchers("/health-check", "/member/sign-up", "/member/login",
                             "/member/logout", "/member/email-check", "/member/seller-check",
-                        "/member/reissue")               //인가부분
+                        "/member/reissue", "/elastic/search")               //인가부분
                     .permitAll()
                     .anyRequest().authenticated());
 
