@@ -1,5 +1,6 @@
 package com.ssafy.c107.main.domain.review.service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ssafy.c107.main.common.aws.FileService;
 import com.ssafy.c107.main.domain.food.entity.Food;
 import com.ssafy.c107.main.domain.food.exception.FoodNotFoundException;
@@ -9,30 +10,38 @@ import com.ssafy.c107.main.domain.order.entity.OrderList;
 import com.ssafy.c107.main.domain.order.repository.OrderListRepository;
 import com.ssafy.c107.main.domain.review.dto.FoodReviewDto;
 import com.ssafy.c107.main.domain.review.dto.ReviewDto;
+import com.ssafy.c107.main.domain.review.dto.TextInput;
 import com.ssafy.c107.main.domain.review.dto.request.CreateReviewInfoRequest;
+import com.ssafy.c107.main.domain.review.dto.response.FastApiResponse;
 import com.ssafy.c107.main.domain.review.dto.response.FoodDetailResponse;
 import com.ssafy.c107.main.domain.review.dto.response.ReviewInfoResponse;
 import com.ssafy.c107.main.domain.review.dto.response.StoreReviewResponse;
 import com.ssafy.c107.main.domain.review.entity.Review;
-import com.ssafy.c107.main.domain.review.exception.InvalidOrderListException;
-import com.ssafy.c107.main.domain.review.exception.MaxUploadSizeExceededException;
-import com.ssafy.c107.main.domain.review.exception.ReviewNotFoundException;
-import com.ssafy.c107.main.domain.review.exception.SummeryNotFoundException;
+import com.ssafy.c107.main.domain.review.exception.*;
 import com.ssafy.c107.main.domain.review.repository.ReviewRepository;
 import com.ssafy.c107.main.domain.store.entity.Store;
 import com.ssafy.c107.main.domain.store.repository.StoreRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.chat.client.ChatClient;
+import org.springframework.http.*;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 
 @Slf4j
 @Service
+@EnableAsync
 @RequiredArgsConstructor
 public class ReviewServiceImpl implements ReviewService {
     private final ReviewRepository reviewRepository;
@@ -42,53 +51,125 @@ public class ReviewServiceImpl implements ReviewService {
     private final ChatClient chatClient;
     private final StoreRepository storeRepository;
 
-    // 리뷰 작성
-    @Override
-    public void writeReview(Long orderListId, CreateReviewInfoRequest createReviewInfoRequest) {
+    @Async
+    public CompletableFuture<Double> analyzeSentimentWithKoBERT(String comment) {
+        RestTemplate restTemplate = new RestTemplate();
+        ObjectMapper objectMapper = new ObjectMapper();
 
-        // 주문 항목 확인
+        try {
+            String fastApiUrl = "http://localhost:8000/api/predict";
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_JSON);
+
+            // 요청 JSON 데이터 생성
+            String requestJson = objectMapper.writeValueAsString(new TextInput(comment));
+            HttpEntity<String> entity = new HttpEntity<>(requestJson, headers);
+
+            // FastAPI로 POST 요청 보내기
+            ResponseEntity<String> response = restTemplate.exchange(
+                    fastApiUrl, HttpMethod.POST, entity, String.class);
+            log.info("FastAPI 응답 내용: {}", response.getBody());
+
+            if (response.getStatusCode().is2xxSuccessful()) {
+                FastApiResponse fastApiResponse = objectMapper.readValue(response.getBody(), FastApiResponse.class);
+                Double positiveRate = fastApiResponse.getProbabilities().get("positive");
+                log.info("FastAPI에서 추출된 긍정 비율: {}", positiveRate);
+                return CompletableFuture.completedFuture(positiveRate);
+            } else {
+                throw new FastApiCommunicationException();
+            }
+        } catch (Exception e) {
+            log.error("FastAPI 감정 분석 중 오류 발생: {}", e.getMessage(), e);
+            throw new FastApiCommunicationException();
+        }
+    }
+
+    @Async
+    public CompletableFuture<Double> analyzeSentimentWithOpenAI(String content) {
+        try {
+            log.info("OpenAI에 보낼 리뷰 내용: {}", content);
+            String summary = chatClient
+                    .prompt()
+                    .system("당신의 반찬 리뷰에 대해서 감정 분석을해 긍정과 부정의 확률을 제공해주는 역할입니다." +
+                            "다음은 반찬을 시켜먹는 사람들이 쓴 리뷰입니다. " +
+                            "이 리뷰를 감정 분석하여 긍정의 확률을 %로 제공해주세요 (예: 긍정:76.5%)")
+                    .user(content)
+                    .call()
+                    .content();
+
+            if (summary.isEmpty()) {
+                throw new SummeryNotFoundException();
+            }
+
+            log.info("OpenAI로부터 받은 응답: {}", summary);
+            Double openAiResult = extractPositiveRateFromSummary(summary);
+            log.info("OpenAI에서 추출된 긍정 비율: {}", openAiResult);
+            return CompletableFuture.completedFuture(openAiResult);
+        } catch (Exception e) {
+            log.error("OpenAI 감정 분석 중 오류 발생: {}", e.getMessage(), e);
+            throw new SummeryNotFoundException();
+        }
+    }
+
+    // 리뷰 작성
+    @Transactional
+    public void writeReview(Long orderListId, CreateReviewInfoRequest createReviewInfoRequest) {
         OrderList orderList = orderListRepository.findById(orderListId)
                 .orElseThrow(InvalidOrderListException::new);
 
-//        String S3imageUrl = fileService.saveFile(createReviewInfoRequest.getImg());
-//
-//        Review review = Review.builder()
-//                .orderList(orderList)
-//                .comment(createReviewInfoRequest.getComment())
-//                .img(S3imageUrl)
-//                .emotion(false)
-//                .build();
-//        reviewRepository.save(review);
+        CompletableFuture<Double> kobertFuture = analyzeSentimentWithKoBERT(createReviewInfoRequest.getComment());
+        CompletableFuture<Double> openAiFuture = analyzeSentimentWithOpenAI(createReviewInfoRequest.getComment());
 
-        try {
-            String S3imageUrl = fileService.saveFile(createReviewInfoRequest.getImg());
-            Review review = Review.builder()
-                    .orderList(orderList)
-                    .comment(createReviewInfoRequest.getComment())
-                    .img(S3imageUrl)
-                    .emotion(false)
-                    .build();
-            reviewRepository.save(review);
-        } catch (org.springframework.web.multipart.MaxUploadSizeExceededException e) {
-            throw new MaxUploadSizeExceededException();
-        }
+        CompletableFuture<Void> combinedFuture = CompletableFuture.allOf(kobertFuture, openAiFuture);
 
+        combinedFuture.thenRun(() -> {
+            try {
+                double kobertResult = kobertFuture.get(); // KoBert의 긍정 확률
+                double openAiResult = openAiFuture.get();
+
+                double finalPositiveRate = (openAiResult * 0.7) + (kobertResult * 0.3);
+                boolean emotion = finalPositiveRate >= 50.0;
+
+                log.info("최종 긍정 확률: {}%", finalPositiveRate);
+                log.info("Review 엔티티 생성 중...");
+                String S3imageUrl = fileService.saveFile(createReviewInfoRequest.getImg());
+                Review review = Review.builder()
+                        .orderList(orderList)
+                        .comment(createReviewInfoRequest.getComment())
+                        .img(S3imageUrl)
+                        .emotion(emotion)
+                        .build();
+                log.info("Review 엔티티 생성 완료: {}", review);
+
+                log.info("Review 저장 시작...");
+                reviewRepository.save(review);
+                log.info("Review 저장 완료.");
+
+            } catch (ExecutionException | InterruptedException e) {
+                log.error("리뷰 저장 중 오류 발생: {}", e.getMessage(), e);
+                throw new ReviewAnalysisProcessingException(e);
+            } catch (Exception e) {
+                log.error("리뷰 저장 중 일반적인 오류 발생: {}", e.getMessage(), e);
+                throw new ReviewAnalysisProcessingException();
+            }
+        });
     }
 
     // 매일 새벽 4시에 AI 요약 생성 및 저장
     @Scheduled(cron = "0 0 4 * * *")
     @Transactional
-    public void updateDailyReviewSummary(){
+    public void updateDailyReviewSummary() {
         List<Store> stores = storeRepository.findAll();
 
-        for(Store store : stores){
+        for (Store store : stores) {
             Long storeId = store.getId();
 
             // 해당 Store의 모든 리뷰 조회 (Fetch Join 사용 가능)
             List<Review> reviews = reviewRepository.findAllByStoreId(storeId);
 
             // 리뷰가 없으면 다음 Store로 이동
-            if(reviews.isEmpty()){
+            if (reviews.isEmpty()) {
                 continue;
             }
 
@@ -210,5 +291,12 @@ public class ReviewServiceImpl implements ReviewService {
             throw new SummeryNotFoundException();
         }
         return summary;
+    }
+
+    // OpenAI 응답에서 긍정 비율을 추출하는 메서드 예시
+    private Double extractPositiveRateFromSummary(String summary) {
+        // 예를 들어 summary가 "긍정 70%" 같은 형식이라면 숫자만 추출하는 로직
+        String percentageString = summary.replaceAll("[^0-9]", "");
+        return Double.parseDouble(percentageString);
     }
 }
