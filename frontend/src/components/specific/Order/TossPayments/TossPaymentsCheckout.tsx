@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { v7 as uuidv7 } from "uuid";
 import { loadTossPayments, TossPaymentsWidgets } from "@tosspayments/tosspayments-sdk";
 import useRootStore from "../../../../stores";
 
@@ -58,8 +59,6 @@ const TossPaymentsCheckout = ({
     renderPaymentWidgets();
   }, [widgets, amount]);
 
-  const generateRandomString = () => window.btoa(Math.random().toString()).slice(0, 20);
-
   return (
     <div className="flex flex-col items-center overflow-auto w-full">
       <div className="max-w-[650px] w-full">
@@ -71,9 +70,11 @@ const TossPaymentsCheckout = ({
           <button
             className="w-2/3 px-[22px] py-[11px] rounded-lg bg-[#3282f6] text-[#f9fcff]"
             onClick={async () => {
+              const orderId = uuidv7();
+
               try {
                 await widgets?.requestPayment({
-                  orderId: generateRandomString(),
+                  orderId,
                   orderName: orderData.orderName,
                   customerName: orderData.customerName,
                   customerEmail: orderData.customerEmail,
