@@ -141,6 +141,20 @@ const useGetProductReview = (storeId: StoreId, foodId: FoodId) => {
   });
 };
 
+/**
+ * 판매자 메뉴페이지 전체 메뉴 확인
+ * @param storeId 가게 Id
+ */
+const useGetAllMenus = (storeId: StoreId) => {
+  const { data } = useQuery({
+    queryKey: keys.getAllMenus(storeId),
+    queryFn: () => sogoo.getAllMenus(storeId),
+  });
+
+  const menus = data ? data.data : [];
+  return menus;
+};
+
 export {
   useCheckEmail,
   useCheckSeller,
@@ -154,4 +168,5 @@ export {
   useGetTodaySales,
   useGetReviewList,
   useGetProductReview,
+  useGetAllMenus,
 };

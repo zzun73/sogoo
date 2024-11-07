@@ -1,3 +1,11 @@
+interface SubscribeInfo {
+  subscribeId: number;
+  subscribeName: string;
+  subscribeDescription: string;
+  subscribePrice: number;
+  subscribeBeforePrice: number;
+}
+
 interface SubscribeData {
   subscribeDate: string;
   subscribeRound: number;
