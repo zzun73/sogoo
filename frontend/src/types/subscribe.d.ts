@@ -1,9 +1,23 @@
+interface FoodProps {
+  foodId: number;
+  foodName: string;
+  foodDescription: string;
+  foodImg: string;
+}
+
+interface WeeklyFood {
+  subscribeDate: string;
+  subscribeRound: number;
+  foods: FoodProps[];
+}
+
 interface SubscribeInfo {
   subscribeId: number;
   subscribeName: string;
   subscribeDescription: string;
   subscribePrice: number;
   subscribeBeforePrice: number;
+  weeklyFood?: WeeklyFood;
 }
 
 interface SubscribeData {
