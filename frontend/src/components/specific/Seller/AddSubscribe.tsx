@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import SubscribeCard from "./MenuComponents/SubscribeCard";
@@ -9,25 +9,29 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 
-interface SubscribeData {
-  subscribeRound: number;
-  subscribeFood: FoodInfo[];
-}
-
 const AddSubscribe: React.FC = () => {
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   const storeId = Number(queryParams.get("store"));
+
+  const now = new Date().getMonth() + 1;
+  const [subscribeMonth, setSubscribeMonth] = useState<number>(now);
 
   const [subscribeName, setSubscribeName] = useState<string>("");
   const [subscribeDescription, setSubscribeDescription] = useState<string>("");
   const [subscribeBeforePrice, setSubscribeBeforePrice] = useState<number>(0);
   const [subscribePrice, setSubscribePrice] = useState<number>(0);
 
-  const now = new Date().getMonth() + 1;
-  const [subscribeMonth, setSubscribeMonth] = useState<number>(now);
-
   const [subscribeData, setSubscribeData] = useState<SubscribeData[]>([]);
+  const [allFoods, setAllFoods] = useState<FoodInfo[][]>([]);
+
+  const updateAllFoods = (round: number, selectedFoods: FoodInfo[]) => {
+    setAllFoods((prevAllFoods) => {
+      const updatedAllFoods = [...prevAllFoods];
+      updatedAllFoods[round - 1] = selectedFoods;
+      return updatedAllFoods;
+    });
+  };
 
   const updateSubscribeData = (
     subscribeDate: string,
@@ -41,26 +45,33 @@ const AddSubscribe: React.FC = () => {
         {
           subscribeDate: subscribeDate,
           subscribeRound: round,
-          subscribeFood: selectedFoods,
+          subscribeFood: selectedFoods.map((food) => food.foodId),
         },
       ].sort((a, b) => a.subscribeRound - b.subscribeRound);
     });
   };
 
+  console.log(allFoods);
   console.log(subscribeData);
 
-  console.log(
-    subscribeName,
-    subscribeDescription,
-    subscribeBeforePrice,
-    subscribePrice,
-    subscribeMonth
-  );
+  console.log(subscribeName, subscribeDescription, subscribePrice);
 
   const handleMonthChange = (event: SelectChangeEvent) => {
     const newMonth = Number(event.target.value);
     setSubscribeMonth(newMonth);
   };
+
+  useEffect(() => {
+    const updatedTotalPrice = allFoods.reduce((acc, roundFoods) => {
+      const roundTotal = roundFoods.reduce(
+        (sum, food) => sum + food.foodPrice,
+        0
+      );
+      return acc + roundTotal;
+    }, 0);
+
+    setSubscribeBeforePrice(updatedTotalPrice);
+  }, [allFoods]);
 
   return (
     <div className="w-full flex flex-col flex-grow bg-slate-200">
@@ -109,15 +120,20 @@ const AddSubscribe: React.FC = () => {
                 month={subscribeMonth}
                 round={index + 1}
                 onSubscribeDataChange={updateSubscribeData}
+                updateAllFoods={updateAllFoods}
               />
             ))}
           </div>
           <TextField
-            required
             id="addSubscribeBeforePrice"
-            label="원가"
             variant="outlined"
-            onChange={(e) => setSubscribeBeforePrice(Number(e.target.value))}
+            label="원가"
+            value={subscribeBeforePrice}
+            slotProps={{
+              input: {
+                readOnly: true,
+              },
+            }}
             sx={{ width: "100%", marginBottom: "20px" }}
           />
           <TextField
