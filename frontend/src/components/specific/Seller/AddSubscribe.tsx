@@ -23,16 +23,23 @@ const AddSubscribe: React.FC = () => {
   const [subscribeDescription, setSubscribeDescription] = useState<string>("");
   const [subscribeBeforePrice, setSubscribeBeforePrice] = useState<number>(0);
   const [subscribePrice, setSubscribePrice] = useState<number>(0);
-  const [subscribeMonth, setSubscribeMonth] = useState<number>(1);
+
+  const now = new Date().getMonth() + 1;
+  const [subscribeMonth, setSubscribeMonth] = useState<number>(now);
 
   const [subscribeData, setSubscribeData] = useState<SubscribeData[]>([]);
 
-  const updateSubscribeData = (round: number, selectedFoods: FoodInfo[]) => {
+  const updateSubscribeData = (
+    subscribeDate: string,
+    round: number,
+    selectedFoods: FoodInfo[]
+  ) => {
     setSubscribeData((prevData) => {
       const newData = prevData.filter((item) => item.subscribeRound !== round);
       return [
         ...newData,
         {
+          subscribeDate: subscribeDate,
           subscribeRound: round,
           subscribeFood: selectedFoods,
         },
@@ -84,6 +91,7 @@ const AddSubscribe: React.FC = () => {
                   labelId="demo-simple-select-label1"
                   id="demo-simple-select1"
                   label="Month"
+                  value={subscribeMonth.toString()}
                   onChange={handleMonthChange}
                 >
                   {[...Array(12)].map((_, index) => (
@@ -98,6 +106,7 @@ const AddSubscribe: React.FC = () => {
               <SubscribeCard
                 key={index}
                 storeId={storeId}
+                month={subscribeMonth}
                 round={index + 1}
                 onSubscribeDataChange={updateSubscribeData}
               />
