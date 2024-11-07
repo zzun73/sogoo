@@ -3,6 +3,8 @@ const keys = {
   member: () => [keys.all, "member"],
   store: () => [keys.all, "store"],
   food: () => [keys.all, "food"],
+  subscribe: () => [keys.all, "subscribe"],
+  review: () => [keys.all, "review"],
   checkEmail: (email: Email) => [...keys.member(), "email", email],
   checkSeller: (businessNumber: BusinessNumber) => [
     ...keys.member(),
@@ -44,6 +46,22 @@ const keys = {
   getStoreDetail: (storeId: StoreId) => [
     ...keys.store(),
     "storeDetail",
+    storeId,
+  ],
+  getStoreSubscribe: (storeId: StoreId) => [
+    ...keys.subscribe(),
+    "storeSubscribe",
+    storeId,
+  ],
+  getStoreReviews: (storeId: StoreId) => [
+    ...keys.review(),
+    "storeReviews",
+    storeId,
+  ],
+  getFoodReviews: (foodId: FoodId) => [...keys.review(), "foodReviews", foodId],
+  getReviewSummary: (storeId: StoreId) => [
+    ...keys.review(),
+    "ReviewSummary",
     storeId,
   ],
 };

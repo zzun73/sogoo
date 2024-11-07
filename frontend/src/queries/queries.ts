@@ -167,6 +167,58 @@ const useGetStoreDetail = (storeId: StoreId) => {
   const info = data ? data.data : null;
   return info;
 };
+
+/**
+ * 반찬가게 상세페이지(구독 상품)
+ * @param storeId 가게 id
+ */
+const useGetStoreSubscribe = (storeId: StoreId) => {
+  const { data } = useQuery({
+    queryKey: keys.getStoreSubscribe(storeId),
+    queryFn: () => sogoo.getStoreSubscribe(storeId),
+  });
+  const info = data ? data.data : null;
+  return info;
+};
+
+/**
+ * 가게 상세페이지 - 전체 리뷰
+ * @param storeId 가게 id
+ */
+const useGetStoreReviews = (storeId: StoreId) => {
+  const { data } = useQuery({
+    queryKey: keys.getStoreReviews(storeId),
+    queryFn: () => sogoo.getStoreReviews(storeId),
+  });
+
+  return data;
+};
+
+/**
+ * 가게 상세페이지 - 개별 반찬 리뷰
+ * @param foodId 반찬 id
+ */
+const useGetFoodReviews = (foodId: FoodId) => {
+  const { data } = useQuery({
+    queryKey: keys.getFoodReviews(foodId),
+    queryFn: () => sogoo.getFoodReviews(foodId),
+  });
+
+  return data;
+};
+/**
+ * 가게 상세페이지 - 리뷰 요약
+ * @param storeId 가게 id
+ */
+const useGetReviewSummary = (storeId: StoreId) => {
+  const { data } = useQuery({
+    queryKey: keys.getReviewSummary(storeId),
+    queryFn: () => sogoo.getReviewSummary(storeId),
+  });
+
+  return data;
+};
+
 export {
   useCheckEmail,
   useCheckSeller,
@@ -182,4 +234,8 @@ export {
   useGetProductReview,
   useGetAllMenus,
   useGetStoreDetail,
+  useGetStoreSubscribe,
+  useGetStoreReviews,
+  useGetFoodReviews,
+  useGetReviewSummary,
 };

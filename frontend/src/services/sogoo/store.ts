@@ -35,7 +35,7 @@ export default {
   },
 
   /**
-   * 반찬가게 상세페이지(반찬가게)
+   * 가게 상세페이지 - 가게 정보
    * @param storeId 가게 id
    */
   getStoreDetail: async (storeId: StoreId) => {
