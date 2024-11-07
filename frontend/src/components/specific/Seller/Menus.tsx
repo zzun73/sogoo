@@ -132,8 +132,35 @@ const Menus: React.FC = () => {
                       }
                     >
                       <ListItemText
-                        primary={`${food.subscribeName} (월 ${food.subscribePrice}원)`}
-                        secondary={food.subscribeDescription}
+                        primary={
+                          <>
+                            <span
+                              style={{
+                                fontWeight: "bold",
+                                fontSize: "18px",
+                              }}
+                            >
+                              {food.subscribeName}
+                            </span>
+                            <br />
+                            <span
+                              style={{
+                                textDecoration: "line-through",
+                                marginRight: 5,
+                              }}
+                            >
+                              {food.subscribeBeforePrice}
+                            </span>
+                            (월 {food.subscribePrice} 원)
+                          </>
+                        }
+                        secondary={
+                          <>
+                            <div className="mt-5">
+                              {food.subscribeDescription}
+                            </div>
+                          </>
+                        }
                       />
                     </ListItem>
                     {index < filteredMenus.subscribes.length - 1 && <Divider />}
