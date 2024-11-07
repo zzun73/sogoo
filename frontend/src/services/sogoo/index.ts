@@ -4,6 +4,7 @@ import store from "./store";
 import food from "./food";
 import payment from "./payment";
 import seller from "./seller";
+import subscribe from "./subscribe";
 
 export default {
   ...auth,
@@ -12,4 +13,5 @@ export default {
   ...food,
   ...payment,
   ...seller,
+  ...subscribe,
 };

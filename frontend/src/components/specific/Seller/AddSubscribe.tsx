@@ -2,14 +2,18 @@ import { useState, useEffect } from "react";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import SubscribeCard from "./MenuComponents/SubscribeCard";
-import { useLocation } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import Box from "@mui/material/Box";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
+import { useMutation } from "@tanstack/react-query";
+import sogoo from "../../../services/sogoo";
 
 const AddSubscribe: React.FC = () => {
+  const navigate = useNavigate();
+
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   const storeId = Number(queryParams.get("store"));
@@ -51,11 +55,6 @@ const AddSubscribe: React.FC = () => {
     });
   };
 
-  console.log(allFoods);
-  console.log(subscribeData);
-
-  console.log(subscribeName, subscribeDescription, subscribePrice);
-
   const handleMonthChange = (event: SelectChangeEvent) => {
     const newMonth = Number(event.target.value);
     setSubscribeMonth(newMonth);
@@ -72,6 +71,58 @@ const AddSubscribe: React.FC = () => {
 
     setSubscribeBeforePrice(updatedTotalPrice);
   }, [allFoods]);
+
+  const { mutate: handleAddSubscribe } = useMutation({
+    mutationFn: ({
+      addSubscribeForm,
+      storeId,
+    }: {
+      addSubscribeForm: AddSubscribeForm;
+      storeId: StoreId;
+    }) => sogoo.requestAddSubscribe(addSubscribeForm, storeId),
+    onSuccess: async (response) => {
+      console.log("구독 상품 등록 성공", response);
+      navigate(`/seller/menus?store=${storeId}`);
+    },
+    onError: (error) => {
+      console.error("구독 상품 등록 실패", error);
+    },
+  });
+
+  const initiateAddSubscribe = (): void => {
+    switch (true) {
+      case !subscribeName:
+        alert("상품명을 입력해 주세요.");
+        return;
+      case !subscribeDescription:
+        alert("상품 설명을 입력해 주세요.");
+        return;
+      case !subscribePrice:
+        alert("판매가를 입력해 주세요.");
+        return;
+    }
+
+    const emptyFoodCount = subscribeData.filter(
+      (item) => item.subscribeFood.length === 0
+    ).length;
+
+    if (emptyFoodCount > 0) {
+      alert(
+        `${emptyFoodCount}개의 주차에 상품이 등록되지 않았습니다. 모든 주차에 최소 1개 이상의 상품을 추가해 주세요.`
+      );
+      return;
+    }
+
+    const addSubscribeForm: AddSubscribeForm = {
+      subscribeName,
+      subscribeDescription,
+      subscribeBeforePrice,
+      subscribePrice,
+      subscribeProducts: subscribeData,
+    };
+
+    handleAddSubscribe({ addSubscribeForm, storeId });
+  };
 
   return (
     <div className="w-full flex flex-col flex-grow bg-slate-200">
@@ -147,6 +198,7 @@ const AddSubscribe: React.FC = () => {
           <Button
             variant="contained"
             sx={{ width: "fit-content", alignSelf: "center" }}
+            onClick={initiateAddSubscribe}
           >
             등 록 하 기
           </Button>
