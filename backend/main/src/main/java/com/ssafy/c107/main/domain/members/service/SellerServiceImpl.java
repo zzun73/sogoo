@@ -206,7 +206,9 @@ public class SellerServiceImpl implements SellerService {
     }
 
     @Override
-    public TodaySalesResponse getTodaySales(Long storeId) {
+    public TodaySalesResponse getTodaySales(Long storeId, Long userId) {
+        memberValidator.validStoreAndMember(storeId, userId);
+
         //초기설정
         List<ProductDto> products = new ArrayList<>();
 
