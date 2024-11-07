@@ -22,20 +22,17 @@ const TossPaymentsCheckout = ({
   });
 
   useEffect(() => {
-    async function fetchPaymentWidgets() {
-      console.log("1번", NORMAL_CLIENT_KEY);
+    const fetchPaymentWidgets = async () => {
       const tossPayments = await loadTossPayments(NORMAL_CLIENT_KEY);
-      console.log("2번 tossPayments", tossPayments);
       const widgets = tossPayments.widgets({ customerKey: memberInfo!.uuid });
-      console.log("3번 widgets", widgets);
       setWidgets(widgets);
-    }
+    };
 
     fetchPaymentWidgets();
   }, [memberInfo]);
 
   useEffect(() => {
-    async function renderPaymentWidgets() {
+    const renderPaymentWidgets = async () => {
       if (widgets === null) {
         return;
       }
@@ -54,7 +51,7 @@ const TossPaymentsCheckout = ({
       ]);
 
       setReady(true);
-    }
+    };
 
     renderPaymentWidgets();
   }, [widgets, amount]);
