@@ -1,24 +1,35 @@
 import { useState, useEffect } from "react";
 import PlusFoodModal from "./PlusFoodModal";
+import formatters from "../../../../utils/formatters";
 
 interface SubscribeCardProps {
   storeId: number;
+  month: number;
   round: number;
-  onSubscribeDataChange: (round: number, selectedFoods: FoodInfo[]) => void;
+  onSubscribeDataChange: (
+    startDate: string,
+    round: number,
+    selectedFoods: FoodInfo[]
+  ) => void;
 }
 
 const SubscribeCard: React.FC<SubscribeCardProps> = ({
   storeId,
+  month,
   round,
   onSubscribeDataChange,
 }) => {
   const [openPlusFood, setOpenPlusFood] = useState<boolean>(false);
   const [selectedFoods, setSelectedFoods] = useState<FoodInfo[]>([]);
 
+  const startDate = formatters.formatToSubDate(month, round).slice(0, 10);
+
+  console.log(startDate);
+
   useEffect(() => {
     // selectedFoods가 변경될 때마다 부모 컴포넌트로 데이터를 업데이트
-    onSubscribeDataChange(round, selectedFoods);
-  }, [selectedFoods, round]);
+    onSubscribeDataChange(startDate, round, selectedFoods);
+  }, [startDate, round, selectedFoods]);
 
   const handlePlusFoodOpen = () => {
     setOpenPlusFood(true);
