@@ -177,8 +177,9 @@ const useGetStoreSubscribe = (storeId: StoreId) => {
     queryKey: keys.getStoreSubscribe(storeId),
     queryFn: () => sogoo.getStoreSubscribe(storeId),
   });
-  const info = data ? data.data : null;
-  return info;
+  console.log("subscribe", data);
+  const subscribes = data ? data.data : null;
+  return subscribes;
 };
 
 /**
