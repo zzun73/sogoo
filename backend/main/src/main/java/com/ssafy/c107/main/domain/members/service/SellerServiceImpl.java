@@ -103,6 +103,9 @@ public class SellerServiceImpl implements SellerService {
 
     @Override
     public MonthlySalesResponse getMonthlySales(Long storeId) {
+        List<String> monthsData = List.of("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug",
+            "Sep", "Oct", "Nov", "Dec");
+
         // 1. 해당 가게의 월별 금액 가져오기
         // 1-1. 개별 반찬 금액 가져오기
         LocalDateTime startDate = LocalDateTime.now().minusYears(1);
@@ -131,6 +134,15 @@ public class SellerServiceImpl implements SellerService {
             String monthName = ym.format(formatter);
             Long total = ((Number) result[1]).longValue();
             subscribeMap.put(monthName, total);
+        }
+
+        for (String mon : monthsData) {
+            if (!foodMap.containsKey(mon)) {
+                foodMap.put(mon, 0L);
+            }
+            if (!subscribeMap.containsKey(mon)) {
+                subscribeMap.put(mon, 0L);
+            }
         }
 
         return MonthlySalesResponse
@@ -299,7 +311,7 @@ public class SellerServiceImpl implements SellerService {
             //리뷰 정보 가져오기
             List<ReviewDetail> reviewDetails = new ArrayList<>();
             String aiSummery = food.getSummary();
-            List<Review> reviews = reviewRepository.findReviewByStoreIdAndFoodId(storeId,foodId);
+            List<Review> reviews = reviewRepository.findReviewByStoreIdAndFoodId(storeId, foodId);
 
             for (Review review : reviews) {
                 String memberEmail = review.getOrderList().getOrder().getMember().getEmail();
@@ -393,11 +405,11 @@ public class SellerServiceImpl implements SellerService {
     private String createSummaryWithAI(String content) {
         // ChatModel을 통해 AI 호출 및 요약 생성
         String summary = chatClient
-                .prompt()
-                .system("반찬을 시켜먹는 사람들이 쓴 리뷰 입니다. 이 리뷰들을 간단하게 한줄로 요약 해주세요")
-                .user(content)
-                .call()
-                .content();
+            .prompt()
+            .system("반찬을 시켜먹는 사람들이 쓴 리뷰 입니다. 이 리뷰들을 간단하게 한줄로 요약 해주세요")
+            .user(content)
+            .call()
+            .content();
         if (summary.isEmpty()) {
             throw new SummeryNotFoundException();
         }
@@ -418,7 +430,7 @@ public class SellerServiceImpl implements SellerService {
 
             // 각 상품별 리뷰 요약을 갱신
             List<Food> foods = foodRepository.findAllByStore_Id(storeId);
-            for(Food food : foods) {
+            for (Food food : foods) {
                 updateWeeklyReviewSummaryForFood(storeId, food.getId());
             }
         }
@@ -427,21 +439,21 @@ public class SellerServiceImpl implements SellerService {
     // Store의 전체 리뷰 요약을 갱신하는 메소드
     private void updateWeeklyReviewSummaryForStore(Long storeId) {
         List<Review> reviews = reviewRepository.findReviewByStoreId(storeId);
-        if(reviews.isEmpty()) {
+        if (reviews.isEmpty()) {
             return;
         }
 
         // 리뷰 코멘트 결함
         String reviewContent = reviews.stream()
-                .map(Review::getComment)
-                .collect(Collectors.joining(" "));
+            .map(Review::getComment)
+            .collect(Collectors.joining(" "));
 
         // AI 요약 생성
         String summary = createSummaryWithAI(reviewContent);
 
         // Store 엔티티의 summary 필드에 업데이트
         Store store = storeRepository.findById(storeId)
-                .orElseThrow(StoreNotFoundException::new);
+            .orElseThrow(StoreNotFoundException::new);
         store.updateSummary(summary);
         storeRepository.save(store);
     }
@@ -449,21 +461,21 @@ public class SellerServiceImpl implements SellerService {
     // 각 Food별 리뷰 요약을 갱신하는 메소드
     private void updateWeeklyReviewSummaryForFood(Long storeId, Long foodId) {
         List<Review> reviews = reviewRepository.findReviewByStoreIdAndFoodId(storeId, foodId);
-        if(reviews.isEmpty()) {
+        if (reviews.isEmpty()) {
             return;
         }
 
         // 리뷰 코멘트 결합
         String reviewContent = reviews.stream()
-                .map(Review::getComment)
-                .collect(Collectors.joining(" "));
+            .map(Review::getComment)
+            .collect(Collectors.joining(" "));
 
         // AI 요약 생성
         String summary = createSummaryWithAI(reviewContent);
 
         // Food 엔티티의 summary 필드에 업데이트
         Food food = foodRepository.findById(foodId)
-                .orElseThrow(FoodNotFoundException::new);
+            .orElseThrow(FoodNotFoundException::new);
         food.updateSummary(summary);
         foodRepository.save(food);
     }
