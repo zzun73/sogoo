@@ -33,7 +33,7 @@ interface SubInfoProps {
 
 const SubscribeInfo = ({ sub }: SubInfoProps) => {
   return (
-    <Accordion className="min-w-[850px]">
+    <Accordion sx={{ width: "100%" }}>
       <AccordionSummary
         expandIcon={<ExpandMoreIcon />}
         aria-controls="panel1-content"

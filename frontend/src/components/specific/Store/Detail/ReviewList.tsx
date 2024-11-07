@@ -7,7 +7,7 @@ const ReviewList = () => {
   const { reviewCount, positiveCount } = summaryData;
   const positiveRatio = Math.floor((positiveCount / reviewCount) * 100);
   return (
-    <div className="min-w-[850px]">
+    <div className="w-full">
       <div className="grid grid-cols-2 my-7">
         <div className="w-[400px] text-center my-auto">
           <p className="text-2xl">전체 리뷰 수</p>

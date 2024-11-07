@@ -4,7 +4,7 @@ import { foodData } from "../../../../assets/dummyData";
 
 const FoodList = () => {
   return (
-    <div className="grid grid-cols-4 m-3 gap-6 my-5 min-w-[850px]">
+    <div className="grid grid-cols-4 gap-6 my-5 w-full">
       {foodData.map((food) => {
         const { foodName, foodDescription, foodImg, foodPrice, foodId } = food;
         const currency = formatters.formatToCurrency(foodPrice);
