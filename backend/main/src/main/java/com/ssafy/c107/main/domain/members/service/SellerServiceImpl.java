@@ -348,7 +348,9 @@ public class SellerServiceImpl implements SellerService {
     }
 
     @Override
-    public SellerMenuResponse getAllProduct(Long storeId) {
+    public SellerMenuResponse getAllProduct(Long storeId, Long userId) {
+        memberValidator.validStoreAndMember(storeId, userId);
+        
         //가게의 구독상품 가져오기
         List<SubscribeDetail> subscribes = new ArrayList<>();
         List<Subscribe> storeSubscribes = subscribeRepository.findAllByStore_Id(storeId);

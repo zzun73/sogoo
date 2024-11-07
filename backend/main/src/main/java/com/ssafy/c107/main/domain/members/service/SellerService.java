@@ -23,7 +23,7 @@ public interface SellerService {
 
     ReviewDetailResponse getProductReview(Long storeId, Long foodId, Long userId);
 
-    SellerMenuResponse getAllProduct(Long storeId);
+    SellerMenuResponse getAllProduct(Long storeId, Long userId);
 
     FoodListResponse getAllFood(Long storeId);
 }
