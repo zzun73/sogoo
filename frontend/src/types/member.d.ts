@@ -44,6 +44,11 @@ interface ReviewItem {
   foodImg: string;
   reviewStatus: boolean;
   orderListId: number;
+  review?: {
+    reviewId: number;
+    reviewComment: string;
+    reviewImg: string;
+  };
 }
 
 interface BuyerDetailInfo {

@@ -1,14 +1,37 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import PlusFoodModal from "./PlusFoodModal";
+import formatters from "../../../../utils/formatters";
 
 interface SubscribeCardProps {
   storeId: number;
+  month: number;
   round: number;
+  onSubscribeDataChange: (
+    startDate: string,
+    round: number,
+    selectedFoods: FoodInfo[]
+  ) => void;
+  updateAllFoods: (round: number, selectedFoods: FoodInfo[]) => void;
 }
 
-const SubscribeCard: React.FC<SubscribeCardProps> = ({ storeId, round }) => {
+const SubscribeCard: React.FC<SubscribeCardProps> = ({
+  storeId,
+  month,
+  round,
+  onSubscribeDataChange,
+  updateAllFoods,
+}) => {
   const [openPlusFood, setOpenPlusFood] = useState<boolean>(false);
   const [selectedFoods, setSelectedFoods] = useState<FoodInfo[]>([]);
+
+  const startDate = formatters.formatToSubDate(month, round).slice(0, 10);
+
+  console.log(startDate);
+
+  useEffect(() => {
+    onSubscribeDataChange(startDate, round, selectedFoods);
+    updateAllFoods(round, selectedFoods);
+  }, [startDate, round, selectedFoods]);
 
   const handlePlusFoodOpen = () => {
     setOpenPlusFood(true);
@@ -18,27 +41,36 @@ const SubscribeCard: React.FC<SubscribeCardProps> = ({ storeId, round }) => {
     setOpenPlusFood(false);
   };
 
-  const roundValue = round + 1;
-
-  console.log(selectedFoods);
-
   return (
     <div className="w-full flex flex-col p-2 justify-center">
       <div className="w-full flex justify-start items-center">
-        <p className="text-xl font-bold">{roundValue}주차</p>
+        <p className="text-xl font-bold">{round}주차</p>
       </div>
       <div
         className="w-full h-32 flex justify-center items-center border-[1px] border-gray-300 rounded px-2 cursor-pointer"
         onClick={handlePlusFoodOpen}
       >
-        <p className="text-base">반찬 추가하기</p>
+        {selectedFoods.length > 0 ? (
+          <div className="flex space-x-10">
+            {selectedFoods.map((food) => (
+              <img
+                key={food.foodId}
+                src={food.foodImg}
+                alt={food.foodName}
+                className="w-28 h-28 rounded"
+              />
+            ))}
+          </div>
+        ) : (
+          <p className="text-base">반찬 추가하기</p>
+        )}
       </div>
       <PlusFoodModal
         open={openPlusFood}
         onClose={handlePlusFoodClose}
         storeId={Number(storeId)}
-        selectedFoods={selectedFoods} // 추가
-        setSelectedFoods={setSelectedFoods} // 추가
+        selectedFoods={selectedFoods}
+        setSelectedFoods={setSelectedFoods}
       />
     </div>
   );
