@@ -7,7 +7,7 @@ import org.springframework.data.elasticsearch.client.elc.ElasticsearchConfigurat
 import org.springframework.data.elasticsearch.repository.config.EnableElasticsearchRepositories;
 
 @Configuration
-@EnableElasticsearchRepositories(basePackages = "org.springframework.data.elasticsearch.repository")
+@EnableElasticsearchRepositories(basePackages = "com.ssafy.c107.main.domain.elasticsearch.repository")
 public class ElasticSearchConfig extends ElasticsearchConfiguration {
 
     @Value("${spring.elasticsearch.uris}")
@@ -16,7 +16,9 @@ public class ElasticSearchConfig extends ElasticsearchConfiguration {
     @Override
     public ClientConfiguration clientConfiguration() {
         return ClientConfiguration.builder()
-            .connectedTo(esHost)
-            .build();
+                .connectedTo(esHost)
+                .withConnectTimeout(10000)
+                .withSocketTimeout(60000)
+                .build();
     }
 }
