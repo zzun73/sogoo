@@ -6,6 +6,10 @@ export const createMemberSlice: StateCreator<RootState, [], [], MemberStore> = (
   memberInfo: null,
   accessToken: null,
   isLogin: false,
+  selectedId: null,
+  setSelectedId: (selectedId: number | null) => {
+    set({ selectedId });
+  },
   setLogin: (memberInfo: Partial<MemberInfo>) => {
     set({
       memberInfo: {

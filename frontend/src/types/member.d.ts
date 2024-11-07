@@ -13,6 +13,8 @@ interface MemberStore {
   memberInfo: MemberInfo | null;
   accessToken: null | string;
   isLogin: boolean;
+  selectedId: number | null;
+  setSelectedId: (selectedId: number | null) => void;
   setLogin: (userInfo: MemberInfo) => void;
   setAccessToken: (accessToken: string) => void;
   setLogout: () => void;
