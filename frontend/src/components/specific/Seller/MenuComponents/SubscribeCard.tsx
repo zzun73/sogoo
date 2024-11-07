@@ -11,6 +11,7 @@ interface SubscribeCardProps {
     round: number,
     selectedFoods: FoodInfo[]
   ) => void;
+  updateAllFoods: (round: number, selectedFoods: FoodInfo[]) => void;
 }
 
 const SubscribeCard: React.FC<SubscribeCardProps> = ({
@@ -18,6 +19,7 @@ const SubscribeCard: React.FC<SubscribeCardProps> = ({
   month,
   round,
   onSubscribeDataChange,
+  updateAllFoods,
 }) => {
   const [openPlusFood, setOpenPlusFood] = useState<boolean>(false);
   const [selectedFoods, setSelectedFoods] = useState<FoodInfo[]>([]);
@@ -27,8 +29,8 @@ const SubscribeCard: React.FC<SubscribeCardProps> = ({
   console.log(startDate);
 
   useEffect(() => {
-    // selectedFoods가 변경될 때마다 부모 컴포넌트로 데이터를 업데이트
     onSubscribeDataChange(startDate, round, selectedFoods);
+    updateAllFoods(round, selectedFoods);
   }, [startDate, round, selectedFoods]);
 
   const handlePlusFoodOpen = () => {
