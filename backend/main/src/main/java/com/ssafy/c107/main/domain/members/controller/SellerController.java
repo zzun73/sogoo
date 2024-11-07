@@ -5,7 +5,6 @@ import com.ssafy.c107.main.domain.members.exception.InvalidMemberRoleException;
 import com.ssafy.c107.main.domain.members.service.SellerService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,7 +26,8 @@ public class SellerController {
         if (!customUserDetails.getUserRole().getRole().equals("SELLER")) {
             throw new InvalidMemberRoleException();
         }
-        return ResponseEntity.ok(sellerService.getSalesStatus(storeId));
+        Long userId = customUserDetails.getUserId();
+        return ResponseEntity.ok(sellerService.getSalesStatus(storeId, userId));
     }
 
     @GetMapping("/monthly-sales/{storeId}")
@@ -36,7 +36,8 @@ public class SellerController {
         if (!customUserDetails.getUserRole().getRole().equals("SELLER")) {
             throw new InvalidMemberRoleException();
         }
-        return ResponseEntity.ok(sellerService.getMonthlySales(storeId));
+        Long userId = customUserDetails.getUserId();
+        return ResponseEntity.ok(sellerService.getMonthlySales(storeId, userId));
     }
 
     @GetMapping("/next-week-sell/{storeId}")
@@ -45,7 +46,8 @@ public class SellerController {
         if (!customUserDetails.getUserRole().getRole().equals("SELLER")) {
             throw new InvalidMemberRoleException();
         }
-        return ResponseEntity.ok(sellerService.getNextCount(storeId));
+        Long userId = customUserDetails.getUserId();
+        return ResponseEntity.ok(sellerService.getNextCount(storeId, userId));
     }
 
     @GetMapping("/today-sell/{storeId}")
@@ -54,38 +56,48 @@ public class SellerController {
         if (!customUserDetails.getUserRole().getRole().equals("SELLER")) {
             throw new InvalidMemberRoleException();
         }
-        return ResponseEntity.ok(sellerService.getTodaySales(storeId));
+        Long userId = customUserDetails.getUserId();
+        return ResponseEntity.ok(sellerService.getTodaySales(storeId, userId));
     }
 
     @GetMapping("/store-review/{storeId}")
-    public ResponseEntity<?> getReviewAll(@PathVariable(name = "storeId") Long storeId, @AuthenticationPrincipal CustomUserDetails customUserDetails) {
+    public ResponseEntity<?> getReviewAll(@PathVariable(name = "storeId") Long storeId,
+        @AuthenticationPrincipal CustomUserDetails customUserDetails) {
         if (!customUserDetails.getUserRole().getRole().equals("SELLER")) {
             throw new InvalidMemberRoleException();
         }
-        return ResponseEntity.ok(sellerService.getAllReview(storeId));
+        Long userId = customUserDetails.getUserId();
+        return ResponseEntity.ok(sellerService.getAllReview(storeId, userId));
     }
 
     @GetMapping("/detail-review/{storeId}/{foodId}")
-    public ResponseEntity<?> getProductReview(@PathVariable(name = "storeId") Long storeId, @PathVariable(name = "foodId") Long foodId, @AuthenticationPrincipal CustomUserDetails customUserDetails) {
+    public ResponseEntity<?> getProductReview(@PathVariable(name = "storeId") Long storeId,
+        @PathVariable(name = "foodId") Long foodId,
+        @AuthenticationPrincipal CustomUserDetails customUserDetails) {
         if (!customUserDetails.getUserRole().getRole().equals("SELLER")) {
             throw new InvalidMemberRoleException();
         }
-        return ResponseEntity.ok(sellerService.getProductReview(storeId, foodId));
+        Long userId = customUserDetails.getUserId();
+        return ResponseEntity.ok(sellerService.getProductReview(storeId, foodId, userId));
     }
 
     @GetMapping("/all-product/{storeId}")
-    public ResponseEntity<?> getAllProducts(@PathVariable(name = "storeId") Long storeId, @AuthenticationPrincipal CustomUserDetails customUserDetails) {
+    public ResponseEntity<?> getAllProducts(@PathVariable(name = "storeId") Long storeId,
+        @AuthenticationPrincipal CustomUserDetails customUserDetails) {
         if (!customUserDetails.getUserRole().getRole().equals("SELLER")) {
             throw new InvalidMemberRoleException();
         }
-        return ResponseEntity.ok(sellerService.getAllProduct(storeId));
+        Long userId = customUserDetails.getUserId();
+        return ResponseEntity.ok(sellerService.getAllProduct(storeId, userId));
     }
 
     @GetMapping("/foods/{storeId}")
-    public ResponseEntity<?> getAllFoods(@PathVariable(name = "storeId") Long storeId, @AuthenticationPrincipal CustomUserDetails customUserDetails) {
+    public ResponseEntity<?> getAllFoods(@PathVariable(name = "storeId") Long storeId,
+        @AuthenticationPrincipal CustomUserDetails customUserDetails) {
         if (!customUserDetails.getUserRole().getRole().equals("SELLER")) {
             throw new InvalidMemberRoleException();
         }
-        return ResponseEntity.ok(sellerService.getAllFood(storeId));
+        Long userId = customUserDetails.getUserId();
+        return ResponseEntity.ok(sellerService.getAllFood(storeId, userId));
     }
 }

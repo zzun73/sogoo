@@ -13,4 +13,6 @@ public interface StoreRepository extends JpaRepository<Store, Long> {
     @Query("SELECT s "
         + "FROM Store s ")
     List<Store> findFoods();
+
+    Optional<Store> findByMember_IdAndId(Long memberId, Long id);
 }
