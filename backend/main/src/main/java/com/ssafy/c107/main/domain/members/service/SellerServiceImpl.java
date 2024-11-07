@@ -155,7 +155,9 @@ public class SellerServiceImpl implements SellerService {
     }
 
     @Override
-    public NextWeekQuantityResponse getNextCount(Long storeId) {
+    public NextWeekQuantityResponse getNextCount(Long storeId, Long userId) {
+        memberValidator.validStoreAndMember(storeId, userId);
+
         //초기 설정
         List<NextWeekFood> foodCnt = new ArrayList<>();
 

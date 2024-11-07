@@ -15,7 +15,7 @@ public interface SellerService {
 
     MonthlySalesResponse getMonthlySales(Long storeId, Long userId);
 
-    NextWeekQuantityResponse getNextCount(Long storeId);
+    NextWeekQuantityResponse getNextCount(Long storeId, Long userId);
 
     TodaySalesResponse getTodaySales(Long storeId);
 
