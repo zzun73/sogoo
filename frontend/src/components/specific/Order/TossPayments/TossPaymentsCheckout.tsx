@@ -5,20 +5,12 @@ import useRootStore from "../../../../stores";
 
 const NORMAL_CLIENT_KEY = import.meta.env.VITE_TOSS_PAYMENTS_NORMAL_CLIENT_KEY;
 
-const TossPaymentsCheckout = ({
-  orderData = {
-    orderName: "토스 티셔츠 외 2건",
-    customerName: "김싸피",
-    customerEmail: "KimSSAFY@abcdeSSAFY.com",
-    amount: 20000,
-  },
-}: TossPaymentsCheckoutProps) => {
+const TossPaymentsCheckout = ({ orderData }: TossPaymentsCheckoutProps) => {
   const memberInfo = useRootStore().memberInfo;
-  const [, setReady] = useState(false);
   const [widgets, setWidgets] = useState<TossPaymentsWidgets | null>(null);
-  const [amount] = useState({
+  const [amount, setAmount] = useState({
     currency: "KRW",
-    value: orderData.amount,
+    value: orderData!.amount,
   });
 
   useEffect(() => {
@@ -30,6 +22,13 @@ const TossPaymentsCheckout = ({
 
     fetchPaymentWidgets();
   }, [memberInfo]);
+
+  useEffect(() => {
+    setAmount({
+      currency: "KRW",
+      value: orderData!.amount,
+    });
+  }, [orderData]);
 
   useEffect(() => {
     const renderPaymentWidgets = async () => {
@@ -49,8 +48,6 @@ const TossPaymentsCheckout = ({
           variantKey: "AGREEMENT",
         }),
       ]);
-
-      setReady(true);
     };
 
     renderPaymentWidgets();
@@ -72,10 +69,15 @@ const TossPaymentsCheckout = ({
               try {
                 await widgets?.requestPayment({
                   orderId,
-                  orderName: orderData.orderName,
-                  customerName: orderData.customerName,
-                  customerEmail: orderData.customerEmail,
-                  successUrl: window.location.origin + "/orders/success",
+                  orderName: orderData!.orderName,
+                  customerName: orderData!.customerName,
+                  customerEmail: orderData!.customerEmail,
+                  successUrl:
+                    window.location.origin +
+                    "/orders/success?" +
+                    `storeId=${orderData?.storeId}` +
+                    `&products=${JSON.stringify(orderData?.products)}` +
+                    `&orderName=${orderData?.orderName}`,
                   failUrl: window.location.origin + "/orders/fail",
                 });
               } catch (error) {
