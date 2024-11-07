@@ -15,6 +15,7 @@ import AddFood from "../components/specific/Seller/AddFood";
 import AddSubscribe from "../components/specific/Seller/AddSubscribe";
 import BuyerMyPage from "../pages/BuyerMyPage";
 import NotFoundPage from "../pages/NotFoundPage";
+import ShoppingCart from "../components/specific/Order/ShoppingCart";
 
 const PageRoutes = () => {
   return (
@@ -27,6 +28,7 @@ const PageRoutes = () => {
         <Route path="form" element={<OrderForm />} />
         <Route path="success" element={<TossPaymentsCheckoutSuccess />} />
         <Route path="fail" element={<TossPaymentsCheckoutFail />} />
+        <Route path="cart" element={<ShoppingCart />} />
       </Route>
       {/* Member Domain */}
       <Route path="/mypage" element={<BuyerMyPage />} />
