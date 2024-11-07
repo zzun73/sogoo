@@ -1,4 +1,5 @@
 import { ChangeEvent, useState } from "react";
+// import { useLocation } from "react-router-dom";
 import { TextField } from "@mui/material";
 import { DataGrid, GridColDef, GridRowsProp } from "@mui/x-data-grid";
 
@@ -8,10 +9,11 @@ import useRootStore from "../../../stores";
 import formatters from "../../../utils/formatters";
 
 const OrderForm = () => {
+  // const location = useLocation();
   const memberInfo = useRootStore().memberInfo;
   const [recipientAddress, setRecipientAddress] = useState<string>("");
   const [request, setRequest] = useState<string>("");
-  const [isSubscription, setIsSubscription] = useState(true);
+  const [isSubscription, setIsSubscription] = useState(false);
 
   // 주문 상품 목록 DataGrid 관련 데이터(rows, columns)
   const rows: GridRowsProp = [

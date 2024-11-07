@@ -18,4 +18,11 @@ export default {
       },
     });
   },
+
+  /**
+   * 판매자 메뉴페이지 전체 메뉴 불러오기
+   */
+  getAllMenus: async (storeId: StoreId) => {
+    return axios.get(`member/seller/all-product/${storeId}`);
+  },
 };

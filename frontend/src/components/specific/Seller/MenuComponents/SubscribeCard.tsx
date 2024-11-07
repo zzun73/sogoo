@@ -26,8 +26,6 @@ const SubscribeCard: React.FC<SubscribeCardProps> = ({
 
   const startDate = formatters.formatToSubDate(month, round).slice(0, 10);
 
-  console.log(startDate);
-
   useEffect(() => {
     onSubscribeDataChange(startDate, round, selectedFoods);
     updateAllFoods(round, selectedFoods);

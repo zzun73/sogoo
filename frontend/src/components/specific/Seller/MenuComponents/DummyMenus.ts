@@ -6,8 +6,7 @@ export type Subscribe = {
   subscribeName: string;
   subscribeDescription: string;
   subscribePrice: number;
-  subscribeRate: number;
-  subscribeImgs: string[];
+  subscribeBeforePrice: number;
 };
 
 export type Food = {
@@ -30,16 +29,14 @@ export const dummyData: ApiResponse = {
       subscribeName: "고기패키지",
       subscribeDescription: "고기반찬~",
       subscribePrice: 13000,
-      subscribeRate: 10,
-      subscribeImgs: ["S3이미지"],
+      subscribeBeforePrice: 15000,
     },
     {
       subscribeId: 2,
       subscribeName: "생선패키지",
       subscribeDescription: "생선반찬~",
       subscribePrice: 15000,
-      subscribeRate: 12,
-      subscribeImgs: ["S3이미지"],
+      subscribeBeforePrice: 20000,
     },
   ],
   foods: [
