@@ -7,5 +7,6 @@ interface NormalPaymentsConfirmRequest {
   paymentKey: string;
   orderId: string;
   amount: number;
+  storeId: number;
   foodItems: FoodItem[];
 }

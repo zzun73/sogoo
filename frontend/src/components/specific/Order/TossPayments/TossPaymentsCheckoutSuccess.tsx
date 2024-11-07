@@ -16,6 +16,8 @@ const TossPaymentsCheckoutSuccess = () => {
   const orderId = searchParams.get("orderId");
   const amount = Number(searchParams.get("amount"));
   const currentPath = searchParams.get("currentPath");
+  const products = JSON.parse(searchParams.get("products")!);
+  const storeId = Number(searchParams.get("storeId")!);
   // const redirectPath = searchParams.get("redirectPath");
 
   const { mutate: requestNormalPayment } = useMutation({
@@ -42,8 +44,10 @@ const TossPaymentsCheckoutSuccess = () => {
         paymentKey,
         orderId,
         amount,
-        foodItems: JSON.parse(searchParams.get("foodItems") || "[]"),
+        storeId,
+        foodItems: products,
       };
+      console.log("data", data);
 
       requestNormalPayment(data);
     } catch (error) {
@@ -59,7 +63,7 @@ const TossPaymentsCheckoutSuccess = () => {
   };
 
   const goToMypage = () => {
-    navigate("/");
+    navigate("/mypage");
   };
 
   return (
@@ -101,7 +105,7 @@ const TossPaymentsCheckoutSuccess = () => {
             <div className="flex justify-between">
               <span className="font-semibold text-[#333d48] text-base">결제 금액</span>
               <span id="amount" className="font-medium text-[#4e5968] text-base pl-4 break-words text-right">
-                {amount}원
+                {formatters.formatToCurrency(amount)}
               </span>
             </div>
           </div>
