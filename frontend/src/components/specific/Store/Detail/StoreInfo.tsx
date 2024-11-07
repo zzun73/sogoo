@@ -1,4 +1,6 @@
 import MenuSelect from "./MenuSelect";
+import { useGetStoreDetail } from "../../../../queries/queries";
+import { useParams } from "react-router-dom";
 
 interface StoreInfo {
   storeId: number;
@@ -8,13 +10,12 @@ interface StoreInfo {
 }
 
 const StoreInfo = () => {
-  const info: StoreInfo = {
-    storeId: 5,
-    name: "혁준이네 반찬가게",
-    description: "ㄹㅇ밥도둑",
-    img: "https://cdn.pixabay.com/photo/2019/01/25/21/35/restaurant-3955372_1280.jpg",
-  };
-
+  const { id } = useParams();
+  const info = useGetStoreDetail(Number(id));
+  console.log("info", info);
+  if (!info) {
+    return <div className="grid grid-cols-2 h-[500px] gap-x-6"></div>;
+  }
   return (
     <div className="grid grid-cols-2 h-[500px] gap-x-6">
       <img src={info.img} className="inline-block h-[400px] w-full" />

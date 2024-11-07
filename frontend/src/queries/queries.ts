@@ -34,13 +34,13 @@ const useCheckSeller = (businessNumber: BusinessNumber) => {
  * 매장 목록 조회
  */
 const useGetStoreList = () => {
-  const { data } = useQuery({
+  const queryResponse = useQuery({
     queryKey: keys.getStoreList(),
     queryFn: () => sogoo.getStoreList(),
   });
-
-  const stores = data ? data.data : [];
-  return stores;
+  console.log(queryResponse);
+  // const stores = data ? data.data : [];
+  return queryResponse;
 };
 
 /**
@@ -155,6 +155,18 @@ const useGetAllMenus = (storeId: StoreId) => {
   return menus;
 };
 
+/**
+ * 반찬가게 상세페이지(반찬가게)
+ * @param storeId 가게 id
+ */
+const useGetStoreDetail = (storeId: StoreId) => {
+  const { data } = useQuery({
+    queryKey: keys.getStoreDetail(storeId),
+    queryFn: () => sogoo.getStoreDetail(storeId),
+  });
+  const info = data ? data.data : null;
+  return info;
+};
 export {
   useCheckEmail,
   useCheckSeller,
@@ -169,4 +181,5 @@ export {
   useGetReviewList,
   useGetProductReview,
   useGetAllMenus,
+  useGetStoreDetail,
 };

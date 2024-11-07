@@ -41,6 +41,11 @@ const keys = {
     foodId,
   ],
   getAllMenus: (storeId: StoreId) => [...keys.member(), "allMenus", storeId],
+  getStoreDetail: (storeId: StoreId) => [
+    ...keys.store(),
+    "storeDetail",
+    storeId,
+  ],
 };
 
 export default keys;

@@ -5,7 +5,7 @@ export default {
    * 매장 목록 조회
    */
   getStoreList: async () => {
-    return axios.get("/store/");
+    return axios.get<GetStoreListResponse>("/store");
   },
 
   /**
@@ -32,5 +32,13 @@ export default {
    */
   getStoreMenu: async (storeId: StoreId) => {
     return axios.get(`/subscribe/all/${storeId}`);
+  },
+
+  /**
+   * 반찬가게 상세페이지(반찬가게)
+   * @param storeId 가게 id
+   */
+  getStoreDetail: async (storeId: StoreId) => {
+    return axios.get<GetStoreDetailResponse>(`/store/${storeId}`);
   },
 };

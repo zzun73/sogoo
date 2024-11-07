@@ -59,6 +59,13 @@ interface GetStoreListResponseData {
 }
 interface GetSalesOverviewResponseData {}
 
+interface GetStoreDetailResponse {
+  storeId: string;
+  name: StoreName;
+  description: StoreDescription;
+  img: ImageURL;
+}
+
 type LoginResponse = LoginResponseData;
-type GetStoreListResponse = SogooResponse<GetStoreiIstResponseData>;
+type GetStoreListResponse = SogooResponse<GetStoreListResponseData>;
 type GetSalesOverviewResponse = SogooResponse<GetSalesOverviewResponseData>;
