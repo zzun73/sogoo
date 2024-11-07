@@ -22,11 +22,9 @@ import com.ssafy.c107.main.domain.members.dto.response.TodaySalesResponse;
 import com.ssafy.c107.main.domain.order.entity.Order;
 import com.ssafy.c107.main.domain.order.entity.OrderList;
 import com.ssafy.c107.main.domain.order.entity.OrderType;
-import com.ssafy.c107.main.domain.order.exception.OrderListNotFoundException;
 import com.ssafy.c107.main.domain.order.repository.OrderListRepository;
 import com.ssafy.c107.main.domain.order.repository.OrderRepository;
 import com.ssafy.c107.main.domain.review.entity.Review;
-import com.ssafy.c107.main.domain.review.exception.ReviewNotFoundException;
 import com.ssafy.c107.main.domain.review.exception.SummeryNotFoundException;
 import com.ssafy.c107.main.domain.review.repository.ReviewRepository;
 import com.ssafy.c107.main.domain.store.entity.Store;
@@ -52,7 +50,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Optional;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -76,9 +73,12 @@ public class SellerServiceImpl implements SellerService {
     private final ReviewRepository reviewRepository;
     private final StoreRepository storeRepository;
     private final ChatClient chatClient;
+    private final MemberValidator memberValidator;
 
     @Override
-    public SalesStatusResponse getSalesStatus(Long storeId) {
+    public SalesStatusResponse getSalesStatus(Long storeId, Long userId) {
+        memberValidator.validStoreAndMember(storeId, userId);
+
         //주문 거래금액 가져오기
         int todayOrderPrice = orderRepository.getTodayTotalPriceByStore(storeId);
 

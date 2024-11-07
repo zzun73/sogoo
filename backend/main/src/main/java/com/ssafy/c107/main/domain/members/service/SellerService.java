@@ -11,7 +11,7 @@ import com.ssafy.c107.main.domain.members.dto.response.TodaySalesResponse;
 
 public interface SellerService {
 
-    SalesStatusResponse getSalesStatus(Long storeId);
+    SalesStatusResponse getSalesStatus(Long storeId, Long userId);
 
     MonthlySalesResponse getMonthlySales(Long storeId);
 
