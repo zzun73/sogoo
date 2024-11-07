@@ -74,7 +74,7 @@ const useGetMyStores = () => {
  */
 const useGetFoodListForSubscribe = (storeId: StoreId) => {
   const { data } = useQuery({
-    queryKey: keys.getFoodListForSubscribe(),
+    queryKey: keys.getFoodListForSubscribe(storeId),
     queryFn: () => sogoo.getFoodListForSubscribe(storeId),
   });
 
