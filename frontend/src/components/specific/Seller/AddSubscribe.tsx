@@ -9,6 +9,11 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 
+interface SubscribeData {
+  subscribeRound: number;
+  subscribeFood: FoodInfo[];
+}
+
 const AddSubscribe: React.FC = () => {
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
@@ -19,6 +24,23 @@ const AddSubscribe: React.FC = () => {
   const [subscribeBeforePrice, setSubscribeBeforePrice] = useState<number>(0);
   const [subscribePrice, setSubscribePrice] = useState<number>(0);
   const [subscribeMonth, setSubscribeMonth] = useState<number>(1);
+
+  const [subscribeData, setSubscribeData] = useState<SubscribeData[]>([]);
+
+  const updateSubscribeData = (round: number, selectedFoods: FoodInfo[]) => {
+    setSubscribeData((prevData) => {
+      const newData = prevData.filter((item) => item.subscribeRound !== round);
+      return [
+        ...newData,
+        {
+          subscribeRound: round,
+          subscribeFood: selectedFoods,
+        },
+      ].sort((a, b) => a.subscribeRound - b.subscribeRound);
+    });
+  };
+
+  console.log(subscribeData);
 
   console.log(
     subscribeName,
@@ -64,23 +86,21 @@ const AddSubscribe: React.FC = () => {
                   label="Month"
                   onChange={handleMonthChange}
                 >
-                  <MenuItem value={1}>1월</MenuItem>
-                  <MenuItem value={2}>2월</MenuItem>
-                  <MenuItem value={3}>3월</MenuItem>
-                  <MenuItem value={4}>4월</MenuItem>
-                  <MenuItem value={5}>5월</MenuItem>
-                  <MenuItem value={6}>6월</MenuItem>
-                  <MenuItem value={7}>7월</MenuItem>
-                  <MenuItem value={8}>8월</MenuItem>
-                  <MenuItem value={9}>9월</MenuItem>
-                  <MenuItem value={10}>10월</MenuItem>
-                  <MenuItem value={11}>11월</MenuItem>
-                  <MenuItem value={12}>12월</MenuItem>
+                  {[...Array(12)].map((_, index) => (
+                    <MenuItem key={index} value={index + 1}>
+                      {index + 1}월
+                    </MenuItem>
+                  ))}
                 </Select>
               </FormControl>
             </Box>
             {[...Array(4)].map((_, index) => (
-              <SubscribeCard key={index} storeId={storeId} round={index} />
+              <SubscribeCard
+                key={index}
+                storeId={storeId}
+                round={index + 1}
+                onSubscribeDataChange={updateSubscribeData}
+              />
             ))}
           </div>
           <TextField

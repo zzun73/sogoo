@@ -32,8 +32,6 @@ const PlusFoodModal: React.FC<PlusFoodProps> = ({
 }) => {
   const { foods: initialFoods } = useGetFoodListForSubscribe(storeId);
 
-  console.log(initialFoods);
-
   const [foods, setFoods] = useState<FoodInfo[]>(initialFoods);
 
   useEffect(() => {
