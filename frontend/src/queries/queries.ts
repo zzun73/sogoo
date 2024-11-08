@@ -170,6 +170,19 @@ const useGetStoreDetail = (storeId: StoreId) => {
 };
 
 /**
+ * 반찬가게 상세페이지(전체 메뉴)
+ * @param storeId 가게 id
+ */
+const useGetStoreItems = (storeId: StoreId) => {
+  const { data } = useQuery({
+    queryKey: keys.getStoreItems(storeId),
+    queryFn: () => sogoo.getStoreItems(storeId),
+  });
+  const storeItems = data ? data.data : null;
+  return storeItems;
+};
+
+/**
  * 반찬가게 상세페이지(구독 상품)
  * @param storeId 가게 id
  */
@@ -180,7 +193,6 @@ const useGetStoreSubscribe = (storeId: StoreId) => {
   });
 
   if (isError && error instanceof AxiosError) {
-    // console.log(error.response!.data);
     return [];
   }
 
@@ -198,7 +210,6 @@ const useGetStoreFoods = (storeId: StoreId) => {
     queryFn: () => sogoo.getStoreFoods(storeId),
   });
 
-  // console.log("반찬 개별 조회", data);
   const foods = data ? data.data.foods : [];
   return foods;
 };
@@ -211,7 +222,6 @@ const useGetReviewSummary = (storeId: StoreId) => {
     queryKey: keys.getReviewSummary(storeId),
     queryFn: () => sogoo.getReviewSummary(storeId),
   });
-  console.log("reviewSummary", data);
   const reviewSummary = data ? data.data : null;
   return reviewSummary;
 };
@@ -277,4 +287,5 @@ export {
   useGetFoodReviews,
   useGetReviewSummary,
   useGetSubscribeDetail,
+  useGetStoreItems,
 };
