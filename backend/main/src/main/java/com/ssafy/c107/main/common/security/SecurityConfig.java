@@ -108,7 +108,7 @@ public class SecurityConfig {
                 UsernamePasswordAuthenticationFilter.class);
 
         http
-            .addFilterBefore(new CustomLogoutFilter(jwtUtil, memberRepository, tokenRepository),
+            .addFilterBefore(new CustomLogoutFilter(jwtUtil, tokenRepository),
                 LogoutFilter.class);
 
         //세션 설정

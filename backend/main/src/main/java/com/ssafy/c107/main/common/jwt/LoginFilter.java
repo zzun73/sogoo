@@ -87,9 +87,6 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
             member.getId());
         String refresh = jwtUtil.createRefreshToken(member.getId(),"refresh", email, member.getRole(), 86400000L,
             member.getId());
-        System.out.println("사용자 아이디 : " +  member.getId());
-
-        System.out.println("role : " + role.toString());
 
         //응답 생성
         response.setHeader("Authorization", "Bearer " + access);

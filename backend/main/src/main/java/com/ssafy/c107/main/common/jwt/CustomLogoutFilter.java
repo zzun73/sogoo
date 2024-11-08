@@ -17,13 +17,11 @@ import org.springframework.web.filter.GenericFilterBean;
 
 public class CustomLogoutFilter extends GenericFilterBean {
     private final JWTUtil jwtUtil;
-    private final MemberRepository memberRepository;
     private final TokenRepository tokenRepository;
 
-    public CustomLogoutFilter(JWTUtil jwtUtil, MemberRepository memberRepository,
+    public CustomLogoutFilter(JWTUtil jwtUtil,
         TokenRepository tokenRepository) {
         this.jwtUtil = jwtUtil;
-        this.memberRepository = memberRepository;
         this.tokenRepository = tokenRepository;
     }
 
@@ -89,7 +87,7 @@ public class CustomLogoutFilter extends GenericFilterBean {
         }
 
         //DB에 저장되어 있는지 확인
-        Boolean isExist = tokenRepository.existsByRefreshToken(refresh);
+        boolean isExist = tokenRepository.existsByRefreshToken(refresh);
         if (!isExist) {
             //response status code
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
