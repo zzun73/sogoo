@@ -50,8 +50,10 @@ public class TossPaymentsServiceImpl implements TossPaymentsService {
     private static final String BILLING_AUTH_URL = "https://api.tosspayments.com/v1/billing/authorizations/issue";
     private static final String BILLING_CHARGE_URL = "https://api.tosspayments.com/v1/billing";
 
-    @Value("${toss.secret-key}")
-    private String secretKey;
+    @Value("${toss.widget.secret-key}")
+    private String widgetSecretKey;
+    @Value("${toss.api.secret-key}")
+    private String apiSecretKey;
 
     private final RestTemplate restTemplate;
 
@@ -64,8 +66,8 @@ public class TossPaymentsServiceImpl implements TossPaymentsService {
     private final MemberSubscribeRepository memberSubscribeRepository;
     private final SubscribePayRepository subscribePayRepository;
 
-    private HttpHeaders createHeaders() {
-        String auth = "Basic " + Base64.getEncoder().encodeToString((secretKey + ":").getBytes());
+    private HttpHeaders createHeaders(String key) {
+        String auth = "Basic " + Base64.getEncoder().encodeToString((key + ":").getBytes());
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.set("Authorization", auth);
@@ -82,7 +84,7 @@ public class TossPaymentsServiceImpl implements TossPaymentsService {
 
         try {
             ResponseEntity<String> response = restTemplate.exchange(
-                    CONFIRM_URL, HttpMethod.POST, new HttpEntity<>(body, createHeaders()), String.class);
+                    CONFIRM_URL, HttpMethod.POST, new HttpEntity<>(body, createHeaders(widgetSecretKey)), String.class);
 
             Store store = storeRepository.findById(payDto.getStoreId()).orElseThrow(StoreNotFoundException::new);
             Member member = memberRepository.findById(memberId).orElseThrow(MemberNotFoundException::new);
@@ -123,7 +125,7 @@ public class TossPaymentsServiceImpl implements TossPaymentsService {
 
         try {
             ResponseEntity<BillingResponse> response = restTemplate.exchange(
-                    BILLING_AUTH_URL, HttpMethod.POST, new HttpEntity<>(body, createHeaders()), BillingResponse.class);
+                    BILLING_AUTH_URL, HttpMethod.POST, new HttpEntity<>(body, createHeaders(apiSecretKey)), BillingResponse.class);
             log.info("response: {}  ", Objects.requireNonNull(response.getBody()));
 
 
@@ -203,7 +205,7 @@ public class TossPaymentsServiceImpl implements TossPaymentsService {
             ResponseEntity<Map<String, Object>> response = restTemplate.exchange(
                     BILLING_CHARGE_URL + member.getBillingKey(),
                     HttpMethod.POST,
-                    new HttpEntity<>(body, createHeaders()),
+                    new HttpEntity<>(body, createHeaders(apiSecretKey)),
                     new ParameterizedTypeReference<>() {
                     } // 타입 명시
             );
