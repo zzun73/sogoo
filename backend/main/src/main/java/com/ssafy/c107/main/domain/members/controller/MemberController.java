@@ -13,6 +13,7 @@ import com.ssafy.c107.main.domain.members.exception.MemberExistException;
 import com.ssafy.c107.main.domain.members.exception.MemberNotFoundException;
 import com.ssafy.c107.main.domain.members.exception.SellerNotFoundException;
 import com.ssafy.c107.main.domain.members.repository.MemberRepository;
+import com.ssafy.c107.main.domain.members.repository.TokenRepository;
 import com.ssafy.c107.main.domain.members.service.MemberService;
 import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.http.Cookie;
@@ -39,6 +40,7 @@ public class MemberController {
     private final MemberService memberService;
     private final MemberRepository memberRepository;
     private final JWTUtil jwtUtil;
+    private final TokenRepository tokenRepository;
 
     @PostMapping("/email-check")
     public ResponseEntity<?> emailCheck(@RequestBody EmailCheckRequest emailCheckDto) {
@@ -121,7 +123,7 @@ public class MemberController {
             return new ResponseEntity<>("invalid refresh token", HttpStatus.BAD_REQUEST);
         }
 
-        boolean isExist = memberRepository.existsByRefreshToken(refresh);
+        boolean isExist = tokenRepository.existsByRefreshToken(refresh);
 
         if (!isExist) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("invalid refresh token");
@@ -137,14 +139,11 @@ public class MemberController {
         //make new JWT
         String newAccess = jwtUtil.createJwt("access", email, member.getRole(), 600000L,
             member.getId());
-        String newRefresh = jwtUtil.createJwt("refresh", email, member.getRole(), 86400000L,
-            member.getId());
-
-        member.updateRefreshToken(newRefresh);
-        memberRepository.save(member);
+        String newRefresh = jwtUtil.createRefreshToken(member.getId(), "refresh", email,
+            member.getRole(), 86400000L, member.getId());
 
         //response
-        response.setHeader("Authorization","Bearer " + newAccess);
+        response.setHeader("Authorization", "Bearer " + newAccess);
         response.addCookie(createCookie("refresh", newRefresh));
         return ResponseEntity.ok().build();
     }

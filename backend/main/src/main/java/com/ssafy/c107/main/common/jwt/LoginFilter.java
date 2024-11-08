@@ -85,13 +85,11 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         //토큰 생성
         String access = jwtUtil.createJwt("access", email, member.getRole(), 1800000L,
             member.getId());
-        String refresh = jwtUtil.createJwt("refresh", email, member.getRole(), 86400000L,
+        String refresh = jwtUtil.createRefreshToken(member.getId(),"refresh", email, member.getRole(), 86400000L,
             member.getId());
+        System.out.println("사용자 아이디 : " +  member.getId());
 
         System.out.println("role : " + role.toString());
-
-        member.updateRefreshToken(refresh);
-        memberRepository.save(member);
 
         //응답 생성
         response.setHeader("Authorization", "Bearer " + access);

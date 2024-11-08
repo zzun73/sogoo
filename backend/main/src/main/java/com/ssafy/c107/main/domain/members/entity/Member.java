@@ -37,9 +37,6 @@ public class Member extends BaseEntity {
     @Column(nullable = false, columnDefinition = "TEXT")
     private String password;
 
-    @Column(columnDefinition = "TEXT")
-    private String refreshToken;
-
     @Column(nullable = false)
     private String phoneNumber;
 
@@ -59,13 +56,12 @@ public class Member extends BaseEntity {
     private String uuid;
 
     @Builder
-    public Member(String name, String email, String password, String refreshToken,
+    public Member(String name, String email, String password,
         String phoneNumber, String birth, String address, WithDrawalStatus withDrawalStatus,
         MemberRole role) {
         this.name = name;
         this.email = email;
         this.password = password;
-        this.refreshToken = refreshToken;
         this.phoneNumber = phoneNumber;
         this.birth = birth;
         this.address = address;
@@ -77,24 +73,12 @@ public class Member extends BaseEntity {
         this.id = id;
     }
 
-    public void updateRefreshToken(String refreshToken) {
-        this.refreshToken = refreshToken;
-    }
-
-    public void deleteRefreshToken() {
-        this.refreshToken = null;
-    }
-
     public void updatePassword(String password) {
         this.password = password;
     }
 
     public void updateAddress(String address) {
         this.address = address;
-    }
-
-    public void updateRole(MemberRole role) {
-        this.role = role;
     }
 
     public void updateUUID() {
