@@ -1,3 +1,5 @@
+type SelectedStoreId = number;
+
 interface RegisterStoreForm {
   name: string;
   address: string;
@@ -26,4 +28,9 @@ interface SelectedItem extends Item {
   category: string;
 }
 
-type RootState = MemberStore & CartStore;
+interface StoreStore {
+  selectedStoreId: number | null;
+  setSelectedStoreId: (selectedStoreId: SelectedStoreId) => void;
+}
+
+type RootState = MemberStore & CartStore & StoreStore;
