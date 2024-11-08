@@ -70,6 +70,11 @@ const keys = {
     "subscribeDetail",
     subscribeId,
   ],
+  getStoreItems: (storeId: StoreId) => [
+    ...keys.subscribe(),
+    "storeItems",
+    storeId,
+  ],
 };
 
 export default keys;

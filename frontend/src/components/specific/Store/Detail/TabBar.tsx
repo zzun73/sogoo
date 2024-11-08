@@ -21,7 +21,9 @@ const TabBar = ({ selectedTab, handleTab }: TabBarProps) => {
         <div
           key={item.key}
           className={`py-5 ${
-            selectedTab === item.key ? "border border-black border-b-0" : ""
+            selectedTab === item.key
+              ? "border border-black border-b-0"
+              : "border border-black border-t-0 border-l-0 border-r-0"
           }`}
           onClick={() => handleTab(item.key)}
         >
