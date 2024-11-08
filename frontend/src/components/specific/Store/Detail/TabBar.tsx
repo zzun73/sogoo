@@ -16,7 +16,7 @@ const TabBar = ({ selectedTab, handleTab }: TabBarProps) => {
   ];
 
   return (
-    <div className="grid grid-cols-3 text-center">
+    <div className="w-full grid grid-cols-3 text-center">
       {tabs.map((item) => (
         <div
           key={item.key}

@@ -60,6 +60,62 @@ interface GetStoreListResponseData {
 }
 interface GetSalesOverviewResponseData {}
 
+interface GetStoreDetailResponse {
+  storeId: string;
+  name: StoreName;
+  description: StoreDescription;
+  img: ImageURL;
+}
+
+interface GetStoreSubscribeResponse {
+  subscribes: SubscribeInfo;
+}
+
+interface Review {
+  reviewId: number;
+  email: Email;
+  foodName: string;
+  img: File | null;
+  comment: string;
+}
+
+interface GetStoreReviewsResponse {
+  reviews: {
+    reviewId: number;
+    email: Email;
+    foodName: string;
+    img: File | null;
+    comment: string;
+  }[];
+}
+
+interface GetFoodReviewsResponse {
+  foodId: number;
+  foodName: string;
+  foodDescription: string;
+  foodPrice: number;
+  foodImg: string;
+  reviews: {
+    reviewId: number;
+    email: Email;
+    foodName: string;
+    img: File | null;
+    comment: string;
+  }[];
+}
+
+interface GetReviewSummaryResponse {
+  reviewCount: number;
+  positiveCount: number;
+  negativeCount: number;
+  summary: string;
+}
+
+interface GetStoreFoodsResponse {
+  foods: Food[];
+}
+
 type LoginResponse = LoginResponseData;
-type GetStoreListResponse = SogooResponse<GetStoreiIstResponseData>;
+type GetStoreListResponse = SogooResponse<GetStoreListResponseData>;
 type GetSalesOverviewResponse = SogooResponse<GetSalesOverviewResponseData>;
+// type GetStoreFoodsResponse = SogooResponse<GetStoreFoodsResponseData>

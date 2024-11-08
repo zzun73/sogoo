@@ -12,7 +12,13 @@ export default {
   ) => {
     return axios.post(`/subscribe/store/${storeId}`, addSubscribeForm);
   },
-
+  /**
+   * 가게 상세페이지 - 구독 상품
+   * @param storeId 가게 id
+   */
+  getStoreSubscribe: (storeId: StoreId) => {
+    return axios.get<GetStoreSubscribeResponse>(`/subscribe/list/${storeId}`);
+  },
   /**
    * 구독 상품 상세 정보 확인
    * @param subscribeId 구독 상품 Id

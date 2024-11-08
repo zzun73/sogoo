@@ -1,15 +1,27 @@
 import { Card, CardMedia, CardContent } from "@mui/material";
 import formatters from "../../../../utils/formatters";
-import { foodData } from "../../../../assets/dummyData";
+import { useGetStoreFoods } from "../../../../queries/queries";
+import { useParams } from "react-router-dom";
 
 const FoodList = () => {
+  const { id } = useParams();
+  const foods = useGetStoreFoods(id);
+  console.log(foods);
+
+  if (!foods || foods.length === 0) {
+    return (
+      <div className="flex flex-col gap-y-5 min-h-80 mt-5 w-11/12 justify-center items-center">
+        <p className="text-lg font-bold">등록된 반찬이 없습니다.</p>
+      </div>
+    );
+  }
   return (
-    <div className="grid grid-cols-4 m-3 gap-6 my-5 min-w-[850px]">
-      {foodData.map((food) => {
+    <div className="grid grid-cols-4 gap-6 mx-3 my-5 w-full">
+      {foods.map((food) => {
         const { foodName, foodDescription, foodImg, foodPrice, foodId } = food;
         const currency = formatters.formatToCurrency(foodPrice);
         return (
-          <Card className="h-[230px]" key={foodId}>
+          <Card className="min-h-[230px]" key={foodId}>
             <CardMedia
               component="img"
               image={foodImg}
