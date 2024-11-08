@@ -11,11 +11,8 @@ interface StoreInfo {
 }
 
 const ChoiceStore = () => {
-  const { selectedId, setSelectedId } = useRootStore();
+  const { selectedStoreId, setSelectedStoreId } = useRootStore();
   const [openStoreModal, setOpenStoreModal] = useState(false);
-  const [selectedStoreId, setSelectedStoreId] = useState<number | null>(
-    selectedId
-  );
 
   const handleStoreModalOpen = () => {
     setOpenStoreModal(true);
@@ -32,13 +29,11 @@ const ChoiceStore = () => {
     if (stores && stores.length > 0) {
       const firstStoreId = stores[0].storeId;
       setSelectedStoreId(firstStoreId);
-      setSelectedId(firstStoreId);
     }
-  }, []);
+  }, [stores]);
 
-  const handleStoreClick = (storeId: number | null) => {
+  const handleStoreClick = (storeId: number) => {
     setSelectedStoreId(storeId);
-    setSelectedId(storeId);
   };
 
   return (

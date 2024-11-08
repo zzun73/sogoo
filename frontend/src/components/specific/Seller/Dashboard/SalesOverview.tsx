@@ -3,15 +3,13 @@ import { CiDeliveryTruck } from "react-icons/ci";
 import Box from "../../../common/Box";
 
 import Button from "@mui/material/Button";
-import useRootStore from "../../../../stores";
 import { useNavigate } from "react-router-dom";
 
 const SalesOverview = () => {
-  const { selectedId } = useRootStore();
   const navigate = useNavigate();
 
   const handleNavigate = () => {
-    navigate(`/seller/menus?store=${selectedId}`);
+    navigate(`/seller/menus`);
   };
 
   const currentDate = formatters.formatToDate(new Date());

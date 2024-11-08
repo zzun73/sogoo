@@ -3,12 +3,13 @@ import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import { useMutation } from "@tanstack/react-query";
 import sogoo from "../services/sogoo";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import useRootStore from "../stores";
 
 const AddFood: React.FC = () => {
-  const location = useLocation();
-  const queryParams = new URLSearchParams(location.search);
-  const storeId = Number(queryParams.get("store"));
+  const storeId = useRootStore().selectedStoreId;
+
+  console.log(storeId);
 
   const navigate = useNavigate();
 
@@ -53,6 +54,11 @@ const AddFood: React.FC = () => {
   });
 
   const initiateAddFood = (): void => {
+    if (!storeId) {
+      console.error("유효한 스토어 ID가 없습니다. 다시 시도해 주세요.");
+      return;
+    }
+
     switch (true) {
       case !foodName:
         alert("상품명을 입력해 주세요.");

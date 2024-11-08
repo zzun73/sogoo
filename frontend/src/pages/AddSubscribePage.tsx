@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import SubscribeCard from "../components/specific/Seller/MenuComponents/SubscribeCard";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Box from "@mui/material/Box";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
@@ -10,13 +10,14 @@ import FormControl from "@mui/material/FormControl";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import { useMutation } from "@tanstack/react-query";
 import sogoo from "../services/sogoo";
+import useRootStore from "../stores";
 
 const AddSubscribe: React.FC = () => {
   const navigate = useNavigate();
 
-  const location = useLocation();
-  const queryParams = new URLSearchParams(location.search);
-  const storeId = Number(queryParams.get("store"));
+  const storeId = useRootStore().selectedStoreId;
+
+  console.log(storeId);
 
   const now = new Date().getMonth() + 1;
   const [subscribeMonth, setSubscribeMonth] = useState<number>(now);
@@ -90,6 +91,11 @@ const AddSubscribe: React.FC = () => {
   });
 
   const initiateAddSubscribe = (): void => {
+    if (!storeId) {
+      console.error("유효한 스토어 ID가 없습니다. 다시 시도해 주세요.");
+      return;
+    }
+
     switch (true) {
       case !subscribeName:
         alert("상품명을 입력해 주세요.");
@@ -164,16 +170,20 @@ const AddSubscribe: React.FC = () => {
                 </Select>
               </FormControl>
             </Box>
-            {[...Array(4)].map((_, index) => (
-              <SubscribeCard
-                key={index}
-                storeId={storeId}
-                month={subscribeMonth}
-                round={index + 1}
-                onSubscribeDataChange={updateSubscribeData}
-                updateAllFoods={updateAllFoods}
-              />
-            ))}
+            {[...Array(4)].map((_, index) =>
+              storeId ? (
+                <SubscribeCard
+                  key={index}
+                  storeId={storeId}
+                  month={subscribeMonth}
+                  round={index + 1}
+                  onSubscribeDataChange={updateSubscribeData}
+                  updateAllFoods={updateAllFoods}
+                />
+              ) : (
+                <div key={index}>유효한 스토어 ID가 필요합니다.</div>
+              )
+            )}
           </div>
           <TextField
             id="addSubscribeBeforePrice"

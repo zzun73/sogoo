@@ -146,14 +146,14 @@ const useGetProductReview = (storeId: StoreId, foodId: FoodId) => {
  * 판매자 메뉴페이지 전체 메뉴 확인
  * @param storeId 가게 Id
  */
-const useGetAllMenus = (storeId: StoreId) => {
+const useGetAllMenus = (storeId: StoreId | null) => {
   const { data } = useQuery({
-    queryKey: keys.getAllMenus(storeId),
-    queryFn: () => sogoo.getAllMenus(storeId),
+    queryKey: storeId ? keys.getAllMenus(storeId) : ["no-store"],
+    queryFn: () => sogoo.getAllMenus(storeId as StoreId),
+    enabled: !!storeId, // storeId가 있을 때만 쿼리 실행
   });
 
-  const menus = data ? data.data : [];
-  return menus;
+  return data ? data.data : { subscribes: [], foods: [] };
 };
 
 /**

@@ -8,13 +8,12 @@ import ListItemAvatar from "@mui/material/ListItemAvatar";
 import Avatar from "@mui/material/Avatar";
 import Divider from "@mui/material/Divider";
 import FoodDetailModal from "./MenuComponents/FoodDetailModal";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useGetAllMenus } from "../../../queries/queries";
+import useRootStore from "../../../stores";
 
 const Menus: React.FC = () => {
-  const location = useLocation();
-  const queryParams = new URLSearchParams(location.search);
-  const storeId = Number(queryParams.get("store"));
+  const storeId = useRootStore().selectedStoreId;
 
   console.log(storeId);
 
@@ -50,16 +49,20 @@ const Menus: React.FC = () => {
   };
 
   const goToAddFood = () => {
-    navigate(`/seller/add/food?store=${storeId}`);
+    navigate(`/seller/add/food`);
   };
 
   const goToAddSubscribe = () => {
-    navigate(`/seller/add/subscribe?store=${storeId}`);
+    navigate(`/seller/add/subscribe`);
   };
 
-  const goToSubscribeDetail = (subscribeId: number) => {
-    navigate(`/seller/subscribe/detail?item=${subscribeId}`);
+  const goToSubscribeDetail = () => {
+    navigate(`/seller/subscribe/detail`);
   };
+
+  if (!menuLists) {
+    return <div>데이터를 불러오는 중입니다...</div>;
+  }
 
   return (
     <div className="w-full flex flex-col flex-grow bg-slate-200">
@@ -127,9 +130,7 @@ const Menus: React.FC = () => {
                             <Button
                               variant="text"
                               size="small"
-                              onClick={() =>
-                                goToSubscribeDetail(subscribe.subscribeId)
-                              }
+                              onClick={() => goToSubscribeDetail()}
                             >
                               상세보기
                             </Button>
