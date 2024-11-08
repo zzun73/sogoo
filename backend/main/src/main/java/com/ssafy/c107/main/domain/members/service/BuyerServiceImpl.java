@@ -65,6 +65,7 @@ public class BuyerServiceImpl implements BuyerService {
                 .subscribePeriod(subscribe.getCreatedAt())
                 .storeId(subscribe.getStore().getId())
                 .storeName(subscribe.getStore().getName())
+                .storeImg(subscribe.getStore().getImg())
                 .build());
         }
 
