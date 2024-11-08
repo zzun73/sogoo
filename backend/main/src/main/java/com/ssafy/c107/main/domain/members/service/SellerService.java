@@ -11,19 +11,19 @@ import com.ssafy.c107.main.domain.members.dto.response.TodaySalesResponse;
 
 public interface SellerService {
 
-    SalesStatusResponse getSalesStatus(Long storeId);
+    SalesStatusResponse getSalesStatus(Long storeId, Long userId);
 
-    MonthlySalesResponse getMonthlySales(Long storeId);
+    MonthlySalesResponse getMonthlySales(Long storeId, Long userId);
 
-    NextWeekQuantityResponse getNextCount(Long storeId);
+    NextWeekQuantityResponse getNextCount(Long storeId, Long userId);
 
-    TodaySalesResponse getTodaySales(Long storeId);
+    TodaySalesResponse getTodaySales(Long storeId, Long userId);
 
-    SellerReviewAllResponse getAllReview(Long storeId);
+    SellerReviewAllResponse getAllReview(Long storeId, Long userId);
 
-    ReviewDetailResponse getProductReview(Long storeId, Long foodId);
+    ReviewDetailResponse getProductReview(Long storeId, Long foodId, Long userId);
 
-    SellerMenuResponse getAllProduct(Long storeId);
+    SellerMenuResponse getAllProduct(Long storeId, Long userId);
 
-    FoodListResponse getAllFood(Long storeId);
+    FoodListResponse getAllFood(Long storeId, Long userId);
 }
