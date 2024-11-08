@@ -22,7 +22,9 @@ import com.ssafy.c107.main.domain.pay.exception.ConfirmPaymentFailedException;
 import com.ssafy.c107.main.domain.store.entity.Store;
 import com.ssafy.c107.main.domain.store.exception.StoreNotFoundException;
 import com.ssafy.c107.main.domain.store.repository.StoreRepository;
-import com.ssafy.c107.main.domain.subscribe.entity.Subscribe;
+import com.ssafy.c107.main.domain.subscribe.entity.*;
+import com.ssafy.c107.main.domain.subscribe.repository.MemberSubscribeRepository;
+import com.ssafy.c107.main.domain.subscribe.repository.SubscribePayRepository;
 import com.ssafy.c107.main.domain.subscribe.repository.SubscribeRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -59,6 +61,8 @@ public class TossPaymentsServiceImpl implements TossPaymentsService {
     private final FoodRepository foodRepository;
     private final MemberRepository memberRepository;
     private final SubscribeRepository subscribeRepository;
+    private final MemberSubscribeRepository memberSubscribeRepository;
+    private final SubscribePayRepository subscribePayRepository;
 
     private HttpHeaders createHeaders() {
         String auth = "Basic " + Base64.getEncoder().encodeToString((secretKey + ":").getBytes());
@@ -133,7 +137,6 @@ public class TossPaymentsServiceImpl implements TossPaymentsService {
 //                subscribeRepository.findById(autoBillingRequest.getSubscribeId()).orElseThrow();
                 Subscribe subscribe = subscribeRepository.findById(autoBillingRequest.getSubscribeId()).orElseThrow();
 
-
                 AutoBillingDto autoBillingDto = AutoBillingDto.builder()
                         .customerKey(member.getUuid())
                         .amount(subscribe.getPrice())
@@ -143,13 +146,24 @@ public class TossPaymentsServiceImpl implements TossPaymentsService {
                         .customerName(member.getName())
                         .build();
 
+                MemberSubscribe ms = MemberSubscribe.builder()
+                        .subscribe(subscribe)
+                        .paymentStatus(PaymentStatus.NECESSARY)
+                        .member(member)
+                        .status(SubscribeStatus.SUBSCRIBE).build();
+                memberSubscribeRepository.save(ms);
+
                 boolean autoBillingResult = executeAutoBilling(memberId, autoBillingDto);
                 if (autoBillingResult) {
+                    ms.updateEndDate();
+                    SubscribePay sp = SubscribePay.builder().memberSubscribe(ms).build();
+                    subscribePayRepository.save(sp);
                     return "빌링키 등록 성공 및 자동 첫 결제 성공";
                 } else {
                     // 익셉션 던져야함
                     return "빌링키 등록 실패 또는 자동 첫 결제 실패";
                 }
+
 
             } else { // 실패시
 

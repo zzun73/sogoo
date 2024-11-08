@@ -13,7 +13,9 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import java.time.LocalDate;
+
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -42,4 +44,16 @@ public class MemberSubscribe extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "subscribe_id")
     private Subscribe subscribe;
+
+    @Builder
+    public MemberSubscribe(SubscribeStatus status, PaymentStatus paymentStatus, Member member, Subscribe subscribe) {
+        this.status = status;
+        this.paymentStatus = paymentStatus;
+        this.member = member;
+        this.subscribe = subscribe;
+    }
+
+    public void updateEndDate() {
+        this.endDate = LocalDate.now().plusDays(31); // 결제 필요 시간은 추후 도입
+    }
 }
