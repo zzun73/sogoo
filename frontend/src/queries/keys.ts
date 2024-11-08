@@ -53,6 +53,7 @@ const keys = {
     "storeSubscribe",
     storeId,
   ],
+  getStoreFoods: (storeId: StoreId) => [...keys.food(), "storeFoods", storeId],
   getStoreReviews: (storeId: StoreId) => [
     ...keys.review(),
     "storeReviews",

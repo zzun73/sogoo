@@ -20,4 +20,12 @@ export default {
   getFoodListForSubscribe: async (storeId: StoreId) => {
     return axios.get(`/food/all/${storeId}`);
   },
+
+  /**
+   * 가게 상세페이지 - 가게 정보
+   * @param storeId 가게 id
+   */
+  getStoreFoods: async (storeId: StoreId) => {
+    return axios.get<GetStoreFoodsResponse>(`/food/dishes/${storeId}`);
+  },
 };

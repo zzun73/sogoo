@@ -70,6 +70,14 @@ interface GetStoreSubscribeResponse {
   subscribes: SubscribeInfo;
 }
 
+interface Review {
+  reviewId: number;
+  email: Email;
+  foodName: string;
+  img: File | null;
+  comment: string;
+}
+
 interface GetStoreReviewsResponse {
   reviews: {
     reviewId: number;
@@ -102,6 +110,11 @@ interface GetReviewSummaryResponse {
   summary: string;
 }
 
+interface GetStoreFoodsResponse {
+  foods: Food[];
+}
+
 type LoginResponse = LoginResponseData;
 type GetStoreListResponse = SogooResponse<GetStoreListResponseData>;
 type GetSalesOverviewResponse = SogooResponse<GetSalesOverviewResponseData>;
+// type GetStoreFoodsResponse = SogooResponse<GetStoreFoodsResponseData>

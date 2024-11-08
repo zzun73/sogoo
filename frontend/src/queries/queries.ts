@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import keys from "./keys";
 import sogoo from "../services/sogoo";
+import { AxiosError } from "axios";
 
 /**
  * 이메일 중복 처리
@@ -34,13 +35,13 @@ const useCheckSeller = (businessNumber: BusinessNumber) => {
  * 매장 목록 조회
  */
 const useGetStoreList = () => {
-  const queryResponse = useQuery({
+  const { data } = useQuery({
     queryKey: keys.getStoreList(),
     queryFn: () => sogoo.getStoreList(),
   });
-  console.log(queryResponse);
-  // const stores = data ? data.data : [];
-  return queryResponse;
+  console.log(data?.data);
+  const stores = data ? data.data.stores : [];
+  return stores;
 };
 
 /**
@@ -173,17 +174,50 @@ const useGetStoreDetail = (storeId: StoreId) => {
  * @param storeId 가게 id
  */
 const useGetStoreSubscribe = (storeId: StoreId) => {
-  const { data } = useQuery({
+  const { data, error, isError } = useQuery({
     queryKey: keys.getStoreSubscribe(storeId),
     queryFn: () => sogoo.getStoreSubscribe(storeId),
   });
-  console.log("subscribe", data);
-  const subscribes = data ? data.data : null;
+
+  if (isError && error instanceof AxiosError) {
+    // console.log(error.response!.data);
+    return [];
+  }
+
+  const subscribes = data ? data.data.subscribes : null;
   return subscribes;
 };
 
 /**
+ * 가게 상세페이지 - 반찬 개별 조회
+ * @param storeId 가게 id
+ */
+const useGetStoreFoods = (storeId: StoreId) => {
+  const { data } = useQuery({
+    queryKey: keys.getStoreFoods(storeId),
+    queryFn: () => sogoo.getStoreFoods(storeId),
+  });
+
+  // console.log("반찬 개별 조회", data);
+  const foods = data ? data.data.foods : [];
+  return foods;
+};
+/**
+ * 가게 상세페이지 - 리뷰 요약
+ * @param storeId 가게 id
+ */
+const useGetReviewSummary = (storeId: StoreId) => {
+  const { data } = useQuery({
+    queryKey: keys.getReviewSummary(storeId),
+    queryFn: () => sogoo.getReviewSummary(storeId),
+  });
+  console.log("reviewSummary", data);
+  const reviewSummary = data ? data.data : null;
+  return reviewSummary;
+};
+/**
  * 가게 상세페이지 - 전체 리뷰
+ * @errorArray 에러시 빈배열
  * @param storeId 가게 id
  */
 const useGetStoreReviews = (storeId: StoreId) => {
@@ -191,8 +225,9 @@ const useGetStoreReviews = (storeId: StoreId) => {
     queryKey: keys.getStoreReviews(storeId),
     queryFn: () => sogoo.getStoreReviews(storeId),
   });
-
-  return data;
+  console.log("reviews", data?.data.reviews);
+  const reviews = data ? data.data.reviews : null;
+  return reviews;
 };
 
 /**
@@ -203,18 +238,6 @@ const useGetFoodReviews = (foodId: FoodId) => {
   const { data } = useQuery({
     queryKey: keys.getFoodReviews(foodId),
     queryFn: () => sogoo.getFoodReviews(foodId),
-  });
-
-  return data;
-};
-/**
- * 가게 상세페이지 - 리뷰 요약
- * @param storeId 가게 id
- */
-const useGetReviewSummary = (storeId: StoreId) => {
-  const { data } = useQuery({
-    queryKey: keys.getReviewSummary(storeId),
-    queryFn: () => sogoo.getReviewSummary(storeId),
   });
 
   return data;
@@ -236,6 +259,7 @@ export {
   useGetAllMenus,
   useGetStoreDetail,
   useGetStoreSubscribe,
+  useGetStoreFoods,
   useGetStoreReviews,
   useGetFoodReviews,
   useGetReviewSummary,
