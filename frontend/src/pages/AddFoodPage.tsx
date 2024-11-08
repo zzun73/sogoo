@@ -2,7 +2,7 @@ import { useState, ChangeEvent } from "react";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import { useMutation } from "@tanstack/react-query";
-import sogoo from "../../../services/sogoo";
+import sogoo from "../services/sogoo";
 import { useNavigate, useLocation } from "react-router-dom";
 
 const AddFood: React.FC = () => {

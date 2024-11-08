@@ -155,6 +155,20 @@ const useGetAllMenus = (storeId: StoreId) => {
   return menus;
 };
 
+/**
+ * 구독 상품 상세 정보 확인
+ * @param subscribeId 구독 상품 Id
+ */
+const useGetSubscribeDetail = (subscribeId: SubscribeId) => {
+  const { data } = useQuery({
+    queryKey: keys.getSubscribeDetail(subscribeId),
+    queryFn: () => sogoo.getSubscribeDetail(subscribeId),
+  });
+
+  const itemDetailInfo = data ? data.data : [];
+  return itemDetailInfo;
+};
+
 export {
   useCheckEmail,
   useCheckSeller,
@@ -169,4 +183,5 @@ export {
   useGetReviewList,
   useGetProductReview,
   useGetAllMenus,
+  useGetSubscribeDetail,
 };

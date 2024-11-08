@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
-import SubscribeCard from "./MenuComponents/SubscribeCard";
+import SubscribeCard from "../components/specific/Seller/MenuComponents/SubscribeCard";
 import { useNavigate, useLocation } from "react-router-dom";
 import Box from "@mui/material/Box";
 import InputLabel from "@mui/material/InputLabel";
@@ -9,7 +9,7 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import { useMutation } from "@tanstack/react-query";
-import sogoo from "../../../services/sogoo";
+import sogoo from "../services/sogoo";
 
 const AddSubscribe: React.FC = () => {
   const navigate = useNavigate();
