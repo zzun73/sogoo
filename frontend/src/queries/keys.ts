@@ -3,6 +3,7 @@ const keys = {
   member: () => [keys.all, "member"],
   store: () => [keys.all, "store"],
   food: () => [keys.all, "food"],
+  subscribe: () => [keys.all, "subscribe"],
   checkEmail: (email: Email) => [...keys.member(), "email", email],
   checkSeller: (businessNumber: BusinessNumber) => [
     ...keys.member(),
@@ -41,6 +42,11 @@ const keys = {
     foodId,
   ],
   getAllMenus: (storeId: StoreId) => [...keys.member(), "allMenus", storeId],
+  getSubscribeDetail: (subscribeId: SubscribeId) => [
+    ...keys.subscribe(),
+    "subscribeDetail",
+    subscribeId,
+  ],
 };
 
 export default keys;
