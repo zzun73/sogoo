@@ -1,5 +1,5 @@
 import React from "react";
-import { Card, CardActionArea, CardContent, Typography } from "@mui/material";
+import { Card, CardActionArea, CardContent, CardMedia, Typography } from "@mui/material";
 import EmptySection from "./EmptySection";
 
 interface SubscriptionListProps {
@@ -25,7 +25,8 @@ const SubscriptionList = ({ subscriptions }: SubscriptionListProps) => {
                 }}
               >
                 <CardActionArea sx={{ display: "flex", justifyContent: "left" }}>
-                  <CardContent sx={{ width: "100%", height: "150px", display: "flex", flexDirection: "column", justifyContent: "center" }}>
+                  <CardMedia component="img" image={item.storeImg} alt={item.storeName} sx={{ width: "180px", height: "150px", objectFit: "cover" }} />
+                  <CardContent sx={{ height: "150px", display: "flex", flexDirection: "column", justifyContent: "center" }}>
                     <Typography gutterBottom variant="h5" component="div">
                       {item.subscribeName}
                     </Typography>
