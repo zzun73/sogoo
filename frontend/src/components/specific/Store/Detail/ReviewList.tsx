@@ -5,17 +5,18 @@ import ReviewCard from "./ReviewCard";
 import { MdOutlineMarkUnreadChatAlt } from "react-icons/md";
 const ReviewList = () => {
   const { reviewCount, positiveCount } = summaryData;
+  const summary = "없음";
   const positiveRatio = Math.floor((positiveCount / reviewCount) * 100);
   return (
     <div className="w-full">
-      <div className="grid grid-cols-2 my-7">
-        <div className="w-[400px] text-center my-auto">
-          <p className="text-2xl">전체 리뷰 수</p>
-          <MdOutlineMarkUnreadChatAlt className="inline-block w-16 h-16 mt-3 " />
-          <p className="mt-5 text-4xl">{reviewCount} 개</p>
+      <div className="grid grid-cols-3 my-7">
+        <div className="w-[400px] text-center my-auto mx-auto">
+          <p className="text-xl">전체 리뷰 수</p>
+          <MdOutlineMarkUnreadChatAlt className="inline-block w-12 h-12 mt-3 " />
+          <p className="mt-5 text-2xl ">{reviewCount} 개</p>
         </div>
         <div>
-          <p className="text-2xl text-center">AI 리뷰 분석</p>
+          <p className="text-2xl text-center">리뷰 평점</p>
           <Gauge
             value={positiveRatio}
             startAngle={-100}
@@ -32,6 +33,12 @@ const ReviewList = () => {
             }}
             text={`긍정 리뷰\n${positiveRatio}%`}
           />
+        </div>
+        <div className="flex flex-col gap-y-5">
+          <p className="text-2xl text-center">AI 리뷰 분석</p>
+          <p className="text-base text-center">
+            {summary !== "없음" ? summary : "AI 리뷰를 생성중입니다."}
+          </p>
         </div>
       </div>
       {/* 리뷰 리스트 */}
