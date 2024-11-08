@@ -124,9 +124,12 @@ public class TossPaymentsServiceImpl implements TossPaymentsService {
         try {
             ResponseEntity<BillingResponse> response = restTemplate.exchange(
                     BILLING_AUTH_URL, HttpMethod.POST, new HttpEntity<>(body, createHeaders()), BillingResponse.class);
+            log.info("response: {}  ", Objects.requireNonNull(response.getBody()));
+
 
             // billing key update
             String billingKey = Objects.requireNonNull(response.getBody()).getBillingKey();
+            log.info("billingKey: {}", billingKey);
 
             // 성공시
             if (billingKey != null) {
@@ -170,6 +173,10 @@ public class TossPaymentsServiceImpl implements TossPaymentsService {
                 log.info("billing key 등록 실패");
             }
         } catch (Exception e) {
+            log.error("error message: {}", e.getMessage());
+            log.error("error cause: {}", e.getCause().toString());
+            log.error("error toString: {}", e.toString());
+
             throw new BillingAuthFailedException();
         }
         return "????????????";
