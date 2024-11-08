@@ -6,21 +6,21 @@ export const createCartSlice: StateCreator<RootState, [], [], CartStore> = (
   storeId: null,
   subscribe: null,
   foodList: null,
-  setStoreId: (id: StoreId) => {
-    set((state) => ({
-      ...state,
-      storeId: id,
-    }));
+
+  // storeId 설정
+  setStoreId: (id: StoreId | null) => {
+    set({ storeId: id });
   },
+
+  // 구독 정보 설정
   setSubscribe: (subInfo) => {
-    set((state) => ({
-      ...state,
-      subscribe: subInfo,
-    }));
+    set({ subscribe: subInfo });
   },
+
+  // 장바구니 목록 설정
   setFoodList: (foodList) => {
     set((state) => {
-      const updatedFoodList = [...((state.foodList ?? []) as SelectedItem[])];
+      const updatedFoodList = [...(state.foodList ?? [])];
 
       foodList.forEach((newItem) => {
         const existingItemIndex = updatedFoodList.findIndex(
@@ -33,7 +33,33 @@ export const createCartSlice: StateCreator<RootState, [], [], CartStore> = (
           updatedFoodList.push(newItem);
         }
       });
-      return { ...state, foodList: updatedFoodList };
+
+      return { foodList: updatedFoodList };
     });
+  },
+
+  // 구매 완료한 제품 삭제
+  deleteSelectedList: (selectedIds: number[]) => {
+    set((state) => ({
+      foodList: state.foodList?.filter(
+        (item) => !selectedIds.includes(item.id)
+      ),
+    }));
+  },
+
+  // 개별 상품 삭제
+  deleteSelectedItem: (foodId: FoodId) => {
+    set((state) => ({
+      foodList: state.foodList?.filter((item) => item.id !== foodId),
+    }));
+  },
+
+  // 수량 변경
+  changeFoodCount: (foodId: FoodId, amount: number) => {
+    set((state) => ({
+      foodList: state.foodList?.map((item) =>
+        item.id === foodId ? { ...item, count: item.count + amount } : item
+      ),
+    }));
   },
 });
