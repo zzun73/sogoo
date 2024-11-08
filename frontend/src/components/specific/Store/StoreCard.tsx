@@ -19,7 +19,7 @@ const StoreCard = ({ store }: StoreProps) => {
           sx={{ width: "100%", aspectRatio: "1 / 1", objectFit: "cover" }}
         />
         <div className="flex flex-row justify-between px-4 items-center py-2">
-          <p className="text-sub fw-bold">{name}</p>
+          <p className="text-sub fw-bold truncate">{name}</p>
           <IconButton aria-label="share">
             <ShareIcon sx={{ width: 20, height: 20 }} />
           </IconButton>
