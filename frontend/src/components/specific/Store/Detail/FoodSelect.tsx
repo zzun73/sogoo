@@ -1,32 +1,36 @@
-import { useState } from "react";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
+import { useParams } from "react-router-dom";
+import { useGetStoreFoods } from "../../../../queries/queries";
 
-const FoodSelect = () => {
-  const [category, setCategory] = useState("");
+interface FoodSelectProps {
+  selectedId: number;
+  handleClick: (event: SelectChangeEvent) => void;
+}
 
-  // 카테고리 선택
-  const handleCategoryChange = (event: SelectChangeEvent) => {
-    setCategory(event.target.value);
-  };
+const FoodSelect = ({ selectedId, handleClick }: FoodSelectProps) => {
+  const { id } = useParams();
+  const foods = useGetStoreFoods(Number(id));
 
   return (
     <div className="flex justify-end me-3">
       <FormControl className="w-64">
         <Select
-          value={category}
-          onChange={handleCategoryChange}
+          value={selectedId.toString()}
+          onChange={handleClick}
           displayEmpty
           inputProps={{ "aria-label": "Without label" }}
           className="h-10"
         >
-          <MenuItem value="">
+          <MenuItem value={-1}>
             <em>전체보기</em>
           </MenuItem>
-          <MenuItem value="foods">
-            <em>개별 상품</em>
-          </MenuItem>
+          {foods.map((food) => (
+            <MenuItem value={food.foodId} key={`select-${food.foodId}`}>
+              <em>{food.foodName}</em>
+            </MenuItem>
+          ))}
         </Select>
       </FormControl>
     </div>

@@ -2,12 +2,14 @@ import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 import { createMemberSlice } from "./memberSlice";
 import { createCartSlice } from "./cartSlice";
+import { createStoreSlice } from "./storeSlice";
 
 const useRootStore = create<RootState>()(
   persist(
     (...a) => ({
       ...createMemberSlice(...a),
       ...createCartSlice(...a),
+      ...createStoreSlice(...a),
     }),
     {
       name: "sogoo",
@@ -20,6 +22,7 @@ const useRootStore = create<RootState>()(
         storeId: state.storeId,
         subscribe: state.subscribe,
         selectedId: state.selectedId,
+        selectedStoreId: state.selectedStoreId,
       }),
     }
   )

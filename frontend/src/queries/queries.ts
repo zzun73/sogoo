@@ -146,14 +146,14 @@ const useGetProductReview = (storeId: StoreId, foodId: FoodId) => {
  * 판매자 메뉴페이지 전체 메뉴 확인
  * @param storeId 가게 Id
  */
-const useGetAllMenus = (storeId: StoreId) => {
+const useGetAllMenus = (storeId: StoreId | null) => {
   const { data } = useQuery({
-    queryKey: keys.getAllMenus(storeId),
-    queryFn: () => sogoo.getAllMenus(storeId),
+    queryKey: storeId ? keys.getAllMenus(storeId) : ["no-store"],
+    queryFn: () => sogoo.getAllMenus(storeId as StoreId),
+    enabled: !!storeId, // storeId가 있을 때만 쿼리 실행
   });
 
-  const menus = data ? data.data : [];
-  return menus;
+  return data ? data.data : { subscribes: [], foods: [] };
 };
 
 /**
@@ -170,6 +170,19 @@ const useGetStoreDetail = (storeId: StoreId) => {
 };
 
 /**
+ * 반찬가게 상세페이지(전체 메뉴)
+ * @param storeId 가게 id
+ */
+const useGetStoreItems = (storeId: StoreId) => {
+  const { data } = useQuery({
+    queryKey: keys.getStoreItems(storeId),
+    queryFn: () => sogoo.getStoreItems(storeId),
+  });
+  const storeItems = data ? data.data : null;
+  return storeItems;
+};
+
+/**
  * 반찬가게 상세페이지(구독 상품)
  * @param storeId 가게 id
  */
@@ -180,7 +193,6 @@ const useGetStoreSubscribe = (storeId: StoreId) => {
   });
 
   if (isError && error instanceof AxiosError) {
-    // console.log(error.response!.data);
     return [];
   }
 
@@ -198,7 +210,6 @@ const useGetStoreFoods = (storeId: StoreId) => {
     queryFn: () => sogoo.getStoreFoods(storeId),
   });
 
-  // console.log("반찬 개별 조회", data);
   const foods = data ? data.data.foods : [];
   return foods;
 };
@@ -211,7 +222,6 @@ const useGetReviewSummary = (storeId: StoreId) => {
     queryKey: keys.getReviewSummary(storeId),
     queryFn: () => sogoo.getReviewSummary(storeId),
   });
-  console.log("reviewSummary", data);
   const reviewSummary = data ? data.data : null;
   return reviewSummary;
 };
@@ -277,4 +287,5 @@ export {
   useGetFoodReviews,
   useGetReviewSummary,
   useGetSubscribeDetail,
+  useGetStoreItems,
 };

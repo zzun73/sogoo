@@ -9,16 +9,19 @@ import {
   IconButton,
 } from "@mui/material";
 import { Add, Remove, Close } from "@mui/icons-material";
-import { menuData } from "../../../../assets/dummyData";
 import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
 import { useNavigate, useParams } from "react-router-dom";
 import useRootStore from "../../../../stores";
+import { useGetStoreItems } from "../../../../queries/queries";
 
 const MenuSelect = () => {
+  const { id } = useParams();
+  const currentStoreId = Number(id);
   const [category, setCategory] = useState("");
   const [selectedItems, setSelectedItems] = useState<SelectedItem[]>([]);
   const [selectedItemId, setSelectedItemId] = useState("");
+  const storeItems = useGetStoreItems(currentStoreId);
 
   const handleCategoryChange = (event: SelectChangeEvent) => {
     setCategory(event.target.value);
@@ -28,7 +31,7 @@ const MenuSelect = () => {
   const handleItemSelect = (event: SelectChangeEvent) => {
     const selectedId = Number(event.target.value);
     const selectedData =
-      category === "subscribe" ? menuData.subscribe : menuData.foods;
+      category === "subscribe" ? storeItems.subscribe : storeItems.foods;
     const selectedItem = selectedData.find(
       (item: Item) => item.id === selectedId
     );
@@ -65,18 +68,14 @@ const MenuSelect = () => {
 
   const renderOptions = () => {
     if (category === "subscribe") {
-      return menuData.subscribe.map((item) => (
-        <MenuItem
-          key={item.name}
-          value={item.id}
-          // disabled={!!selectedItems.find((i) => i.category === "subscribe")}
-        >
+      return storeItems.subscribe.map((item: SelectedItem) => (
+        <MenuItem key={item.name} value={item.id}>
           {item.name}
         </MenuItem>
       ));
     }
     if (category === "foods") {
-      return menuData.foods.map((item) => (
+      return storeItems.foods.map((item: SelectedItem) => (
         <MenuItem key={`food${item.id}`} value={item.id}>
           {item.name}
         </MenuItem>
@@ -103,13 +102,10 @@ const MenuSelect = () => {
 
   // 여기부터는 장바구니!
   const navigate = useNavigate();
-  const { id } = useParams();
   const { storeId, subscribe, setFoodList, setSubscribe, setStoreId } =
     useRootStore();
 
   const goToCart = () => {
-    const currentStoreId = Number(id);
-
     // 현재 장바구니에 담긴 상품의 storeId와 비교
     if (storeId && storeId !== currentStoreId) {
       alert("장바구니에는 한 가게의 상품만 담을 수 있습니다.");
@@ -186,10 +182,11 @@ const MenuSelect = () => {
             key={`${item.category}${item.id}`}
             className="flex flex-row items-center"
           >
+            <div></div>
             <ListItemText
               primary={item.name}
               secondary={
-                <p>
+                <>
                   <span>가격: </span>
                   {item.category === "subscribe" ? (
                     <span className="line-through mr-1 text-gray-500">
@@ -197,7 +194,7 @@ const MenuSelect = () => {
                     </span>
                   ) : null}
                   <span>{item.price}원</span>
-                </p>
+                </>
               }
             />
             {item.category === "foods" && (
@@ -231,9 +228,6 @@ const MenuSelect = () => {
           disabled={selectedItems.length === 0}
         >
           장바구니 담기
-        </Button>
-        <Button variant="contained" className="w-full h-10">
-          구매하기
         </Button>
       </Stack>
     </div>

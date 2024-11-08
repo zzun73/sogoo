@@ -1,6 +1,7 @@
 import { useLocation } from "react-router-dom";
 import TextField from "@mui/material/TextField";
 import { useGetSubscribeDetail } from "../queries/queries";
+import SubscribeCarousel from "../components/specific/Seller/MenuComponents/SubscribeCarousel";
 
 const SubscribeDetail: React.FC = () => {
   const location = useLocation();
@@ -29,6 +30,9 @@ const SubscribeDetail: React.FC = () => {
               },
             }}
             sx={{ width: "100%", marginBottom: "20px" }}
+          />
+          <SubscribeCarousel
+            subscribeProducts={itemDetailInfo.subscribeProducts}
           />
           <TextField
             id="subscribeDetailBeforePrice"
