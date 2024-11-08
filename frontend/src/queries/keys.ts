@@ -4,10 +4,7 @@ const keys = {
   store: () => [keys.all, "store"],
   food: () => [keys.all, "food"],
   subscribe: () => [keys.all, "subscribe"],
-<<<<<<< HEAD
   review: () => [keys.all, "review"],
-=======
->>>>>>> 1e4ea4cccee3b030b3c5fbb028146241655bd0af
   checkEmail: (email: Email) => [...keys.member(), "email", email],
   checkSeller: (businessNumber: BusinessNumber) => [
     ...keys.member(),

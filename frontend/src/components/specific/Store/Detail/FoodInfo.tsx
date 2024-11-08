@@ -1,9 +1,3 @@
-interface FoodProps {
-  foodId: number;
-  foodName: string;
-  foodDescription: string;
-  foodImg: string;
-}
 interface FoodInfoProps {
   food: FoodProps;
   round: number;

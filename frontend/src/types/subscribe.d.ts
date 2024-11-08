@@ -17,7 +17,7 @@ interface SubscribeInfo {
   subscribeDescription: string;
   subscribePrice: number;
   subscribeBeforePrice: number;
-  weeklyFood?: WeeklyFood;
+  weeklyFood: WeeklyFood[];
 }
 
 interface SubscribeData {
