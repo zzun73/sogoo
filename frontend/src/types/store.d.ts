@@ -15,7 +15,6 @@ interface CartStore {
   setSubscribe: (subInfo: SelectedItem | null) => void;
   setFoodList: (foodList: SelectedItem[]) => void;
   deleteSelectedList: (selectedIds: number[]) => void;
-  deleteSelectedItem: (foodId: FoodId) => void;
   changeFoodCount: (foodId: FoodId, amount: number) => void;
 }
 

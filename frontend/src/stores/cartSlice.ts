@@ -49,33 +49,18 @@ export const createCartSlice: StateCreator<RootState, [], [], CartStore> = (
   // 구매 완료한 제품 삭제
   deleteSelectedList: (selectedIds: number[]) => {
     set((state) => {
-      const updatedFoodList =
-        state.foodList?.filter((item) => !selectedIds.includes(item.id)) ?? [];
-
-      const newState = { ...state, foodList: updatedFoodList };
-
-      // subscribe와 foodList가 동시에 null인 경우 storeId를 null로 설정
-      if (state.subscribe === null && updatedFoodList.length === 0) {
-        newState.storeId = null;
-      }
-
-      return newState;
-    });
-  },
-
-  // 개별 상품 삭제
-  deleteSelectedItem: (foodId: FoodId) => {
-    set((state) => {
-      const updatedFoodList =
-        state.foodList?.filter((item) => item.id !== foodId) ?? [];
+      const updatedFoodList = state.foodList?.filter(
+        (item) => !selectedIds.includes(item.id)
+      );
+      const newFoodList =
+        updatedFoodList && updatedFoodList.length > 0 ? updatedFoodList : null;
 
       const newState = {
         ...state,
-        foodList: updatedFoodList.length ? updatedFoodList : null,
+        foodList: newFoodList,
       };
 
-      // subscribe와 foodList가 동시에 null인 경우 storeId를 null로 설정
-      if (updatedFoodList.length === 0 && state.subscribe === null) {
+      if (state.subscribe === null && newFoodList === null) {
         newState.storeId = null;
       }
 

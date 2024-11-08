@@ -11,7 +11,7 @@ import { Remove, Add, Close } from "@mui/icons-material";
 import useRootStore from "../../../../stores";
 
 const FoodCart = () => {
-  const { foodList, deleteSelectedItem, changeFoodCount } = useRootStore();
+  const { foodList, deleteSelectedList, changeFoodCount } = useRootStore();
   const [checked, setChecked] = useState<number[]>([]);
 
   const handleChecked = (id: number) => {
@@ -75,7 +75,7 @@ const FoodCart = () => {
                 <Add />
               </IconButton>
             </div>
-            <IconButton onClick={() => deleteSelectedItem(item.id)}>
+            <IconButton onClick={() => deleteSelectedList([item.id])}>
               <Close />
             </IconButton>
           </ListItem>
