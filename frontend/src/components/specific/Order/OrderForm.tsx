@@ -1,5 +1,5 @@
 import { ChangeEvent, useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+// import { useLocation } from "react-router-dom";
 import { TextField } from "@mui/material";
 import { DataGrid, GridColDef, GridRowsProp, GridFooter, GridFooterContainer } from "@mui/x-data-grid";
 
@@ -19,24 +19,24 @@ import formatters from "../../../utils/formatters";
 // }
 
 const OrderForm = () => {
-  const location = useLocation();
+  // const location = useLocation();
   const { memberInfo, foodList, subscribe, storeId } = useRootStore();
   const [recipientAddress, setRecipientAddress] = useState<string>("");
   const [request, setRequest] = useState<string>("");
-  const [isSubscription, setIsSubscription] = useState(false);
+  const [isSubscription] = useState(true);
   const [rows, setRows] = useState<GridRowsProp>([]);
   const [orderName, setOrderName] = useState("");
   const [totalPrice, setTotalPrice] = useState(0);
 
-  const selectedItems = [1];
+  const selectedId = [1];
 
-  useEffect(() => {
-    if (location.state?.isSubscription) {
-      setIsSubscription(true);
-    } else {
-      setIsSubscription(false);
-    }
-  }, [location.state?.isSubscription]);
+  // useEffect(() => {
+  //   if (location.state?.isSubscription) {
+  //     setIsSubscription(true);
+  //   } else {
+  //     setIsSubscription(false);
+  //   }
+  // }, [location.state?.isSubscription]);
 
   useEffect(() => {
     if (isSubscription) {
@@ -50,8 +50,9 @@ const OrderForm = () => {
       ];
 
       setRows(subscriptionItem);
+      console.log("subscription", subscriptionItem);
     } else {
-      const filteredFoodItems = foodList!.filter((item) => selectedItems.includes(item.id));
+      const filteredFoodItems = foodList!.filter((item) => selectedId.includes(item.id));
       const foodItems = filteredFoodItems.map((item) => ({
         id: item.id,
         productName: item.name,
@@ -60,6 +61,7 @@ const OrderForm = () => {
       }));
 
       setRows(foodItems);
+      console.log("foodItems", foodItems);
     }
   }, [foodList, isSubscription, subscribe]);
 
@@ -175,9 +177,19 @@ const OrderForm = () => {
         {/* 결제 수단 */}
         <div className="flex flex-col gap-8 w-full mt-4 p-8 rounded-3xl bg-white">
           <h3 className="text-xl font-semibold">결제 수단</h3>
-          <button onClick={() => setIsSubscription((prev) => !prev)}>임시 버튼(추후 삭제)</button>
+          {/* <button onClick={() => setIsSubscription((prev) => !prev)}>임시 버튼(추후 삭제)</button> */}
           {isSubscription ? (
-            <TossPaymentsBillingCheckout />
+            <TossPaymentsBillingCheckout
+              orderData={{
+                orderName,
+                storeId,
+                customerName: memberInfo!.name,
+                customerEmail: memberInfo!.email,
+                amount: totalPrice,
+                subscribeId: subscribe!.id,
+                products: convertToSubmitFormat(rows),
+              }}
+            />
           ) : (
             <TossPaymentsCheckout
               orderData={{

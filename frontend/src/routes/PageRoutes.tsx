@@ -16,6 +16,7 @@ import AddSubscribePage from "../pages/AddSubscribePage";
 import BuyerMyPage from "../pages/BuyerMyPage";
 import NotFoundPage from "../pages/NotFoundPage";
 import ShoppingCart from "../components/specific/Order/ShoppingCart";
+import TossPaymentsBillingCheckoutSuccess from "../components/specific/Order/TossPaymentsBilling/TossPaymentsBillingCheckoutSuccess";
 import SubscribeDetail from "../pages/SubscribeDetailPage";
 
 const PageRoutes = () => {
@@ -28,6 +29,7 @@ const PageRoutes = () => {
       <Route path="/orders" element={<OrderCheckoutPage />}>
         <Route path="form" element={<OrderForm />} />
         <Route path="success" element={<TossPaymentsCheckoutSuccess />} />
+        <Route path="billing/success" element={<TossPaymentsBillingCheckoutSuccess />} />
         <Route path="fail" element={<TossPaymentsCheckoutFail />} />
         <Route path="cart" element={<ShoppingCart />} />
       </Route>
