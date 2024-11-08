@@ -128,20 +128,23 @@ public class TossPaymentsServiceImpl implements TossPaymentsService {
                     BILLING_AUTH_URL, HttpMethod.POST, new HttpEntity<>(body, createHeaders(apiSecretKey)), BillingResponse.class);
             log.info("response: {}  ", Objects.requireNonNull(response.getBody()));
 
-
             // billing key update
             String billingKey = Objects.requireNonNull(response.getBody()).getBillingKey();
             log.info("billingKey: {}", billingKey);
 
             // 성공시
             if (billingKey != null) {
+                log.info("빌링키 존재!");
                 Member member = memberRepository.findById(memberId).orElseThrow(MemberNotFoundException::new);
                 member.updateBillingKey(billingKey); // Member 엔티티의 메서드 사용
                 memberRepository.save(member); // 변경 사항을 반영하기 위해 저장
+                log.info("업데이트 된 memberId {}", member.getId());
 
 //                subscribeRepository.findById(autoBillingRequest.getSubscribeId()).orElseThrow();
                 Subscribe subscribe = subscribeRepository.findById(autoBillingRequest.getSubscribeId()).orElseThrow();
+                log.info("subscribe Id: {}", subscribe.getId());
 
+                // 자동 결제용 DTO 생성
                 AutoBillingDto autoBillingDto = AutoBillingDto.builder()
                         .customerKey(member.getUuid())
                         .amount(subscribe.getPrice())
@@ -151,6 +154,9 @@ public class TossPaymentsServiceImpl implements TossPaymentsService {
                         .customerName(member.getName())
                         .build();
 
+                log.info("autoBillingDto: {}", autoBillingDto.toString());
+
+
                 MemberSubscribe ms = MemberSubscribe.builder()
                         .subscribe(subscribe)
                         .paymentStatus(PaymentStatus.NECESSARY)
@@ -158,14 +164,20 @@ public class TossPaymentsServiceImpl implements TossPaymentsService {
                         .status(SubscribeStatus.SUBSCRIBE).build();
                 memberSubscribeRepository.save(ms);
 
+                log.info("MemberSubscribe: {}", ms.getStatus());
+
+
                 boolean autoBillingResult = executeAutoBilling(memberId, autoBillingDto);
                 if (autoBillingResult) {
                     ms.updateEndDate();
                     SubscribePay sp = SubscribePay.builder().memberSubscribe(ms).build();
                     subscribePayRepository.save(sp);
+                    log.info("SubscribePay: {}", sp.getCreatedAt());
                     return "빌링키 등록 성공 및 자동 첫 결제 성공";
                 } else {
                     // 익셉션 던져야함
+                    log.info("자동결제 false");
+
                     return "빌링키 등록 실패 또는 자동 첫 결제 실패";
                 }
 
@@ -176,7 +188,6 @@ public class TossPaymentsServiceImpl implements TossPaymentsService {
             }
         } catch (Exception e) {
             log.error("error message: {}", e.getMessage());
-            log.error("error cause: {}", e.getCause().toString());
             log.error("error toString: {}", e.toString());
 
             throw new BillingAuthFailedException();
@@ -187,6 +198,9 @@ public class TossPaymentsServiceImpl implements TossPaymentsService {
     // 자동 결제 진행 (첫 결제에서도 사용하고, 자동결제에서도 사용하고.)
     @Override
     public boolean executeAutoBilling(Long memberId, AutoBillingDto autoBillingDto) {
+        log.info("==========================================================================");
+        log.info("Auto Billing process{}", autoBillingDto.toString());
+
         Member member = memberRepository.findById(memberId).orElseThrow(MemberNotFoundException::new);
 
         Map<String, Object> body = new HashMap<>();
@@ -209,6 +223,7 @@ public class TossPaymentsServiceImpl implements TossPaymentsService {
                     new ParameterizedTypeReference<>() {
                     } // 타입 명시
             );
+            log.info("Auto Billing 요청 성공{}", autoBillingDto.toString());
 
             // 상태 코드가 200이고 응답 본문에서 "status"가 "DONE"이면 결제 성공
             if (response.getStatusCode().is2xxSuccessful()) {
