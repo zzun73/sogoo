@@ -23,7 +23,7 @@ const StoreContent = () => {
   };
 
   return (
-    <div className="w-full min-w-[850px]">
+    <div className="w-full w-[1200px]">
       <TabBar selectedTab={selectedTab} handleTab={handleTab} />
       <Content />
     </div>
