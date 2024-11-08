@@ -14,4 +14,5 @@ public class SubscribesResponse {
     private Long storeId;
     private String storeName;
     private LocalDateTime subscribePeriod;
+    private String storeImg;
 }
