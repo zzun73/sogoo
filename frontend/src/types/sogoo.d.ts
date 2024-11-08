@@ -55,9 +55,6 @@ interface ProductReviewProps {
   foodId: FoodId;
 }
 
-interface GetStoreListResponseData {
-  stores: Store[] | [];
-}
 interface GetSalesOverviewResponseData {}
 
 interface GetStoreDetailResponse {
@@ -68,7 +65,7 @@ interface GetStoreDetailResponse {
 }
 
 interface GetStoreSubscribeResponse {
-  subscribes: SubscribeInfo;
+  subscribes: SubscribeInfo[];
 }
 
 interface Review {
@@ -115,7 +112,9 @@ interface GetStoreFoodsResponse {
   foods: Food[];
 }
 
+interface GetStoreListResponse {
+  stores: Store[] | [];
+}
+
 type LoginResponse = LoginResponseData;
-type GetStoreListResponse = SogooResponse<GetStoreListResponseData>;
 type GetSalesOverviewResponse = SogooResponse<GetSalesOverviewResponseData>;
-// type GetStoreFoodsResponse = SogooResponse<GetStoreFoodsResponseData>

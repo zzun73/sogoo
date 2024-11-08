@@ -1,19 +1,6 @@
 import formatters from "../../../../utils/formatters";
 import FoodInfo from "./FoodInfo";
 
-interface FoodProps {
-  foodId: number;
-  foodName: string;
-  foodDescription: string;
-  foodImg: string;
-}
-
-interface WeeklyFood {
-  subscribeDate: string;
-  subscribeRound: number;
-  foods: FoodProps[];
-}
-
 interface WeeklyProps {
   week: WeeklyFood;
 }

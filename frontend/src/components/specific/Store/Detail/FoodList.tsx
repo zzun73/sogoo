@@ -5,7 +5,7 @@ import { useParams } from "react-router-dom";
 
 const FoodList = () => {
   const { id } = useParams();
-  const foods = useGetStoreFoods(id);
+  const foods = useGetStoreFoods(Number(id));
   console.log(foods);
 
   if (!foods || foods.length === 0) {

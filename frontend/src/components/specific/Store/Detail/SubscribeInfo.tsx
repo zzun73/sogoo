@@ -5,19 +5,6 @@ import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 
-interface FoodProps {
-  foodId: number;
-  foodName: string;
-  foodDescription: string;
-  foodImg: string;
-}
-
-interface WeeklyFood {
-  subscribeDate: string;
-  subscribeRound: number;
-  foods: FoodProps[];
-}
-
 interface Sub {
   subscribeId: number;
   subscribeName: string;

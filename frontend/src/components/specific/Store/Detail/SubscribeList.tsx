@@ -30,11 +30,12 @@ const PackageSkeleton = () => {
 
 const SubscribeList = () => {
   const { id } = useParams();
-  const subscribes = useGetStoreSubscribe(id);
+  const subscribes = useGetStoreSubscribe(Number(id));
   console.log(subscribes);
   if (!subscribes) {
     return <PackageSkeleton />;
   }
+
   if (subscribes.length === 0) {
     return (
       <div className="flex flex-col gap-y-5 min-h-80 mt-5 w-11/12 justify-center items-center">
@@ -42,12 +43,12 @@ const SubscribeList = () => {
       </div>
     );
   }
+
   return (
     <div className="flex flex-col gap-y-5 min-h-80 mx-auto mt-5">
-      {subscribes &&
-        subscribes.map((sub) => (
-          <SubscribeInfo sub={sub} key={`sub-${sub.subscribeName}`} />
-        ))}
+      {subscribes.map((sub) => (
+        <SubscribeInfo sub={sub} key={`sub-${sub.subscribeName}`} />
+      ))}
     </div>
   );
 };
