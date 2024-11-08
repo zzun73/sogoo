@@ -12,6 +12,7 @@ type StoreId = number;
 type StoreName = string;
 type StoreDescription = string;
 type ImageURL = string;
+type SubscribeId = number;
 
 // request, response 변수에 대한 type 정의
 

@@ -11,11 +11,13 @@ import Dashboard from "../components/specific/Seller/Dashboard";
 import Menus from "../components/specific/Seller/Menus";
 import StoreList from "../components/specific/Store/StoreList";
 import StoreDetail from "../components/specific/Store/StoreDetail";
-import AddFood from "../components/specific/Seller/AddFood";
-import AddSubscribe from "../components/specific/Seller/AddSubscribe";
+import AddFoodPage from "../pages/AddFoodPage";
+import AddSubscribePage from "../pages/AddSubscribePage";
 import BuyerMyPage from "../pages/BuyerMyPage";
 import NotFoundPage from "../pages/NotFoundPage";
 import ShoppingCart from "../components/specific/Order/ShoppingCart";
+import TossPaymentsBillingCheckoutSuccess from "../components/specific/Order/TossPaymentsBilling/TossPaymentsBillingCheckoutSuccess";
+import SubscribeDetail from "../pages/SubscribeDetailPage";
 
 const PageRoutes = () => {
   return (
@@ -27,6 +29,7 @@ const PageRoutes = () => {
       <Route path="/orders" element={<OrderCheckoutPage />}>
         <Route path="form" element={<OrderForm />} />
         <Route path="success" element={<TossPaymentsCheckoutSuccess />} />
+        <Route path="billing/success" element={<TossPaymentsBillingCheckoutSuccess />} />
         <Route path="fail" element={<TossPaymentsCheckoutFail />} />
         <Route path="cart" element={<ShoppingCart />} />
       </Route>
@@ -35,8 +38,9 @@ const PageRoutes = () => {
       <Route path="/seller" element={<SellerMyPage />}>
         <Route index element={<Dashboard />} />
         <Route path="menus" element={<Menus />} />
-        <Route path="add/food" element={<AddFood />} />
-        <Route path="add/subscribe" element={<AddSubscribe />} />
+        <Route path="add/food" element={<AddFoodPage />} />
+        <Route path="add/subscribe" element={<AddSubscribePage />} />
+        <Route path="subscribe/detail" element={<SubscribeDetail />} />
       </Route>
       {/* Store Domain */}
       <Route path="/store" element={<StorePage />}>

@@ -1,7 +1,6 @@
 import { useState } from "react";
 import Stack from "@mui/material/Stack";
 import Button from "@mui/material/Button";
-// import { dummyData } from "./MenuComponents/DummyMenus";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
@@ -56,6 +55,10 @@ const Menus: React.FC = () => {
 
   const goToAddSubscribe = () => {
     navigate(`/seller/add/subscribe?store=${storeId}`);
+  };
+
+  const goToSubscribeDetail = (subscribeId: number) => {
+    navigate(`/seller/subscribe/detail?item=${subscribeId}`);
   };
 
   return (
@@ -121,7 +124,13 @@ const Menus: React.FC = () => {
                       <div key={subscribe.subscribeId}>
                         <ListItem
                           secondaryAction={
-                            <Button variant="text" size="small">
+                            <Button
+                              variant="text"
+                              size="small"
+                              onClick={() =>
+                                goToSubscribeDetail(subscribe.subscribeId)
+                              }
+                            >
                               상세보기
                             </Button>
                           }

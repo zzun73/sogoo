@@ -1,15 +1,14 @@
-import { loadTossPayments, TossPaymentsPayment } from "@tosspayments/tosspayments-sdk";
 import { useEffect, useState } from "react";
+import { v7 as uuidv7 } from "uuid";
+import { loadTossPayments, TossPaymentsPayment } from "@tosspayments/tosspayments-sdk";
 import useRootStore from "../../../../stores";
 
 const BILLING_CLIENT_KEY = import.meta.env.VITE_TOSS_PAYMENTS_BILLING_CLIENT_KEY;
 
-const TossPaymentsBillingCheckout = () => {
+const TossPaymentsBillingCheckout = ({ orderData }: TossPaymentsCheckoutProps) => {
   const memberInfo = useRootStore().memberInfo;
   const customerKey = memberInfo!.uuid; // 구매자 UUID
   const [payment, setPayment] = useState<TossPaymentsPayment | null>(null);
-
-  // const generateRandomString = () => window.btoa(Math.random().toString()).slice(0, 20);
 
   useEffect(() => {
     async function fetchPayment() {
@@ -32,13 +31,21 @@ const TossPaymentsBillingCheckout = () => {
     // 결제를 요청하기 전에 orderId, amount를 서버에 저장하세요.
     // 결제 과정에서 악의적으로 결제 금액이 바뀌는 것을 확인하는 용도입니다.
     // const orderId = generateRandomString();
+    const orderId = uuidv7();
 
     await payment!.requestBillingAuth({
-      method: "CARD", // 자동결제(빌링)는 카드만 지원합니다
-      successUrl: window.location.origin + "/orders/success", // 요청이 성공하면 리다이렉트되는 URL
-      failUrl: window.location.origin + "/orders/fail", // 요청이 실패하면 리다이렉트되는 URL
-      customerEmail: memberInfo?.email,
-      customerName: memberInfo?.name,
+      method: "CARD",
+      successUrl:
+        window.location.origin +
+        "/orders/billing/success?" +
+        `storeId=${orderData?.storeId}` +
+        `&amount=${orderData?.amount}` +
+        `&orderId=${orderId}` +
+        `&orderName=${orderData?.orderName}` +
+        `&subscribeId=${orderData?.subscribeId}`,
+      failUrl: window.location.origin + "/orders/fail",
+      customerEmail: orderData?.customerEmail,
+      customerName: orderData?.customerName,
     });
   };
   return (

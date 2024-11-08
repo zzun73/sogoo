@@ -19,4 +19,11 @@ export default {
   getStoreSubscribe: (storeId: StoreId) => {
     return axios.get<GetStoreSubscribeResponse>(`/subscribe/list/${storeId}`);
   },
+  /**
+   * 구독 상품 상세 정보 확인
+   * @param subscribeId 구독 상품 Id
+   */
+  getSubscribeDetail: async (subscribeId: SubscribeId) => {
+    return axios.get(`subscribe/detail/${subscribeId}`);
+  },
 };

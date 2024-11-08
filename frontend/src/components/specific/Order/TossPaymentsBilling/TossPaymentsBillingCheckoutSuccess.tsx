@@ -1,27 +1,33 @@
 import { useMutation } from "@tanstack/react-query";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import sogoo from "../../../../services/sogoo";
 import useRootStore from "../../../../stores";
 import formatters from "../../../../utils/formatters";
 
-const TossPaymentsCheckoutSuccess = () => {
+const TossPaymentsBillingCheckoutSuccess = () => {
   const memberInfo = useRootStore().memberInfo;
   const [isConfirmed, setIsConfirmed] = useState(false);
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
 
-  const orderName = searchParams.get("orderName");
-  const paymentKey = searchParams.get("paymentKey");
   const orderId = searchParams.get("orderId");
+  const orderName = searchParams.get("orderName");
   const amount = Number(searchParams.get("amount"));
-  const currentPath = searchParams.get("currentPath");
-  const products = JSON.parse(searchParams.get("products")!);
-  const storeId = Number(searchParams.get("storeId")!);
+  const customerKey = searchParams.get("customerKey")!;
+  const authKey = searchParams.get("authKey")!;
+  const subscribeId = Number(searchParams.get("subscribeId")!);
+  // const storeId = Number(searchParams.get("storeId")!);
   // const redirectPath = searchParams.get("redirectPath");
 
-  const { mutate: requestNormalPayment } = useMutation({
-    mutationFn: sogoo.requestNormalPayment,
+  useEffect(() => {
+    if (!isConfirmed) {
+      confirmPayment();
+    }
+  }, [isConfirmed]);
+
+  const { mutate: requestSubscribePayment } = useMutation({
+    mutationFn: sogoo.requestSubscribePayment,
     onSuccess: () => {
       setIsConfirmed(true);
       // 결제 승인 완료 후 지정된 경로로 이동
@@ -36,29 +42,28 @@ const TossPaymentsCheckoutSuccess = () => {
 
   const confirmPayment = async () => {
     try {
-      if (!paymentKey || !orderId || !amount) {
+      if (!orderId || !subscribeId || !customerKey || !authKey) {
         throw new Error("Invalid payment data");
       }
 
-      const data: NormalPaymentsConfirmRequest = {
-        paymentKey,
+      const data: SubscribePaymentsConfirmRequest = {
         orderId,
-        amount,
-        storeId,
-        foodItems: products,
+        subscribeId,
+        customerKey,
+        authKey,
       };
       console.log("data", data);
 
-      requestNormalPayment(data);
+      requestSubscribePayment(data);
     } catch (error) {
       console.error("Payment confirmation failed:", error);
       // 에러 발생 시 원래 페이지로 돌아가기
-      if (currentPath) {
-        navigate(decodeURIComponent(currentPath), {
-          replace: true,
-          state: { paymentError: true },
-        });
-      }
+      // if (currentPath) {
+      //   navigate(decodeURIComponent(currentPath), {
+      //     replace: true,
+      //     state: { paymentError: true },
+      //   });
+      // }
     }
   };
 
@@ -118,12 +123,7 @@ const TossPaymentsCheckoutSuccess = () => {
           <div className="flex flex-col items-center">
             <img src="https://static.toss.im/lotties/loading-spot-apng.png" className="w-[120px] h-[120px]" />
             <h2 className="mt-8 text-[#191f28] font-bold text-2xl text-center">결제 요청까지 성공했어요.</h2>
-            <h4 className="mt-2 text-[#4e5968] font-medium text-base text-center">결제 승인하고 완료해보세요.</h4>
-          </div>
-          <div className="w-full">
-            <button className="w-full px-[22px] py-[11px] rounded-lg text-[#f9fcff] bg-[#3282f6]" onClick={confirmPayment}>
-              결제 승인하기
-            </button>
+            <h4 className="mt-2 text-[#4e5968] font-medium text-base text-center">결제 승인 요청 중이에요. 잠시만 기다려 주세요.</h4>
           </div>
         </div>
       )}
@@ -131,4 +131,4 @@ const TossPaymentsCheckoutSuccess = () => {
   );
 };
 
-export default TossPaymentsCheckoutSuccess;
+export default TossPaymentsBillingCheckoutSuccess;
