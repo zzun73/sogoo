@@ -58,6 +58,10 @@ const Menus: React.FC = () => {
     navigate(`/seller/add/subscribe?store=${storeId}`);
   };
 
+  const goToSubscribeDetail = (subscribeId: number) => {
+    navigate(`/seller/subscribe/detail?item=${subscribeId}`);
+  };
+
   return (
     <div className="w-full flex flex-col flex-grow bg-slate-200">
       <div className="my-10 mx-[200px]">
@@ -121,7 +125,13 @@ const Menus: React.FC = () => {
                       <div key={subscribe.subscribeId}>
                         <ListItem
                           secondaryAction={
-                            <Button variant="text" size="small">
+                            <Button
+                              variant="text"
+                              size="small"
+                              onClick={() =>
+                                goToSubscribeDetail(subscribe.subscribeId)
+                              }
+                            >
                               상세보기
                             </Button>
                           }

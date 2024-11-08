@@ -16,6 +16,7 @@ import AddSubscribePage from "../pages/AddSubscribePage";
 import BuyerMyPage from "../pages/BuyerMyPage";
 import NotFoundPage from "../pages/NotFoundPage";
 import ShoppingCart from "../components/specific/Order/ShoppingCart";
+import SubscribeDetail from "../pages/SubscribeDetailPage";
 
 const PageRoutes = () => {
   return (
@@ -37,6 +38,7 @@ const PageRoutes = () => {
         <Route path="menus" element={<Menus />} />
         <Route path="add/food" element={<AddFoodPage />} />
         <Route path="add/subscribe" element={<AddSubscribePage />} />
+        <Route path="subscribe/detail" element={<SubscribeDetail />} />
       </Route>
       {/* Store Domain */}
       <Route path="/store" element={<StorePage />}>
