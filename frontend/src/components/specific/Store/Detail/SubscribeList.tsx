@@ -1,4 +1,3 @@
-import { subscribeData } from "../../../../assets/dummyData";
 import SubscribeInfo from "./SubscribeInfo";
 import { useGetStoreSubscribe } from "../../../../queries/queries";
 import { useParams } from "react-router-dom";
@@ -36,10 +35,17 @@ const SubscribeList = () => {
   if (!subscribes) {
     return <PackageSkeleton />;
   }
+  if (subscribes.length === 0) {
+    return (
+      <div className="flex flex-col gap-y-5 min-h-80 mt-5 w-11/12 justify-center items-center">
+        <p className="text-lg font-bold">구독 상품이 존재하지 않습니다.</p>
+      </div>
+    );
+  }
   return (
-    <div className="flex flex-col gap-y-5 min-h-80 w-11/12 mx-auto mt-5">
-      {subscribeData &&
-        subscribeData.map((sub) => (
+    <div className="flex flex-col gap-y-5 min-h-80 mx-auto mt-5">
+      {subscribes &&
+        subscribes.map((sub) => (
           <SubscribeInfo sub={sub} key={`sub-${sub.subscribeName}`} />
         ))}
     </div>
