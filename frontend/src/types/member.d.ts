@@ -26,6 +26,7 @@ interface SubscribeItem {
   subscribeName: string;
   subscribePrice: number;
   storeId: number;
+  storeImg: string;
   storeName: string;
   SubscribePeriod: string;
 }
