@@ -10,3 +10,10 @@ interface NormalPaymentsConfirmRequest {
   storeId: number;
   foodItems: FoodItem[];
 }
+
+interface SubscribePaymentsConfirmRequest {
+  orderId: string;
+  subscribeId: number;
+  authKey: string;
+  customerKey: string;
+}

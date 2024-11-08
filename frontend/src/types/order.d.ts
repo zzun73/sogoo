@@ -5,6 +5,7 @@ interface TossPaymentsCheckoutProps {
     customerEmail: string;
     storeId: number;
     amount: number;
+    subscribeId?: number;
     products: {
       foodId: number;
       count: number;
