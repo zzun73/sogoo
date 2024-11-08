@@ -85,6 +85,21 @@ const ReviewManagement = ({ reviews }: ReviewManagementProps) => {
     if (!review.comment.trim()) {
       alert("리뷰 내용을 입력해주세요.");
       return;
+    } else if (review.comment.trim().length > 300) {
+      alert("리뷰 내용은 300자 이내로 작성해주세요.");
+      return;
+    } else if (review.comment.trim().length < 10) {
+      alert("리뷰 내용은 10자 이상 작성해주세요.");
+      return;
+    } else if (!review.img) {
+      alert("이미지를 등록해주세요.");
+      return;
+    } else if (review.img && !review.img.type.startsWith("image/")) {
+      alert("이미지 파일만 등록 가능합니다.");
+      return;
+    } else if (review.img && review.img.size > 10 * 1024 * 1024) {
+      alert("이미지 파일은 10MB 이하로 등록 가능합니다.");
+      return;
     }
 
     const formData = new FormData();
