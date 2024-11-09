@@ -24,13 +24,6 @@ const TossPaymentsCheckoutSuccess = () => {
     mutationFn: sogoo.requestNormalPayment,
     onSuccess: () => {
       setIsConfirmed(true);
-      // 결제 승인 완료 후 지정된 경로로 이동
-      // if (redirectPath) {
-      //   navigate(decodeURIComponent(redirectPath), {
-      //     replace: true,
-      //     state: { paymentSuccess: true, orderId },
-      //   });
-      // }
     },
   });
 
@@ -52,13 +45,7 @@ const TossPaymentsCheckoutSuccess = () => {
       requestNormalPayment(data);
     } catch (error) {
       console.error("Payment confirmation failed:", error);
-      // 에러 발생 시 원래 페이지로 돌아가기
-      if (currentPath) {
-        navigate(decodeURIComponent(currentPath), {
-          replace: true,
-          state: { paymentError: true },
-        });
-      }
+      navigate("/orders/cart");
     }
   };
 
@@ -80,7 +67,7 @@ const TossPaymentsCheckoutSuccess = () => {
           <div className="w-full my-[60px] flex flex-col gap-4 text-xl">
             <div className="flex justify-between">
               <span className="font-semibold text-[#333d48] text-base">주문번호</span>
-              <span id="orderId" className="font-medium text-[#4e5968] text-base pl-4 break-words text-right">
+              <span id="orderId" className="font-medium text-[#4e5968] text-base pl-4 break-words text-rㄴight">
                 {orderId}
               </span>
             </div>
