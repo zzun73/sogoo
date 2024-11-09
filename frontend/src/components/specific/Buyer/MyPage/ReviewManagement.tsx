@@ -196,13 +196,25 @@ const ReviewManagement = ({ reviews }: ReviewManagementProps) => {
                     </>
                   )}
                   {item.reviewStatus && (
-                    <>
-                      <h5>작성한 리뷰</h5>
-                      <div className="flex items-center">
-                        <img src={item.review?.reviewImg} alt={`리뷰 이미지 ${item.review?.reviewId}`} className="w-[200px]" />
-                        <p>{item.review?.reviewComment}</p>
-                      </div>
-                    </>
+                    <div className="flex flex-col items-center gap-4">
+                      <TextField
+                        id="outlined-read-only-input"
+                        label="작성한 리뷰"
+                        defaultValue={item.review?.reviewComment}
+                        slotProps={{
+                          input: {
+                            readOnly: true,
+                          },
+                        }}
+                        fullWidth
+                        multiline
+                      />
+                      <img
+                        src={item.review?.reviewImg}
+                        alt={`리뷰 이미지 ${item.review?.reviewId}`}
+                        className="w-[400px] h-[300px] object-cover rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 border border-gray-200 hover:scale-[1.02] transform cursor-pointer"
+                      />
+                    </div>
                   )}
                 </AccordionDetails>
                 {!item.reviewStatus && (
