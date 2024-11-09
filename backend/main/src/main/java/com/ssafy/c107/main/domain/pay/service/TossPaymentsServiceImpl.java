@@ -48,7 +48,7 @@ public class TossPaymentsServiceImpl implements TossPaymentsService {
 
     private static final String CONFIRM_URL = "https://api.tosspayments.com/v1/payments/confirm";
     private static final String BILLING_AUTH_URL = "https://api.tosspayments.com/v1/billing/authorizations/issue";
-    private static final String BILLING_CHARGE_URL = "https://api.tosspayments.com/v1/billing";
+    private static final String BILLING_CHARGE_URL = "https://api.tosspayments.com/v1/billing/";
 
     @Value("${toss.widget.secret-key}")
     private String widgetSecretKey;
@@ -126,10 +126,18 @@ public class TossPaymentsServiceImpl implements TossPaymentsService {
         try {
             ResponseEntity<BillingResponse> response = restTemplate.exchange(
                     BILLING_AUTH_URL, HttpMethod.POST, new HttpEntity<>(body, createHeaders(apiSecretKey)), BillingResponse.class);
-            log.info("response: {}  ", Objects.requireNonNull(response.getBody()));
+            if (response.getBody() == null) {
+                log.error("Billing API response body is null");
+                throw new BillingAuthFailedException();
+            }
 
             // billing key update
-            String billingKey = Objects.requireNonNull(response.getBody()).getBillingKey();
+            BillingResponse billingResponse = response.getBody();
+            String billingKey = billingResponse.getBillingKey();
+            if (billingKey == null) {
+                log.error("Billing key is null");
+                throw new BillingAuthFailedException();
+            }
             log.info("billingKey: {}", billingKey);
 
             // 성공시
@@ -223,11 +231,18 @@ public class TossPaymentsServiceImpl implements TossPaymentsService {
                     new ParameterizedTypeReference<>() {
                     } // 타입 명시
             );
-            log.info("Auto Billing 요청 성공{}", autoBillingDto.toString());
+            log.info("Auto Billing 요청 성공{}", autoBillingDto);
+
+            Map<String, Object> responseBody = response.getBody();
+            if (responseBody == null) {
+                log.error("Auto billing API response body is null");
+                return false;
+            }
+
 
             // 상태 코드가 200이고 응답 본문에서 "status"가 "DONE"이면 결제 성공
             if (response.getStatusCode().is2xxSuccessful()) {
-                Map<String, Object> responseBody = response.getBody();
+                responseBody = response.getBody();
                 if (responseBody != null && "DONE".equals(responseBody.get("status"))) {
                     return true; // 결제 성공
                 }
@@ -236,7 +251,7 @@ public class TossPaymentsServiceImpl implements TossPaymentsService {
             return false; // 결제 실패 시 false 반환
 
         } catch (Exception e) {
-            log.info("[error] getMessage: {},  ", e.getMessage(), e.getCause());
+            log.info("[error] getMessage: {}  ", e.getMessage());
             throw new BillingChargeFailedException();
         }
     }
