@@ -1,7 +1,7 @@
 import { ChangeEvent, useEffect, useState } from "react";
 // import { useLocation } from "react-router-dom";
 import { TextField } from "@mui/material";
-import { DataGrid, GridColDef, GridRowsProp, GridFooter, GridFooterContainer } from "@mui/x-data-grid";
+import { DataGrid, GridColDef, GridRowsProp, GridFooterContainer } from "@mui/x-data-grid";
 
 import TossPaymentsCheckout from "./TossPayments/TossPaymentsCheckout";
 import TossPaymentsBillingCheckout from "./TossPaymentsBilling/TossPaymentsBillingCheckout";
@@ -117,8 +117,7 @@ const OrderForm = () => {
   function CustomFooter() {
     return (
       <GridFooterContainer className="flex justify-between items-center px-4">
-        <GridFooter />
-        <div className="font-semibold">총 주문금액: {formatters.formatToCurrency(totalPrice)}</div>
+        <div className="font-semibold ml-auto">총 주문금액: {formatters.formatToCurrency(totalPrice)}</div>
       </GridFooterContainer>
     );
   }
@@ -177,7 +176,6 @@ const OrderForm = () => {
         {/* 결제 수단 */}
         <div className="flex flex-col gap-8 w-full mt-4 p-8 rounded-3xl bg-white">
           <h3 className="text-xl font-semibold">결제 수단</h3>
-          {/* <button onClick={() => setIsSubscription((prev) => !prev)}>임시 버튼(추후 삭제)</button> */}
           {isSubscription ? (
             <TossPaymentsBillingCheckout
               orderData={{
