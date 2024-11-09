@@ -11,6 +11,7 @@ import com.ssafy.c107.main.domain.order.entity.OrderList;
 import com.ssafy.c107.main.domain.order.entity.OrderType;
 import com.ssafy.c107.main.domain.order.repository.OrderListRepository;
 import com.ssafy.c107.main.domain.order.repository.OrderRepository;
+import com.ssafy.c107.main.domain.pay.client.TossPaymentsClient;
 import com.ssafy.c107.main.domain.pay.dto.AutoBillingDto;
 import com.ssafy.c107.main.domain.pay.dto.request.AutoBillingRequest;
 import com.ssafy.c107.main.domain.pay.dto.FoodItemDto;
@@ -28,17 +29,13 @@ import com.ssafy.c107.main.domain.subscribe.repository.SubscribePayRepository;
 import com.ssafy.c107.main.domain.subscribe.repository.SubscribeRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.client.RestTemplate;
 
-import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -46,17 +43,7 @@ import java.util.Objects;
 @Slf4j
 public class TossPaymentsServiceImpl implements TossPaymentsService {
 
-    private static final String CONFIRM_URL = "https://api.tosspayments.com/v1/payments/confirm";
-    private static final String BILLING_AUTH_URL = "https://api.tosspayments.com/v1/billing/authorizations/issue";
-    private static final String BILLING_CHARGE_URL = "https://api.tosspayments.com/v1/billing/";
-
-    @Value("${toss.widget.secret-key}")
-    private String widgetSecretKey;
-    @Value("${toss.api.secret-key}")
-    private String apiSecretKey;
-
-    private final RestTemplate restTemplate;
-
+    private final TossPaymentsClient tossPaymentsClient;
     private final OrderRepository orderRepository;
     private final OrderListRepository orderListRepository;
     private final StoreRepository storeRepository;
@@ -66,54 +53,52 @@ public class TossPaymentsServiceImpl implements TossPaymentsService {
     private final MemberSubscribeRepository memberSubscribeRepository;
     private final SubscribePayRepository subscribePayRepository;
 
-    private HttpHeaders createHeaders(String key) {
-        String auth = "Basic " + Base64.getEncoder().encodeToString((key + ":").getBytes());
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        headers.set("Authorization", auth);
-        return headers;
-    }
-
     // 결제 승인 요청을 처리
     @Override
     public String confirmPayment(Long memberId, PayDto payDto) {
-        Map<String, Object> body = new HashMap<>();
-        body.put("paymentKey", payDto.getPaymentKey());
-        body.put("orderId", payDto.getOrderId());
-        body.put("amount", payDto.getAmount());
+        Map<String, Object> body = Map.of(
+                "paymentKey", payDto.getPaymentKey(),
+                "orderId", payDto.getOrderId(),
+                "amount", payDto.getAmount()
+        );
 
         try {
-            ResponseEntity<String> response = restTemplate.exchange(
-                    CONFIRM_URL, HttpMethod.POST, new HttpEntity<>(body, createHeaders(widgetSecretKey)), String.class);
-
-            Store store = storeRepository.findById(payDto.getStoreId()).orElseThrow(StoreNotFoundException::new);
-            Member member = memberRepository.findById(memberId).orElseThrow(MemberNotFoundException::new);
-
-            // Order 생성
-            Order savedOrder = orderRepository.save(
-                    Order.builder()
-                            .orderType(OrderType.FOOD)
-                            .price(payDto.getAmount())
-                            .member(member)
-                            .store(store)
-                            .build());
-
-            // OrderList 생성
-            for (FoodItemDto item : payDto.getFoodItems()) {
-                Food food = foodRepository.findById(item.getFoodId()).orElseThrow(FoodNotFoundException::new);
-
-                orderListRepository.save(OrderList.builder()
-                        .order(savedOrder)
-                        .food(food)
-                        .count(item.getCount())
-                        .price(item.getCount() * food.getPrice()) // 개별 반찬별 결제 금액
-                        .build());
-            }
+            ResponseEntity<String> response = tossPaymentsClient.confirmPayment(body);
+            createOrderAndOrderList(memberId, payDto);
             return response.getBody();
         } catch (Exception e) {
+            log.error("confirmPayment error: {}",e.getMessage(), e);
             throw new ConfirmPaymentFailedException();
         }
     }
+
+    private void createOrderAndOrderList(Long memberId, PayDto payDto) {
+        Store store = storeRepository.findById(payDto.getStoreId()).orElseThrow(StoreNotFoundException::new);
+        Member member = memberRepository.findById(memberId).orElseThrow(MemberNotFoundException::new);
+
+        // 주문 생성
+        Order savedOrder = orderRepository.save(
+                Order.builder()
+                        .orderType(OrderType.FOOD)
+                        .price(payDto.getAmount())
+                        .member(member)
+                        .store(store)
+                        .build()
+        );
+
+        // 주문 목록 생성
+        for (FoodItemDto item : payDto.getFoodItems()) {
+            Food food = foodRepository.findById(item.getFoodId()).orElseThrow(FoodNotFoundException::new);
+            orderListRepository.save(OrderList.builder()
+                    .order(savedOrder)
+                    .food(food)
+                    .count(item.getCount())
+                    .price(item.getCount() * food.getPrice())
+                    .build()
+            );
+        }
+    }
+
 
     // 구독용 카드 등록 요청을 처리
     @Override
