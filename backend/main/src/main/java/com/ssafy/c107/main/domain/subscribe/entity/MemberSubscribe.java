@@ -12,7 +12,10 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -29,7 +32,7 @@ public class MemberSubscribe extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private LocalDate endDate;
+    private LocalDateTime endDate;
 
     @Enumerated(EnumType.STRING)
     private SubscribeStatus status;
@@ -53,7 +56,8 @@ public class MemberSubscribe extends BaseEntity {
         this.subscribe = subscribe;
     }
 
-    public void updateEndDate() {
-        this.endDate = LocalDate.now().plusDays(31); // 결제 필요 시간은 추후 도입
+    public void completePayment() {
+        this.paymentStatus = PaymentStatus.COMPLETE;
+        this.endDate = LocalDateTime.of(LocalDate.now().plusDays(31), LocalTime.of(6, 0)); // 결제일 기준 + 31일 오전 6시
     }
 }
