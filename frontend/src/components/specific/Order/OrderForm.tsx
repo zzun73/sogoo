@@ -23,7 +23,7 @@ const OrderForm = () => {
   const { memberInfo, foodList, subscribe, storeId } = useRootStore();
   const [recipientAddress, setRecipientAddress] = useState<string>("");
   const [request, setRequest] = useState<string>("");
-  const [isSubscription] = useState(true);
+  const [isSubscription] = useState(false);
   const [rows, setRows] = useState<GridRowsProp>([]);
   const [orderName, setOrderName] = useState("");
   const [totalPrice, setTotalPrice] = useState(0);
