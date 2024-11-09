@@ -15,7 +15,6 @@ const TossPaymentsCheckoutSuccess = () => {
   const paymentKey = searchParams.get("paymentKey");
   const orderId = searchParams.get("orderId");
   const amount = Number(searchParams.get("amount"));
-  const currentPath = searchParams.get("currentPath");
   const products = JSON.parse(searchParams.get("products")!);
   const storeId = Number(searchParams.get("storeId")!);
   // const redirectPath = searchParams.get("redirectPath");
