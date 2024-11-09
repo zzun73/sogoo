@@ -28,7 +28,7 @@ const OrderForm = () => {
   const [orderName, setOrderName] = useState("");
   const [totalPrice, setTotalPrice] = useState(0);
 
-  const selectedId = [1];
+  const selectedId = [1]; // 이 부분은 장바구니에서 선택한 상품이 localStorage selectedId 변수에 추가되는 기능 반영되면 수정 예정
 
   // useEffect(() => {
   //   if (location.state?.isSubscription) {
