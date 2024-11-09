@@ -151,7 +151,7 @@ public class TossPaymentsServiceImpl implements TossPaymentsService {
         boolean billingSuccess = executeAutoBilling(member.getId(), autoBillingDto);
 
         if (billingSuccess) {
-            memberSubscribe.updateEndDate();
+            memberSubscribe.completePayment();
             SubscribePay subscribePay = SubscribePay.builder().memberSubscribe(memberSubscribe).build();
             subscribePayRepository.save(subscribePay);
         } else {
