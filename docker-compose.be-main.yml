@@ -45,7 +45,7 @@ services:
 
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:8.13.4
-    container_name: elasticsearch
+    container_name: sogoo-elasticsearch
     environment:
       - discovery.type=single-node
       - xpack.security.enabled=false
@@ -66,9 +66,21 @@ services:
       bash -c "./bin/elasticsearch-plugin install analysis-nori || exit 1; 
       /usr/local/bin/docker-entrypoint.sh"
 
+  redis:
+    image: redis:latest
+    container_name: sogoo-redis
+    ports:
+      - "6379:6379"
+    networks:
+      - sogoo-network
+    volumes:
+      - redis-data:/data
+    restart: always
+
 networks:
   sogoo-network:
     driver: bridge
 
 volumes:
   postgres-data:
+  redis-data:
