@@ -24,18 +24,18 @@ import com.ssafy.c107.main.domain.store.entity.Store;
 import com.ssafy.c107.main.domain.store.exception.StoreNotFoundException;
 import com.ssafy.c107.main.domain.store.repository.StoreRepository;
 import com.ssafy.c107.main.domain.subscribe.entity.*;
+import com.ssafy.c107.main.domain.subscribe.exception.SubscribeNotFoundException;
 import com.ssafy.c107.main.domain.subscribe.repository.MemberSubscribeRepository;
 import com.ssafy.c107.main.domain.subscribe.repository.SubscribePayRepository;
 import com.ssafy.c107.main.domain.subscribe.repository.SubscribeRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -67,7 +67,7 @@ public class TossPaymentsServiceImpl implements TossPaymentsService {
             createOrderAndOrderList(memberId, payDto);
             return response.getBody();
         } catch (Exception e) {
-            log.error("confirmPayment error: {}",e.getMessage(), e);
+            log.error("confirmPayment error: {}", e.getMessage(), e);
             throw new ConfirmPaymentFailedException();
         }
     }
@@ -100,143 +100,99 @@ public class TossPaymentsServiceImpl implements TossPaymentsService {
     }
 
 
-    // 구독용 카드 등록 요청을 처리
     @Override
     public String prepareBillingAuth(Long memberId, AutoBillingRequest autoBillingRequest) {
-
-        Map<String, Object> body = new HashMap<>();
-        body.put("authKey", autoBillingRequest.getAuthKey());
-        body.put("customerKey", autoBillingRequest.getCustomerKey());
+        Map<String, Object> body = Map.of(
+                "authKey", autoBillingRequest.getAuthKey(),
+                "customerKey", autoBillingRequest.getCustomerKey()
+        );
 
         try {
-            ResponseEntity<BillingResponse> response = restTemplate.exchange(
-                    BILLING_AUTH_URL, HttpMethod.POST, new HttpEntity<>(body, createHeaders(apiSecretKey)), BillingResponse.class);
-            if (response.getBody() == null) {
-                log.error("Billing API response body is null");
-                throw new BillingAuthFailedException();
-            }
+            ResponseEntity<BillingResponse> response = tossPaymentsClient.issueBillingKey(body);
 
-            // billing key update
             BillingResponse billingResponse = response.getBody();
-            String billingKey = billingResponse.getBillingKey();
-            if (billingKey == null) {
-                log.error("Billing key is null");
-                throw new BillingAuthFailedException();
-            }
-            log.info("billingKey: {}", billingKey);
 
-            // 성공시
-            if (billingKey != null) {
-                log.info("빌링키 존재!");
-                Member member = memberRepository.findById(memberId).orElseThrow(MemberNotFoundException::new);
-                member.updateBillingKey(billingKey); // Member 엔티티의 메서드 사용
-                memberRepository.save(member); // 변경 사항을 반영하기 위해 저장
-                log.info("업데이트 된 memberId {}", member.getId());
+            // 빌링키 업데이트
+            String billingKey = Objects.requireNonNull(billingResponse).getBillingKey();
+            Member member = updateBillingKeyForMember(memberId, billingKey);
 
-//                subscribeRepository.findById(autoBillingRequest.getSubscribeId()).orElseThrow();
-                Subscribe subscribe = subscribeRepository.findById(autoBillingRequest.getSubscribeId()).orElseThrow();
-                log.info("subscribe Id: {}", subscribe.getId());
+            // 자동 결제 진행
+            AutoBillingDto autoBillingDto = createAutoBillingDto(member, autoBillingRequest);
+            processSubscription(member, autoBillingDto, autoBillingRequest.getSubscribeId());
 
-                // 자동 결제용 DTO 생성
-                AutoBillingDto autoBillingDto = AutoBillingDto.builder()
-                        .customerKey(member.getUuid())
-                        .amount(subscribe.getPrice())
-                        .orderId(autoBillingRequest.getOrderId())
-                        .customerEmail(member.getEmail())
-                        .orderName(subscribe.getName())
-                        .customerName(member.getName())
-                        .build();
-
-                log.info("autoBillingDto: {}", autoBillingDto.toString());
-
-
-                MemberSubscribe ms = MemberSubscribe.builder()
-                        .subscribe(subscribe)
-                        .paymentStatus(PaymentStatus.NECESSARY)
-                        .member(member)
-                        .status(SubscribeStatus.SUBSCRIBE).build();
-                memberSubscribeRepository.save(ms);
-
-                log.info("MemberSubscribe: {}", ms.getStatus());
-
-
-                boolean autoBillingResult = executeAutoBilling(memberId, autoBillingDto);
-                if (autoBillingResult) {
-                    ms.updateEndDate();
-                    SubscribePay sp = SubscribePay.builder().memberSubscribe(ms).build();
-                    subscribePayRepository.save(sp);
-                    log.info("SubscribePay: {}", sp.getCreatedAt());
-                    return "빌링키 등록 성공 및 자동 첫 결제 성공";
-                } else {
-                    // 익셉션 던져야함
-                    log.info("자동결제 false");
-
-                    return "빌링키 등록 실패 또는 자동 첫 결제 실패";
-                }
-
-
-            } else { // 실패시
-
-                log.info("billing key 등록 실패");
-            }
+            return "billing key 발급 및 첫 구독 결제 성공";
         } catch (Exception e) {
-            log.error("error message: {}", e.getMessage());
-            log.error("error toString: {}", e.toString());
-
             throw new BillingAuthFailedException();
         }
-        return "????????????";
     }
 
-    // 자동 결제 진행 (첫 결제에서도 사용하고, 자동결제에서도 사용하고.)
+    private Member updateBillingKeyForMember(Long memberId, String billingKey) {
+        Member member = memberRepository.findById(memberId).orElseThrow(MemberNotFoundException::new);
+        member.updateBillingKey(billingKey);
+        return memberRepository.save(member);
+    }
+
+    private AutoBillingDto createAutoBillingDto(Member member, AutoBillingRequest autoBillingRequest) {
+        Subscribe subscribe = subscribeRepository.findById(autoBillingRequest.getSubscribeId())
+                .orElseThrow(SubscribeNotFoundException::new);
+
+        return AutoBillingDto.builder()
+                .customerKey(member.getUuid())
+                .amount(subscribe.getPrice())
+                .orderId(autoBillingRequest.getOrderId())
+                .customerEmail(member.getEmail())
+                .orderName(subscribe.getName())
+                .customerName(member.getName())
+                .build();
+    }
+
+    private void processSubscription(Member member, AutoBillingDto autoBillingDto, Long subscribeId) {
+        MemberSubscribe memberSubscribe = createMemberSubscribe(member, subscribeId);
+        boolean billingSuccess = executeAutoBilling(member.getId(), autoBillingDto);
+
+        if (billingSuccess) {
+            memberSubscribe.updateEndDate();
+            SubscribePay subscribePay = SubscribePay.builder().memberSubscribe(memberSubscribe).build();
+            subscribePayRepository.save(subscribePay);
+        } else {
+            log.error("자동 결제 실패");
+            throw new BillingChargeFailedException();
+        }
+    }
+
+    private MemberSubscribe createMemberSubscribe(Member member, Long subscribeId) {
+        Subscribe subscribe = subscribeRepository.findById(subscribeId).orElseThrow(SubscribeNotFoundException::new);
+
+        MemberSubscribe memberSubscribe = MemberSubscribe.builder()
+                .subscribe(subscribe)
+                .paymentStatus(PaymentStatus.NECESSARY)
+                .member(member)
+                .status(SubscribeStatus.SUBSCRIBE)
+                .build();
+
+        return memberSubscribeRepository.save(memberSubscribe);
+    }
+
+
     @Override
     public boolean executeAutoBilling(Long memberId, AutoBillingDto autoBillingDto) {
-        log.info("==========================================================================");
-        log.info("Auto Billing process{}", autoBillingDto.toString());
-
-        Member member = memberRepository.findById(memberId).orElseThrow(MemberNotFoundException::new);
-
-        Map<String, Object> body = new HashMap<>();
-        body.put("amount", autoBillingDto.getAmount()); // 구독 상품 금액
-        body.put("customerKey", autoBillingDto.getCustomerKey()); // 사용자 uuid
-        body.put("orderId", autoBillingDto.getOrderId()); // 주문번호 UUID
-        body.put("orderName", autoBillingDto.getOrderName()); // 구독 상품 명
-        body.put("customerName", member.getName()); // 구독자 이름
-        body.put("customerEmail", member.getEmail()); // 구독자 이메일
+        Map<String, Object> body = Map.of(
+                "amount", autoBillingDto.getAmount(),
+                "customerKey", autoBillingDto.getCustomerKey(),
+                "orderId", autoBillingDto.getOrderId(),
+                "orderName", autoBillingDto.getOrderName(),
+                "customerName", autoBillingDto.getCustomerName(),
+                "customerEmail", autoBillingDto.getCustomerEmail()
+        );
 
         try {
-//            ResponseEntity<Object> response = restTemplate.exchange(
-//                    BILLING_CHARGE_URL + member.getBillingKey(), HttpMethod.POST, new HttpEntity<>(body, createHeaders()), Object.class);
-
-            // 자동결제 요청
-            ResponseEntity<Map<String, Object>> response = restTemplate.exchange(
-                    BILLING_CHARGE_URL + member.getBillingKey(),
-                    HttpMethod.POST,
-                    new HttpEntity<>(body, createHeaders(apiSecretKey)),
-                    new ParameterizedTypeReference<>() {
-                    } // 타입 명시
-            );
-            log.info("Auto Billing 요청 성공{}", autoBillingDto);
+            ResponseEntity<Map<String, Object>> response = tossPaymentsClient.autoBilling(memberRepository.findById(memberId)
+                    .orElseThrow(MemberNotFoundException::new).getBillingKey(), body);
 
             Map<String, Object> responseBody = response.getBody();
-            if (responseBody == null) {
-                log.error("Auto billing API response body is null");
-                return false;
-            }
-
-
-            // 상태 코드가 200이고 응답 본문에서 "status"가 "DONE"이면 결제 성공
-            if (response.getStatusCode().is2xxSuccessful()) {
-                responseBody = response.getBody();
-                if (responseBody != null && "DONE".equals(responseBody.get("status"))) {
-                    return true; // 결제 성공
-                }
-            }
-            log.info("자동결제 실패  statusCode:{}   body: {}", response.getStatusCode(), response.getBody());
-            return false; // 결제 실패 시 false 반환
-
+            return response.getStatusCode().is2xxSuccessful() && "DONE".equals(responseBody.get("status"));
         } catch (Exception e) {
-            log.info("[error] getMessage: {}  ", e.getMessage());
+            log.error("executeAutoBilling error: {}", e.getMessage(), e);
             throw new BillingChargeFailedException();
         }
     }
