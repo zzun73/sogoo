@@ -2,7 +2,7 @@ package com.ssafy.c107.main.domain.pay.controller;
 
 import com.ssafy.c107.main.domain.members.dto.CustomUserDetails;
 import com.ssafy.c107.main.domain.members.exception.InvalidMemberRoleException;
-import com.ssafy.c107.main.domain.pay.service.TossPaymentsServiceImpl;
+import com.ssafy.c107.main.domain.pay.service.TossPaymentsService;
 import com.ssafy.c107.main.domain.pay.dto.request.AutoBillingRequest;
 import com.ssafy.c107.main.domain.pay.dto.PayDto;
 import lombok.RequiredArgsConstructor;
@@ -18,13 +18,13 @@ import org.springframework.web.bind.annotation.*;
 public class TossPaymentsController {
 
     private static final Logger log = LoggerFactory.getLogger(TossPaymentsController.class);
-    private final TossPaymentsServiceImpl tossPaymentsServiceImpl;
+    private final TossPaymentsService tossPaymentsService;
 
     @PostMapping("/confirm")
     public ResponseEntity<String> confirmPayment(@RequestBody PayDto payDto, @AuthenticationPrincipal CustomUserDetails customUserDetails) {
         validateMemberRoleBuyer(customUserDetails);
 
-        String result = tossPaymentsServiceImpl.confirmPayment(customUserDetails.getUserId(), payDto);
+        String result = tossPaymentsService.confirmPayment(customUserDetails.getUserId(), payDto);
         log.info("결제 승인: {}", result);
         return ResponseEntity.ok("결제 승인이 완료되었습니다.");
     }
@@ -37,7 +37,7 @@ public class TossPaymentsController {
     public ResponseEntity<String> prepareBillingAuth(@RequestBody AutoBillingRequest autoBillingRequest, @AuthenticationPrincipal CustomUserDetails customUserDetails) {
         validateMemberRoleBuyer(customUserDetails);
 
-        String result = tossPaymentsServiceImpl.prepareBillingAuth(customUserDetails.getUserId(), autoBillingRequest);
+        String result = tossPaymentsService.prepareBillingAuth(customUserDetails.getUserId(), autoBillingRequest);
         log.info("카드 등록: {}", result);
         return ResponseEntity.ok("카드 등록이 완료되었습니다.");
     }
