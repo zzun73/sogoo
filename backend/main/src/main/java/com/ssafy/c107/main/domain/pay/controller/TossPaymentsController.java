@@ -42,15 +42,6 @@ public class TossPaymentsController {
         return ResponseEntity.ok("카드 등록이 완료되었습니다.");
     }
 
-//    @PostMapping("/billing/charge")
-//    public ResponseEntity<String> chargeBilling(@RequestBody BillingChargeDto billingChargeDto, @AuthenticationPrincipal CustomUserDetails customUserDetails) {
-//        validateMemberRoleBuyer(customUserDetails);
-//
-//        String result = tossPaymentsServiceImpl.chargeBilling(customUserDetails.getUserId(), billingChargeDto);
-//        log.info("자동 결제: {}", result);
-//        return ResponseEntity.ok("자동 결제가 완료되었습니다.");
-//    }
-
     private static void validateMemberRoleBuyer(CustomUserDetails customUserDetails) {
         if (!customUserDetails.getUserRole().getRole().equals("BUYER")) {
             throw new InvalidMemberRoleException();
