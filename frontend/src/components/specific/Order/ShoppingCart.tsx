@@ -1,4 +1,3 @@
-import { useState } from "react";
 import SubscribeCart from "./ShoppingCart/SubscribeCart";
 import FoodCart from "./ShoppingCart/FoodCart";
 
