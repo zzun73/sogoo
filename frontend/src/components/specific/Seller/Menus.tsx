@@ -65,7 +65,7 @@ const Menus: React.FC = () => {
   }
 
   return (
-    <div className="w-full flex flex-col flex-grow bg-slate-200">
+    <div className="w-full flex flex-col flex-grow">
       <div className="my-10 mx-[200px]">
         <div className="w-full h-40 flex flex-col justify-center rounded-t-3xl bg-white mb-4 px-10">
           <h1 className="text-xl font-bold mb-7">내 상품 목록</h1>

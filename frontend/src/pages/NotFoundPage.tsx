@@ -4,7 +4,7 @@ const NotFoundPage = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="w-full bg-stone-50 flex flex-col items-center justify-center">
+    <div className="w-full bg-main-200 flex flex-col items-center justify-center">
       {/* 수묵화 스타일의 404 메시지 */}
       <div
         className="text-[200px] leading-none font-bold text-gray-800 mb-8 transform hover:scale-105 transition-transform duration-300"

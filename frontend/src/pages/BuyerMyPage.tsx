@@ -31,7 +31,7 @@ const BuyerMyPage = () => {
   console.log(data);
 
   return (
-    <div className="w-full flex flex-col justify-center items-center bg-slate-200">
+    <div className="w-full flex flex-col justify-center items-center bg-sub-100">
       <div className="my-10 px-[200px] w-full">
         <h2 className="text-5xl font-shilla font-bold text-center mb-8">마이페이지</h2>
         <div className="min-w-[800px] grid grid-cols-2 gap-4">
