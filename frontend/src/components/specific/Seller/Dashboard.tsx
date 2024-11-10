@@ -22,7 +22,7 @@ const Dashboard: React.FC = () => {
         <ScheduledProducts storeId={selectedStoreId} />
       </div>
       <div className="grid grid-cols-2 gap-x-3 w-full">
-        <TodaySalesStatus />
+        <TodaySalesStatus storeId={selectedStoreId} />
         <ReviewChart />
       </div>
     </div>
