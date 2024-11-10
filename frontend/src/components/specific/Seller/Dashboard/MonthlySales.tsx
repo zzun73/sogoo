@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import Chart from "chart.js/auto";
 import Box from "../../../common/Box";
 import { Skeleton } from "@mui/material";
@@ -13,7 +13,6 @@ const SkeletonUI = () => {
   return (
     <Box className="flex flex-col items-center justify-between w-full h-[300px] gap-y-3">
       <Skeleton variant="text" width="80px" height={40} />
-      {/* 막대형 차트 스켈레톤 */}
       <div className="flex gap-2 justify-center items-end w-full">
         {[...Array(12)].map((_, index) => (
           <div key={`bar${index}`} className="flex flex-col items-center">

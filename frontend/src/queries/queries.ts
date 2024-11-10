@@ -39,7 +39,6 @@ const useGetStoreList = () => {
     queryKey: keys.getStoreList(),
     queryFn: () => sogoo.getStoreList(),
   });
-  console.log(data?.data);
   const stores = data ? data.data.stores : [];
   return stores;
 };
@@ -112,6 +111,8 @@ const useGetScheduledProduct = (storeId: StoreId) => {
     queryKey: keys.getScheduledProduct(storeId),
     queryFn: () => sogoo.getScheduledProduct(storeId),
   });
+  console.log(data?.data);
+  return data?.data || null;
 };
 /**
  * 판매자 마이페이지(당일 매출 현황)
