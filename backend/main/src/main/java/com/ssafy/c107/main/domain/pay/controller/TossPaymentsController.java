@@ -22,6 +22,8 @@ public class TossPaymentsController {
 
     @PostMapping("/confirm")
     public ResponseEntity<String> confirmPayment(@RequestBody PayDto payDto, @AuthenticationPrincipal CustomUserDetails customUserDetails) {
+        log.info("===================confirmPayment=========================");
+        log.info("payDto: {}",payDto.toString());
         validateMemberRoleBuyer(customUserDetails);
 
         String result = tossPaymentsService.confirmPayment(customUserDetails.getUserId(), payDto);
@@ -35,7 +37,10 @@ public class TossPaymentsController {
      */
     @PostMapping("/subscriptions")
     public ResponseEntity<String> prepareBillingAuth(@RequestBody AutoBillingRequest autoBillingRequest, @AuthenticationPrincipal CustomUserDetails customUserDetails) {
+        log.info("===================prepareBillingAuth=========================");
+
         validateMemberRoleBuyer(customUserDetails);
+        log.info("autoBillingRequest: {}",autoBillingRequest.toString());
 
         String result = tossPaymentsService.prepareBillingAuth(customUserDetails.getUserId(), autoBillingRequest);
         log.info("카드 등록: {}", result);
