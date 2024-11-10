@@ -29,7 +29,7 @@ const FoodCart = () => {
    * */
   const goToOrder = () => {
     setSelectedId(checked);
-    navigate(`/orders/form`, { state: { setIsSubscription: false } });
+    navigate(`/orders/form`, { state: { setIsSubscription: false, accessRoute: location.pathname } });
   };
   if (!foodList) {
     return (

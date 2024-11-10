@@ -14,7 +14,7 @@ const SubscribeCart = () => {
    * 구독 구매 페이지 이동
    * */
   const goToOrder = () => {
-    navigate(`/orders/form`, { state: { setIsSubscription: true } });
+    navigate(`/orders/form`, { state: { setIsSubscription: true, accessRoute: location.pathname } });
   };
 
   if (!subscribe) {
