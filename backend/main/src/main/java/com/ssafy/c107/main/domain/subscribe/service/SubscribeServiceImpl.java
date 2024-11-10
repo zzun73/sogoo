@@ -221,6 +221,7 @@ public class SubscribeServiceImpl implements SubscribeService {
                     dto.setId(food.getId());
                     dto.setName(food.getName());
                     dto.setPrice(food.getPrice());
+                    dto.setImage(food.getImg());
 
                     return dto;
                 }).collect(Collectors.toList());
