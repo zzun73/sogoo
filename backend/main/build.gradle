@@ -50,6 +50,8 @@ dependencies {
 
 	implementation 'org.springframework.boot:spring-boot-starter-actuator'
 
+	implementation 'org.springframework.boot:spring-boot-starter-quartz'
+
 	// AI integration
 	implementation "org.springframework.ai:spring-ai-openai-spring-boot-starter:0.8.0-SNAPSHOT"
 
