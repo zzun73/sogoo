@@ -4,6 +4,7 @@ export const createCartSlice: StateCreator<RootState, [], [], CartStore> = (
   set
 ) => ({
   storeId: null,
+  storeName: "",
   subscribe: null,
   foodList: null,
 
@@ -12,6 +13,10 @@ export const createCartSlice: StateCreator<RootState, [], [], CartStore> = (
     set({ storeId: id });
   },
 
+  // storeName 설정
+  setStoreName: (name: string) => {
+    set({ storeName: name });
+  },
   // 구독 정보 설정
   setSubscribe: (subInfo) => {
     set((state) => {

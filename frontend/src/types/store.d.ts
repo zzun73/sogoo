@@ -9,9 +9,11 @@ interface RegisterStoreForm {
 
 interface CartStore {
   storeId: number | null;
+  storeName: string;
   subscribe: SelectedItem | null;
   foodList: SelectedItem[] | null;
   setStoreId: (id: StoreId | null) => void;
+  setStoreName: (name: string) => void;
   setSubscribe: (subInfo: SelectedItem | null) => void;
   setFoodList: (foodList: SelectedItem[]) => void;
   deleteSelectedList: (selectedIds: number[]) => void;

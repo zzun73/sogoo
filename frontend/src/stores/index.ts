@@ -20,6 +20,7 @@ const useRootStore = create<RootState>()(
         isLogin: state.isLogin,
         foodList: state.foodList,
         storeId: state.storeId,
+        storeName: state.storeName,
         subscribe: state.subscribe,
         selectedId: state.selectedId,
         selectedStoreId: state.selectedStoreId,
