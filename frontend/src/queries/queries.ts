@@ -111,8 +111,8 @@ const useGetScheduledProduct = (storeId: StoreId) => {
     queryKey: keys.getScheduledProduct(storeId),
     queryFn: () => sogoo.getScheduledProduct(storeId),
   });
-  console.log(data?.data);
-  return data?.data || null;
+  console.log(data?.data.foods);
+  return data?.data.foods || null;
 };
 /**
  * 판매자 마이페이지(당일 매출 현황)
