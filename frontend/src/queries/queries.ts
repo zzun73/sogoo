@@ -102,6 +102,7 @@ const useGetMonthlySales = (storeId: StoreId) => {
     queryKey: keys.getMonthlySales(storeId),
     queryFn: () => sogoo.getMonthlySales(storeId),
   });
+  return data?.data || null;
 };
 /**
  * 판매자 마이페이지(다음주 출고량)
