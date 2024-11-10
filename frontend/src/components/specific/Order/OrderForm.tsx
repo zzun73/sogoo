@@ -1,5 +1,5 @@
 import { ChangeEvent, useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { TextField } from "@mui/material";
 import { DataGrid, GridColDef, GridRowsProp, GridFooterContainer } from "@mui/x-data-grid";
 
@@ -10,6 +10,7 @@ import formatters from "../../../utils/formatters";
 
 const OrderForm = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const { memberInfo, foodList, subscribe, storeId, selectedId } = useRootStore();
   const [recipientAddress, setRecipientAddress] = useState<string>("");
   const [request, setRequest] = useState<string>("");
@@ -17,6 +18,14 @@ const OrderForm = () => {
   const [rows, setRows] = useState<GridRowsProp>([]);
   const [orderName, setOrderName] = useState("");
   const [totalPrice, setTotalPrice] = useState(0);
+
+  useEffect(() => {
+    if (location.state?.accessRoute !== "/orders/cart") {
+      console.error("장바구니 페이지를 통해서 접근해 주세요.");
+      navigate(-1);
+      return;
+    }
+  }, []);
 
   useEffect(() => {
     if (location.state?.isSubscription) {
