@@ -16,7 +16,7 @@ const Dashboard: React.FC = () => {
 
   return (
     <div className="flex flex-col gap-y-5 w-full px-[200px] md-5">
-      <SalesOverview />
+      <SalesOverview storeId={selectedStoreId} />
       <div className="grid grid-cols-2 gap-x-3 w-full">
         <MonthlySales />
         <ScheduledProducts />

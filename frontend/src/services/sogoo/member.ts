@@ -69,7 +69,9 @@ export default {
    * 판매자 마이페이지(판매 현황)
    */
   getSalesOverview: async (storeId: StoreId) => {
-    return axios.get(`/member/seller/sales-status/${storeId}`);
+    return axios.get<GetSalesOverviewResponse>(
+      `/member/seller/sales-status/${storeId}`
+    );
   },
 
   /**

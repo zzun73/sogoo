@@ -55,7 +55,11 @@ interface ProductReviewProps {
   foodId: FoodId;
 }
 
-interface GetSalesOverviewResponseData {}
+interface GetSalesOverviewResponse {
+  todaySales: number;
+  subscribePeopleCnt: number;
+  todayTradeCnt: number;
+}
 
 interface GetStoreDetailResponse {
   storeId: string;
@@ -117,4 +121,3 @@ interface GetStoreListResponse {
 }
 
 type LoginResponse = LoginResponseData;
-type GetSalesOverviewResponse = SogooResponse<GetSalesOverviewResponseData>;

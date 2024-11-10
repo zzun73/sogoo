@@ -91,8 +91,8 @@ const useGetSalesOverview = (storeId: StoreId) => {
     queryKey: keys.getSalesOverview(storeId),
     queryFn: () => sogoo.getSalesOverview(storeId),
   });
-
-  // const overview = data?.data;
+  const salesoverview = data?.data || null;
+  return salesoverview;
 };
 /**
  * 판매자 마이페이지(월별 매출)
