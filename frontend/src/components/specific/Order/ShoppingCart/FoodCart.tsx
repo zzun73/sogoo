@@ -11,7 +11,8 @@ import { Remove, Add, Close } from "@mui/icons-material";
 import useRootStore from "../../../../stores";
 
 const FoodCart = () => {
-  const { foodList, deleteSelectedList, changeFoodCount } = useRootStore();
+  const { foodList, deleteSelectedList, changeFoodCount, setSelectedId } =
+    useRootStore();
   const [checked, setChecked] = useState<number[]>([]);
 
   const handleChecked = (id: number) => {
@@ -29,6 +30,7 @@ const FoodCart = () => {
    * 구독 구매 페이지 이동 => 이쪽 수정 필요!!
    * */
   const goToOrder = () => {
+    setSelectedId(checked);
     navigate(`/orders/form`);
   };
   if (!foodList) {
