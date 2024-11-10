@@ -13,9 +13,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -62,7 +60,7 @@ public class MemberSubscribe extends BaseEntity {
         this.endDate = LocalDateTime.now().plusMinutes(1);
     }
 
-    public void cancleSubscription() {
+    public void cancelSubscription() {
         this.status = SubscribeStatus.CANCELED;
     }
 }
