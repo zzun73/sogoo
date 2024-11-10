@@ -5,8 +5,11 @@ const formatToDate = (date: Date): string => {
   return `${year}-${month}-${day}`;
 };
 
-const formatToCurrency = (amount: number): string => {
-  return amount.toLocaleString("ko-KR") + "원";
+const formatToCurrency = (
+  amount: number,
+  unit: string | null = null
+): string => {
+  return `${amount.toLocaleString("ko-KR")}${unit ? unit : "원"}`;
 };
 
 // 이 함수의 목적 : 해당 달과 해당 회차를 주면 나는 그 회차의 시작과 끝 날짜를 반환한다.
