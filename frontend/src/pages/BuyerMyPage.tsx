@@ -6,14 +6,14 @@ import UserInfo from "../components/specific/Buyer/MyPage/UserInfo";
 import SubscriptionList from "../components/specific/Buyer/MyPage/SubscriptionList";
 import FoodTradeList from "../components/specific/Buyer/MyPage/FoodTradeList";
 import ReviewManagement from "../components/specific/Buyer/MyPage/ReviewManagement";
-// import { useGetBuyerMyPage } from "../queries/queries";
+import { useGetBuyerMyPage } from "../queries/queries";
 
-import { buyerMyPageData } from "../../src/assets/dummyData";
+// import { buyerMyPageData } from "../../src/assets/dummyData";
 
 const BuyerMyPage = () => {
   const navigate = useNavigate();
   const { memberInfo, isLogin } = useRootStore();
-  // const { data, isLoading } = useGetBuyerMyPage();
+  const { data, isLoading } = useGetBuyerMyPage();
 
   useEffect(() => {
     if (!isLogin) {
@@ -23,11 +23,11 @@ const BuyerMyPage = () => {
     }
   }, [navigate, isLogin, memberInfo?.role]);
 
-  // if (isLoading) {
-  //   return <div>Loading...</div>; // 또는 별도의 로딩 컴포넌트
-  // }
+  if (isLoading) {
+    return <div>Loading...</div>; // 또는 별도의 로딩 컴포넌트
+  }
 
-  const data: BuyerDetailInfo = buyerMyPageData;
+  // const data: BuyerDetailInfo = buyerMyPageData;
   console.log(data);
 
   return (

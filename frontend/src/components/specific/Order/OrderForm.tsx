@@ -1,5 +1,5 @@
 import { ChangeEvent, useEffect, useState } from "react";
-// import { useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { TextField } from "@mui/material";
 import { DataGrid, GridColDef, GridRowsProp, GridFooterContainer } from "@mui/x-data-grid";
 
@@ -8,35 +8,25 @@ import TossPaymentsBillingCheckout from "./TossPaymentsBilling/TossPaymentsBilli
 import useRootStore from "../../../stores";
 import formatters from "../../../utils/formatters";
 
-// interface CartItemData {
-//   id: number;
-//   name: string;
-//   price: number;
-//   beforePrice?: number;
-//   quantity: number;
-//   category: string;
-//   image?: string;
-// }
-
 const OrderForm = () => {
-  // const location = useLocation();
-  const { memberInfo, foodList, subscribe, storeId } = useRootStore();
+  const location = useLocation();
+  const { memberInfo, foodList, subscribe, storeId, selectedId } = useRootStore();
   const [recipientAddress, setRecipientAddress] = useState<string>("");
   const [request, setRequest] = useState<string>("");
-  const [isSubscription] = useState(false);
+  const [isSubscription, setIsSubscription] = useState(false);
   const [rows, setRows] = useState<GridRowsProp>([]);
   const [orderName, setOrderName] = useState("");
   const [totalPrice, setTotalPrice] = useState(0);
 
-  const selectedId = [1]; // 이 부분은 장바구니에서 선택한 상품이 localStorage selectedId 변수에 추가되는 기능 반영되면 수정 예정
-
-  // useEffect(() => {
-  //   if (location.state?.isSubscription) {
-  //     setIsSubscription(true);
-  //   } else {
-  //     setIsSubscription(false);
-  //   }
-  // }, [location.state?.isSubscription]);
+  useEffect(() => {
+    if (location.state?.isSubscription) {
+      setIsSubscription(true);
+      console.log("구독 상품 구매 경로");
+    } else {
+      setIsSubscription(false);
+      console.log("단일 반찬 상품 구매 경로");
+    }
+  }, [location.state?.isSubscription]);
 
   useEffect(() => {
     if (isSubscription) {
@@ -52,7 +42,7 @@ const OrderForm = () => {
       setRows(subscriptionItem);
       console.log("subscription", subscriptionItem);
     } else {
-      const filteredFoodItems = foodList!.filter((item) => selectedId.includes(item.id));
+      const filteredFoodItems = foodList!.filter((item) => selectedId!.includes(item.id));
       const foodItems = filteredFoodItems.map((item) => ({
         id: item.id,
         productName: item.name,
@@ -63,7 +53,7 @@ const OrderForm = () => {
       setRows(foodItems);
       console.log("foodItems", foodItems);
     }
-  }, [foodList, isSubscription, subscribe]);
+  }, [foodList, isSubscription, subscribe, selectedId]);
 
   useEffect(() => {
     // 주문명
