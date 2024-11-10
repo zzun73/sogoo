@@ -14,15 +14,13 @@ const SubscribeCart = () => {
    * 구독 구매 페이지 이동
    * */
   const goToOrder = () => {
-    navigate(`/orders/form`);
+    navigate(`/orders/form`, { state: { setIsSubscription: true } });
   };
 
   if (!subscribe) {
     return (
       <div className=" flex flex-col justify-center h-32 w-full rounded-b-3xl bg-white my-3">
-        <p className="text-lg font-semibold text-center">
-          담긴 구독 상품이 없습니다.
-        </p>
+        <p className="text-lg font-semibold text-center">담긴 구독 상품이 없습니다.</p>
       </div>
     );
   }
@@ -33,23 +31,13 @@ const SubscribeCart = () => {
       {subscribe && (
         <ListItem key={subscribe.id} className="flex items-center py-3 px-2">
           {" "}
-          <img
-            src={subscribe.image}
-            alt={subscribe.name}
-            className="w-16 h-16 rounded-lg mr-3"
-          />
+          <img src={subscribe.image} alt={subscribe.name} className="w-16 h-16 rounded-lg mr-3" />
           <ListItemText
             primary={subscribe.name}
             secondary={
               <>
-                <span className="text-lg font-bold">
-                  {subscribe.price.toLocaleString()}원
-                </span>
-                {subscribe.beforePrice && (
-                  <span className="line-through text-sm text-gray-500 ml-2">
-                    {subscribe.beforePrice.toLocaleString()}원
-                  </span>
-                )}
+                <span className="text-lg font-bold">{subscribe.price.toLocaleString()}원</span>
+                {subscribe.beforePrice && <span className="line-through text-sm text-gray-500 ml-2">{subscribe.beforePrice.toLocaleString()}원</span>}
               </>
             }
           />

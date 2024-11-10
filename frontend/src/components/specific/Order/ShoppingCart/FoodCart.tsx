@@ -1,23 +1,11 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import {
-  ListItem,
-  ListItemText,
-  IconButton,
-  Checkbox,
-  Button,
-} from "@mui/material";
+import { ListItem, ListItemText, IconButton, Checkbox, Button } from "@mui/material";
 import { Remove, Add, Close } from "@mui/icons-material";
 import useRootStore from "../../../../stores";
 
 const FoodCart = () => {
-  const {
-    foodList,
-    deleteSelectedList,
-    changeFoodCount,
-    setSelectedId,
-    selectedId,
-  } = useRootStore();
+  const { foodList, deleteSelectedList, changeFoodCount, setSelectedId, selectedId } = useRootStore();
   const [checked, setChecked] = useState<number[]>([]);
 
   useEffect(() => {
@@ -37,18 +25,16 @@ const FoodCart = () => {
   const navigate = useNavigate();
 
   /**
-   * 구독 구매 페이지 이동 => 이쪽 수정 필요!!
+   * 단일 반찬 구매 페이지 이동
    * */
   const goToOrder = () => {
     setSelectedId(checked);
-    navigate(`/orders/form`);
+    navigate(`/orders/form`, { state: { setIsSubscription: false } });
   };
   if (!foodList) {
     return (
       <div className=" flex flex-col justify-center h-32 w-full rounded-b-3xl bg-white my-3">
-        <p className="text-lg font-semibold text-center">
-          담긴 반찬 상품이 없습니다.
-        </p>
+        <p className="text-lg font-semibold text-center">담긴 반찬 상품이 없습니다.</p>
       </div>
     );
   }
@@ -58,28 +44,11 @@ const FoodCart = () => {
       {foodList &&
         foodList.map((item) => (
           <ListItem key={item.id} className="flex items-center py-3">
-            <Checkbox
-              onChange={() => handleChecked(item.id)}
-              checked={checked.includes(item.id)}
-            />
-            <img
-              src={item.image}
-              alt={item.name}
-              className="w-16 h-16 rounded-lg mr-3"
-            />
-            <ListItemText
-              primary={item.name}
-              secondary={
-                <span className="text-lg font-bold">
-                  {item.price.toLocaleString()}원
-                </span>
-              }
-            />
+            <Checkbox onChange={() => handleChecked(item.id)} checked={checked.includes(item.id)} />
+            <img src={item.image} alt={item.name} className="w-16 h-16 rounded-lg mr-3" />
+            <ListItemText primary={item.name} secondary={<span className="text-lg font-bold">{item.price.toLocaleString()}원</span>} />
             <div className="flex items-center">
-              <IconButton
-                onClick={() => changeFoodCount(item.id, -1)}
-                disabled={item.count === 1}
-              >
+              <IconButton onClick={() => changeFoodCount(item.id, -1)} disabled={item.count === 1}>
                 <Remove />
               </IconButton>
               <span>{item.count}</span>
