@@ -14,6 +14,7 @@ import Stack from "@mui/material/Stack";
 import { useNavigate, useParams } from "react-router-dom";
 import useRootStore from "../../../../stores";
 import { useGetStoreItems } from "../../../../queries/queries";
+import formatters from "../../../../utils/formatters";
 
 const MenuSelect = () => {
   const { id } = useParams();
@@ -190,10 +191,12 @@ const MenuSelect = () => {
                   <span>가격: </span>
                   {item.category === "subscribe" ? (
                     <span className="line-through mr-1 text-gray-500">
-                      {item.beforePrice}원
+                      {item.beforePrice &&
+                        formatters.formatToCurrency(item.beforePrice)}
+                      원
                     </span>
                   ) : null}
-                  <span>{item.price}원</span>
+                  <span>{formatters.formatToCurrency(item.price)}원</span>
                 </>
               }
             />
