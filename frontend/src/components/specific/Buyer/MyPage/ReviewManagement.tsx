@@ -85,6 +85,21 @@ const ReviewManagement = ({ reviews }: ReviewManagementProps) => {
     if (!review.comment.trim()) {
       alert("리뷰 내용을 입력해주세요.");
       return;
+    } else if (review.comment.trim().length > 300) {
+      alert("리뷰 내용은 300자 이내로 작성해주세요.");
+      return;
+    } else if (review.comment.trim().length < 10) {
+      alert("리뷰 내용은 10자 이상 작성해주세요.");
+      return;
+    } else if (!review.img) {
+      alert("이미지를 등록해주세요.");
+      return;
+    } else if (review.img && !review.img.type.startsWith("image/")) {
+      alert("이미지 파일만 등록 가능합니다.");
+      return;
+    } else if (review.img && review.img.size > 10 * 1024 * 1024) {
+      alert("이미지 파일은 10MB 이하로 등록 가능합니다.");
+      return;
     }
 
     const formData = new FormData();
@@ -181,13 +196,25 @@ const ReviewManagement = ({ reviews }: ReviewManagementProps) => {
                     </>
                   )}
                   {item.reviewStatus && (
-                    <>
-                      <h5>작성한 리뷰</h5>
-                      <div className="flex items-center">
-                        <img src={item.review?.reviewImg} alt={`리뷰 이미지 ${item.review?.reviewId}`} className="w-[200px]" />
-                        <p>{item.review?.reviewComment}</p>
-                      </div>
-                    </>
+                    <div className="flex flex-col items-center gap-4">
+                      <TextField
+                        id="outlined-read-only-input"
+                        label="작성한 리뷰"
+                        defaultValue={item.review?.reviewComment}
+                        slotProps={{
+                          input: {
+                            readOnly: true,
+                          },
+                        }}
+                        fullWidth
+                        multiline
+                      />
+                      <img
+                        src={item.review?.reviewImg}
+                        alt={`리뷰 이미지 ${item.review?.reviewId}`}
+                        className="w-[400px] h-[300px] object-cover rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 border border-gray-200 hover:scale-[1.02] transform cursor-pointer"
+                      />
+                    </div>
                   )}
                 </AccordionDetails>
                 {!item.reviewStatus && (
