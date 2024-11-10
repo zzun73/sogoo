@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   ListItem,
@@ -11,9 +11,20 @@ import { Remove, Add, Close } from "@mui/icons-material";
 import useRootStore from "../../../../stores";
 
 const FoodCart = () => {
-  const { foodList, deleteSelectedList, changeFoodCount } = useRootStore();
+  const {
+    foodList,
+    deleteSelectedList,
+    changeFoodCount,
+    setSelectedId,
+    selectedId,
+  } = useRootStore();
   const [checked, setChecked] = useState<number[]>([]);
 
+  useEffect(() => {
+    if (selectedId) {
+      setSelectedId(null);
+    }
+  }, []);
   const handleChecked = (id: number) => {
     if (checked.includes(id)) {
       const updatedChecked = checked.filter((foodId) => foodId !== id);
@@ -29,6 +40,7 @@ const FoodCart = () => {
    * 구독 구매 페이지 이동 => 이쪽 수정 필요!!
    * */
   const goToOrder = () => {
+    setSelectedId(checked);
     navigate(`/orders/form`);
   };
   if (!foodList) {
