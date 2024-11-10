@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   ListItem,
@@ -11,10 +11,20 @@ import { Remove, Add, Close } from "@mui/icons-material";
 import useRootStore from "../../../../stores";
 
 const FoodCart = () => {
-  const { foodList, deleteSelectedList, changeFoodCount, setSelectedId } =
-    useRootStore();
+  const {
+    foodList,
+    deleteSelectedList,
+    changeFoodCount,
+    setSelectedId,
+    selectedId,
+  } = useRootStore();
   const [checked, setChecked] = useState<number[]>([]);
 
+  useEffect(() => {
+    if (selectedId) {
+      setSelectedId(null);
+    }
+  }, []);
   const handleChecked = (id: number) => {
     if (checked.includes(id)) {
       const updatedChecked = checked.filter((foodId) => foodId !== id);
