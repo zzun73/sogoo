@@ -16,7 +16,12 @@ import useRootStore from "../../../../stores";
 import { useGetStoreItems } from "../../../../queries/queries";
 import formatters from "../../../../utils/formatters";
 
-const MenuSelect = () => {
+interface MenuSelectProps {
+  storeImg: string;
+  storeName: string;
+}
+
+const MenuSelect = ({ storeImg, storeName }: MenuSelectProps) => {
   const { id } = useParams();
   const currentStoreId = Number(id);
   const [category, setCategory] = useState("");
@@ -60,7 +65,12 @@ const MenuSelect = () => {
     if (selectedItem) {
       setSelectedItems([
         ...selectedItems,
-        { ...selectedItem, count: 1, category },
+        {
+          ...selectedItem,
+          count: 1,
+          category,
+          image: selectedItem.image ? selectedItem.image : storeImg,
+        },
       ]);
     }
     setSelectedItemId("");
@@ -103,8 +113,14 @@ const MenuSelect = () => {
 
   // 여기부터는 장바구니!
   const navigate = useNavigate();
-  const { storeId, subscribe, setFoodList, setSubscribe, setStoreId } =
-    useRootStore();
+  const {
+    storeId,
+    subscribe,
+    setFoodList,
+    setSubscribe,
+    setStoreId,
+    setStoreName,
+  } = useRootStore();
 
   const goToCart = () => {
     // 현재 장바구니에 담긴 상품의 storeId와 비교
@@ -112,7 +128,6 @@ const MenuSelect = () => {
       alert("장바구니에는 한 가게의 상품만 담을 수 있습니다.");
       return;
     }
-    setFoodList([]);
     // 장바구니에 상품이 없으면 현재 storeId로 설정
     if (!storeId) {
       setStoreId(currentStoreId);
@@ -135,12 +150,10 @@ const MenuSelect = () => {
     if (foodItems.length) {
       setFoodList(foodItems);
     }
-
+    setStoreName(storeName);
     if (confirm("페이지를 이동하시겠습니까?")) {
       navigate("/orders/cart");
     }
-
-    // 장바구니 페이지로 이동
   };
 
   return (
@@ -193,10 +206,9 @@ const MenuSelect = () => {
                     <span className="line-through mr-1 text-gray-500">
                       {item.beforePrice &&
                         formatters.formatToCurrency(item.beforePrice)}
-                      원
                     </span>
                   ) : null}
-                  <span>{formatters.formatToCurrency(item.price)}원</span>
+                  <span>{formatters.formatToCurrency(item.price)}</span>
                 </>
               }
             />

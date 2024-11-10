@@ -23,7 +23,7 @@ const StoreInfo = () => {
         <p className="text-slate-500 text-base">{info.description}</p>
         <div className="flex">
           <p className="basis-1/6 py-3">상품 선택</p>
-          <MenuSelect />
+          <MenuSelect storeImg={info.img} storeName={info.name} />
         </div>
       </div>
     </div>
