@@ -113,14 +113,17 @@ public class TossPaymentsServiceImpl implements TossPaymentsService {
                 "authKey", autoBillingRequest.getAuthKey(),
                 "customerKey", autoBillingRequest.getCustomerKey()
         );
-
         try {
             ResponseEntity<BillingResponse> response = tossPaymentsClient.issueBillingKey(body);
+            log.info("response: {}", response);
 
             BillingResponse billingResponse = response.getBody();
+            log.info("billingResponse: {}", billingResponse);
 
             // 빌링키 업데이트
             String billingKey = Objects.requireNonNull(billingResponse).getBillingKey();
+            log.info("billingKey: {}", billingKey);
+
             Member member = updateBillingKeyForMember(memberId, billingKey);
 
             // 자동 결제 진행
@@ -128,10 +131,10 @@ public class TossPaymentsServiceImpl implements TossPaymentsService {
             processSubscription(member, autoBillingDto, autoBillingRequest.getSubscribeId());
 
             // TODO: 첫 결제 성공 후 Quartz 스케줄 설정
-            MemberSubscribe subscription = memberSubscribeRepository.findByMember_Id(memberId)
-                    .orElseThrow(() -> new RuntimeException("Subscription not found for member: " + memberId));
-
-            quartzConfig.scheduleAutoBillingJob(subscription.getId(), subscription.getEndDate());
+//            MemberSubscribe subscription = memberSubscribeRepository.findByMember_Id(memberId)
+//                    .orElseThrow(() -> new RuntimeException("Subscription not found for member: " + memberId));
+//
+//            quartzConfig.scheduleAutoBillingJob(subscription.getId(), subscription.getEndDate());
 
             return "Billing key 발급 및 첫 구독 결제 성공";
         } catch (Exception e) {

@@ -22,32 +22,32 @@ public class AutoBillingJob implements Job {
     public void execute(JobExecutionContext context) throws JobExecutionException {
 
         Long subscriptionId = context.getJobDetail().getJobDataMap().getLong("subscriptionId");
-        MemberSubscribe subscription = memberSubscribeRepository.findById(subscriptionId)
+        MemberSubscribe ms = memberSubscribeRepository.findById(subscriptionId)
                 .orElseThrow(() -> new RuntimeException("Subscription not found: " + subscriptionId));
 
         // 자동 결제 수행
         boolean billingSuccess = tossPaymentsService.executeAutoBilling(
-                subscription.getMember().getId(),
+                ms.getMember().getId(),
                 new AutoBillingDto(
-                        subscription.getMember().getBillingKey(),
-                        subscription.getMember().getUuid(),
-                        subscription.getSubscribe().getPrice(),
-                        subscription.getSubscribe().getName(),
-                        subscription.getMember().getName(),
-                        subscription.getMember().getEmail()
+                        ms.getMember().getBillingKey(),
+                        ms.getMember().getUuid(),
+                        ms.getSubscribe().getPrice(),
+                        ms.getSubscribe().getName(),
+                        ms.getMember().getName(),
+                        ms.getMember().getEmail()
                 )
         );
 
         if (billingSuccess) {
             // 결제 성공 시, 결제 내역 저장 및 구독 완료 처리
-            subscription.completePayment();
-            memberSubscribeRepository.save(subscription);
+            ms.completePayment();
+            memberSubscribeRepository.save(ms);
 
             // 다음 결제 일자를 기준으로 스케줄링 재설정
-            quartzConfig.scheduleAutoBillingJob(subscriptionId, subscription.getEndDate());
+            quartzConfig.scheduleAutoBillingJob(subscriptionId, ms.getEndDate());
 
         } else {
-            throw new JobExecutionException("Failed to process auto billing for subscription: " + subscriptionId);
+            throw new JobExecutionException("Failed to process auto billing for ms: " + subscriptionId);
         }
     }
 }
