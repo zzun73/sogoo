@@ -1,18 +1,18 @@
-# 🐢 꼬북집 KKOBUKZIP
+# 🍱 소상한 구독 (SOGOO)
 
 ![썸네일](./docs/assets/thumbnail.png)
 
-## 💚 프로젝트 소개
+## 🍴 프로젝트 소개
 
 [배포 링크 🔗](https://j11c107.p.ssafy.io/)
 
-## 💚 프로젝트 기간
+## 🍴 프로젝트 기간
 
 24.10.14 ~ 24.11.19 (6주)
 
 (SSAFY 자율 프로젝트 - 자유 주제)
 
-## 💚 기술 스택
+## 🍴 기술 스택
 
 ### **Backend**
 
@@ -30,14 +30,14 @@
 
 <img src="https://img.shields.io/badge/Git(Gitlab)-FCA121?style=for-the-badge&logo=Gitlab&logoColor=white"> <img src="https://img.shields.io/badge/Jira-0052CC?style=for-the-badge&logo=Jira&logoColor=white"> <img src="https://img.shields.io/badge/Notion-000000?style=for-the-badge&logo=Notion&logoColor=white"> <img src="https://img.shields.io/badge/Mattermost-0058CC?style=for-the-badge&logo=Mattermost&logoColor=white"> <img src="https://img.shields.io/badge/Figma-F24E1E?style=for-the-badge&logo=Figma&logoColor=white">
 
-## 💚 팀원 소개
+## 🍴 팀원 소개
 
 | ![남혁준](https://avatars.githubusercontent.com/zzun73) | ![박동민](https://avatars.githubusercontent.com/PDMsnail) | ![서규범](https://avatars.githubusercontent.com/goosebbeoms) | ![이학현](https://avatars.githubusercontent.com/hyeonhakyi) | ![최승현](https://avatars.githubusercontent.com/cshyun7097) | ![황민채](https://avatars.githubusercontent.com/trick0846) |
 | ------------------------------------------------------- | --------------------------------------------------------- | ------------------------------------------------------------ | ----------------------------------------------------------- | ----------------------------------------------------------- | ---------------------------------------------------------- |
 | 남혁준([@zzun73](https://github.com/zzun73))            | 박동민([@PDMsnail](https://github.com/PDMsnail))          | 서규범([@goosebbeoms](https://github.com/goosebbeoms))       | 이학현([@hyeonhakyi](https://github.com/hyeonhakyi))        | 최승현([@cshyun7097](https://github.com/cshyun7097))        | 황민채([@trick0846](https://github.com/trick0846))         |
 | Leader / Backend                                        | Frontend                                                  | Fullstack                                                    | Backend                                                     | Backend                                                     | Frontend                                                   |
 
-## 💚 프로젝트 산출물
+## 🍴 프로젝트 산출물
 
 - [기능명세서](./docs/기능명세서.md)
 - [와이어프레임](./docs/와이어프레임.md)
@@ -47,12 +47,12 @@
 - [목업](./docs/목업.md)
 - [아키텍처](./docs/아키텍처.md)
 
-## 💚 프로젝트 결과물
+## 🍴 프로젝트 결과물
 
 - [포팅매뉴얼](./exec/)
 - [중간발표자료](./docs/꼬북집_중간발표_PPT.pdf)
 - [최종발표자료](./docs/꼬북집_최종발표_PPT.pdf)
 
-## 💚 기능 및 화면 구성
+## 🍴 기능 및 화면 구성
 
 ### 메인
