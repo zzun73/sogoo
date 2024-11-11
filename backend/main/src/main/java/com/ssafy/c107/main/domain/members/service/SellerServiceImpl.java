@@ -46,6 +46,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -255,6 +256,8 @@ public class SellerServiceImpl implements SellerService {
                 .salesSum(food.getPrice() * map.get(foodName))
                 .build());
         }
+
+        products.sort((o1, o2) -> o2.getSalesSum() - o1.getSalesSum());
 
         return TodaySalesResponse
             .builder()
