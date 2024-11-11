@@ -20,9 +20,9 @@ public class ElasticSearchController {
     private final ElasticSearchService elasticSearchService;
 
     @GetMapping("/search")
-    public ResponseEntity<?> search(@RequestParam(name = "query") String query) {
+    public ResponseEntity<?> search(@RequestParam(name = "query") String query, @RequestParam(name = "page") int page) {
         try {
-            SearchResponse response = elasticSearchService.getStores(query);
+            SearchResponse response = elasticSearchService.getStores(query, page);
             return ResponseEntity.ok(response);
         } catch (Exception e) {
             log.error("Elasticsearch 검색 중 오류 발생: {}", e.getMessage());
