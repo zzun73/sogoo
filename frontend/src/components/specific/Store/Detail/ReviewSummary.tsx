@@ -8,11 +8,7 @@ const ReviewSummary = () => {
   const reviewSummary = useGetReviewSummary(Number(id));
 
   if (!reviewSummary || !reviewSummary.reviewCount) {
-    return (
-      <div className="flex flex-col gap-y-5 min-h-80 mt-5 w-11/12 justify-center items-center">
-        <p className="text-lg font-bold">리뷰가 존재하지 않습니다.</p>
-      </div>
-    );
+    return null;
   }
 
   const { reviewCount, positiveCount, summary } = reviewSummary;
