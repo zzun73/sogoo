@@ -54,6 +54,9 @@ dependencies {
 	// AI integration
 	implementation "org.springframework.ai:spring-ai-openai-spring-boot-starter:0.8.0-SNAPSHOT"
 
+	// 욕설 필터링
+	implementation 'io.github.vaneproject:badwordfiltering:1.0.0'
+
 	compileOnly 'org.projectlombok:lombok'
 	runtimeOnly 'org.postgresql:postgresql'
 	annotationProcessor 'org.projectlombok:lombok'
