@@ -1,3 +1,5 @@
+type SelectedSubscribeId = number;
+
 interface FoodProps {
   foodId: number;
   foodName: string;
@@ -54,4 +56,9 @@ interface SubscribeDetailData {
   subscribeBeforePrice: number;
   subscribePrice: number;
   subscribeProducts: SubscribeProductsData[];
+}
+
+interface SubscribeStore {
+  selectedSubscribeId: number | null;
+  setSelectedSubscribeId: (selectedSubscribeId: SelectedSubscribeId) => void;
 }

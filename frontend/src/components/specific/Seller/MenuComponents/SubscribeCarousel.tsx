@@ -26,7 +26,7 @@ const SubscribeCarousel: React.FC<SubscribeCarouselData> = ({
   };
 
   return (
-    <div className="w-full bg-slate-300 mb-10 flex justify-center items-center rounded-lg">
+    <div className="w-full bg-main-200 mb-10 flex justify-center items-center rounded-lg">
       <Slider className="w-11/12" {...settings}>
         {items?.map((item: SubscribeProductsData) => {
           return (
@@ -34,7 +34,7 @@ const SubscribeCarousel: React.FC<SubscribeCarouselData> = ({
               <div className="text-xl font-bold mb-5">
                 {item.subscribeRound}주차 메뉴 ({item.subscribeDate} ~ )
               </div>
-              <div className="w-full h-96 flex flex-col justify-evenly items-center bg-white px-4">
+              <div className="w-full h-96 flex flex-col justify-evenly items-center bg-white rounded-lg px-4">
                 {item?.foodData.map((food: SubscribeFoodItem) => {
                   return (
                     <div className="w-full h-24 flex items-center border-2 border-slate-300 rounded px-3">

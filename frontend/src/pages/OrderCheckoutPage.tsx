@@ -16,7 +16,7 @@ const OrderCheckoutPage = () => {
   }, [navigate, isLogin, isSeller]);
 
   return (
-    <div className="w-full flex flex-col justify-center items-center bg-slate-200">
+    <div className="w-full flex flex-col justify-center items-center bg-sub-100">
       <div className="my-10 mx-[200px]">
         <Outlet />
       </div>

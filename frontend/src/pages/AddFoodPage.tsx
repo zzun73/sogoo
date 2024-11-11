@@ -85,9 +85,9 @@ const AddFood: React.FC = () => {
   };
 
   return (
-    <div className="w-full flex flex-col flex-grow bg-slate-200">
+    <div className="w-full flex flex-col flex-grow">
       <div className="flex flex-col justify-center items-center my-10 mx-[200px]">
-        <h1 className="text-3xl font-bold mb-5">개별 반찬 등록하기</h1>
+        <h1 className="font-shilla text-5xl font-bold mb-5">개별 반찬 등록하기</h1>
         <div className="w-full flex flex-col justify-center items-center rounded-3xl bg-white p-10">
           <TextField
             required

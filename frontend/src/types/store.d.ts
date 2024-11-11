@@ -1,5 +1,8 @@
 type SelectedStoreId = number;
 
+type MenuName = string;
+type PageNumber = number;
+
 interface RegisterStoreForm {
   name: string;
   address: string;
@@ -36,6 +39,27 @@ interface SelectedItem extends Item {
 interface StoreStore {
   selectedStoreId: number | null;
   setSelectedStoreId: (selectedStoreId: SelectedStoreId) => void;
+  searchKeyword: string | null;
+  setSearchKeyword: (searchKeyword: MenuName) => void;
 }
 
-type RootState = MemberStore & CartStore & StoreStore;
+interface SearchResultFood {
+  foodName: string;
+  foodPrice: number;
+  foodDescription: string;
+}
+
+interface SearchResultStore {
+  storeId: number;
+  storeName: string;
+  storeAddress: string;
+  storeDescription: string;
+  storeImg: string;
+  foods: SearchResultFood[];
+}
+
+interface SearchResult {
+  stores?: SearchResultStore[];
+}
+
+type RootState = MemberStore & CartStore & StoreStore & SubscribeStore;

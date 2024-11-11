@@ -30,11 +30,23 @@ const SignInBox = () => {
   });
 
   const initiateLogin = (): void => {
-    const loginForm: LoginForm = {
-      email,
-      password,
-    };
-    handleLogin(loginForm);
+    switch (true) {
+      case !email: {
+        alert("이메일을 입력해주세요.");
+        return;
+      }
+      case !password: {
+        alert("비밀번호를 입력해주세요.");
+        return;
+      }
+      default: {
+        const loginForm: LoginForm = {
+          email,
+          password,
+        };
+        handleLogin(loginForm);
+      }
+    }
   };
 
   const handleLoginKeydown = (event: React.KeyboardEvent) => {

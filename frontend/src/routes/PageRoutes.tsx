@@ -18,6 +18,7 @@ import NotFoundPage from "../pages/NotFoundPage";
 import ShoppingCart from "../components/specific/Order/ShoppingCart";
 import TossPaymentsBillingCheckoutSuccess from "../components/specific/Order/TossPaymentsBilling/TossPaymentsBillingCheckoutSuccess";
 import SubscribeDetail from "../pages/SubscribeDetailPage";
+import SearchResultPage from "../pages/SearchResultPage";
 
 const PageRoutes = () => {
   return (
@@ -29,7 +30,10 @@ const PageRoutes = () => {
       <Route path="/orders" element={<OrderCheckoutPage />}>
         <Route path="form" element={<OrderForm />} />
         <Route path="success" element={<TossPaymentsCheckoutSuccess />} />
-        <Route path="billing/success" element={<TossPaymentsBillingCheckoutSuccess />} />
+        <Route
+          path="billing/success"
+          element={<TossPaymentsBillingCheckoutSuccess />}
+        />
         <Route path="fail" element={<TossPaymentsCheckoutFail />} />
         <Route path="cart" element={<ShoppingCart />} />
       </Route>
@@ -46,6 +50,7 @@ const PageRoutes = () => {
       <Route path="/store" element={<StorePage />}>
         <Route index element={<StoreList />} />
         <Route path=":id" element={<StoreDetail />} />
+        <Route path="search/result" element={<SearchResultPage />} />
       </Route>
       <Route path="/store" element={<StorePage />} />
       <Route path="*" element={<NotFoundPage />} />

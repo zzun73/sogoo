@@ -15,7 +15,11 @@ import sogoo from "../../../services/sogoo";
 import { useNavigate } from "react-router-dom";
 import useRootStore from "../../../stores";
 
-const SignUpBox = () => {
+// 정규식 패턴 정의
+const emailPattern = /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/;
+const phonePattern = /^01([0|1|6|7|8|9])(\d{3,4})(\d{4})$/;
+
+const SignUpBox: React.FC = () => {
   const navigate = useNavigate();
   const [name, setName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
@@ -26,6 +30,10 @@ const SignUpBox = () => {
   const [phone, setPhone] = useState<string>("");
   const [role, setRole] = useState<string>("Buyer");
   const [businessNumber, setBusinessNumber] = useState<string>("");
+
+  const [isEmailFormatValid, setIsEmailFormatValid] = useState<boolean>(true);
+  const [isPhoneFormatValid, setIsPhoneFormatValid] = useState<boolean>(true);
+
   const [isEmailValid, setIsEmailValid] = useState<boolean | null>(null);
   const [isSellerValid, setIsSellerValid] = useState<boolean | null>(null);
 
@@ -53,32 +61,78 @@ const SignUpBox = () => {
   });
 
   const initiateSignUp = (): void => {
-    if (isEmailValid === false) {
-      alert("이 이메일은 이미 사용 중입니다.");
+    if (!isEmailFormatValid) {
+      alert("유효한 이메일을 입력하세요.");
+      return;
+    }
+    if (!isPhoneFormatValid) {
+      alert("유효한 휴대전화 번호를 입력하세요.");
       return;
     }
 
-    if (role === "Seller" && isSellerValid === false) {
-      alert("해당 번호의 사업자를 찾지 못했습니다.");
-      return;
+    switch (true) {
+      case !name: {
+        alert("이름을 입력하세요.");
+        return;
+      }
+      case !email: {
+        alert("이메일을 입력하세요.");
+        return;
+      }
+      case !password1: {
+        alert("비밀번호를 입력하세요.");
+        return;
+      }
+      case password1 !== password2: {
+        alert("비밀번호가 일치하지 않습니다.");
+        return;
+      }
+      case !address: {
+        alert("주소를 입력하세요.");
+        return;
+      }
+      case !birth: {
+        alert("생년월일을 입력하세요.");
+        return;
+      }
+      case !phone: {
+        alert("연락처를 입력하세요.");
+        return;
+      }
+      case isEmailValid === null: {
+        alert("이메일 검사를 실행해주세요.");
+        return;
+      }
+      case isEmailValid === false: {
+        alert("사용 중인 이메일로는 가입하실 수 없습니다.");
+        return;
+      }
+      case role === "Seller" && !businessNumber: {
+        alert("사업자 회원가입을 위해서는 사업자 등록 번호가 필요합니다.");
+        return;
+      }
+      case role === "Seller" && isSellerValid === null: {
+        alert("사업자 번호 검사를 실행해주세요.");
+        return;
+      }
+      case role === "Seller" && isSellerValid === false: {
+        alert("유효한 사업자 번호를 입력해주세요.");
+        return;
+      }
+      default: {
+        const signUpForm: SignUpForm = {
+          name,
+          email,
+          password: password1,
+          phoneNumber: phone,
+          birth,
+          address,
+          role,
+          businessNumber: role === "Seller" ? businessNumber : null,
+        };
+        handleSignUp(signUpForm);
+      }
     }
-
-    if (password1 !== password2) {
-      alert("비밀번호가 일치하지 않습니다.");
-      return;
-    }
-
-    const signUpForm: SignUpForm = {
-      name,
-      email,
-      password: password1,
-      phoneNumber: phone,
-      birth,
-      address,
-      role,
-      businessNumber: role === "Seller" ? businessNumber : null,
-    };
-    handleSignUp(signUpForm);
   };
 
   const handleDateChange = (date: Dayjs | null) => {
@@ -94,7 +148,7 @@ const SignUpBox = () => {
   const handleEmailCheck = async () => {
     const result = await refetch();
     console.log(result);
-    setIsEmailValid(String(result.data?.data) === "사용 가능한 이메일핑");
+    setIsEmailValid(Number(result.data?.status) === 200);
   };
 
   const handleEmailKeyDown = (event: React.KeyboardEvent) => {
@@ -106,13 +160,21 @@ const SignUpBox = () => {
   const handleSellerCheck = async () => {
     const result = await refetchSeller();
     console.log(result);
-    setIsSellerValid(String(result.data?.data) === "사업자 인증 완료핑");
+    setIsSellerValid(Number(result.data?.status) === 200);
   };
 
   const handleSellerKeyDown = (event: React.KeyboardEvent) => {
     if (event.key === "Enter") {
       handleSellerCheck();
     }
+  };
+
+  const validateEmail = (value: string) => {
+    setIsEmailFormatValid(emailPattern.test(value));
+  };
+
+  const validatePhone = (value: string) => {
+    setIsPhoneFormatValid(phonePattern.test(value));
   };
 
   return (
@@ -133,6 +195,7 @@ const SignUpBox = () => {
           variant="outlined"
           onChange={(e) => setEmail(e.target.value)}
           onKeyDown={handleEmailKeyDown}
+          onBlur={() => validateEmail(email)}
           sx={{ width: "80%", height: "50px" }}
         />
         <Button
@@ -143,11 +206,14 @@ const SignUpBox = () => {
           확인
         </Button>
       </div>
-      {isEmailValid === true && (
-        <p className="text-green-500 mb-3">사용 가능한 이메일입니다.</p>
+      {!isEmailFormatValid && (
+        <p className="text-red-500 mb-3">유효한 이메일을 입력하세요.</p>
       )}
-      {isEmailValid === false && (
-        <p className="text-red-500 mb-3">이 이메일은 이미 사용 중입니다.</p>
+      {isEmailFormatValid && isEmailValid === false && (
+        <p className="text-red-500 mb-3">이 이메일은 사용하실 수 없습니다.</p>
+      )}
+      {isEmailFormatValid && isEmailValid === true && (
+        <p className="text-green-500 mb-3">사용 가능한 이메일입니다.</p>
       )}
       <TextField
         required
@@ -189,8 +255,12 @@ const SignUpBox = () => {
         variant="outlined"
         placeholder="ex. 01012341234"
         onChange={(e) => setPhone(e.target.value)}
+        onBlur={() => validatePhone(phone)}
         sx={{ width: "100%", height: "50px", marginBottom: "20px" }}
       />
+      {!isPhoneFormatValid && (
+        <p className="text-red-500 mb-3">유효한 전화번호를 입력하세요.</p>
+      )}
       <FormControl>
         <RadioGroup
           row

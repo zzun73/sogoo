@@ -15,7 +15,7 @@ import useRootStore from "../../../stores";
 const Menus: React.FC = () => {
   const storeId = useRootStore().selectedStoreId;
 
-  console.log(storeId);
+  const { setSelectedSubscribeId } = useRootStore();
 
   const menuLists = useGetAllMenus(storeId);
   const [activeView, setActiveView] = useState("전체 보기");
@@ -56,7 +56,8 @@ const Menus: React.FC = () => {
     navigate(`/seller/add/subscribe`);
   };
 
-  const goToSubscribeDetail = () => {
+  const goToSubscribeDetail = (selectedSubscribeId: SelectedSubscribeId) => {
+    setSelectedSubscribeId(selectedSubscribeId);
     navigate(`/seller/subscribe/detail`);
   };
 
@@ -65,7 +66,7 @@ const Menus: React.FC = () => {
   }
 
   return (
-    <div className="w-full flex flex-col flex-grow bg-slate-200">
+    <div className="w-full flex flex-col flex-grow">
       <div className="my-10 mx-[200px]">
         <div className="w-full h-40 flex flex-col justify-center rounded-t-3xl bg-white mb-4 px-10">
           <h1 className="text-xl font-bold mb-7">내 상품 목록</h1>
@@ -130,7 +131,9 @@ const Menus: React.FC = () => {
                             <Button
                               variant="text"
                               size="small"
-                              onClick={() => goToSubscribeDetail()}
+                              onClick={() =>
+                                goToSubscribeDetail(subscribe.subscribeId)
+                              }
                             >
                               상세보기
                             </Button>
