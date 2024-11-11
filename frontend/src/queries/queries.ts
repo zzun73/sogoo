@@ -111,7 +111,7 @@ const useGetScheduledProduct = (storeId: StoreId) => {
     queryKey: keys.getScheduledProduct(storeId),
     queryFn: () => sogoo.getScheduledProduct(storeId),
   });
-  console.log(data?.data.foods);
+  console.log(data?.data);
   return data?.data.foods || null;
 };
 /**
@@ -122,6 +122,9 @@ const useGetTodaySales = (storeId: StoreId) => {
     queryKey: keys.getTodaySales(storeId),
     queryFn: () => sogoo.getTodaySales(storeId),
   });
+
+  const list = data?.data.products || null;
+  return list;
 };
 /**
  * 판매자 마이페이지(전체 리뷰 요약)
@@ -258,8 +261,8 @@ const useGetFoodReviews = (foodId: FoodId) => {
     queryKey: keys.getFoodReviews(foodId),
     queryFn: () => sogoo.getFoodReviews(foodId),
   });
-  const totalReviews = data?.data || null;
-  return { totalReviews, refetch };
+  const foodReviews = data?.data.reviews || null;
+  return foodReviews;
 };
 /*
  * 구독 상품 상세 정보 확인
