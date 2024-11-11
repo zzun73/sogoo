@@ -1,19 +1,17 @@
-import { useLocation } from "react-router-dom";
 import TextField from "@mui/material/TextField";
 import { useGetSubscribeDetail } from "../queries/queries";
 import SubscribeCarousel from "../components/specific/Seller/MenuComponents/SubscribeCarousel";
+import useRootStore from "../stores";
 
 const SubscribeDetail: React.FC = () => {
-  const location = useLocation();
-  const queryParams = new URLSearchParams(location.search);
-  const subscribeId = Number(queryParams.get("item"));
+  const subscribeId = useRootStore().selectedSubscribeId;
 
-  const itemDetailInfo = useGetSubscribeDetail(subscribeId);
+  const itemDetailInfo = useGetSubscribeDetail(subscribeId!);
 
   console.log(itemDetailInfo);
 
   return (
-    <div className="w-full flex flex-col flex-grow bg-slate-200">
+    <div className="w-full flex flex-col flex-grow">
       <div className="my-10 mx-[200px]">
         <div className="w-full flex flex-col justify-center rounded-3xl bg-white mb-4 p-10">
           <h1 className="text-xl font-bold mb-5">
