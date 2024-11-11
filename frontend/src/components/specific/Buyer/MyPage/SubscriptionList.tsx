@@ -8,11 +8,11 @@ interface SubscriptionListProps {
 
 const SubscriptionList = ({ subscriptions }: SubscriptionListProps) => {
   return (
-    <div className="flex flex-col gap-2">
+    <div className="flex flex-col gap-2 h-full">
       <div className="flex flex-col gap-8 w-full p-8 rounded-t-3xl bg-white">
         <h3 className="text-xl font-semibold">구독 중인 상품</h3>
       </div>
-      <div className="flex flex-col gap-8 w-full p-8 rounded-b-3xl bg-white">
+      <div className="flex flex-col gap-8 w-full h-full p-8 rounded-b-3xl bg-white">
         <div className="max-h-[600px] p-1 flex flex-col gap-y-2 overflow-y-auto">
           {subscriptions.length > 0 ? (
             subscriptions.map((item) => (
@@ -25,7 +25,12 @@ const SubscriptionList = ({ subscriptions }: SubscriptionListProps) => {
                 }}
               >
                 <CardActionArea sx={{ display: "flex", justifyContent: "left" }}>
-                  <CardMedia component="img" image={item.storeImg} alt={item.storeName} sx={{ width: "180px", height: "150px", objectFit: "cover" }} />
+                  <CardMedia
+                    component="img"
+                    image={item.storeImg}
+                    alt={item.storeName}
+                    sx={{ width: "180px", height: "150px", objectFit: "cover" }}
+                  />
                   <CardContent sx={{ height: "150px", display: "flex", flexDirection: "column", justifyContent: "center" }}>
                     <Typography gutterBottom variant="h5" component="div">
                       {item.subscribeName}

@@ -34,7 +34,7 @@ const CustomCarousel: React.FC<CustomCarouselProps> = ({ items, autoplay = true,
     <div className="relative">
       <Slider {...settings}>
         {items.map((item) => (
-          <div key={item.id} className="relative h-[800px]">
+          <div key={item.id} className="relative h-[650px]">
             <img src={item.image} alt={item.title} className="w-full h-full object-cover" />
             {item.description && (
               <div className="absolute bottom-0 left-0 right-0 p-5 bg-gradient-to-t from-black/70 to-transparent text-white">
