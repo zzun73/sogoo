@@ -18,6 +18,7 @@ import NotFoundPage from "../pages/NotFoundPage";
 import ShoppingCart from "../components/specific/Order/ShoppingCart";
 import TossPaymentsBillingCheckoutSuccess from "../components/specific/Order/TossPaymentsBilling/TossPaymentsBillingCheckoutSuccess";
 import SubscribeDetail from "../pages/SubscribeDetailPage";
+import ReviewList from "../components/specific/Seller/ReviewList";
 
 const PageRoutes = () => {
   return (
@@ -29,7 +30,10 @@ const PageRoutes = () => {
       <Route path="/orders" element={<OrderCheckoutPage />}>
         <Route path="form" element={<OrderForm />} />
         <Route path="success" element={<TossPaymentsCheckoutSuccess />} />
-        <Route path="billing/success" element={<TossPaymentsBillingCheckoutSuccess />} />
+        <Route
+          path="billing/success"
+          element={<TossPaymentsBillingCheckoutSuccess />}
+        />
         <Route path="fail" element={<TossPaymentsCheckoutFail />} />
         <Route path="cart" element={<ShoppingCart />} />
       </Route>
@@ -37,6 +41,7 @@ const PageRoutes = () => {
       <Route path="/mypage" element={<BuyerMyPage />} />
       <Route path="/seller" element={<SellerMyPage />}>
         <Route index element={<Dashboard />} />
+        <Route path="reviews" element={<ReviewList />} />
         <Route path="menus" element={<Menus />} />
         <Route path="add/food" element={<AddFoodPage />} />
         <Route path="add/subscribe" element={<AddSubscribePage />} />
