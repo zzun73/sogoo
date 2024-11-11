@@ -9,11 +9,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface MemberRepository extends JpaRepository<Member, Long> {
 
-    boolean existsByRefreshToken(String refreshToken);
-
-    Member findByRefreshToken(String refreshToken);
-
-    Optional<Member> findByEmailAndWithDrawalStatus(String email, WithDrawalStatus withDrawalStatus);
+    Optional<Member> findByEmailAndWithDrawalStatus(String email,
+        WithDrawalStatus withDrawalStatus);
 
     boolean existsByEmail(String email);
 

@@ -21,9 +21,11 @@ import com.ssafy.c107.main.domain.review.exception.*;
 import com.ssafy.c107.main.domain.review.repository.ReviewRepository;
 import com.ssafy.c107.main.domain.store.entity.Store;
 import com.ssafy.c107.main.domain.store.repository.StoreRepository;
+import com.vane.badwordfiltering.BadWordFiltering;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.chat.client.ChatClient;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.EnableAsync;
@@ -35,8 +37,6 @@ import org.springframework.web.client.RestTemplate;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -51,14 +51,15 @@ public class ReviewServiceImpl implements ReviewService {
     private final ChatClient chatClient;
     private final StoreRepository storeRepository;
 
+    @Value("${sangmoo.data.url}")
+    private String fastApiUrl;
+
     @Async
     public CompletableFuture<Double> analyzeSentimentWithKoBERT(String comment) {
         RestTemplate restTemplate = new RestTemplate();
         ObjectMapper objectMapper = new ObjectMapper();
 
         try {
-            String fastApiUrl = "http://localhost:8000/api/predict";
-
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_JSON);
 
@@ -68,7 +69,7 @@ public class ReviewServiceImpl implements ReviewService {
 
             // FastAPI로 POST 요청 보내기
             ResponseEntity<String> response = restTemplate.exchange(
-                    fastApiUrl, HttpMethod.POST, entity, String.class);
+                    fastApiUrl + "/predict", HttpMethod.POST, entity, String.class);
             log.info("FastAPI 응답 내용: {}", response.getBody());
 
             if (response.getStatusCode().is2xxSuccessful()) {
@@ -118,12 +119,15 @@ public class ReviewServiceImpl implements ReviewService {
         OrderList orderList = orderListRepository.findById(orderListId)
                 .orElseThrow(InvalidOrderListException::new);
 
+        String S3imageUrl = fileService.saveFile(createReviewInfoRequest.getImg());
+
         CompletableFuture<Double> kobertFuture = analyzeSentimentWithKoBERT(createReviewInfoRequest.getComment());
         CompletableFuture<Double> openAiFuture = analyzeSentimentWithOpenAI(createReviewInfoRequest.getComment());
 
         CompletableFuture<Void> combinedFuture = CompletableFuture.allOf(kobertFuture, openAiFuture);
 
-        combinedFuture.thenRun(() -> {
+        BadWordFiltering badWordFiltering = new BadWordFiltering();
+        combinedFuture.thenRunAsync(() -> {
             try {
                 double kobertResult = kobertFuture.get(); // KoBert의 긍정 확률
                 double openAiResult = openAiFuture.get();
@@ -132,20 +136,15 @@ public class ReviewServiceImpl implements ReviewService {
                 boolean emotion = finalPositiveRate >= 50.0;
 
                 log.info("최종 긍정 확률: {}%", finalPositiveRate);
-                log.info("Review 엔티티 생성 중...");
-                String S3imageUrl = fileService.saveFile(createReviewInfoRequest.getImg());
+                String commentText = badWordFiltering.change(createReviewInfoRequest.getComment());
                 Review review = Review.builder()
                         .orderList(orderList)
-                        .comment(createReviewInfoRequest.getComment())
+                        .comment(commentText)
                         .img(S3imageUrl)
                         .emotion(emotion)
                         .build();
-                log.info("Review 엔티티 생성 완료: {}", review);
 
-                log.info("Review 저장 시작...");
                 reviewRepository.save(review);
-                log.info("Review 저장 완료.");
-
             } catch (ExecutionException | InterruptedException e) {
                 log.error("리뷰 저장 중 오류 발생: {}", e.getMessage(), e);
                 throw new ReviewAnalysisProcessingException(e);

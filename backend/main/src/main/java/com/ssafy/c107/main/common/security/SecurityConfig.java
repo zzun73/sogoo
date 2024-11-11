@@ -5,6 +5,7 @@ import com.ssafy.c107.main.common.jwt.JWTFilter;
 import com.ssafy.c107.main.common.jwt.JWTUtil;
 import com.ssafy.c107.main.common.jwt.LoginFilter;
 import com.ssafy.c107.main.domain.members.repository.MemberRepository;
+import com.ssafy.c107.main.domain.members.repository.TokenRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.Arrays;
 import java.util.Collections;
@@ -54,7 +55,7 @@ public class SecurityConfig {
     }
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain filterChain(HttpSecurity http, TokenRepository tokenRepository) throws Exception {
         http
             .cors((cors) -> cors
                 .configurationSource(new CorsConfigurationSource() {
@@ -107,7 +108,7 @@ public class SecurityConfig {
                 UsernamePasswordAuthenticationFilter.class);
 
         http
-            .addFilterBefore(new CustomLogoutFilter(jwtUtil, memberRepository),
+            .addFilterBefore(new CustomLogoutFilter(jwtUtil, tokenRepository),
                 LogoutFilter.class);
 
         //세션 설정

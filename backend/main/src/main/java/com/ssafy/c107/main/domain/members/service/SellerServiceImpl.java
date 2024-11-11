@@ -46,10 +46,12 @@ import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.TreeMap;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -165,7 +167,7 @@ public class SellerServiceImpl implements SellerService {
         List<Subscribe> subscribes = subscribeRepository.findAllByStore_Id(storeId);
 
         //구독 상품별 개수 구하기
-        Map<Long, Integer> subscribeMap = new HashMap<>();
+        Map<Long, Integer> subscribeMap = new TreeMap<>((o1, o2) -> Math.toIntExact(o2 - o1));
         List<SubscribeStatus> statuses = Arrays.asList(SubscribeStatus.SUBSCRIBE,
             SubscribeStatus.CANCEL_SCHEDULE);
         for (Subscribe subscribe : subscribes) {
@@ -255,6 +257,8 @@ public class SellerServiceImpl implements SellerService {
                 .build());
         }
 
+        products.sort((o1, o2) -> o2.getSalesSum() - o1.getSalesSum());
+
         return TodaySalesResponse
             .builder()
             .products(products)
@@ -299,6 +303,7 @@ public class SellerServiceImpl implements SellerService {
                     .comment(review.getComment())
                     .foodName(foodName)
                     .memberEmail(memberEmail)
+                    .emotion(review.isEmotion())
                     .build());
             }
             return ReviewDetailResponse
@@ -389,7 +394,7 @@ public class SellerServiceImpl implements SellerService {
     @Override
     public FoodListResponse getAllFood(Long storeId, Long userId) {
         memberValidator.validStoreAndMember(storeId, userId);
-        
+
         List<FoodDetailDto> foods = new ArrayList<>();
         foods.add(FoodDetailDto
             .builder()
