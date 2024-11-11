@@ -4,6 +4,7 @@ import ScheduledProducts from "./Dashboard/ScheduledProduct";
 import TodaySalesStatus from "./Dashboard/TodaySalesStatus";
 import ReviewChart from "./Dashboard/ReviewChart";
 import useRootStore from "../../../stores";
+
 const Dashboard: React.FC = () => {
   const { selectedStoreId } = useRootStore();
   if (!selectedStoreId) {
@@ -23,7 +24,7 @@ const Dashboard: React.FC = () => {
       </div>
       <div className="grid grid-cols-2 gap-x-3 w-full">
         <TodaySalesStatus storeId={selectedStoreId} />
-        <ReviewChart />
+        <ReviewChart storeId={selectedStoreId} />
       </div>
     </div>
   );

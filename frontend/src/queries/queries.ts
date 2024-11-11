@@ -131,6 +131,9 @@ const useGetReviewList = (storeId: StoreId) => {
     queryKey: keys.getReviewList(storeId),
     queryFn: () => sogoo.getReviewList(storeId),
   });
+
+  const reviewSummary = data?.data || null;
+  return reviewSummary;
 };
 /**
  * 판매자 마이페이지(상품 리뷰)
@@ -224,6 +227,7 @@ const useGetReviewSummary = (storeId: StoreId) => {
     queryKey: keys.getReviewSummary(storeId),
     queryFn: () => sogoo.getReviewSummary(storeId),
   });
+  console.log(data?.data);
   const reviewSummary = data ? data.data : null;
   return reviewSummary;
 };
