@@ -4,7 +4,7 @@
 
 ## 🍴 프로젝트 소개
 
-[배포 링크 🔗](https://j11c107.p.ssafy.io/)
+[배포 링크 (https://www.sogoo.kr/) 🔗](https://www.sogoo.kr/)
 
 ## 🍴 프로젝트 기간
 
