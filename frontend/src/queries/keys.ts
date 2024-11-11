@@ -75,6 +75,7 @@ const keys = {
     "storeItems",
     storeId,
   ],
+  getAllFoods: (storeId: StoreId) => [...keys.food(), "allFoods", storeId],
 };
 
 export default keys;

@@ -124,7 +124,7 @@ const useGetTodaySales = (storeId: StoreId) => {
   });
 };
 /**
- * 판매자 마이페이지(전체 리뷰)
+ * 판매자 마이페이지(전체 리뷰 요약)
  */
 const useGetReviewList = (storeId: StoreId) => {
   const { data } = useQuery({
@@ -138,13 +138,16 @@ const useGetReviewList = (storeId: StoreId) => {
 /**
  * 판매자 마이페이지(상품 리뷰)
  * @param storeId 가게 id
- * @param foodId 상품 id
+ * @param foodId 상품 id, -1일때 전체 리뷰
  */
 const useGetProductReview = (storeId: StoreId, foodId: FoodId) => {
   const { data } = useQuery({
     queryKey: keys.getProductReview(storeId, foodId),
     queryFn: () => sogoo.getProductReview(storeId, foodId),
   });
+
+  const reviews = data?.data || null;
+  return reviews;
 };
 
 /**
@@ -251,12 +254,12 @@ const useGetStoreReviews = (storeId: StoreId) => {
  * @param foodId 반찬 id
  */
 const useGetFoodReviews = (foodId: FoodId) => {
-  const { data } = useQuery({
+  const { data, refetch } = useQuery({
     queryKey: keys.getFoodReviews(foodId),
     queryFn: () => sogoo.getFoodReviews(foodId),
   });
-
-  return data;
+  const totalReviews = data?.data || null;
+  return { totalReviews, refetch };
 };
 /*
  * 구독 상품 상세 정보 확인
@@ -270,6 +273,19 @@ const useGetSubscribeDetail = (subscribeId: SubscribeId) => {
 
   const itemDetailInfo = data ? data.data : [];
   return itemDetailInfo;
+};
+/**
+ * 판매자 반찬 목록 불러오기
+ * @param storeId 가게 id
+ */
+const useGetAllFoods = (storeId: StoreId) => {
+  const { data } = useQuery({
+    queryKey: keys.getAllFoods(storeId),
+    queryFn: () => sogoo.getAllFoods(storeId),
+  });
+  console.log(data?.data.foods);
+  const foods = data?.data.foods || null;
+  return foods;
 };
 
 export {
@@ -294,4 +310,5 @@ export {
   useGetReviewSummary,
   useGetSubscribeDetail,
   useGetStoreItems,
+  useGetAllFoods,
 };
