@@ -35,7 +35,7 @@ const OrderForm = () => {
       setIsSubscription(false);
       console.log("단일 반찬 상품 구매 경로");
     }
-  }, [location.state?.isSubscription]);
+  }, []);
 
   useEffect(() => {
     if (isSubscription) {
