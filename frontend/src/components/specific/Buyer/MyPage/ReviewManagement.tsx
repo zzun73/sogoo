@@ -14,6 +14,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import sogoo from "../../../../services/sogoo";
 import ImageUpload from "../../../common/ImageUpload";
 import EmptySection from "./EmptySection";
+import keys from "../../../../queries/keys";
 
 interface ReviewInputType {
   reviewId: number;
@@ -72,7 +73,7 @@ const ReviewManagement = ({ reviews }: ReviewManagementProps) => {
       return sogoo.registerReview(reviewId, formData);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["buyerMyPage"] });
+      queryClient.invalidateQueries({ queryKey: keys.getBuyerMypage() });
       alert("리뷰가 등록되었습니다.");
       setReviewInput((prevInputs) =>
         prevInputs.map((input) => ({
@@ -115,7 +116,7 @@ const ReviewManagement = ({ reviews }: ReviewManagementProps) => {
     const formData = new FormData();
     formData.append("comment", review.comment);
     if (review.img) {
-      formData.append("image", review.img);
+      formData.append("img", review.img);
     }
 
     registerReview({ reviewId, formData });
