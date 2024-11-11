@@ -112,6 +112,8 @@ export default {
    * @param foodId 상품 id
    */
   getProductReview: async (storeId: StoreId, foodId: FoodId) => {
-    return axios.get(`/member/seller/detail-review/${storeId}/${foodId}`);
+    return axios.get<GetProductReviewResponse>(
+      `/member/seller/detail-review/${storeId}/${foodId}`
+    );
   },
 };

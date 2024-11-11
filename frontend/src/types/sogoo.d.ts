@@ -120,4 +120,31 @@ interface GetStoreListResponse {
   stores: Store[] | [];
 }
 
+interface GetAllFoodsResponse {
+  foods: {
+    foodId: number;
+    foodName: string;
+  }[];
+}
+
+interface Chart {
+  positiveCnt: number;
+  negativeCnt: number;
+  aiSummary: string;
+}
+
+interface GetProductReviewResponse {
+  chart: {
+    positiveCnt: number;
+    negativeCnt: number;
+    aiSummary: string;
+  };
+  reviews: {
+    img: string;
+    memberEmail: string;
+    foodName: string;
+    comment: string;
+    emotion: boolean;
+  }[];
+}
 type LoginResponse = LoginResponseData;
