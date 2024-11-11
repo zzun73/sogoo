@@ -15,9 +15,7 @@ import useRootStore from "../../../stores";
 const Menus: React.FC = () => {
   const storeId = useRootStore().selectedStoreId;
 
-  const { selectedSubscribeId, setSelectedSubscribeId } = useRootStore();
-
-  console.log(storeId);
+  const { setSelectedSubscribeId } = useRootStore();
 
   const menuLists = useGetAllMenus(storeId);
   const [activeView, setActiveView] = useState("전체 보기");

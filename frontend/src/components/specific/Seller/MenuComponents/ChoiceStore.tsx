@@ -4,6 +4,7 @@ import Typography from "@mui/material/Typography";
 import RegisterStoreModal from "./RegisterStoreModal";
 import { useGetMyStores } from "../../../../queries/queries";
 import useRootStore from "../../../../stores";
+import { useNavigate } from "react-router-dom";
 
 interface StoreInfo {
   storeId: number;
@@ -13,6 +14,8 @@ interface StoreInfo {
 const ChoiceStore = () => {
   const { selectedStoreId, setSelectedStoreId } = useRootStore();
   const [openStoreModal, setOpenStoreModal] = useState(false);
+
+  const navigate = useNavigate();
 
   const handleStoreModalOpen = () => {
     setOpenStoreModal(true);
@@ -34,10 +37,15 @@ const ChoiceStore = () => {
 
   const handleStoreClick = (storeId: number) => {
     setSelectedStoreId(storeId);
+    navigate("/seller");
+  };
+
+  const goToBack = () => {
+    navigate(-1);
   };
 
   return (
-    <div className="gap-y-5 w-full py-5 px-[200px]">
+    <div className="gap-y-5 w-full flex justify-between items-center py-5 px-[200px]">
       <div className="flex space-x-2">
         {stores && stores.length > 0 ? (
           stores.map((store) => (
@@ -76,6 +84,9 @@ const ChoiceStore = () => {
           onClose={handleStoreModalClose}
         />
       </div>
+      <Button variant="contained" onClick={goToBack}>
+        뒤로가기
+      </Button>
     </div>
   );
 };
