@@ -46,7 +46,6 @@ import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -56,6 +55,8 @@ import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.chat.client.ChatClient;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -280,7 +281,7 @@ public class SellerServiceImpl implements SellerService {
     }
 
     @Override
-    public ReviewDetailResponse getProductReview(Long storeId, Long foodId, Long userId) {
+    public ReviewDetailResponse getProductReview(Long storeId, Long foodId, Long userId, int page) {
         memberValidator.validStoreAndMember(storeId, userId);
 
         //전체 상품일 때
@@ -292,7 +293,10 @@ public class SellerServiceImpl implements SellerService {
                 .orElseThrow(StoreNotFoundException::new);
             List<ReviewDetail> reviewDetails = new ArrayList<>();
             String aiSummery = store.getSummary();
-            List<Review> reviews = reviewRepository.findReviewByStoreId(storeId);
+
+            Pageable pageable = PageRequest.of(page - 1, 20);
+            List<Review> reviews = reviewRepository.findReviewByStoreId(storeId, pageable)
+                .getContent();
 
             for (Review review : reviews) {
                 String memberEmail = review.getOrderList().getOrder().getMember().getEmail();
@@ -326,7 +330,10 @@ public class SellerServiceImpl implements SellerService {
             //리뷰 정보 가져오기
             List<ReviewDetail> reviewDetails = new ArrayList<>();
             String aiSummery = food.getSummary();
-            List<Review> reviews = reviewRepository.findReviewByStoreIdAndFoodId(storeId, foodId);
+
+            Pageable pageable = PageRequest.of(page - 1, 20);
+            List<Review> reviews = reviewRepository.findReviewByStoreIdAndFoodId(storeId, foodId,
+                pageable).getContent();
 
             for (Review review : reviews) {
                 String memberEmail = review.getOrderList().getOrder().getMember().getEmail();

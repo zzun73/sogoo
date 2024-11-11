@@ -61,4 +61,13 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
         + "AND f.id = :foodId ")
     List<Review> findReviewByStoreIdAndFoodId(@Param("storeId") Long storeId,
         @Param("foodId") Long foodId);
+
+    @Query("SELECT r FROM Review r " +
+        "JOIN FETCH r.orderList ol " +
+        "JOIN FETCH ol.order o " +
+        "JOIN FETCH ol.food f " +
+        "WHERE o.store.id = :storeId "
+        + "AND f.id = :foodId ")
+    Page<Review> findReviewByStoreIdAndFoodId(@Param("storeId") Long storeId,
+        @Param("foodId") Long foodId, Pageable pageable);
 }
