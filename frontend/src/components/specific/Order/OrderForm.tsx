@@ -14,10 +14,11 @@ const OrderForm = () => {
   const { memberInfo, foodList, subscribe, storeId, selectedId } = useRootStore();
   const [recipientAddress, setRecipientAddress] = useState<string>("");
   const [request, setRequest] = useState<string>("");
-  const [isSubscription, setIsSubscription] = useState(false);
   const [rows, setRows] = useState<GridRowsProp>([]);
   const [orderName, setOrderName] = useState("");
   const [totalPrice, setTotalPrice] = useState(0);
+
+  const isSubscription = location.state?.isSubscription ?? false;
 
   useEffect(() => {
     if (location.state?.accessRoute !== "/orders/cart") {
@@ -28,40 +29,30 @@ const OrderForm = () => {
   }, []);
 
   useEffect(() => {
-    if (location.state?.isSubscription) {
-      setIsSubscription(true);
-      console.log("구독 상품 구매 경로");
-    } else {
-      setIsSubscription(false);
-      console.log("단일 반찬 상품 구매 경로");
-    }
-  }, []);
-
-  useEffect(() => {
-    if (isSubscription) {
-      const subscriptionItem = [
-        {
-          id: subscribe?.id,
-          productName: subscribe?.name,
+    const initializeProducts = () => {
+      if (isSubscription && subscribe) {
+        const subscriptionItem = [{
+          id: subscribe.id,
+          productName: subscribe.name,
           productCount: 1,
-          productPrice: subscribe?.price,
-        },
-      ];
+          productPrice: subscribe.price,
+        }];
+        setRows(subscriptionItem);
+        console.log("subscription", subscriptionItem);
+      } else if (!isSubscription && foodList && selectedId) {
+        const filteredFoodItems = foodList.filter((item) => selectedId.includes(item.id));
+        const foodItems = filteredFoodItems.map((item) => ({
+          id: item.id,
+          productName: item.name,
+          productCount: item.count,
+          productPrice: item.price,
+        }));
+        setRows(foodItems);
+        console.log("foodItems", foodItems);
+      }
+    };
 
-      setRows(subscriptionItem);
-      console.log("subscription", subscriptionItem);
-    } else {
-      const filteredFoodItems = foodList!.filter((item) => selectedId!.includes(item.id));
-      const foodItems = filteredFoodItems.map((item) => ({
-        id: item.id,
-        productName: item.name,
-        productCount: item.count,
-        productPrice: item.price,
-      }));
-
-      setRows(foodItems);
-      console.log("foodItems", foodItems);
-    }
+    initializeProducts();
   }, [foodList, isSubscription, subscribe, selectedId]);
 
   useEffect(() => {
