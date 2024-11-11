@@ -7,4 +7,9 @@ export const createStoreSlice: StateCreator<RootState, [], [], StoreStore> = (
   setSelectedStoreId: (selectedStoreId: SelectedStoreId) => {
     set({ selectedStoreId });
   },
+
+  searchKeyword: null,
+  setSearchKeyword: (searchKeyword: MenuName) => {
+    set({ searchKeyword });
+  },
 });

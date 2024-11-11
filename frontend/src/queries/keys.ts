@@ -75,6 +75,12 @@ const keys = {
     "storeItems",
     storeId,
   ],
+  getSearchResult: (query: MenuName, page: PageNumber) => [
+    ...keys.store(),
+    "searchResult",
+    query,
+    page,
+  ],
 };
 
 export default keys;
