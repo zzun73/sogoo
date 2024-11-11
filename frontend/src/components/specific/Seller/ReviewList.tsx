@@ -1,5 +1,5 @@
 const ReviewList = () => {
-  return <div></div>;
+  return <div className="mx-[200px]"></div>;
 };
 
 export default ReviewList;
