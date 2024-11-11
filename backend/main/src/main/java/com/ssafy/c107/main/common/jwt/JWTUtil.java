@@ -1,11 +1,15 @@
 package com.ssafy.c107.main.common.jwt;
 
 import com.ssafy.c107.main.domain.members.entity.MemberRole;
+import com.ssafy.c107.main.domain.members.entity.Token;
+import com.ssafy.c107.main.domain.members.repository.TokenRepository;
 import io.jsonwebtoken.Jwts;
 import java.nio.charset.StandardCharsets;
+import java.time.Instant;
 import java.util.Date;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import io.jsonwebtoken.Jwts.SIG;
@@ -15,10 +19,12 @@ import io.jsonwebtoken.Jwts.SIG;
 public class JWTUtil {
 
     private SecretKey secretKey;
+    private final TokenRepository tokenRepository;
 
-    public JWTUtil(@Value("${spring.jwt.secret}") String secret) {
+    public JWTUtil(@Value("${spring.jwt.secret}") String secret, TokenRepository tokenRepository) {
         secretKey = new SecretKeySpec(secret.getBytes(StandardCharsets.UTF_8),
             SIG.HS256.key().build().getAlgorithm());
+        this.tokenRepository = tokenRepository;
     }
 
     private String removeBearerPrefix(String token) {
@@ -72,5 +78,24 @@ public class JWTUtil {
             .expiration(new Date(System.currentTimeMillis() + expiredMs))
             .signWith(secretKey)
             .compact();
+    }
+
+    public String createRefreshToken(Long id, String category, String email, MemberRole role,
+        Long expiredMs, Long userId) {
+        String refreshToken = Jwts
+            .builder()
+            .claim("id", id)
+            .claim("category", category)
+            .claim("email", email)
+            .claim("role", role)
+            .claim("userId", userId)
+            .issuedAt(new Date(System.currentTimeMillis()))
+            .expiration(new Date(System.currentTimeMillis() + expiredMs))
+            .signWith(secretKey)
+            .compact();
+
+        Token token = new Token(id, refreshToken);
+        tokenRepository.save(token);
+        return refreshToken;
     }
 }
