@@ -6,7 +6,7 @@ import useRootStore from "../../../../stores";
 import formatters from "../../../../utils/formatters";
 
 const TossPaymentsBillingCheckoutSuccess = () => {
-  const memberInfo = useRootStore().memberInfo;
+  const { memberInfo, setSubscribe } = useRootStore();
   const [isConfirmed, setIsConfirmed] = useState(false);
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
@@ -30,13 +30,7 @@ const TossPaymentsBillingCheckoutSuccess = () => {
     mutationFn: sogoo.requestSubscribePayment,
     onSuccess: () => {
       setIsConfirmed(true);
-      // 결제 승인 완료 후 지정된 경로로 이동
-      // if (redirectPath) {
-      //   navigate(decodeURIComponent(redirectPath), {
-      //     replace: true,
-      //     state: { paymentSuccess: true, orderId },
-      //   });
-      // }
+      setSubscribe(null);
     },
   });
 

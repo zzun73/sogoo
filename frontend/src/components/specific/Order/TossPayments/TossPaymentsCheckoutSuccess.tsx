@@ -6,7 +6,7 @@ import useRootStore from "../../../../stores";
 import formatters from "../../../../utils/formatters";
 
 const TossPaymentsCheckoutSuccess = () => {
-  const memberInfo = useRootStore().memberInfo;
+  const { memberInfo, selectedId, deleteSelectedList } = useRootStore();
   const [isConfirmed, setIsConfirmed] = useState(false);
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
@@ -17,12 +17,12 @@ const TossPaymentsCheckoutSuccess = () => {
   const amount = Number(searchParams.get("amount"));
   const products = JSON.parse(searchParams.get("products")!);
   const storeId = Number(searchParams.get("storeId")!);
-  // const redirectPath = searchParams.get("redirectPath");
 
   const { mutate: requestNormalPayment } = useMutation({
     mutationFn: sogoo.requestNormalPayment,
     onSuccess: () => {
       setIsConfirmed(true);
+      deleteSelectedList(selectedId as number[]);
     },
   });
 
