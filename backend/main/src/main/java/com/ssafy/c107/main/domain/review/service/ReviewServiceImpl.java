@@ -119,13 +119,15 @@ public class ReviewServiceImpl implements ReviewService {
         OrderList orderList = orderListRepository.findById(orderListId)
                 .orElseThrow(InvalidOrderListException::new);
 
+        String S3imageUrl = fileService.saveFile(createReviewInfoRequest.getImg());
+
         CompletableFuture<Double> kobertFuture = analyzeSentimentWithKoBERT(createReviewInfoRequest.getComment());
         CompletableFuture<Double> openAiFuture = analyzeSentimentWithOpenAI(createReviewInfoRequest.getComment());
 
         CompletableFuture<Void> combinedFuture = CompletableFuture.allOf(kobertFuture, openAiFuture);
 
         BadWordFiltering badWordFiltering = new BadWordFiltering();
-        combinedFuture.thenRun(() -> {
+        combinedFuture.thenRunAsync(() -> {
             try {
                 double kobertResult = kobertFuture.get(); // KoBert의 긍정 확률
                 double openAiResult = openAiFuture.get();
@@ -134,8 +136,6 @@ public class ReviewServiceImpl implements ReviewService {
                 boolean emotion = finalPositiveRate >= 50.0;
 
                 log.info("최종 긍정 확률: {}%", finalPositiveRate);
-                log.info("Review 엔티티 생성 중...");
-                String S3imageUrl = fileService.saveFile(createReviewInfoRequest.getImg());
                 String commentText = badWordFiltering.change(createReviewInfoRequest.getComment());
                 Review review = Review.builder()
                         .orderList(orderList)
@@ -143,12 +143,8 @@ public class ReviewServiceImpl implements ReviewService {
                         .img(S3imageUrl)
                         .emotion(emotion)
                         .build();
-                log.info("Review 엔티티 생성 완료: {}", review);
 
-                log.info("Review 저장 시작...");
                 reviewRepository.save(review);
-                log.info("Review 저장 완료.");
-
             } catch (ExecutionException | InterruptedException e) {
                 log.error("리뷰 저장 중 오류 발생: {}", e.getMessage(), e);
                 throw new ReviewAnalysisProcessingException(e);
