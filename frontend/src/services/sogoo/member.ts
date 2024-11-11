@@ -87,7 +87,9 @@ export default {
    * @param storeId 가게 아이디
    */
   getScheduledProduct: async (storeId: StoreId) => {
-    return axios.get(`/member/seller/next-week-sell/${storeId}`);
+    return axios.get<GetScheduledProductResponse>(
+      `/member/seller/next-week-sell/${storeId}`
+    );
   },
 
   /**
@@ -95,7 +97,9 @@ export default {
    * @param storeId 가게 아이디
    */
   getTodaySales: async (storeId: StoreId) => {
-    return axios.get(`/member/seller/today-sell/${storeId}`);
+    return axios.get<GetTodaySalesResponse>(
+      `/member/seller/today-sell/${storeId}`
+    );
   },
 
   /**
@@ -112,6 +116,8 @@ export default {
    * @param foodId 상품 id
    */
   getProductReview: async (storeId: StoreId, foodId: FoodId) => {
-    return axios.get(`/member/seller/detail-review/${storeId}/${foodId}`);
+    return axios.get<GetProductReviewResponse>(
+      `/member/seller/detail-review/${storeId}/${foodId}`
+    );
   },
 };

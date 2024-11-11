@@ -19,6 +19,7 @@ import ShoppingCart from "../components/specific/Order/ShoppingCart";
 import TossPaymentsBillingCheckoutSuccess from "../components/specific/Order/TossPaymentsBilling/TossPaymentsBillingCheckoutSuccess";
 import SubscribeDetail from "../pages/SubscribeDetailPage";
 import SearchResultPage from "../pages/SearchResultPage";
+import ReviewList from "../components/specific/Seller/ReviewList";
 
 const PageRoutes = () => {
   return (
@@ -41,6 +42,7 @@ const PageRoutes = () => {
       <Route path="/mypage" element={<BuyerMyPage />} />
       <Route path="/seller" element={<SellerMyPage />}>
         <Route index element={<Dashboard />} />
+        <Route path="reviews" element={<ReviewList />} />
         <Route path="menus" element={<Menus />} />
         <Route path="add/food" element={<AddFoodPage />} />
         <Route path="add/subscribe" element={<AddSubscribePage />} />

@@ -111,7 +111,7 @@ const useGetScheduledProduct = (storeId: StoreId) => {
     queryKey: keys.getScheduledProduct(storeId),
     queryFn: () => sogoo.getScheduledProduct(storeId),
   });
-  console.log(data?.data.foods);
+  console.log(data?.data);
   return data?.data.foods || null;
 };
 /**
@@ -122,26 +122,35 @@ const useGetTodaySales = (storeId: StoreId) => {
     queryKey: keys.getTodaySales(storeId),
     queryFn: () => sogoo.getTodaySales(storeId),
   });
+
+  const list = data?.data.products || null;
+  return list;
 };
 /**
- * 판매자 마이페이지(전체 리뷰)
+ * 판매자 마이페이지(전체 리뷰 요약)
  */
 const useGetReviewList = (storeId: StoreId) => {
   const { data } = useQuery({
     queryKey: keys.getReviewList(storeId),
     queryFn: () => sogoo.getReviewList(storeId),
   });
+
+  const reviewSummary = data?.data || null;
+  return reviewSummary;
 };
 /**
  * 판매자 마이페이지(상품 리뷰)
  * @param storeId 가게 id
- * @param foodId 상품 id
+ * @param foodId 상품 id, -1일때 전체 리뷰
  */
 const useGetProductReview = (storeId: StoreId, foodId: FoodId) => {
   const { data } = useQuery({
     queryKey: keys.getProductReview(storeId, foodId),
     queryFn: () => sogoo.getProductReview(storeId, foodId),
   });
+
+  const reviews = data?.data || null;
+  return reviews;
 };
 
 /**
@@ -224,6 +233,7 @@ const useGetReviewSummary = (storeId: StoreId) => {
     queryKey: keys.getReviewSummary(storeId),
     queryFn: () => sogoo.getReviewSummary(storeId),
   });
+  console.log(data?.data);
   const reviewSummary = data ? data.data : null;
   return reviewSummary;
 };
@@ -247,12 +257,12 @@ const useGetStoreReviews = (storeId: StoreId) => {
  * @param foodId 반찬 id
  */
 const useGetFoodReviews = (foodId: FoodId) => {
-  const { data } = useQuery({
+  const { data, refetch } = useQuery({
     queryKey: keys.getFoodReviews(foodId),
     queryFn: () => sogoo.getFoodReviews(foodId),
   });
-
-  return data;
+  const foodReviews = data?.data.reviews || null;
+  return foodReviews;
 };
 /*
  * 구독 상품 상세 정보 확인
@@ -266,6 +276,19 @@ const useGetSubscribeDetail = (subscribeId: SubscribeId) => {
 
   const itemDetailInfo = data ? data.data : [];
   return itemDetailInfo;
+};
+/**
+ * 판매자 반찬 목록 불러오기
+ * @param storeId 가게 id
+ */
+const useGetAllFoods = (storeId: StoreId) => {
+  const { data } = useQuery({
+    queryKey: keys.getAllFoods(storeId),
+    queryFn: () => sogoo.getAllFoods(storeId),
+  });
+  console.log(data?.data.foods);
+  const foods = data?.data.foods || null;
+  return foods;
 };
 
 /**
@@ -306,4 +329,5 @@ export {
   useGetSubscribeDetail,
   useGetStoreItems,
   useGetSearchResult,
+  useGetAllFoods,
 };

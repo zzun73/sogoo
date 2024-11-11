@@ -1,29 +1,53 @@
-import React, { useEffect, useRef, useMemo } from "react";
+import { useEffect, useRef } from "react";
 import Chart, { ChartOptions, TooltipItem } from "chart.js/auto";
 import Box from "../../../common/Box";
+import { useGetReviewList } from "../../../../queries/queries";
+import { Skeleton } from "@mui/material";
 
-const ReviewChart = () => {
-  const chartRef = useRef<HTMLCanvasElement | null>(null);
+const SkeletonUI = () => {
+  return (
+    <Box className="flex flex-col w-full h-[300px] gap-y-2">
+      <div className="mx-auto">
+        <Skeleton variant="text" width={150} height={40} />
+      </div>
+      <div className="flex flex-row mx-auto w-56 justify-evenly gap-x-5">
+        <Skeleton variant="text" width={80} height={30} />
+        <Skeleton variant="text" width={80} height={30} />
+      </div>
+      <div className="flex flex-col gap-y-3 items-center">
+        <Skeleton variant="circular" width={150} height={150} />
+      </div>
 
-  const chartData = useMemo(
-    () => ({
-      positiveCnt: 24,
-      negativeCnt: 20,
-      aiSummary: "맛이 짜요",
-    }),
-    []
+      <Skeleton variant="text" width={80} height={30} className="mx-auto" />
+    </Box>
   );
+};
+
+interface ReviewChartProps {
+  storeId: number;
+}
+
+const ReviewChart = ({ storeId }: ReviewChartProps) => {
+  const chartRef = useRef<HTMLCanvasElement | null>(null);
+  const reviewSummary = useGetReviewList(storeId);
 
   useEffect(() => {
+    if (!reviewSummary) {
+      return;
+    }
+    if (reviewSummary.positiveCnt + reviewSummary.negativeCnt == 0) {
+      return;
+    }
+
     const ctx = chartRef.current?.getContext("2d");
     if (!ctx) return;
 
     const data = {
-      labels: ["Positive", "Negative"],
+      labels: ["긍정", "부정"],
       datasets: [
         {
           label: "Sentiment Analysis",
-          data: [chartData.positiveCnt, chartData.negativeCnt],
+          data: [reviewSummary.positiveCnt, reviewSummary.negativeCnt],
           backgroundColor: ["#4CAF50", "#FF5252"],
           hoverBackgroundColor: ["#66BB6A", "#FF867C"],
         },
@@ -57,16 +81,26 @@ const ReviewChart = () => {
     return () => {
       chart.destroy();
     };
-  }, [chartData]);
+  }, [reviewSummary]);
 
+  if (reviewSummary) {
+    return <SkeletonUI />;
+  }
+
+  const { positiveCnt, negativeCnt } = reviewSummary;
+  if (positiveCnt + negativeCnt == 0) {
+    return (
+      <Box className="flex flex-col items-center justify-center w-full h-[300px]">
+        <p className="text-lg font-bold">작성된 리뷰가 없습니다.</p>
+      </Box>
+    );
+  }
   return (
-    <Box className="flex flex-col w-full h-[300px] gap-y-1">
-      <p className="text-xl text-center font-bold">감정 분석 결과</p>
+    <Box className="flex flex-col justify-between w-full h-[300px] gap-y-3">
+      <p className="text-xl text-center font-bold">리뷰 감정 분석</p>
       <div className="flex h-2/3 items-center">
         <canvas ref={chartRef} id="sentimentChart" className="w-full h-full" />
       </div>
-      <p className="text-center font-bold">AI 리뷰</p>
-      <p className="text-center text-sm">{chartData.aiSummary}</p>
     </Box>
   );
 };

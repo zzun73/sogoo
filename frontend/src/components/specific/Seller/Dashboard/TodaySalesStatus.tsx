@@ -11,10 +11,11 @@ const SkeletonUI = () => {
     <Box className="flex flex-col items-center justify-between w-full h-[300px]">
       <Skeleton variant="text" width="150px" height={40} />
       <div className="w-full">
-        {[...Array(7)].map((i, idx1) => (
+        {[...Array(7)].map((_, idx1) => (
           <div key={`table${idx1}`} className="grid grid-cols-5 gap-10">
-            {[...Array(5)].map((j, idx2) => (
+            {[...Array(5)].map((_, idx2) => (
               <Skeleton
+                key={`skeleton${idx1}-${idx2}`}
                 variant="text"
                 width={!idx1 ? "100%" : "60%"}
                 height={30}
@@ -30,9 +31,11 @@ const SkeletonUI = () => {
 
 const TodaySalesStatus = ({ storeId }: TodaySalesProps) => {
   const list = useGetTodaySales(storeId);
-  if (true) {
+  console.log(list);
+  if (!list) {
     return <SkeletonUI />;
   }
+
   const updatedList = list.map((item, idx) => {
     return { ...item, id: idx + 1 };
   });

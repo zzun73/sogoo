@@ -13,7 +13,6 @@ export default {
       },
     });
   },
-
   /**
    * 구독 상품에 등록하기 위해 개별 상품 목록 불러오기
    */
@@ -27,5 +26,12 @@ export default {
    */
   getStoreFoods: async (storeId: StoreId) => {
     return axios.get<GetStoreFoodsResponse>(`/food/dishes/${storeId}`);
+  },
+  /**
+   * 판매자 반찬 불러오기
+   * @param storeId 가게 id
+   */
+  getAllFoods: async (storeId: StoreId) => {
+    return axios.get<GetAllFoodsResponse>(`/seller/foods/${storeId}`);
   },
 };
