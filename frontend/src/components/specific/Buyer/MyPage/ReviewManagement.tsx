@@ -115,7 +115,7 @@ const ReviewManagement = ({ reviews }: ReviewManagementProps) => {
     const formData = new FormData();
     formData.append("comment", review.comment);
     if (review.img) {
-      formData.append("image", review.img);
+      formData.append("img", review.img);
     }
 
     registerReview({ reviewId, formData });
