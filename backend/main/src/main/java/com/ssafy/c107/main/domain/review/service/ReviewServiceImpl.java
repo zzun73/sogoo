@@ -248,13 +248,14 @@ public class ReviewServiceImpl implements ReviewService {
 
     // 반찬 선택 리뷰
     @Transactional(readOnly = true)
-    public FoodDetailResponse getFoodDetails(Long foodId) {
+    public FoodDetailResponse getFoodDetails(Long foodId, int page) {
         // 반찬 정보 조회
         Food food = foodRepository.findById(foodId)
                 .orElseThrow(FoodNotFoundException::new);
 
         // 반찬에 해당하는 리뷰 조회
-        List<Review> reviews = reviewRepository.findAllByOrderList_Food_Id(foodId);
+        Pageable pageable = PageRequest.of(page - 1, 20);
+        List<Review> reviews = reviewRepository.findAllByOrderList_Food_Id(foodId, pageable).getContent();
 
         // 리뷰 목록을 Dto로 변환
         List<FoodReviewDto> reviewDtos = reviews.stream()

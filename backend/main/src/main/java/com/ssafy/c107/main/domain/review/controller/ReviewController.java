@@ -52,8 +52,8 @@ public class ReviewController {
 
     // 반찬별 리뷰 조회
     @GetMapping("buyer/food/{foodId}")
-    public ResponseEntity<?> getStoreReviewsByFood(@PathVariable Long foodId) {
-        FoodDetailResponse response = reviewService.getFoodDetails(foodId);
+    public ResponseEntity<?> getStoreReviewsByFood(@PathVariable Long foodId, @RequestParam(name = "page") int page) {
+        FoodDetailResponse response = reviewService.getFoodDetails(foodId, page);
         return ResponseEntity.ok(response);
     }
 }

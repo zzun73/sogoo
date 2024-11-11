@@ -13,5 +13,5 @@ public interface ReviewService {
 
     StoreReviewResponse getStoreReviews(Long storeId, int page);
 
-    FoodDetailResponse getFoodDetails(Long foodId);
+    FoodDetailResponse getFoodDetails(Long foodId, int page);
 }
