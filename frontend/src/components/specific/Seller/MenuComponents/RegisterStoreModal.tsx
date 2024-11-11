@@ -62,7 +62,7 @@ const RegisterStoreModal: React.FC<RegisterStoreModalProps> = ({
         console.log("가게 등록 성공");
         handleModalClose();
 
-        queryClient.invalidateQueries({ queryKey: keys.getMyStores() });
+        await queryClient.invalidateQueries({ queryKey: keys.getMyStores() });
       }
     },
     onError: (error: AxiosError) => {
