@@ -25,6 +25,7 @@ import com.vane.badwordfiltering.BadWordFiltering;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.chat.client.ChatClient;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.EnableAsync;
@@ -50,14 +51,15 @@ public class ReviewServiceImpl implements ReviewService {
     private final ChatClient chatClient;
     private final StoreRepository storeRepository;
 
+    @Value("${sangmoo.data.url}")
+    private String fastApiUrl;
+
     @Async
     public CompletableFuture<Double> analyzeSentimentWithKoBERT(String comment) {
         RestTemplate restTemplate = new RestTemplate();
         ObjectMapper objectMapper = new ObjectMapper();
 
         try {
-            String fastApiUrl = "http://localhost:8000/api/predict";
-
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_JSON);
 
@@ -67,7 +69,7 @@ public class ReviewServiceImpl implements ReviewService {
 
             // FastAPI로 POST 요청 보내기
             ResponseEntity<String> response = restTemplate.exchange(
-                    fastApiUrl, HttpMethod.POST, entity, String.class);
+                    fastApiUrl + "/predict", HttpMethod.POST, entity, String.class);
             log.info("FastAPI 응답 내용: {}", response.getBody());
 
             if (response.getStatusCode().is2xxSuccessful()) {
