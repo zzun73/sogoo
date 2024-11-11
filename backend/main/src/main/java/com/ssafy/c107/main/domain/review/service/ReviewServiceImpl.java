@@ -21,6 +21,7 @@ import com.ssafy.c107.main.domain.review.exception.*;
 import com.ssafy.c107.main.domain.review.repository.ReviewRepository;
 import com.ssafy.c107.main.domain.store.entity.Store;
 import com.ssafy.c107.main.domain.store.repository.StoreRepository;
+import com.vane.badwordfiltering.BadWordFiltering;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.chat.client.ChatClient;
@@ -35,8 +36,6 @@ import org.springframework.web.client.RestTemplate;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -123,6 +122,7 @@ public class ReviewServiceImpl implements ReviewService {
 
         CompletableFuture<Void> combinedFuture = CompletableFuture.allOf(kobertFuture, openAiFuture);
 
+        BadWordFiltering badWordFiltering = new BadWordFiltering();
         combinedFuture.thenRun(() -> {
             try {
                 double kobertResult = kobertFuture.get(); // KoBert의 긍정 확률
@@ -134,9 +134,10 @@ public class ReviewServiceImpl implements ReviewService {
                 log.info("최종 긍정 확률: {}%", finalPositiveRate);
                 log.info("Review 엔티티 생성 중...");
                 String S3imageUrl = fileService.saveFile(createReviewInfoRequest.getImg());
+                String commentText = badWordFiltering.change(createReviewInfoRequest.getComment());
                 Review review = Review.builder()
                         .orderList(orderList)
-                        .comment(createReviewInfoRequest.getComment())
+                        .comment(commentText)
                         .img(S3imageUrl)
                         .emotion(emotion)
                         .build();
