@@ -46,7 +46,6 @@ import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -221,7 +220,7 @@ public class SellerServiceImpl implements SellerService {
         for (Object[] object : todaySubscribeSales) {
             products.add(ProductDto
                 .builder()
-                .price((int) object[1])
+                .price(((Number) object[1]).intValue())
                 .productCnt((int) object[0])
                 .productName((String) object[2])
                 .salesSum((int) object[0] * (int) object[1])
