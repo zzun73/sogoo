@@ -26,6 +26,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.*;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.EnableAsync;
@@ -216,9 +218,11 @@ public class ReviewServiceImpl implements ReviewService {
 
     // 반찬가게 상세페이지[구매자용](반찬별 리뷰)
     @Transactional(readOnly = true)
-    public StoreReviewResponse getStoreReviews(Long storeId) {
+    public StoreReviewResponse getStoreReviews(Long storeId, int page) {
+        Pageable pageable = PageRequest.of(page - 1, 20);
+
         // 가게와 관련된 리뷰 조회
-        List<Review> reviews = reviewRepository.findReviewByStoreId(storeId);
+        List<Review> reviews = reviewRepository.findReviewByStoreId(storeId, pageable).getContent();
 
         // 리뷰 리스트 Dto로 변환
         List<ReviewDto> reviewDtoList = reviews.stream()
