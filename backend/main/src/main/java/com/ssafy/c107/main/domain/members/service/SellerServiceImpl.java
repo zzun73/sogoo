@@ -220,7 +220,7 @@ public class SellerServiceImpl implements SellerService {
         for (Object[] object : todaySubscribeSales) {
             products.add(ProductDto
                 .builder()
-                .price(((Number) object[1]).intValue())
+                .price(((Number) object[1]).longValue())
                 .productCnt((int) object[0])
                 .productName((String) object[2])
                 .salesSum((int) object[0] * (int) object[1])
@@ -251,7 +251,7 @@ public class SellerServiceImpl implements SellerService {
                 .builder()
                 .productName(foodName)
                 .productCnt(map.get(foodName))
-                .price(food.getPrice())
+                .price(Long.parseLong(String.valueOf(food.getPrice())))
                 .salesSum(food.getPrice() * map.get(foodName))
                 .build());
         }
