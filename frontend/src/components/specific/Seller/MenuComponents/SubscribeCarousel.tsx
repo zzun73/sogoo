@@ -26,7 +26,7 @@ const SubscribeCarousel: React.FC<SubscribeCarouselData> = ({
   };
 
   return (
-    <div className="w-full bg-slate-300 mb-10 flex justify-center items-center rounded-lg">
+    <div className="w-full bg-main-200 mb-10 flex justify-center items-center rounded-lg">
       <Slider className="w-11/12" {...settings}>
         {items?.map((item: SubscribeProductsData) => {
           return (

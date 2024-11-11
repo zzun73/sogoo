@@ -15,6 +15,8 @@ import useRootStore from "../../../stores";
 const Menus: React.FC = () => {
   const storeId = useRootStore().selectedStoreId;
 
+  const { selectedSubscribeId, setSelectedSubscribeId } = useRootStore();
+
   console.log(storeId);
 
   const menuLists = useGetAllMenus(storeId);
@@ -56,7 +58,8 @@ const Menus: React.FC = () => {
     navigate(`/seller/add/subscribe`);
   };
 
-  const goToSubscribeDetail = () => {
+  const goToSubscribeDetail = (selectedSubscribeId: SelectedSubscribeId) => {
+    setSelectedSubscribeId(selectedSubscribeId);
     navigate(`/seller/subscribe/detail`);
   };
 
@@ -130,7 +133,9 @@ const Menus: React.FC = () => {
                             <Button
                               variant="text"
                               size="small"
-                              onClick={() => goToSubscribeDetail()}
+                              onClick={() =>
+                                goToSubscribeDetail(subscribe.subscribeId)
+                              }
                             >
                               상세보기
                             </Button>

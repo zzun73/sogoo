@@ -38,4 +38,4 @@ interface StoreStore {
   setSelectedStoreId: (selectedStoreId: SelectedStoreId) => void;
 }
 
-type RootState = MemberStore & CartStore & StoreStore;
+type RootState = MemberStore & CartStore & StoreStore & SubscribeStore;
