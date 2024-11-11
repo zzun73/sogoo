@@ -1,7 +1,9 @@
 package com.ssafy.c107.main.domain.subscribe.repository;
 
 import com.ssafy.c107.main.domain.subscribe.entity.MemberSubscribe;
+import com.ssafy.c107.main.domain.subscribe.entity.PaymentStatus;
 import com.ssafy.c107.main.domain.subscribe.entity.SubscribeStatus;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -20,4 +22,10 @@ public interface MemberSubscribeRepository extends JpaRepository<MemberSubscribe
 
     @Query("SELECT COALESCE(COUNT(o), 0) FROM MemberSubscribe o WHERE o.subscribe.id = :subscribeId AND o.status IN :statuses")
     int getCountSubscribes(Long subscribeId, @Param("statuses") List<SubscribeStatus> statuses);
+
+    @Query("SELECT ms FROM MemberSubscribe ms " +
+            "JOIN FETCH ms.member m " +
+            "JOIN FETCH ms.subscribe s " +
+            "WHERE ms.status = :status AND ms.paymentStatus = :paymentStatus")
+    List<MemberSubscribe> findActiveSubscriptions(@Param("status") SubscribeStatus status, @Param("paymentStatus") PaymentStatus paymentStatus);
 }
