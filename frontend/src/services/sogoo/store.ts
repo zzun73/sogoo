@@ -48,6 +48,8 @@ export default {
    * @param page 페이지
    */
   getSearchResult: async (query: MenuName, page: PageNumber) => {
-    return axios.get<SearchForm>(`/elastic/search?query=${query}&page=${page}`);
+    return axios.get<SearchResult>(
+      `/elastic/search?query=${query}&page=${page}`
+    );
   },
 };

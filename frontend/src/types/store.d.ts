@@ -43,9 +43,23 @@ interface StoreStore {
   setSearchKeyword: (searchKeyword: MenuName) => void;
 }
 
-interface SearchForm {
-  query: string;
-  page: number;
+interface SearchResultFood {
+  foodName: string;
+  foodPrice: number;
+  foodDescription: string;
+}
+
+interface SearchResultStore {
+  storeId: number;
+  storeName: string;
+  storeAddress: string;
+  storeDescription: string;
+  storeImg: string;
+  foods: SearchResultFood[];
+}
+
+interface SearchResult {
+  stores?: SearchResultStore[];
 }
 
 type RootState = MemberStore & CartStore & StoreStore & SubscribeStore;
