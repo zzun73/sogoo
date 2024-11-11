@@ -1,4 +1,5 @@
 import type { StateCreator } from "zustand";
+import { useNavigate } from "react-router-dom";
 
 export const createMemberSlice: StateCreator<RootState, [], [], MemberStore> = (
   set
