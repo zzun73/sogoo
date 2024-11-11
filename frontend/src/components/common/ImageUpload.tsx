@@ -45,11 +45,11 @@ const ImageUpload: React.FC<ImageUploadProps> = ({ onImageSelect, selectedImage 
   };
 
   return (
-    <Box sx={{ mt: 2, mb: 2 }}>
+    <Box>
       <input type="file" accept="image/*" ref={fileInputRef} onChange={handleFileChange} style={{ display: "none" }} />
 
       {!selectedImage ? (
-        <Button variant="outlined" onClick={handleClick} startIcon={<ImageIcon />} fullWidth sx={{ height: "100px" }}>
+        <Button variant="outlined" onClick={handleClick} startIcon={<ImageIcon />} fullWidth sx={{ height: "250px" }}>
           이미지 업로드
         </Button>
       ) : (
@@ -57,7 +57,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({ onImageSelect, selectedImage 
           sx={{
             position: "relative",
             width: "100%",
-            height: "200px",
+            height: "250px",
             borderRadius: 1,
             overflow: "hidden",
           }}

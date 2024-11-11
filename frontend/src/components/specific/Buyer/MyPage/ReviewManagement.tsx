@@ -1,5 +1,15 @@
 import React, { useState } from "react";
-import { Accordion, AccordionSummary, AccordionDetails, AccordionActions, Button, TextField, CardMedia, CardContent, Typography } from "@mui/material";
+import {
+  Accordion,
+  AccordionSummary,
+  AccordionDetails,
+  AccordionActions,
+  Button,
+  TextField,
+  CardMedia,
+  CardContent,
+  Typography,
+} from "@mui/material";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import sogoo from "../../../../services/sogoo";
 import ImageUpload from "../../../common/ImageUpload";
@@ -144,56 +154,69 @@ const ReviewManagement = ({ reviews }: ReviewManagementProps) => {
                 <AccordionDetails>
                   <hr className="mb-5" />
                   {!item.reviewStatus && (
-                    <>
-                      <TextField
-                        fullWidth
-                        label="리뷰를 작성해 주세요. (300자 이내)"
-                        value={reviewInput.find((input) => input.reviewId === item.orderListId)?.comment || ""}
-                        onChange={(event) => {
-                          const newValue = event.target.value;
-                          if (newValue.length > 300) return;
-                          setReviewInput((prevInputs) =>
-                            prevInputs.map((input) => (input.reviewId === item.orderListId ? { ...input, comment: newValue } : input))
-                          );
-                        }}
-                        helperText={`${reviewInput.find((input) => input.reviewId === item.orderListId)?.comment.length || 0}/300자`}
-                        error={(reviewInput.find((input) => input.reviewId === item.orderListId)?.comment.length || 0) === 300}
-                        slotProps={{
-                          formHelperText: {
-                            sx: {
-                              textAlign: "right",
-                              marginRight: "0",
-                              color:
-                                (reviewInput.find((input) => input.reviewId === item.orderListId)?.comment.length || 0) === 300
-                                  ? "error.main"
-                                  : "text.secondary",
+                    <div className="flex gap-8 w-full">
+                      <div className="flex-1">
+                        <TextField
+                          fullWidth
+                          label="리뷰를 작성해 주세요. (300자 이내)"
+                          sx={{
+                            "& .MuiInputBase-root": {
+                              height: "230px", // 원하는 높이 값
                             },
-                          },
-                        }}
-                        onPaste={(event) => {
-                          event.preventDefault();
-                          const pastedText = event.clipboardData.getData("text");
-                          const currentInput = reviewInput.find((input) => input.reviewId === item.orderListId);
-                          const currentText = currentInput?.comment || "";
+                          }}
+                          value={reviewInput.find((input) => input.reviewId === item.orderListId)?.comment || ""}
+                          onChange={(event) => {
+                            const newValue = event.target.value;
+                            if (newValue.length > 300) return;
+                            setReviewInput((prevInputs) =>
+                              prevInputs.map((input) => (input.reviewId === item.orderListId ? { ...input, comment: newValue } : input))
+                            );
+                          }}
+                          helperText={`${reviewInput.find((input) => input.reviewId === item.orderListId)?.comment.length || 0}/300자`}
+                          error={(reviewInput.find((input) => input.reviewId === item.orderListId)?.comment.length || 0) === 300}
+                          slotProps={{
+                            formHelperText: {
+                              sx: {
+                                textAlign: "right",
+                                marginRight: "0",
+                                color:
+                                  (reviewInput.find((input) => input.reviewId === item.orderListId)?.comment.length || 0) === 300
+                                    ? "error.main"
+                                    : "text.secondary",
+                              },
+                            },
+                          }}
+                          onPaste={(event) => {
+                            event.preventDefault();
+                            const pastedText = event.clipboardData.getData("text");
+                            const currentInput = reviewInput.find((input) => input.reviewId === item.orderListId);
+                            const currentText = currentInput?.comment || "";
 
-                          if (currentText.length + pastedText.length > 300) {
-                            const allowedText = pastedText.slice(0, 300 - currentText.length);
-                            setReviewInput((prevInputs) =>
-                              prevInputs.map((input) => (input.reviewId === item.orderListId ? { ...input, comment: currentText + allowedText } : input))
-                            );
-                          } else {
-                            setReviewInput((prevInputs) =>
-                              prevInputs.map((input) => (input.reviewId === item.orderListId ? { ...input, comment: currentText + pastedText } : input))
-                            );
-                          }
-                        }}
-                        multiline
-                      />
-                      <ImageUpload
-                        onImageSelect={(file) => handleImageSelect(item.orderListId, file)}
-                        selectedImage={reviewInput.find((input) => input.reviewId === item.orderListId)?.imgPreview || null}
-                      />
-                    </>
+                            if (currentText.length + pastedText.length > 300) {
+                              const allowedText = pastedText.slice(0, 300 - currentText.length);
+                              setReviewInput((prevInputs) =>
+                                prevInputs.map((input) =>
+                                  input.reviewId === item.orderListId ? { ...input, comment: currentText + allowedText } : input
+                                )
+                              );
+                            } else {
+                              setReviewInput((prevInputs) =>
+                                prevInputs.map((input) =>
+                                  input.reviewId === item.orderListId ? { ...input, comment: currentText + pastedText } : input
+                                )
+                              );
+                            }
+                          }}
+                          multiline
+                        />
+                      </div>
+                      <div className="w-[260px]">
+                        <ImageUpload
+                          onImageSelect={(file) => handleImageSelect(item.orderListId, file)}
+                          selectedImage={reviewInput.find((input) => input.reviewId === item.orderListId)?.imgPreview || null}
+                        />
+                      </div>
+                    </div>
                   )}
                   {item.reviewStatus && (
                     <div className="flex flex-col items-center gap-4">
