@@ -7,32 +7,18 @@ import { Skeleton } from "@mui/material";
 const SkeletonUI = () => {
   return (
     <Box className="flex flex-col w-full h-[300px] gap-y-2">
-      {/* 제목 스켈레톤 */}
-      <Skeleton
-        variant="text"
-        width={180}
-        height={30}
-        style={{ margin: "0 auto" }}
-      />
+      <div className="mx-auto">
+        <Skeleton variant="text" width={150} height={40} />
+      </div>
+      <div className="flex flex-row mx-auto w-56 justify-evenly gap-x-5">
+        <Skeleton variant="text" width={80} height={30} />
+        <Skeleton variant="text" width={80} height={30} />
+      </div>
+      <div className="flex flex-col gap-y-3 items-center">
+        <Skeleton variant="circular" width={150} height={150} />
+      </div>
 
-      {/* 도넛차트 스켈레톤 */}
-      <Box className="flex h-2/3 items-center justify-center">
-        <Skeleton variant="circular" width={200} height={200} />
-      </Box>
-
-      {/* AI 리뷰 스켈레톤 */}
-      <Skeleton
-        variant="text"
-        width={100}
-        height={20}
-        style={{ margin: "0 auto" }}
-      />
-      <Skeleton
-        variant="text"
-        width="60%"
-        height={15}
-        style={{ margin: "0 auto" }}
-      />
+      <Skeleton variant="text" width={80} height={30} className="mx-auto" />
     </Box>
   );
 };
@@ -97,7 +83,7 @@ const ReviewChart = ({ storeId }: ReviewChartProps) => {
     };
   }, [reviewSummary]);
 
-  if (!reviewSummary) {
+  if (reviewSummary) {
     return <SkeletonUI />;
   }
 
