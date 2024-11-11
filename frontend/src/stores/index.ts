@@ -27,6 +27,7 @@ const useRootStore = create<RootState>()(
         selectedId: state.selectedId,
         selectedStoreId: state.selectedStoreId,
         selectedSubscribeId: state.selectedSubscribeId,
+        searchKeyword: state.searchKeyword,
       }),
     }
   )

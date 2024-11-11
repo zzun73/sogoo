@@ -266,6 +266,21 @@ const useGetSubscribeDetail = (subscribeId: SubscribeId) => {
   return itemDetailInfo;
 };
 
+/**
+ * 검색 결과 불러오기
+ * @param query 검색할 메뉴
+ * @param page 불러올 페이지
+ */
+const useGetSearchResult = (query: MenuName, page: PageNumber) => {
+  const { data } = useQuery({
+    queryKey: keys.getSearchResult(query, page),
+    queryFn: () => sogoo.getSearchResult(query, page),
+  });
+
+  const searchResult = data ? data.data : [];
+  return searchResult;
+};
+
 export {
   useCheckEmail,
   useCheckSeller,
@@ -288,4 +303,5 @@ export {
   useGetReviewSummary,
   useGetSubscribeDetail,
   useGetStoreItems,
+  useGetSearchResult,
 };
