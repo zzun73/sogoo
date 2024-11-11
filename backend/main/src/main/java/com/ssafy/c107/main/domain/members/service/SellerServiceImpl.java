@@ -303,6 +303,7 @@ public class SellerServiceImpl implements SellerService {
                     .comment(review.getComment())
                     .foodName(foodName)
                     .memberEmail(memberEmail)
+                    .emotion(review.isEmotion())
                     .build());
             }
             return ReviewDetailResponse

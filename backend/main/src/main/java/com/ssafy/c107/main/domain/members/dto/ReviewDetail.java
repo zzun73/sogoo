@@ -11,4 +11,5 @@ public class ReviewDetail {
     private String memberEmail;
     private String foodName;
     private String comment;
+    private boolean emotion;
 }
