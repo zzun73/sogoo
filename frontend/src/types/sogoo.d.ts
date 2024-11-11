@@ -85,7 +85,7 @@ interface GetStoreReviewsResponse {
     reviewId: number;
     email: Email;
     foodName: string;
-    img: File | null;
+    img: string;
     comment: string;
   }[];
 }
@@ -100,7 +100,7 @@ interface GetFoodReviewsResponse {
     reviewId: number;
     email: Email;
     foodName: string;
-    img: File | null;
+    img: string;
     comment: string;
   }[];
 }
@@ -133,6 +133,14 @@ interface Chart {
   aiSummary: string;
 }
 
+interface GetScheduledProductResponse {
+  foods: {
+    foodId: number;
+    foodName: string;
+    foodCnt: number;
+  }[];
+}
+
 interface GetProductReviewResponse {
   chart: {
     positiveCnt: number;
@@ -145,6 +153,15 @@ interface GetProductReviewResponse {
     foodName: string;
     comment: string;
     emotion: boolean;
+  }[];
+}
+
+interface GetTodaySalesResponse {
+  products: {
+    productName: string;
+    salesSum: number;
+    price: number;
+    productCnt: number;
   }[];
 }
 type LoginResponse = LoginResponseData;
