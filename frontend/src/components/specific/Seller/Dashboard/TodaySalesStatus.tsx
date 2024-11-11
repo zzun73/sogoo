@@ -1,6 +1,45 @@
 import Box from "../../../common/Box";
+import { useGetTodaySales } from "../../../../queries/queries";
+import { Skeleton } from "@mui/material";
 
-const TodaySalesStatus = () => {
+interface TodaySalesProps {
+  storeId: number;
+}
+
+const SkeletonUI = () => {
+  return (
+    <Box className="flex flex-col items-center justify-between w-full h-[300px]">
+      <Skeleton variant="text" width="150px" height={40} />
+      <div className="w-full">
+        {[...Array(7)].map((_, idx1) => (
+          <div key={`table${idx1}`} className="grid grid-cols-5 gap-10">
+            {[...Array(5)].map((_, idx2) => (
+              <Skeleton
+                key={`skeleton${idx1}-${idx2}`}
+                variant="text"
+                width={!idx1 ? "100%" : "60%"}
+                height={30}
+                className="mx-auto"
+              />
+            ))}
+          </div>
+        ))}
+      </div>
+    </Box>
+  );
+};
+
+const TodaySalesStatus = ({ storeId }: TodaySalesProps) => {
+  const list = useGetTodaySales(storeId);
+  console.log(list);
+  if (!list) {
+    return <SkeletonUI />;
+  }
+
+  const updatedList = list.map((item, idx) => {
+    return { ...item, id: idx + 1 };
+  });
+
   const data = {
     columns: [
       { field: "id", headerName: "순위" },
@@ -14,78 +53,7 @@ const TodaySalesStatus = () => {
         maxWidth: 140,
       },
     ],
-    rows: [
-      {
-        id: 1,
-        productName: "불고기",
-        salesSum: 130000,
-        price: 13000,
-        productCnt: 10,
-      },
-      {
-        id: 2,
-        productName: "제육볶음",
-        salesSum: 91000,
-        price: 7000,
-        productCnt: 13,
-      },
-      {
-        id: 3,
-        productName: "김치",
-        salesSum: 63000,
-        price: 9000,
-        productCnt: 7,
-      },
-      {
-        id: 4,
-        productName: "된장찌개",
-        salesSum: 54000,
-        price: 6000,
-        productCnt: 9,
-      },
-      {
-        id: 5,
-        productName: "비빔밥",
-        salesSum: 80000,
-        price: 8000,
-        productCnt: 10,
-      },
-      {
-        id: 6,
-        productName: "잡채",
-        salesSum: 72000,
-        price: 9000,
-        productCnt: 8,
-      },
-      {
-        id: 7,
-        productName: "콩나물무침",
-        salesSum: 32000,
-        price: 4000,
-        productCnt: 8,
-      },
-      {
-        id: 8,
-        productName: "오이무침",
-        salesSum: 45000,
-        price: 5000,
-        productCnt: 9,
-      },
-      {
-        id: 9,
-        productName: "계란말이",
-        salesSum: 78000,
-        price: 6500,
-        productCnt: 12,
-      },
-      {
-        id: 10,
-        productName: "닭볶음탕",
-        salesSum: 150000,
-        price: 15000,
-        productCnt: 10,
-      },
-    ],
+    rows: updatedList,
   };
 
   return (

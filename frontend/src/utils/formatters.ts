@@ -5,11 +5,13 @@ const formatToDate = (date: Date): string => {
   return `${year}-${month}-${day}`;
 };
 
-const formatToCurrency = (amount: number): string => {
-  return amount.toLocaleString("ko-KR") + "원";
+const formatToCurrency = (
+  amount: number,
+  unit: string | null = null
+): string => {
+  return `${amount.toLocaleString("ko-KR")}${unit ? unit : "원"}`;
 };
 
-// 이 함수의 목적 : 해당 달과 해당 회차를 주면 나는 그 회차의 시작과 끝 날짜를 반환한다.
 const formatToSubDate = (m: number, round: number): string => {
   const year = new Date().getFullYear();
   const month = m.toString().padStart(2, "0");
@@ -50,9 +52,57 @@ const formatPhoneNumber = (number: string | undefined): string => {
   return `${number.slice(0, 3)}-${number.slice(3, 7)}-${number.slice(7)}`;
 };
 
+const getSortedMonths = (): string[] => {
+  const currentMonth = new Date().getMonth();
+  const labels = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
+  ];
+
+  const sortedLabels = [
+    ...labels.slice(currentMonth + 1),
+    ...labels.slice(0, currentMonth + 1),
+  ];
+
+  return sortedLabels;
+};
+
+const formatMonthLabels = (): string[] => {
+  const sortedLabels = getSortedMonths();
+  return sortedLabels.map((label) => {
+    const month = new Date(`${label} 1`).getMonth() + 1;
+    return `${month}월`;
+  });
+};
+
+interface FormatMonthProps {
+  [key: string]: number;
+}
+
+const formatMonthData = (data: FormatMonthProps | null): number[] => {
+  const sortedData: number[] = [];
+  const sortedLabels = getSortedMonths();
+  sortedLabels.forEach((label) => {
+    sortedData.push(data?.[label as keyof FormatMonthProps] ?? 0);
+  });
+  return sortedData;
+};
+
 export default {
   formatToDate,
   formatToCurrency,
   formatToSubDate,
   formatPhoneNumber,
+  formatMonthLabels,
+  formatMonthData,
 };

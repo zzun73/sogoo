@@ -55,7 +55,11 @@ interface ProductReviewProps {
   foodId: FoodId;
 }
 
-interface GetSalesOverviewResponseData {}
+interface GetSalesOverviewResponse {
+  todaySales: number;
+  subscribePeopleCnt: number;
+  todayTradeCnt: number;
+}
 
 interface GetStoreDetailResponse {
   storeId: string;
@@ -81,7 +85,7 @@ interface GetStoreReviewsResponse {
     reviewId: number;
     email: Email;
     foodName: string;
-    img: File | null;
+    img: string;
     comment: string;
   }[];
 }
@@ -96,7 +100,7 @@ interface GetFoodReviewsResponse {
     reviewId: number;
     email: Email;
     foodName: string;
-    img: File | null;
+    img: string;
     comment: string;
   }[];
 }
@@ -116,5 +120,48 @@ interface GetStoreListResponse {
   stores: Store[] | [];
 }
 
+interface GetAllFoodsResponse {
+  foods: {
+    foodId: number;
+    foodName: string;
+  }[];
+}
+
+interface Chart {
+  positiveCnt: number;
+  negativeCnt: number;
+  aiSummary: string;
+}
+
+interface GetScheduledProductResponse {
+  foods: {
+    foodId: number;
+    foodName: string;
+    foodCnt: number;
+  }[];
+}
+
+interface GetProductReviewResponse {
+  chart: {
+    positiveCnt: number;
+    negativeCnt: number;
+    aiSummary: string;
+  };
+  reviews: {
+    img: string;
+    memberEmail: string;
+    foodName: string;
+    comment: string;
+    emotion: boolean;
+  }[];
+}
+
+interface GetTodaySalesResponse {
+  products: {
+    productName: string;
+    salesSum: number;
+    price: number;
+    productCnt: number;
+  }[];
+}
 type LoginResponse = LoginResponseData;
-type GetSalesOverviewResponse = SogooResponse<GetSalesOverviewResponseData>;

@@ -1,45 +1,61 @@
-import React, { useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import Chart from "chart.js/auto";
-import Box from "../../../common/Box"; // 필요한 경우 MUI 사용
+import Box from "../../../common/Box";
+import { Skeleton } from "@mui/material";
+import { useGetMonthlySales } from "../../../../queries/queries";
+import formatters from "../../../../utils/formatters";
 
-const MonthlySales = () => {
+interface MonthlySalesProps {
+  storeId: number;
+}
+
+const SkeletonUI = () => {
+  return (
+    <Box className="flex flex-col items-center justify-between w-full h-[300px] gap-y-3">
+      <Skeleton variant="text" width="80px" height={40} />
+      <div className="flex gap-2 justify-center items-end w-full">
+        {[...Array(12)].map((_, index) => (
+          <div key={`bar${index}`} className="flex flex-col items-center">
+            <Skeleton
+              variant="rectangular"
+              width="20px"
+              height={Math.random() * 100 + 50}
+            />
+            <Skeleton variant="text" width="15px" height={15} />
+          </div>
+        ))}
+      </div>
+    </Box>
+  );
+};
+
+const MonthlySales = ({ storeId }: MonthlySalesProps) => {
   const chartRef = useRef<HTMLCanvasElement | null>(null);
+  const sales = useGetMonthlySales(storeId);
+  console.log(sales);
 
   useEffect(() => {
+    if (!sales) return;
+    const { foodSales, subscribeSales } = sales;
+    const label = formatters.formatMonthLabels();
+    const updatedFoodSales = formatters.formatMonthData(foodSales);
+    const updatedSubSales = formatters.formatMonthData(subscribeSales);
+
     const ctx = chartRef.current?.getContext("2d");
     if (!ctx) return;
 
     const data = {
-      labels: [
-        "30",
-        "29",
-        "28",
-        "27",
-        "26",
-        "25",
-        "24",
-        "23",
-        "22",
-        "21",
-        "20",
-        "19",
-      ],
+      labels: label,
       datasets: [
         {
           label: "개별 상품",
           backgroundColor: "#0353a4",
-          data: [
-            9000, 5000, 5240, 3520, 2510, 3652, 4555, 7850, 8850, 4000, 5000,
-            4520,
-          ],
+          data: updatedFoodSales,
         },
         {
           label: "구독 상품",
           backgroundColor: "#ff8552",
-          data: [
-            3000, 4000, 6000, 3500, 3600, 8060, 9120, 8900, 9300, 10010, 9500,
-            6300,
-          ],
+          data: updatedSubSales,
         },
       ],
     };
@@ -61,8 +77,11 @@ const MonthlySales = () => {
     return () => {
       chart.destroy();
     };
-  }, []);
+  }, [sales]);
 
+  if (!sales) {
+    return <SkeletonUI />;
+  }
   return (
     <Box className="flex flex-col justify-between w-full h-[300px] gap-y-3">
       <p className="text-xl text-center font-bold">월별 매출</p>
