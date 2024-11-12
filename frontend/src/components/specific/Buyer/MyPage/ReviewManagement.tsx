@@ -311,7 +311,13 @@ const ReviewManagement = ({ reviews }: ReviewManagementProps) => {
                     sx={{ display: "flex", justifyContent: "center" }}
                   >
                     <Button
-                      sx={{ width: "80px" }}
+                      variant="contained"
+                      size="large"
+                      sx={{
+                        width: "200px",
+                        borderRadius: "50px",
+                        marginBottom: "10px",
+                      }}
                       onClick={() => handleReviewSubmit(item.orderListId)}
                     >
                       등록하기
