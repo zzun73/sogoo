@@ -19,8 +19,9 @@ const SignInBox = () => {
     onSuccess: async (response) => {
       setLogin(response.data.userInfo);
       setAccessToken(response.headers.authorization.split(" ")[1]);
-      toast(`${response.data.userInfo.name}님, 반갑습니다!`);
+      console.log(response.data.userInfo.name);
       navigate("/");
+      toast(`${response.data.userInfo.name}님, 반갑습니다!`);
     },
     onError: (error) => {
       console.error("로그인 실패", error);
