@@ -78,15 +78,14 @@ const ReviewSummary = ({ summary }: SummaryProps) => {
   return (
     <div className="w-full">
       <div className="grid grid-cols-3 my-7">
-        <div className="w-[400px] text-center my-auto mx-auto">
+        <div className="w-[400px] text-center my-auto mx-auto flex flex-col justify-between items-center h-full">
           <p className="text-xl text-center">전체 리뷰 수</p>
-          <RiChatSmile3Fill className="inline-block w-20 h-20 mt-3 " />
+          <RiChatSmile3Fill className="inline-block w-16 h-16 mt-3 " />
           <p className="mt-5 text-3xl ">{positiveCnt + negativeCnt} 개</p>
         </div>
         <div className="flex flex-col items-center">
           <p className="text-xl text-center">리뷰 감정 분석</p>
-          //{" "}
-          <div className="flex h-2/3 items-center">
+          <div className="flex h-[180px] items-center">
             <canvas
               ref={chartRef}
               id="sentimentChart"
@@ -96,7 +95,7 @@ const ReviewSummary = ({ summary }: SummaryProps) => {
         </div>
         <div className="flex flex-col gap-y-5">
           <p className="text-xl text-center">AI 리뷰 분석</p>
-          <p className="text-base text-center">
+          <p className="text-base text-center border rounded-lg border-main-400 h-[200px] p-3">
             {aiSummary !== "없음" ? aiSummary : "AI 리뷰를 생성중입니다."}
           </p>
         </div>
