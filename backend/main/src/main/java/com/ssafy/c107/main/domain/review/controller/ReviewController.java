@@ -56,4 +56,9 @@ public class ReviewController {
         FoodDetailResponse response = reviewService.getFoodDetails(foodId, page);
         return ResponseEntity.ok(response);
     }
+
+    @GetMapping("buyer/count/{storeId}")
+    public ResponseEntity<?> countStoreReviews(@PathVariable Long storeId) {
+        return null;
+    }
 }
