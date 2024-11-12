@@ -165,3 +165,7 @@ interface GetTodaySalesResponse {
   }[];
 }
 type LoginResponse = LoginResponseData;
+
+interface BuyerAllReviewCountResult {
+  reviewCount?: number | null;
+}

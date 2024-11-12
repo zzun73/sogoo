@@ -320,6 +320,20 @@ const useGetStoreCounts = () => {
   return storeCount;
 };
 
+/**
+ * Pagination 위해 가게 상세페이지에서 모든 리뷰 개수 불러오기
+ * @param storeId 가게 id
+ */
+const useGetBuyerAllReviewCounts = (storeId: StoreId) => {
+  const { data } = useQuery({
+    queryKey: keys.getBuyerAllReviewCounts(storeId),
+    queryFn: () => sogoo.getBuyerAllReviewCounts(storeId),
+  });
+
+  const reviewCount = data ? data.data : null;
+  return reviewCount;
+};
+
 export {
   useCheckEmail,
   useCheckSeller,
@@ -345,4 +359,5 @@ export {
   useGetSearchResult,
   useGetAllFoods,
   useGetStoreCounts,
+  useGetBuyerAllReviewCounts,
 };
