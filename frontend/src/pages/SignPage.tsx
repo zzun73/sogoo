@@ -4,6 +4,7 @@ import LogoImg from "../assets/logo.png";
 import SignInBox from "../components/specific/Sign/SignInBox";
 import SignUpBox from "../components/specific/Sign/SignUpBox";
 import BrushBorder from "../components/common/BrushBorder";
+import Person1 from "../assets/people/person1.png";
 
 const SignPage = () => {
   const navigate = useNavigate();
@@ -15,7 +16,10 @@ const SignPage = () => {
 
   return (
     <div className="h-screen flex justify-center items-center">
-      <BrushBorder className="h-full max-h-[500px] flex items-center pr-20" borderColor="#333333" strokeWidth={4}>
+      <BrushBorder className="w-96 h-full max-h-[500px] flex justify-end items-center pr-20" borderColor="#333333" strokeWidth={4}>
+        <div className="absolute top-[100px] right-[250px] w-[150px]">
+          <img src={Person1} alt="로그인 캐릭터" className="object-cover" />
+        </div>
         <img className="w-60 mb-10 cursor-pointer transform duration-300 hover:scale-[1.05]" src={LogoImg} alt="소상한 구독" onClick={goToLanding} />
       </BrushBorder>
 
