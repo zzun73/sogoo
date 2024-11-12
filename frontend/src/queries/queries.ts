@@ -33,11 +33,12 @@ const useCheckSeller = (businessNumber: BusinessNumber) => {
 
 /**
  * 매장 목록 조회
+ * @param page 페이지 번호
  */
-const useGetStoreList = () => {
+const useGetStoreList = (page: PageNumber) => {
   const { data } = useQuery({
-    queryKey: keys.getStoreList(),
-    queryFn: () => sogoo.getStoreList(),
+    queryKey: keys.getStoreList(page),
+    queryFn: () => sogoo.getStoreList(page),
   });
   const stores = data ? data.data.stores : [];
   return stores;

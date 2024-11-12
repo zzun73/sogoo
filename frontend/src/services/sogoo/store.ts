@@ -3,9 +3,10 @@ import axios from "../../configs/axios";
 export default {
   /**
    * 매장 목록 조회
+   * @param page 페이지 번호
    */
-  getStoreList: async () => {
-    return axios.get<GetStoreListResponse>("/store");
+  getStoreList: async (page: PageNumber) => {
+    return axios.get<GetStoreListResponse>(`/store?page=${page}`);
   },
 
   /**
