@@ -2,16 +2,7 @@ package com.ssafy.c107.main.domain.subscribe.entity;
 
 import com.ssafy.c107.main.common.entity.BaseEntity;
 import com.ssafy.c107.main.domain.members.entity.Member;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -48,12 +39,16 @@ public class MemberSubscribe extends BaseEntity {
     @JoinColumn(name = "subscribe_id")
     private Subscribe subscribe;
 
+    @Column
+    private String billingKey;
+
     @Builder
-    public MemberSubscribe(SubscribeStatus status, PaymentStatus paymentStatus, Member member, Subscribe subscribe) {
+    public MemberSubscribe(SubscribeStatus status, PaymentStatus paymentStatus, Member member, Subscribe subscribe, String billingKey) {
         this.status = status;
         this.paymentStatus = paymentStatus;
         this.member = member;
         this.subscribe = subscribe;
+        this.billingKey = billingKey;
     }
 
     public void completePayment() {
