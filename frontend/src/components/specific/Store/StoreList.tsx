@@ -29,10 +29,7 @@ const StoreList: React.FC = () => {
     navigate("/store/search/result");
   };
 
-  const handlePageChange = (
-    event: React.ChangeEvent<unknown>,
-    page: number
-  ) => {
+  const handlePageChange = (event: React.ChangeEvent<unknown>, page: number) => {
     setNowStorePage(page);
   };
 
@@ -46,20 +43,16 @@ const StoreList: React.FC = () => {
 
   return (
     <div className="w-full flex flex-col justify-center items-center">
-      <div className="w-5/6 flex justify-evenly items-center mb-10">
+      <div className="w-full flex justify-center items-center mb-10">
         <TextField
           id="searchBar"
           variant="outlined"
           placeholder="검색 내용을 입력하세요"
           value={searchInfo}
           onChange={(e) => setSearchInfo(e.target.value)}
-          sx={{ width: 10 / 12 }}
+          sx={{ width: 5 / 12, "& .MuiOutlinedInput-root": { borderRadius: "50px 0 0 50px" } }}
         />
-        <Button
-          variant="contained"
-          sx={{ width: 1 / 12, height: "50px" }}
-          onClick={handleSearch}
-        >
+        <Button variant="contained" sx={{ width: 1 / 12, height: "56px", borderRadius: "0 50px 50px 0", fontSize: "1rem" }} onClick={handleSearch}>
           검색
         </Button>
       </div>
