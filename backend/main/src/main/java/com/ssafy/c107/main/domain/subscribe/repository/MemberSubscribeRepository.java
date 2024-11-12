@@ -18,10 +18,10 @@ public interface MemberSubscribeRepository extends JpaRepository<MemberSubscribe
     Optional<MemberSubscribe> findByMember_Id(Long memberId);
 
     @Query("SELECT COALESCE(COUNT(o), 0) FROM MemberSubscribe o WHERE o.subscribe.store.id = :storeId AND o.status IN :statuses")
-    int getSubscribeMembers(Long storeId, @Param("statuses") List<SubscribeStatus> statuses);
+    Long getSubscribeMembers(Long storeId, @Param("statuses") List<SubscribeStatus> statuses);
 
     @Query("SELECT COALESCE(COUNT(o), 0) FROM MemberSubscribe o WHERE o.subscribe.id = :subscribeId AND o.status IN :statuses")
-    int getCountSubscribes(Long subscribeId, @Param("statuses") List<SubscribeStatus> statuses);
+    Long getCountSubscribes(Long subscribeId, @Param("statuses") List<SubscribeStatus> statuses);
 
     @Query("SELECT ms FROM MemberSubscribe ms " +
             "JOIN FETCH ms.member m " +

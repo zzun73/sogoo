@@ -11,6 +11,7 @@ import com.ssafy.c107.main.domain.store.dto.SellerStoreDto;
 import com.ssafy.c107.main.domain.store.dto.request.AddStoreRequest;
 import com.ssafy.c107.main.domain.store.dto.response.GetStoreResponse;
 import com.ssafy.c107.main.domain.store.dto.response.SellerStoresResponse;
+import com.ssafy.c107.main.domain.store.dto.response.StoreCountResponse;
 import com.ssafy.c107.main.domain.store.entity.Store;
 import com.ssafy.c107.main.domain.store.exception.StoreNotFoundException;
 import com.ssafy.c107.main.domain.store.repository.StoreRepository;
@@ -116,6 +117,15 @@ public class StoreServiceImpl implements StoreService {
         return SellerStoresResponse
             .builder()
             .stores(result)
+            .build();
+    }
+
+    @Override
+    public StoreCountResponse getStoreCount() {
+        int count = (int) storeRepository.count();
+        return StoreCountResponse
+            .builder()
+            .storeCount(count)
             .build();
     }
 }
