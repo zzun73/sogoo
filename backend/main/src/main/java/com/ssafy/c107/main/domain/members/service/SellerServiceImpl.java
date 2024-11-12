@@ -94,7 +94,7 @@ public class SellerServiceImpl implements SellerService {
         //구독자 수 가져오기
         List<SubscribeStatus> statuses = Arrays.asList(SubscribeStatus.SUBSCRIBE,
             SubscribeStatus.CANCEL_SCHEDULE);
-        int subscribeCount = memberSubscribeRepository.getSubscribeMembers(storeId, statuses);
+        int subscribeCount = memberSubscribeRepository.getSubscribeMembers(storeId, statuses).intValue();
 
         return SalesStatusResponse
             .builder()
@@ -173,7 +173,7 @@ public class SellerServiceImpl implements SellerService {
             SubscribeStatus.CANCEL_SCHEDULE);
         for (Subscribe subscribe : subscribes) {
             int cnt = memberSubscribeRepository.getCountSubscribes(subscribe.getId(),
-                statuses);
+                statuses).intValue();
             if (cnt == 0) {
                 continue;
             }
