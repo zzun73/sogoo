@@ -83,7 +83,7 @@ const ReviewChart = ({ storeId }: ReviewChartProps) => {
     };
   }, [reviewSummary]);
 
-  if (reviewSummary) {
+  if (!reviewSummary) {
     return <SkeletonUI />;
   }
 
