@@ -15,6 +15,7 @@ import sogoo from "../../../../services/sogoo";
 import ImageUpload from "../../../common/ImageUpload";
 import EmptySection from "./EmptySection";
 import keys from "../../../../queries/keys";
+import { AxiosError } from "axios";
 
 interface ReviewInputType {
   reviewId: number;
@@ -90,8 +91,15 @@ const ReviewManagement = ({ reviews }: ReviewManagementProps) => {
         }))
       );
     },
-    onError: () => {
-      alert("리뷰 등록에 실패하였습니다.");
+    onError: async (error: AxiosError) => {
+      if (
+        error.message === "timeout of 2500ms exceeded" ||
+        error.response?.data == "리뷰 분석 처리 중 오류가 발생했습니다."
+      ) {
+        alert("리뷰 형식이 올바르지 않습니다. 리뷰를 다시 작성해주세요.");
+        return;
+      }
+      if (error.message == "") alert("리뷰 등록에 실패하였습니다.");
     },
   });
 
@@ -124,7 +132,6 @@ const ReviewManagement = ({ reviews }: ReviewManagementProps) => {
     if (review.img) {
       formData.append("img", review.img);
     }
-
     registerReview({ reviewId, formData });
   };
 
