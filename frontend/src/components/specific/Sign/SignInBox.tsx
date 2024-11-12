@@ -12,14 +12,14 @@ const SignInBox = () => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
 
-  const { memberInfo, setLogin, setAccessToken } = useRootStore();
+  const { setLogin, setAccessToken } = useRootStore();
 
   const { mutate: handleLogin } = useMutation({
     mutationFn: sogoo.login,
     onSuccess: async (response) => {
       setLogin(response.data.userInfo);
       setAccessToken(response.headers.authorization.split(" ")[1]);
-      toast(`${memberInfo?.name}님, 반갑습니다!`);
+      toast(`${response.data.userInfo.name}님, 반갑습니다!`);
       navigate("/");
     },
     onError: (error) => {
