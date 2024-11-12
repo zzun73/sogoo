@@ -233,7 +233,7 @@ public class SellerServiceImpl implements SellerService {
             products.add(ProductDto
                     .builder()
                     .price(productPrice)
-                    .productCnt((int) object[0])
+                    .productCnt(productCount)
                     .productName((String) object[2])
                     .salesSum(productCount * productPrice.intValue())
                     .build());
