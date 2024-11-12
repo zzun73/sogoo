@@ -6,6 +6,7 @@ import com.ssafy.c107.main.domain.members.exception.InvalidMemberRoleException;
 import com.ssafy.c107.main.domain.members.exception.MemberExistException;
 import com.ssafy.c107.main.domain.members.exception.MemberNotFoundException;
 import com.ssafy.c107.main.domain.members.exception.SellerNotFoundException;
+import com.ssafy.c107.main.domain.order.exception.OrderCreationFailedException;
 import com.ssafy.c107.main.domain.order.exception.OrderListNotFoundException;
 import com.ssafy.c107.main.domain.pay.exception.BillingAuthFailedException;
 import com.ssafy.c107.main.domain.pay.exception.BillingChargeFailedException;
@@ -125,6 +126,11 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(MemberSubscribeNotFoundException.class)
     public ResponseEntity<String> handleMemberSubscribeNotFoundException(MemberSubscribeNotFoundException e) {
+        return ResponseEntity.status(e.getStatus()).body(e.getMessage());
+    }
+
+    @ExceptionHandler(MemberSubscribeNotFoundException.class)
+    public ResponseEntity<String> handleOrderCreationFailedException(OrderCreationFailedException e) {
         return ResponseEntity.status(e.getStatus()).body(e.getMessage());
     }
 }
