@@ -159,8 +159,6 @@ public class TossPaymentsServiceImpl implements TossPaymentsService {
 
         if (billingSuccess) {
             memberSubscribe.completePayment();
-            SubscribePay subscribePay = SubscribePay.builder().memberSubscribe(memberSubscribe).build();
-            subscribePayRepository.save(subscribePay);
         } else {
             log.error("자동 결제 실패");
             throw new BillingChargeFailedException();
