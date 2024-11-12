@@ -1,6 +1,6 @@
 import { useState } from "react";
 import StoreCard from "./StoreCard";
-import { useGetStoreList } from "../../../queries/queries";
+import { useGetStoreCounts, useGetStoreList } from "../../../queries/queries";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import useRootStore from "../../../stores";
@@ -13,6 +13,10 @@ const StoreList: React.FC = () => {
   const [nowStorePage, setNowStorePage] = useState<number>(1);
 
   const stores = useGetStoreList(nowStorePage);
+
+  const storeCount = useGetStoreCounts()?.storeCount;
+
+  const totalPageCount = storeCount ? Math.ceil(storeCount / 20) : 1;
 
   const { searchKeyword, setSearchKeyword } = useRootStore();
 
@@ -61,7 +65,7 @@ const StoreList: React.FC = () => {
 
       <Stack spacing={2} className="mt-10">
         <Pagination
-          count={10}
+          count={totalPageCount}
           showFirstButton
           showLastButton
           sx={{

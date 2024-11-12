@@ -53,4 +53,11 @@ export default {
       `/elastic/search?query=${query}&page=${page}`
     );
   },
+
+  /**
+   * Pagination 위해 가게 개수 불러오기
+   */
+  getStoreCounts: async () => {
+    return axios.get<StoreCountResult>(`/store/count`);
+  },
 };

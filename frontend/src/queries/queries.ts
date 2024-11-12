@@ -307,6 +307,19 @@ const useGetSearchResult = (query: MenuName, page: PageNumber) => {
   return searchResult;
 };
 
+/**
+ * Pagination 위해 가게 총 개수 불러오기
+ */
+const useGetStoreCounts = () => {
+  const { data } = useQuery({
+    queryKey: keys.getStoreCounts(),
+    queryFn: () => sogoo.getStoreCounts(),
+  });
+
+  const storeCount = data ? data.data : null;
+  return storeCount;
+};
+
 export {
   useCheckEmail,
   useCheckSeller,
@@ -331,4 +344,5 @@ export {
   useGetStoreItems,
   useGetSearchResult,
   useGetAllFoods,
+  useGetStoreCounts,
 };
