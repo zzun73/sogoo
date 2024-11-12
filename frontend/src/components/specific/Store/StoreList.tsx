@@ -8,7 +8,9 @@ import { useNavigate } from "react-router-dom";
 
 const StoreList: React.FC = () => {
   const navigate = useNavigate();
-  const stores = useGetStoreList();
+  const [nowStorePage, setNowStorePage] = useState<number>(1);
+
+  const stores = useGetStoreList(nowStorePage);
 
   const { searchKeyword, setSearchKeyword } = useRootStore();
 
