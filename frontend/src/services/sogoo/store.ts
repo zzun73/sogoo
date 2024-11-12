@@ -3,9 +3,10 @@ import axios from "../../configs/axios";
 export default {
   /**
    * 매장 목록 조회
+   * @param page 페이지 번호
    */
-  getStoreList: async () => {
-    return axios.get<GetStoreListResponse>("/store");
+  getStoreList: async (page: PageNumber) => {
+    return axios.get<GetStoreListResponse>(`/store?page=${page}`);
   },
 
   /**
@@ -51,5 +52,12 @@ export default {
     return axios.get<SearchResult>(
       `/elastic/search?query=${query}&page=${page}`
     );
+  },
+
+  /**
+   * Pagination 위해 가게 개수 불러오기
+   */
+  getStoreCounts: async () => {
+    return axios.get<StoreCountResult>(`/store/count`);
   },
 };

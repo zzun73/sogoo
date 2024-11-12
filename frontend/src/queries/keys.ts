@@ -11,7 +11,7 @@ const keys = {
     "businessNumber",
     businessNumber,
   ],
-  getStoreList: () => [...keys.store(), "storeList"],
+  getStoreList: (page: PageNumber) => [...keys.store(), "storeList", page],
   getBuyerMypage: () => [...keys.member(), "buyerMyPage"],
   getMyStores: () => [...keys.store(), "myStores"],
   getFoodListForSubscribe: (storeId: StoreId) => [
@@ -82,6 +82,7 @@ const keys = {
     page,
   ],
   getAllFoods: (storeId: StoreId) => [...keys.food(), "allFoods", storeId],
+  getStoreCounts: () => [...keys.store(), "storeCounts"],
 };
 
 export default keys;

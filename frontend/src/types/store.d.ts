@@ -62,4 +62,8 @@ interface SearchResult {
   stores?: SearchResultStore[];
 }
 
+interface StoreCountResult {
+  storeCount?: number | null;
+}
+
 type RootState = MemberStore & CartStore & StoreStore & SubscribeStore;

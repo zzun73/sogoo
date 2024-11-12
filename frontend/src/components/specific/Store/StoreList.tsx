@@ -1,14 +1,22 @@
 import { useState } from "react";
 import StoreCard from "./StoreCard";
-import { useGetStoreList } from "../../../queries/queries";
+import { useGetStoreCounts, useGetStoreList } from "../../../queries/queries";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import useRootStore from "../../../stores";
 import { useNavigate } from "react-router-dom";
+import Pagination from "@mui/material/Pagination";
+import Stack from "@mui/material/Stack";
 
 const StoreList: React.FC = () => {
   const navigate = useNavigate();
-  const stores = useGetStoreList();
+  const [nowStorePage, setNowStorePage] = useState<number>(1);
+
+  const stores = useGetStoreList(nowStorePage);
+
+  const storeCount = useGetStoreCounts()?.storeCount;
+
+  const totalPageCount = storeCount ? Math.ceil(storeCount / 20) : 1;
 
   const { searchKeyword, setSearchKeyword } = useRootStore();
 
@@ -18,7 +26,26 @@ const StoreList: React.FC = () => {
 
   const handleSearch = () => {
     setSearchKeyword(searchInfo);
+
+    if (searchInfo === "") {
+      alert("검색어를 입력해주세요.");
+      return;
+    }
+
     navigate("/store/search/result");
+  };
+
+  const handlePageChange = (
+    event: React.ChangeEvent<unknown>,
+    page: number
+  ) => {
+    setNowStorePage(page);
+  };
+
+  const handleSearchKeydown = (event: React.KeyboardEvent) => {
+    if (event.key === "Enter") {
+      handleSearch();
+    }
   };
 
   if (!stores) {
@@ -38,6 +65,7 @@ const StoreList: React.FC = () => {
           placeholder="검색 내용을 입력하세요"
           value={searchInfo}
           onChange={(e) => setSearchInfo(e.target.value)}
+          onKeyDown={handleSearchKeydown}
           sx={{ width: 10 / 12 }}
         />
         <Button
@@ -54,6 +82,23 @@ const StoreList: React.FC = () => {
           <StoreCard store={store} key={`store-${store.storeId}`} />
         ))}
       </div>
+
+      <Stack spacing={2} className="mt-10">
+        <Pagination
+          count={totalPageCount}
+          page={nowStorePage}
+          onChange={handlePageChange}
+          showFirstButton
+          showLastButton
+          sx={{
+            "& .MuiPaginationItem-root": {
+              padding: "10px 20px", // 버튼 크기 조정
+              margin: "0 4px", // 버튼 간격 조정
+              fontSize: "1rem", // 텍스트 크기 조정
+            },
+          }}
+        />
+      </Stack>
     </div>
   );
 };
