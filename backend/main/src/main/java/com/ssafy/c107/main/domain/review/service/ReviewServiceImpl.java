@@ -14,6 +14,7 @@ import com.ssafy.c107.main.domain.review.dto.TextInput;
 import com.ssafy.c107.main.domain.review.dto.request.CreateReviewInfoRequest;
 import com.ssafy.c107.main.domain.review.dto.response.FastApiResponse;
 import com.ssafy.c107.main.domain.review.dto.response.FoodDetailResponse;
+import com.ssafy.c107.main.domain.review.dto.response.ReviewCountResponse;
 import com.ssafy.c107.main.domain.review.dto.response.ReviewInfoResponse;
 import com.ssafy.c107.main.domain.review.dto.response.StoreReviewResponse;
 import com.ssafy.c107.main.domain.review.entity.Review;
@@ -280,6 +281,11 @@ public class ReviewServiceImpl implements ReviewService {
         foodDetailResponse.setReviews(reviewDtos);
 
         return foodDetailResponse;
+    }
+
+    @Override
+    public ReviewCountResponse getStoreReviewCount(Long storeId) {
+        return null;
     }
 
     // ChatModel을 사용해 요약 생성
