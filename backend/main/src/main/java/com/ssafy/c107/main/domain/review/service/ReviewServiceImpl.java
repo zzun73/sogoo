@@ -292,6 +292,11 @@ public class ReviewServiceImpl implements ReviewService {
             .build();
     }
 
+    @Override
+    public ReviewCountResponse getFoodDetailCount(Long foodId) {
+        return null;
+    }
+
     // ChatModel을 사용해 요약 생성
     private String createSummaryWithAI(String content) {
         // ChatModel을 통해 AI 호출 및 요약 생성
