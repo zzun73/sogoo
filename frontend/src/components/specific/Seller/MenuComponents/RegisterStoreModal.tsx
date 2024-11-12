@@ -8,6 +8,7 @@ import sogoo from "../../../../services/sogoo";
 import { AxiosError } from "axios";
 import { useQueryClient } from "@tanstack/react-query";
 import keys from "../../../../queries/keys";
+import { toast } from "react-toastify";
 
 const style = {
   position: "absolute",
@@ -59,7 +60,7 @@ const RegisterStoreModal: React.FC<RegisterStoreModalProps> = ({
       sogoo.registerMyStore(registerStoreForm),
     onSuccess: async (response) => {
       if (response.status === 200) {
-        console.log("가게 등록 성공");
+        toast("가게가 등록되었습니다!");
         handleModalClose();
 
         await queryClient.invalidateQueries({ queryKey: keys.getMyStores() });
@@ -68,14 +69,11 @@ const RegisterStoreModal: React.FC<RegisterStoreModalProps> = ({
     onError: (error: AxiosError) => {
       const status = error.response?.status;
       if (status === 403) {
-        console.error("해당 작업을 수행할 권한이 없습니다.");
-        alert("해당 작업을 수행할 권한이 없습니다.");
+        toast.error("해당 작업을 수행할 권한이 없습니다.");
       } else if (status === 404) {
-        console.error("해당 멤버를 찾지 못했습니다.");
-        alert("해당 멤버를 찾지 못했습니다.");
+        toast.error("해당 멤버를 찾지 못했습니다.");
       } else {
-        console.error("가게 등록 실패", error);
-        alert("가게 등록 실패");
+        toast.error("가게 등록 실패");
       }
     },
   });

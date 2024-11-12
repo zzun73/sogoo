@@ -16,6 +16,7 @@ import ImageUpload from "../../../common/ImageUpload";
 import EmptySection from "./EmptySection";
 import keys from "../../../../queries/keys";
 import { AxiosError } from "axios";
+import { toast } from "react-toastify";
 
 interface ReviewInputType {
   reviewId: number;
@@ -82,7 +83,7 @@ const ReviewManagement = ({ reviews }: ReviewManagementProps) => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: keys.getBuyerMypage() });
-      alert("리뷰가 등록되었습니다.");
+      toast("리뷰가 등록되었습니다.");
       setReviewInput((prevInputs) =>
         prevInputs.map((input) => ({
           ...input,
@@ -98,10 +99,10 @@ const ReviewManagement = ({ reviews }: ReviewManagementProps) => {
         error.message === "timeout of 2500ms exceeded" ||
         error.response?.data == "리뷰 분석 처리 중 오류가 발생했습니다."
       ) {
-        alert("리뷰 형식이 올바르지 않습니다. 리뷰를 다시 작성해주세요.");
+        toast.error("리뷰 형식이 올바르지 않습니다. 리뷰를 다시 작성해주세요.");
         return;
       }
-      if (error.message == "") alert("리뷰 등록에 실패하였습니다.");
+      if (error.message == "") toast.error("리뷰 등록에 실패하였습니다.");
     },
   });
 
@@ -110,22 +111,22 @@ const ReviewManagement = ({ reviews }: ReviewManagementProps) => {
     if (!review) return;
 
     if (!review.comment.trim()) {
-      alert("리뷰 내용을 입력해주세요.");
+      toast.error("리뷰 내용을 입력해주세요.");
       return;
     } else if (review.comment.trim().length > 300) {
-      alert("리뷰 내용은 300자 이내로 작성해주세요.");
+      toast.error("리뷰 내용은 300자 이내로 작성해주세요.");
       return;
     } else if (review.comment.trim().length < 10) {
-      alert("리뷰 내용은 10자 이상 작성해주세요.");
+      toast.error("리뷰 내용은 10자 이상 작성해주세요.");
       return;
     } else if (!review.img) {
-      alert("이미지를 등록해주세요.");
+      toast.error("이미지를 등록해주세요.");
       return;
     } else if (review.img && !review.img.type.startsWith("image/")) {
-      alert("이미지 파일만 등록 가능합니다.");
+      toast.error("이미지 파일만 등록 가능합니다.");
       return;
     } else if (review.img && review.img.size > 10 * 1024 * 1024) {
-      alert("이미지 파일은 10MB 이하로 등록 가능합니다.");
+      toast.error("이미지 파일은 10MB 이하로 등록 가능합니다.");
       return;
     }
 

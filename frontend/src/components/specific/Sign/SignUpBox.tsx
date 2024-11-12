@@ -14,6 +14,7 @@ import { useMutation } from "@tanstack/react-query";
 import sogoo from "../../../services/sogoo";
 import { useNavigate } from "react-router-dom";
 import useRootStore from "../../../stores";
+import { toast } from "react-toastify";
 
 // 정규식 패턴 정의
 const emailPattern = /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/;
@@ -45,9 +46,8 @@ const SignUpBox: React.FC = () => {
 
   const { mutate: handleSignUp } = useMutation({
     mutationFn: sogoo.signup,
-    onSuccess: async (response) => {
-      console.log("회원가입 성공:", response);
-      alert("회원가입 성공");
+    onSuccess: async () => {
+      toast("화원가입이 완료되었습니다!");
 
       const loginResponse = await sogoo.login({ email, password: password1 });
       setLogin(loginResponse.data.userInfo);
@@ -58,67 +58,69 @@ const SignUpBox: React.FC = () => {
     },
     onError: (error) => {
       console.error("회원가입 실패:", error);
-      alert("회원가입 실패");
+      toast.error("회원가입에 실패했습니다. 다시 시도해 주세요!");
     },
   });
 
   const initiateSignUp = (): void => {
     if (!isEmailFormatValid) {
-      alert("유효한 이메일을 입력하세요.");
+      toast.error("유효한 이메일을 입력하세요.");
       return;
     }
     if (!isPhoneFormatValid) {
-      alert("유효한 휴대전화 번호를 입력하세요.");
+      toast.error("유효한 휴대전화 번호를 입력하세요.");
       return;
     }
 
     switch (true) {
       case !name: {
-        alert("이름을 입력하세요.");
+        toast.error("이름을 입력하세요.");
         return;
       }
       case !email: {
-        alert("이메일을 입력하세요.");
+        toast.error("이메일을 입력하세요.");
         return;
       }
       case !password1: {
-        alert("비밀번호를 입력하세요.");
+        toast.error("비밀번호를 입력하세요.");
         return;
       }
       case password1 !== password2: {
-        alert("비밀번호가 일치하지 않습니다.");
+        toast.error("비밀번호가 일치하지 않습니다.");
         return;
       }
       case !address: {
-        alert("주소를 입력하세요.");
+        toast.error("주소를 입력하세요.");
         return;
       }
       case !birth: {
-        alert("생년월일을 입력하세요.");
+        toast.error("생년월일을 입력하세요.");
         return;
       }
       case !phone: {
-        alert("연락처를 입력하세요.");
+        toast.error("연락처를 입력하세요.");
         return;
       }
       case isEmailValid === null: {
-        alert("이메일 검사를 실행해주세요.");
+        toast.error("이메일 검사를 실행해주세요.");
         return;
       }
       case isEmailValid === false: {
-        alert("사용 중인 이메일로는 가입하실 수 없습니다.");
+        toast.error("사용 중인 이메일로는 가입하실 수 없습니다.");
         return;
       }
       case role === "Seller" && !businessNumber: {
-        alert("사업자 회원가입을 위해서는 사업자 등록 번호가 필요합니다.");
+        toast.error(
+          "사업자 회원가입을 위해서는 사업자 등록 번호가 필요합니다."
+        );
         return;
       }
       case role === "Seller" && isSellerValid === null: {
-        alert("사업자 번호 검사를 실행해주세요.");
+        toast.error("사업자 번호 검사를 실행해주세요.");
         return;
       }
       case role === "Seller" && isSellerValid === false: {
-        alert("유효한 사업자 번호를 입력해주세요.");
+        toast.error("유효한 사업자 번호를 입력해주세요.");
         return;
       }
       default: {
@@ -149,7 +151,6 @@ const SignUpBox: React.FC = () => {
 
   const handleEmailCheck = async () => {
     const result = await refetch();
-    console.log(result);
     setIsEmailValid(Number(result.data?.status) === 200);
   };
 
@@ -161,7 +162,6 @@ const SignUpBox: React.FC = () => {
 
   const handleSellerCheck = async () => {
     const result = await refetchSeller();
-    console.log(result);
     setIsSellerValid(Number(result.data?.status) === 200);
   };
 

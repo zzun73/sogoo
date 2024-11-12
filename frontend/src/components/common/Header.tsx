@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 import sogoo from "../../services/sogoo";
 import { useMutation } from "@tanstack/react-query";
 import HeaderImage from "../../assets/header-image.png";
+import { toast } from "react-toastify";
 
 const Header = () => {
   const navigate = useNavigate();
@@ -20,15 +21,15 @@ const Header = () => {
 
   const { mutate: handleLogout } = useMutation({
     mutationFn: sogoo.logout,
-    onSuccess: async (response) => {
+    onSuccess: async () => {
       setLogout();
-      console.log("로그아웃 성공", response);
-      alert("로그아웃 완료");
+      toast("로그아웃이 완료되었습니다!");
       navigate("/sign");
     },
     onError: (error) => {
-      console.log("로그아웃 실패", error);
-      localStorage.clear();
+      console.error("로그아웃 중 에러 발생 : ", error);
+      setLogout();
+      toast("로그아웃이 완료되었습니다!");
       navigate("/sign");
     },
   });
@@ -40,10 +41,18 @@ const Header = () => {
   return (
     <>
       <header className="relative flex justify-center z-10">
-        <img src={HeaderImage} alt="헤더 이미지" className="absolute top-0 left-0 w-full h-full object-cover opacity-50" />
+        <img
+          src={HeaderImage}
+          alt="헤더 이미지"
+          className="absolute top-0 left-0 w-full h-full object-cover opacity-50"
+        />
         <div className="mt-10 mb-5">
           <Link to="/">
-            <img src={LogoImg} alt="소상한 구독" className="w-[120px] drop-shadow-2xl" />
+            <img
+              src={LogoImg}
+              alt="소상한 구독"
+              className="w-[120px] drop-shadow-2xl"
+            />
           </Link>
         </div>
       </header>

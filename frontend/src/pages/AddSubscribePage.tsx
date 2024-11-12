@@ -11,6 +11,7 @@ import Select, { SelectChangeEvent } from "@mui/material/Select";
 import { useMutation } from "@tanstack/react-query";
 import sogoo from "../services/sogoo";
 import useRootStore from "../stores";
+import { toast } from "react-toastify";
 
 const AddSubscribe: React.FC = () => {
   const navigate = useNavigate();
@@ -98,13 +99,13 @@ const AddSubscribe: React.FC = () => {
 
     switch (true) {
       case !subscribeName:
-        alert("상품명을 입력해 주세요.");
+        toast.error("상품명을 입력해 주세요.");
         return;
       case !subscribeDescription:
-        alert("상품 설명을 입력해 주세요.");
+        toast.error("상품 설명을 입력해 주세요.");
         return;
       case !subscribePrice:
-        alert("판매가를 입력해 주세요.");
+        toast.error("판매가를 입력해 주세요.");
         return;
     }
 
@@ -113,7 +114,7 @@ const AddSubscribe: React.FC = () => {
     ).length;
 
     if (emptyFoodCount > 0) {
-      alert(
+      toast.error(
         `${emptyFoodCount}개의 주차에 상품이 등록되지 않았습니다. 모든 주차에 최소 1개 이상의 상품을 추가해 주세요.`
       );
       return;
@@ -133,7 +134,9 @@ const AddSubscribe: React.FC = () => {
   return (
     <div className="w-full flex flex-col flex-grow">
       <div className="flex flex-col justify-center items-center my-10 mx-[200px]">
-        <h1 className="font-shilla text-5xl font-bold mb-5">구독 상품 등록하기</h1>
+        <h1 className="font-shilla text-5xl font-bold mb-5">
+          구독 상품 등록하기
+        </h1>
         <div className="w-full flex flex-col justify-center items-center rounded-3xl bg-white p-10">
           <TextField
             required

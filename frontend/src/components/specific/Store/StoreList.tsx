@@ -7,6 +7,7 @@ import useRootStore from "../../../stores";
 import { useNavigate } from "react-router-dom";
 import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
+import { toast } from "react-toastify";
 
 const StoreList: React.FC = () => {
   const navigate = useNavigate();
@@ -28,14 +29,17 @@ const StoreList: React.FC = () => {
     setSearchKeyword(searchInfo);
 
     if (searchInfo === "") {
-      alert("검색어를 입력해주세요.");
+      toast.error("검색어를 입력해주세요.");
       return;
     }
 
     navigate("/store/search/result");
   };
 
-  const handlePageChange = (event: React.ChangeEvent<unknown>, page: number) => {
+  const handlePageChange = (
+    event: React.ChangeEvent<unknown>,
+    page: number
+  ) => {
     setNowStorePage(page);
   };
 
@@ -63,9 +67,21 @@ const StoreList: React.FC = () => {
           value={searchInfo}
           onChange={(e) => setSearchInfo(e.target.value)}
           onKeyDown={handleSearchKeydown}
-          sx={{ width: 5 / 12, "& .MuiOutlinedInput-root": { borderRadius: "50px 0 0 50px" } }}
+          sx={{
+            width: 5 / 12,
+            "& .MuiOutlinedInput-root": { borderRadius: "50px 0 0 50px" },
+          }}
         />
-        <Button variant="contained" sx={{ width: 1 / 12, height: "56px", borderRadius: "0 50px 50px 0", fontSize: "1rem" }} onClick={handleSearch}>
+        <Button
+          variant="contained"
+          sx={{
+            width: 1 / 12,
+            height: "56px",
+            borderRadius: "0 50px 50px 0",
+            fontSize: "1rem",
+          }}
+          onClick={handleSearch}
+        >
           검색
         </Button>
       </div>
