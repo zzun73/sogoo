@@ -12,6 +12,7 @@ import com.ssafy.c107.main.domain.pay.exception.BillingChargeFailedException;
 import com.ssafy.c107.main.domain.pay.exception.ConfirmPaymentFailedException;
 import com.ssafy.c107.main.domain.review.exception.*;
 import com.ssafy.c107.main.domain.store.exception.StoreNotFoundException;
+import com.ssafy.c107.main.domain.subscribe.exception.MemberSubscribeNotFoundException;
 import com.ssafy.c107.main.domain.subscribe.exception.SubscribeNotFoundException;
 import com.ssafy.c107.main.domain.subscribe.exception.SubscribeWeekNotFoundException;
 import org.springframework.http.ResponseEntity;
@@ -119,6 +120,11 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(FastApiCommunicationException.class)
     public ResponseEntity<String> handleFastApiCommunicationException(FastApiCommunicationException e) {
+        return ResponseEntity.status(e.getStatus()).body(e.getMessage());
+    }
+
+    @ExceptionHandler(MemberSubscribeNotFoundException.class)
+    public ResponseEntity<String> handleMemberSubscribeNotFoundException(MemberSubscribeNotFoundException e) {
         return ResponseEntity.status(e.getStatus()).body(e.getMessage());
     }
 }

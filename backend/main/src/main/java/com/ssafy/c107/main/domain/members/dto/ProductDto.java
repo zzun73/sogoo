@@ -9,6 +9,6 @@ public class ProductDto {
 
     private String productName;
     private int salesSum;
-    private int price;
+    private Long price;
     private int productCnt;
 }
