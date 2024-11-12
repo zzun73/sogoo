@@ -7,6 +7,7 @@ import useRootStore from "../../stores";
 import { useNavigate } from "react-router-dom";
 import sogoo from "../../services/sogoo";
 import { useMutation } from "@tanstack/react-query";
+import HeaderImage from "../../assets/header-image.png";
 
 const Header = () => {
   const navigate = useNavigate();
@@ -39,13 +40,10 @@ const Header = () => {
   return (
     <>
       <header className="relative flex justify-center z-10">
+        <img src={HeaderImage} alt="헤더 이미지" className="absolute top-0 left-0 w-full h-full object-cover opacity-50" />
         <div className="mt-10 mb-5">
           <Link to="/">
-            <img
-              src={LogoImg}
-              alt="소상한 구독"
-              className="w-[120px] drop-shadow-2xl"
-            />
+            <img src={LogoImg} alt="소상한 구독" className="w-[120px] drop-shadow-2xl" />
           </Link>
         </div>
       </header>
