@@ -168,7 +168,7 @@ public class SellerServiceImpl implements SellerService {
         List<Subscribe> subscribes = subscribeRepository.findAllByStore_Id(storeId);
 
         //구독 상품별 개수 구하기
-        Map<Long, Integer> subscribeMap = new TreeMap<>((o1, o2) -> Math.toIntExact(o2 - o1));
+        Map<Long, Integer> subscribeMap = new TreeMap<>((o1, o2) -> o2.compareTo(o1));
         List<SubscribeStatus> statuses = Arrays.asList(SubscribeStatus.SUBSCRIBE,
             SubscribeStatus.CANCEL_SCHEDULE);
         for (Subscribe subscribe : subscribes) {
