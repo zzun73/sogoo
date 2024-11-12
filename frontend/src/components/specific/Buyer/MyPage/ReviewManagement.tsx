@@ -30,6 +30,7 @@ interface ReviewManagementProps {
 
 const ReviewManagement = ({ reviews }: ReviewManagementProps) => {
   const queryClient = useQueryClient();
+  const [isSaving, setIsSaving] = useState(false);
   const [reviewInput, setReviewInput] = useState<ReviewInputType[]>(
     reviews.map((review) => ({
       reviewId: review.orderListId,
@@ -90,6 +91,7 @@ const ReviewManagement = ({ reviews }: ReviewManagementProps) => {
           imgPreview: null,
         }))
       );
+      setIsSaving(false);
     },
     onError: async (error: AxiosError) => {
       if (
@@ -132,6 +134,10 @@ const ReviewManagement = ({ reviews }: ReviewManagementProps) => {
     if (review.img) {
       formData.append("img", review.img);
     }
+    if (isSaving) {
+      return;
+    }
+    setIsSaving(true);
     registerReview({ reviewId, formData });
   };
 
