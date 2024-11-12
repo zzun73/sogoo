@@ -129,7 +129,7 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(e.getStatus()).body(e.getMessage());
     }
 
-    @ExceptionHandler(MemberSubscribeNotFoundException.class)
+    @ExceptionHandler(OrderCreationFailedException.class)
     public ResponseEntity<String> handleOrderCreationFailedException(OrderCreationFailedException e) {
         return ResponseEntity.status(e.getStatus()).body(e.getMessage());
     }
