@@ -15,6 +15,9 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -23,7 +26,6 @@ public class ElasticSearchServiceImpl implements ElasticSearchService {
 
     private final StoreSearchRepository storeSearchRepository;
     private final StoreRepository storeRepository;
-
 
 //    @EventListener(ApplicationReadyEvent.class)
 //    @Transactional
@@ -91,9 +93,13 @@ public class ElasticSearchServiceImpl implements ElasticSearchService {
     }
 
     @Override
-    public SearchResponse getStores(String query) {
-        List<StoreSearchDocument> stores = storeSearchRepository.findByStoreNameOrFoodName(
-            query);
+    public SearchResponse getStores(String query, int page) {
+        Pageable pageable = PageRequest.of(page - 1, 20);
+
+        Page<StoreSearchDocument> searchResult = storeSearchRepository.findByStoreNameOrFoodName(
+            query, pageable);
+
+        List<StoreSearchDocument> stores = searchResult.getContent();
 
         List<SearchDetail> results = new ArrayList<>();
 

@@ -7,7 +7,7 @@ import com.ssafy.c107.main.domain.store.dto.response.SellerStoresResponse;
 
 public interface StoreService {
 
-    GetStoreResponse getAllStores();
+    GetStoreResponse getAllStores(int page);
 
     GetStoreDto getStoreById(Long id);
 

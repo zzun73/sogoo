@@ -21,7 +21,7 @@ public interface SellerService {
 
     SellerReviewAllResponse getAllReview(Long storeId, Long userId);
 
-    ReviewDetailResponse getProductReview(Long storeId, Long foodId, Long userId);
+    ReviewDetailResponse getProductReview(Long storeId, Long foodId, Long userId, int page);
 
     SellerMenuResponse getAllProduct(Long storeId, Long userId);
 

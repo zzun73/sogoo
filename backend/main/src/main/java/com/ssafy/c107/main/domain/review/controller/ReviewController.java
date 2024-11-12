@@ -45,15 +45,15 @@ public class ReviewController {
 
     // 반찬가게 상세페이지[구매자용](반찬별 리뷰)
     @GetMapping("buyer/{storeId}")
-    public ResponseEntity<?> getStoreReviews(@PathVariable Long storeId) {
-        StoreReviewResponse response = reviewService.getStoreReviews(storeId);
+    public ResponseEntity<?> getStoreReviews(@PathVariable Long storeId, @RequestParam(name = "page") int page) {
+        StoreReviewResponse response = reviewService.getStoreReviews(storeId, page);
         return ResponseEntity.ok(response);
     }
 
     // 반찬별 리뷰 조회
     @GetMapping("buyer/food/{foodId}")
-    public ResponseEntity<?> getStoreReviewsByFood(@PathVariable Long foodId) {
-        FoodDetailResponse response = reviewService.getFoodDetails(foodId);
+    public ResponseEntity<?> getStoreReviewsByFood(@PathVariable Long foodId, @RequestParam(name = "page") int page) {
+        FoodDetailResponse response = reviewService.getFoodDetails(foodId, page);
         return ResponseEntity.ok(response);
     }
 }
