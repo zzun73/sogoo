@@ -26,6 +26,12 @@ const StoreList: React.FC = () => {
 
   const handleSearch = () => {
     setSearchKeyword(searchInfo);
+
+    if (searchInfo === "") {
+      alert("검색어를 입력해주세요.");
+      return;
+    }
+
     navigate("/store/search/result");
   };
 
