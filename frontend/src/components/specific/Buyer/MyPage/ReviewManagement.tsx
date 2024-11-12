@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import {
   Accordion,
   AccordionSummary,
@@ -15,6 +15,7 @@ import sogoo from "../../../../services/sogoo";
 import ImageUpload from "../../../common/ImageUpload";
 import EmptySection from "./EmptySection";
 import keys from "../../../../queries/keys";
+import { AxiosError } from "axios";
 
 interface ReviewInputType {
   reviewId: number;
@@ -29,6 +30,7 @@ interface ReviewManagementProps {
 
 const ReviewManagement = ({ reviews }: ReviewManagementProps) => {
   const queryClient = useQueryClient();
+  const [isSaving, setIsSaving] = useState(false);
   const [reviewInput, setReviewInput] = useState<ReviewInputType[]>(
     reviews.map((review) => ({
       reviewId: review.orderListId,
@@ -69,7 +71,13 @@ const ReviewManagement = ({ reviews }: ReviewManagementProps) => {
   };
 
   const { mutate: registerReview } = useMutation({
-    mutationFn: ({ reviewId, formData }: { reviewId: number; formData: FormData }) => {
+    mutationFn: ({
+      reviewId,
+      formData,
+    }: {
+      reviewId: number;
+      formData: FormData;
+    }) => {
       return sogoo.registerReview(reviewId, formData);
     },
     onSuccess: () => {
@@ -83,9 +91,17 @@ const ReviewManagement = ({ reviews }: ReviewManagementProps) => {
           imgPreview: null,
         }))
       );
+      setIsSaving(false);
     },
-    onError: () => {
-      alert("리뷰 등록에 실패하였습니다.");
+    onError: async (error: AxiosError) => {
+      if (
+        error.message === "timeout of 2500ms exceeded" ||
+        error.response?.data == "리뷰 분석 처리 중 오류가 발생했습니다."
+      ) {
+        alert("리뷰 형식이 올바르지 않습니다. 리뷰를 다시 작성해주세요.");
+        return;
+      }
+      if (error.message == "") alert("리뷰 등록에 실패하였습니다.");
     },
   });
 
@@ -118,7 +134,10 @@ const ReviewManagement = ({ reviews }: ReviewManagementProps) => {
     if (review.img) {
       formData.append("img", review.img);
     }
-
+    if (isSaving) {
+      return;
+    }
+    setIsSaving(true);
     registerReview({ reviewId, formData });
   };
 
@@ -145,7 +164,12 @@ const ReviewManagement = ({ reviews }: ReviewManagementProps) => {
                     },
                   }}
                 >
-                  <CardMedia component="img" image={item.foodImg} alt="green iguana" sx={{ width: "180px", height: "150px", objectFit: "cover" }} />
+                  <CardMedia
+                    component="img"
+                    image={item.foodImg}
+                    alt="green iguana"
+                    sx={{ width: "180px", height: "150px", objectFit: "cover" }}
+                  />
                   <CardContent sx={{ display: "flex", alignItems: "center" }}>
                     <Typography gutterBottom variant="h5" component="div">
                       {item.foodName}
@@ -165,23 +189,42 @@ const ReviewManagement = ({ reviews }: ReviewManagementProps) => {
                               height: "230px", // 원하는 높이 값
                             },
                           }}
-                          value={reviewInput.find((input) => input.reviewId === item.orderListId)?.comment || ""}
+                          value={
+                            reviewInput.find(
+                              (input) => input.reviewId === item.orderListId
+                            )?.comment || ""
+                          }
                           onChange={(event) => {
                             const newValue = event.target.value;
                             if (newValue.length > 300) return;
                             setReviewInput((prevInputs) =>
-                              prevInputs.map((input) => (input.reviewId === item.orderListId ? { ...input, comment: newValue } : input))
+                              prevInputs.map((input) =>
+                                input.reviewId === item.orderListId
+                                  ? { ...input, comment: newValue }
+                                  : input
+                              )
                             );
                           }}
-                          helperText={`${reviewInput.find((input) => input.reviewId === item.orderListId)?.comment.length || 0}/300자`}
-                          error={(reviewInput.find((input) => input.reviewId === item.orderListId)?.comment.length || 0) === 300}
+                          helperText={`${
+                            reviewInput.find(
+                              (input) => input.reviewId === item.orderListId
+                            )?.comment.length || 0
+                          }/300자`}
+                          error={
+                            (reviewInput.find(
+                              (input) => input.reviewId === item.orderListId
+                            )?.comment.length || 0) === 300
+                          }
                           slotProps={{
                             formHelperText: {
                               sx: {
                                 textAlign: "right",
                                 marginRight: "0",
                                 color:
-                                  (reviewInput.find((input) => input.reviewId === item.orderListId)?.comment.length || 0) === 300
+                                  (reviewInput.find(
+                                    (input) =>
+                                      input.reviewId === item.orderListId
+                                  )?.comment.length || 0) === 300
                                     ? "error.main"
                                     : "text.secondary",
                               },
@@ -189,21 +232,37 @@ const ReviewManagement = ({ reviews }: ReviewManagementProps) => {
                           }}
                           onPaste={(event) => {
                             event.preventDefault();
-                            const pastedText = event.clipboardData.getData("text");
-                            const currentInput = reviewInput.find((input) => input.reviewId === item.orderListId);
+                            const pastedText =
+                              event.clipboardData.getData("text");
+                            const currentInput = reviewInput.find(
+                              (input) => input.reviewId === item.orderListId
+                            );
                             const currentText = currentInput?.comment || "";
 
                             if (currentText.length + pastedText.length > 300) {
-                              const allowedText = pastedText.slice(0, 300 - currentText.length);
+                              const allowedText = pastedText.slice(
+                                0,
+                                300 - currentText.length
+                              );
                               setReviewInput((prevInputs) =>
                                 prevInputs.map((input) =>
-                                  input.reviewId === item.orderListId ? { ...input, comment: currentText + allowedText } : input
+                                  input.reviewId === item.orderListId
+                                    ? {
+                                        ...input,
+                                        comment: currentText + allowedText,
+                                      }
+                                    : input
                                 )
                               );
                             } else {
                               setReviewInput((prevInputs) =>
                                 prevInputs.map((input) =>
-                                  input.reviewId === item.orderListId ? { ...input, comment: currentText + pastedText } : input
+                                  input.reviewId === item.orderListId
+                                    ? {
+                                        ...input,
+                                        comment: currentText + pastedText,
+                                      }
+                                    : input
                                 )
                               );
                             }
@@ -213,8 +272,14 @@ const ReviewManagement = ({ reviews }: ReviewManagementProps) => {
                       </div>
                       <div className="w-[260px]">
                         <ImageUpload
-                          onImageSelect={(file) => handleImageSelect(item.orderListId, file)}
-                          selectedImage={reviewInput.find((input) => input.reviewId === item.orderListId)?.imgPreview || null}
+                          onImageSelect={(file) =>
+                            handleImageSelect(item.orderListId, file)
+                          }
+                          selectedImage={
+                            reviewInput.find(
+                              (input) => input.reviewId === item.orderListId
+                            )?.imgPreview || null
+                          }
                         />
                       </div>
                     </div>
@@ -242,8 +307,13 @@ const ReviewManagement = ({ reviews }: ReviewManagementProps) => {
                   )}
                 </AccordionDetails>
                 {!item.reviewStatus && (
-                  <AccordionActions sx={{ display: "flex", justifyContent: "center" }}>
-                    <Button sx={{ width: "80px" }} onClick={() => handleReviewSubmit(item.orderListId)}>
+                  <AccordionActions
+                    sx={{ display: "flex", justifyContent: "center" }}
+                  >
+                    <Button
+                      sx={{ width: "80px" }}
+                      onClick={() => handleReviewSubmit(item.orderListId)}
+                    >
                       등록하기
                     </Button>
                   </AccordionActions>
