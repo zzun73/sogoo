@@ -13,7 +13,7 @@ interface SellerReviewProps {
 const ReviewCard = ({ review }: SellerReviewProps) => {
   const { img, memberEmail, foodName, comment } = review;
   return (
-    <Card className="flex flex-row px-2 gap-x-3">
+    <Card className="flex flex-row px-2 gap-x-3 w-full">
       <img src={img} className="w-24 h-24" />
       <div>
         <p>{memberEmail}</p>
