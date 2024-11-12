@@ -20,12 +20,10 @@ import com.ssafy.c107.main.domain.pay.dto.response.BillingResponse;
 import com.ssafy.c107.main.domain.pay.exception.BillingAuthFailedException;
 import com.ssafy.c107.main.domain.pay.exception.BillingChargeFailedException;
 import com.ssafy.c107.main.domain.pay.exception.ConfirmPaymentFailedException;
-import com.ssafy.c107.main.domain.pay.quartz.QuartzConfig;
 import com.ssafy.c107.main.domain.store.entity.Store;
 import com.ssafy.c107.main.domain.store.exception.StoreNotFoundException;
 import com.ssafy.c107.main.domain.store.repository.StoreRepository;
 import com.ssafy.c107.main.domain.subscribe.entity.*;
-import com.ssafy.c107.main.domain.subscribe.exception.MemberSubscribeNotFoundException;
 import com.ssafy.c107.main.domain.subscribe.exception.SubscribeNotFoundException;
 import com.ssafy.c107.main.domain.subscribe.repository.MemberSubscribeRepository;
 import com.ssafy.c107.main.domain.subscribe.repository.SubscribePayRepository;
@@ -36,7 +34,6 @@ import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.Objects;
 
@@ -57,7 +54,7 @@ public class TossPaymentsServiceImpl implements TossPaymentsService {
     private final SubscribePayRepository subscribePayRepository;
 
 
-    private final QuartzConfig quartzConfig;
+//    private final QuartzConfig quartzConfig;
 
 
     // 결제 승인 요청을 처리
@@ -124,11 +121,11 @@ public class TossPaymentsServiceImpl implements TossPaymentsService {
             String billingKey = Objects.requireNonNull(billingResponse).getBillingKey();
             log.info("billingKey: {}", billingKey);
 
-            Member member = updateBillingKeyForMember(memberId, billingKey);
+            Member member = memberRepository.findById(memberId).orElseThrow(MemberNotFoundException::new);
 
             // 자동 결제 진행
             AutoBillingDto autoBillingDto = createAutoBillingDto(member, autoBillingRequest);
-            processSubscription(member, autoBillingDto, autoBillingRequest.getSubscribeId());
+            processSubscription(member, autoBillingDto, autoBillingRequest.getSubscribeId(), billingKey);
 
             // TODO: 첫 결제 성공 후 Quartz 스케줄 설정
 //            MemberSubscribe subscription = memberSubscribeRepository.findByMember_Id(memberId)
@@ -140,12 +137,6 @@ public class TossPaymentsServiceImpl implements TossPaymentsService {
         } catch (Exception e) {
             throw new BillingAuthFailedException();
         }
-    }
-
-    private Member updateBillingKeyForMember(Long memberId, String billingKey) {
-        Member member = memberRepository.findById(memberId).orElseThrow(MemberNotFoundException::new);
-        member.updateBillingKey(billingKey);
-        return memberRepository.save(member);
     }
 
     private AutoBillingDto createAutoBillingDto(Member member, AutoBillingRequest autoBillingRequest) {
@@ -162,9 +153,9 @@ public class TossPaymentsServiceImpl implements TossPaymentsService {
                 .build();
     }
 
-    private void processSubscription(Member member, AutoBillingDto autoBillingDto, Long subscribeId) {
-        MemberSubscribe memberSubscribe = createMemberSubscribe(member, subscribeId);
-        boolean billingSuccess = executeAutoBilling(member.getId(), autoBillingDto);
+    private void processSubscription(Member member, AutoBillingDto autoBillingDto, Long subscribeId, String billingKey) {
+        MemberSubscribe memberSubscribe = createMemberSubscribe(member, subscribeId, billingKey);
+        boolean billingSuccess = executeAutoBilling(member.getId(), autoBillingDto, billingKey);
 
         if (billingSuccess) {
             memberSubscribe.completePayment();
@@ -176,7 +167,7 @@ public class TossPaymentsServiceImpl implements TossPaymentsService {
         }
     }
 
-    private MemberSubscribe createMemberSubscribe(Member member, Long subscribeId) {
+    private MemberSubscribe createMemberSubscribe(Member member, Long subscribeId, String billingKey) {
         Subscribe subscribe = subscribeRepository.findById(subscribeId).orElseThrow(SubscribeNotFoundException::new);
 
         MemberSubscribe memberSubscribe = MemberSubscribe.builder()
@@ -184,6 +175,7 @@ public class TossPaymentsServiceImpl implements TossPaymentsService {
                 .paymentStatus(PaymentStatus.NECESSARY)
                 .member(member)
                 .status(SubscribeStatus.SUBSCRIBE)
+                .billingKey(billingKey)
                 .build();
 
         return memberSubscribeRepository.save(memberSubscribe);
@@ -191,7 +183,7 @@ public class TossPaymentsServiceImpl implements TossPaymentsService {
 
 
     @Override
-    public boolean executeAutoBilling(Long memberId, AutoBillingDto autoBillingDto) {
+    public boolean executeAutoBilling(Long memberId, AutoBillingDto autoBillingDto, String billingKey) {
         Map<String, Object> body = Map.of(
                 "amount", autoBillingDto.getAmount(),
                 "customerKey", autoBillingDto.getCustomerKey(),
@@ -202,8 +194,7 @@ public class TossPaymentsServiceImpl implements TossPaymentsService {
         );
 
         try {
-            ResponseEntity<Map<String, Object>> response = tossPaymentsClient.autoBilling(memberRepository.findById(memberId)
-                    .orElseThrow(MemberNotFoundException::new).getBillingKey(), body);
+            ResponseEntity<Map<String, Object>> response = tossPaymentsClient.autoBilling(billingKey, body);
 
             Map<String, Object> responseBody = response.getBody();
             boolean success = response.getStatusCode().is2xxSuccessful() && "DONE".equals(responseBody.get("status"));
@@ -218,55 +209,12 @@ public class TossPaymentsServiceImpl implements TossPaymentsService {
                 // 결제 성공 시 다음 결제일 설정 및 Quartz 스케줄 갱신
                 subscription.completePayment();
                 memberSubscribeRepository.save(subscription);
-                quartzConfig.scheduleAutoBillingJob(subscription.getId(), subscription.getEndDate());
+//                quartzConfig.scheduleAutoBillingJob(subscription.getId(), subscription.getEndDate());
             }
             return success;
         } catch (Exception e) {
             log.error("executeAutoBilling error: {}", e.getMessage(), e);
             throw new BillingChargeFailedException();
-        }
-    }
-
-
-    // 결제 승인 및 구독 생성 로직
-    public void registerSubscription(Long memberId, AutoBillingRequest autoBillingRequest) {
-        // 구독 생성 로직 수행
-        MemberSubscribe memberSubscribe = createSubscription(memberId, autoBillingRequest);
-
-        // 첫 결제 성공 후 다음 결제일 기준으로 Quartz Job 등록
-        LocalDateTime nextBillingDate = memberSubscribe.getEndDate();
-        quartzConfig.scheduleAutoBillingJob(memberSubscribe.getId(), nextBillingDate);
-    }
-
-    private MemberSubscribe createSubscription(Long memberId, AutoBillingRequest autoBillingRequest) {
-        // Member와 Subscribe 엔티티를 조회
-        Member member = memberRepository.findById(memberId).orElseThrow(MemberNotFoundException::new);
-        Subscribe subscribe = subscribeRepository.findById(autoBillingRequest.getSubscribeId()).orElseThrow(SubscribeNotFoundException::new);
-
-        // MemberSubscribe 생성 및 저장
-        MemberSubscribe memberSubscribe = MemberSubscribe.builder()
-                .member(member)  // memberId 대신 member 객체로 설정
-                .subscribe(subscribe)  // 구독 상품 설정
-                .paymentStatus(PaymentStatus.COMPLETE)  // 첫 결제 상태 완료로 설정
-                .status(SubscribeStatus.SUBSCRIBE)  // 구독 상태 설정
-                .build();
-
-        memberSubscribe.completePayment();
-
-        return memberSubscribeRepository.save(memberSubscribe);
-    }
-
-    public void cancelSubscription(Long subscriptionId) {
-        try {
-            MemberSubscribe memberSubscribe = memberSubscribeRepository.findById(subscriptionId)
-                    .orElseThrow(MemberSubscribeNotFoundException::new);
-            memberSubscribe.cancelSubscription();
-            memberSubscribeRepository.save(memberSubscribe);
-
-            quartzConfig.removeScheduledJob(subscriptionId);
-        } catch (Exception e) {
-            log.error("Failed to cancel subscription or remove job for ID: " + subscriptionId, e);
-            throw new RuntimeException("Cancellation failed for subscription ID: " + subscriptionId, e);
         }
     }
 }

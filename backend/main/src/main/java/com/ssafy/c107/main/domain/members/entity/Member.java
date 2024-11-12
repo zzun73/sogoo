@@ -58,13 +58,10 @@ public class Member extends BaseEntity {
     @Column(nullable = false)
     private String uuid;
 
-    @Column
-    private String billingKey;
-
     @Builder
     public Member(String name, String email, String password,
-        String phoneNumber, String birth, String address, WithDrawalStatus withDrawalStatus,
-        MemberRole role) {
+                  String phoneNumber, String birth, String address, WithDrawalStatus withDrawalStatus,
+                  MemberRole role) {
         this.name = name;
         this.email = email;
         this.password = password;
@@ -89,10 +86,6 @@ public class Member extends BaseEntity {
 
     public void updateRole(MemberRole role) {
         this.role = role;
-    }
-
-    public void updateBillingKey(String billingKey) {
-        this.billingKey = billingKey;
     }
 
     public void updateUUID() {

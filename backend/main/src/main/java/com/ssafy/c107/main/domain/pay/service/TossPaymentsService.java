@@ -11,6 +11,6 @@ public interface TossPaymentsService {
 
     String prepareBillingAuth(Long memberId, AutoBillingRequest autoBillingRequest);
 
-    boolean executeAutoBilling(Long memberId, AutoBillingDto autoBillingDto);
+    boolean executeAutoBilling(Long memberId, AutoBillingDto autoBillingDto, String billingKey);
 
 }
