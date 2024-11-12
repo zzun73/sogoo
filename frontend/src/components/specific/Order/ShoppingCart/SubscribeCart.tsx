@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { ListItem, ListItemText, IconButton, Button } from "@mui/material";
 import { Close } from "@mui/icons-material";
 import useRootStore from "../../../../stores";
+import { HiOutlineShoppingBag } from "react-icons/hi2";
 
 const SubscribeCart = () => {
   const { subscribe, setSubscribe } = useRootStore();
@@ -19,8 +20,9 @@ const SubscribeCart = () => {
 
   if (!subscribe) {
     return (
-      <div className=" flex flex-col justify-center h-32 w-full rounded-b-3xl bg-white my-3">
-        <p className="text-lg font-semibold text-center">담긴 구독 상품이 없습니다.</p>
+      <div className="flex flex-col gap-4 justify-center items-center h-32 w-full rounded-b-3xl bg-white">
+        <HiOutlineShoppingBag className="w-10 h-10 text-gray-400" />
+        <p className="text-md text-center">담긴 구독 상품이 없습니다.</p>
       </div>
     );
   }

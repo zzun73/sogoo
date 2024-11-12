@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { ListItem, ListItemText, IconButton, Checkbox, Button } from "@mui/material";
 import { Remove, Add, Close } from "@mui/icons-material";
 import useRootStore from "../../../../stores";
+import { HiOutlineSparkles } from "react-icons/hi2";
 
 const FoodCart = () => {
   const { foodList, deleteSelectedList, changeFoodCount, setSelectedId, selectedId } = useRootStore();
@@ -33,14 +34,15 @@ const FoodCart = () => {
   };
   if (!foodList) {
     return (
-      <div className=" flex flex-col justify-center h-32 w-full rounded-b-3xl bg-white my-3">
-        <p className="text-lg font-semibold text-center">담긴 반찬 상품이 없습니다.</p>
+      <div className="flex flex-col gap-4 justify-center items-center h-32 w-full rounded-b-3xl bg-white">
+        <HiOutlineSparkles className="w-10 h-10 text-gray-400" />
+        <p className="text-md text-center">담긴 반찬 상품이 없습니다.</p>
       </div>
     );
   }
 
   return (
-    <div className="w-full rounded-b-3xl bg-white my-3 flex flex-col gap-8 pt-3">
+    <div className="w-full rounded-b-3xl bg-white flex flex-col gap-8 pt-3">
       {foodList &&
         foodList.map((item) => (
           <ListItem key={item.id} className="flex items-center py-3">
