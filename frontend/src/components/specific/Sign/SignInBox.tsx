@@ -5,6 +5,7 @@ import { useMutation } from "@tanstack/react-query";
 import sogoo from "../../../services/sogoo";
 import useRootStore from "../../../stores";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const SignInBox = () => {
   const navigate = useNavigate();
@@ -18,25 +19,23 @@ const SignInBox = () => {
     onSuccess: async (response) => {
       setLogin(response.data.userInfo);
       setAccessToken(response.headers.authorization.split(" ")[1]);
-      console.log("로그인 성공:", response);
-      alert("로그인 성공");
-      console.log(memberInfo);
+      toast(`${memberInfo?.name}님, 반갑습니다!`);
       navigate("/");
     },
     onError: (error) => {
-      console.error("로그인 실패:", error);
-      alert("로그인 실패");
+      console.error("로그인 실패", error);
+      toast.error("로그인 실패!");
     },
   });
 
   const initiateLogin = (): void => {
     switch (true) {
       case !email: {
-        alert("이메일을 입력해주세요.");
+        toast.error("이메일을 입력해주세요.");
         return;
       }
       case !password: {
-        alert("비밀번호를 입력해주세요.");
+        toast.error("비밀번호를 입력해주세요.");
         return;
       }
       default: {

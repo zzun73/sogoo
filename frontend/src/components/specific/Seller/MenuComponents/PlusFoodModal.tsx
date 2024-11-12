@@ -3,6 +3,7 @@ import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import { useGetFoodListForSubscribe } from "../../../../queries/queries";
+import { toast } from "react-toastify";
 
 const style = {
   position: "absolute",
@@ -46,7 +47,7 @@ const PlusFoodModal: React.FC<PlusFoodProps> = ({
 
   const handleDrop = (event: React.DragEvent) => {
     if (selectedFoods.length >= 3) {
-      alert("한 주차에 상품은 최대 3개까지만 등록할 수 있습니다.");
+      toast.error("한 주차에 상품은 최대 3개까지만 등록할 수 있습니다.");
       return;
     }
 

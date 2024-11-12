@@ -1,7 +1,11 @@
 import { useEffect, useState } from "react";
 import { v7 as uuidv7 } from "uuid";
-import { loadTossPayments, TossPaymentsWidgets } from "@tosspayments/tosspayments-sdk";
+import {
+  loadTossPayments,
+  TossPaymentsWidgets,
+} from "@tosspayments/tosspayments-sdk";
 import useRootStore from "../../../../stores";
+import { toast } from "react-toastify";
 
 const NORMAL_CLIENT_KEY = import.meta.env.VITE_TOSS_PAYMENTS_NORMAL_CLIENT_KEY;
 
@@ -82,7 +86,7 @@ const TossPaymentsCheckout = ({ orderData }: TossPaymentsCheckoutProps) => {
                 });
               } catch (error) {
                 console.error("Payment request failed:", error);
-                alert("결제 요청 중 오류가 발생했습니다.");
+                toast.error("결제 요청 중 오류가 발생했습니다.");
               }
             }}
           >

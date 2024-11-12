@@ -15,6 +15,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import useRootStore from "../../../../stores";
 import { useGetStoreItems } from "../../../../queries/queries";
 import formatters from "../../../../utils/formatters";
+import { toast } from "react-toastify";
 
 interface MenuSelectProps {
   storeImg: string;
@@ -46,7 +47,7 @@ const MenuSelect = ({ storeImg, storeName }: MenuSelectProps) => {
       category === "subscribe" &&
       selectedItems.find((item) => item.category === "subscribe")
     ) {
-      alert("구독 상품은 1개만 선택 가능합니다.");
+      toast.error("구독 상품은 1개만 선택 가능합니다.");
       setCategory("");
       return;
     }
@@ -57,7 +58,7 @@ const MenuSelect = ({ storeImg, storeName }: MenuSelectProps) => {
         (item) => item.id === selectedId && item.category === category
       )
     ) {
-      alert("이미 추가된 상품입니다.");
+      toast.error("이미 추가된 상품입니다.");
       setCategory("");
       return;
     }
@@ -125,7 +126,7 @@ const MenuSelect = ({ storeImg, storeName }: MenuSelectProps) => {
   const goToCart = () => {
     // 현재 장바구니에 담긴 상품의 storeId와 비교
     if (storeId && storeId !== currentStoreId) {
-      alert("장바구니에는 한 가게의 상품만 담을 수 있습니다.");
+      toast.error("장바구니에는 한 가게의 상품만 담을 수 있습니다.");
       return;
     }
     // 장바구니에 상품이 없으면 현재 storeId로 설정
@@ -137,7 +138,7 @@ const MenuSelect = ({ storeImg, storeName }: MenuSelectProps) => {
     const subItem = selectedItems.find((item) => item.category === "subscribe");
     if (subItem) {
       if (subscribe) {
-        alert("구독 상품은 1개만 선택 가능합니다.");
+        toast.error("구독 상품은 1개만 선택 가능합니다.");
         return;
       } else {
         setSubscribe(subItem);

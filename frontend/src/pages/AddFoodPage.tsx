@@ -5,6 +5,7 @@ import { useMutation } from "@tanstack/react-query";
 import sogoo from "../services/sogoo";
 import { useNavigate } from "react-router-dom";
 import useRootStore from "../stores";
+import { toast } from "react-toastify";
 
 const AddFood: React.FC = () => {
   const storeId = useRootStore().selectedStoreId;
@@ -61,16 +62,16 @@ const AddFood: React.FC = () => {
 
     switch (true) {
       case !foodName:
-        alert("상품명을 입력해 주세요.");
+        toast.error("상품명을 입력해 주세요.");
         return;
       case !foodImg:
-        alert("상품 이미지를 등록해 주세요");
+        toast.error("상품 이미지를 등록해 주세요");
         return;
       case !foodPrice:
-        alert("판매가를 입력해 주세요.");
+        toast.error("판매가를 입력해 주세요.");
         return;
       case !foodDescription:
-        alert("상품 설명을 입력해 주세요.");
+        toast.error("상품 설명을 입력해 주세요.");
         return;
     }
 
@@ -87,7 +88,9 @@ const AddFood: React.FC = () => {
   return (
     <div className="w-full flex flex-col flex-grow">
       <div className="flex flex-col justify-center items-center my-10 mx-[200px]">
-        <h1 className="font-shilla text-5xl font-bold mb-5">개별 반찬 등록하기</h1>
+        <h1 className="font-shilla text-5xl font-bold mb-5">
+          개별 반찬 등록하기
+        </h1>
         <div className="w-full flex flex-col justify-center items-center rounded-3xl bg-white p-10">
           <TextField
             required
