@@ -6,7 +6,10 @@ import { useParams } from "react-router-dom";
 import {
   useGetFoodReviews,
   useGetStoreReviews,
+  useGetBuyerAllReviewCounts,
 } from "../../../../queries/queries";
+import Pagination from "@mui/material/Pagination";
+import Stack from "@mui/material/Stack";
 
 const FoodReviews = () => {
   const { id } = useParams();
@@ -14,10 +17,25 @@ const FoodReviews = () => {
   const totalReviews = useGetStoreReviews(Number(id));
   const foodReviews = useGetFoodReviews(selectedFoodId);
 
+  const allReviewCount = useGetBuyerAllReviewCounts(Number(id))?.reviewCount;
+  const totalPageCount = allReviewCount ? Math.ceil(allReviewCount / 20) : 1;
+
+  const [nowAllReviewPage, setNowAllReviewPage] = useState<number>(1);
+
+  console.log(totalReviews);
   console.log(foodReviews);
+  console.log(allReviewCount);
+
   const handleClick = (event: SelectChangeEvent) => {
     console.log("click", Number(event.target.value));
     setSelectedFoodId(Number(event.target.value));
+  };
+
+  const handleAllReviewPageChange = (
+    event: React.ChangeEvent<unknown>,
+    page: number
+  ) => {
+    setNowAllReviewPage(page);
   };
 
   if (selectedFoodId == -1) {
@@ -36,6 +54,22 @@ const FoodReviews = () => {
             <ReviewCard review={review} key={review.reviewId} />
           ))}
         </div>
+        <Stack spacing={2} className="mt-10">
+          <Pagination
+            count={totalPageCount}
+            page={nowAllReviewPage}
+            onChange={handleAllReviewPageChange}
+            showFirstButton
+            showLastButton
+            sx={{
+              "& .MuiPaginationItem-root": {
+                padding: "10px 20px", // 버튼 크기 조정
+                margin: "0 4px", // 버튼 간격 조정
+                fontSize: "1rem", // 텍스트 크기 조정
+              },
+            }}
+          />
+        </Stack>
       </div>
     );
   }

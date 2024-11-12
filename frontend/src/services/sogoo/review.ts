@@ -1,4 +1,5 @@
 import axios from "../../configs/axios";
+import { useGetBuyerAllReviewCounts } from "../../queries/queries";
 
 export default {
   /**
@@ -6,7 +7,9 @@ export default {
    * @param storeId 가게 id
    */
   getStoreReviews: (storeId: StoreId) => {
-    return axios.get<GetStoreReviewsResponse>(`/review/buyer/${storeId}`);
+    return axios.get<GetStoreReviewsResponse>(
+      `/review/buyer/${storeId}?page=${storeId}`
+    );
   },
 
   /**
@@ -22,5 +25,15 @@ export default {
    */
   getReviewSummary: (storeId: StoreId) => {
     return axios.get<GetReviewSummaryResponse>(`/review/buyer/info/${storeId}`);
+  },
+
+  /**
+   * Pagination 위해 가게 전체 리뷰 개수 불러오기
+   * @param storeId 가게 id
+   */
+  getBuyerAllReviewCounts: async (storeId: StoreId) => {
+    return axios.get<BuyerAllReviewCountResult>(
+      `/store/buyer/count/${storeId}`
+    );
   },
 };

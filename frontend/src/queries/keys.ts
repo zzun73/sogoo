@@ -83,6 +83,11 @@ const keys = {
   ],
   getAllFoods: (storeId: StoreId) => [...keys.food(), "allFoods", storeId],
   getStoreCounts: () => [...keys.store(), "storeCounts"],
+  getBuyerAllReviewCounts: (storeId: StoreId) => [
+    ...keys.review(),
+    "buyerAllReviewCounts",
+    storeId,
+  ],
 };
 
 export default keys;
