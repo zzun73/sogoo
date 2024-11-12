@@ -52,4 +52,9 @@ public class StoreController {
         }
         return ResponseEntity.ok(storeService.getAllSellerStores(customUserDetails.getUserId()));
     }
+
+    @GetMapping("/count/{storeId}")
+    public ResponseEntity<?> getStoreCount(@PathVariable Long storeId) {
+        return null;
+    }
 }
