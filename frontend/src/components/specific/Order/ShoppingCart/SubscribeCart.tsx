@@ -19,7 +19,7 @@ const SubscribeCart = () => {
 
   if (!subscribe) {
     return (
-      <div className=" flex flex-col justify-center h-32 w-full rounded-b-3xl bg-white my-3">
+      <div className="flex flex-col justify-center h-32 w-full rounded-b-3xl bg-white">
         <p className="text-lg font-semibold text-center">담긴 구독 상품이 없습니다.</p>
       </div>
     );

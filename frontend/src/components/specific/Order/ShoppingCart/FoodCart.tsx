@@ -33,14 +33,14 @@ const FoodCart = () => {
   };
   if (!foodList) {
     return (
-      <div className=" flex flex-col justify-center h-32 w-full rounded-b-3xl bg-white my-3">
+      <div className=" flex flex-col justify-center h-32 w-full rounded-b-3xl bg-white">
         <p className="text-lg font-semibold text-center">담긴 반찬 상품이 없습니다.</p>
       </div>
     );
   }
 
   return (
-    <div className="w-full rounded-b-3xl bg-white my-3 flex flex-col gap-8 pt-3">
+    <div className="w-full rounded-b-3xl bg-white flex flex-col gap-8 pt-3">
       {foodList &&
         foodList.map((item) => (
           <ListItem key={item.id} className="flex items-center py-3">
