@@ -35,7 +35,7 @@ const ReviewList = () => {
 
   const { chart, reviews } = selectedReviews;
   return (
-    <div className="mx-[200px]">
+    <div className="mx-[200px] min-w-[1100px]">
       <h2 className="text-3xl font-shilla text-center mb-3">후기 목록</h2>
       <Box className="min-h-[400px]">
         <FoodSelect
