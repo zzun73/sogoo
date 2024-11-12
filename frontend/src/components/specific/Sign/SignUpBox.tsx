@@ -31,7 +31,9 @@ const SignUpBox: React.FC = () => {
   const [role, setRole] = useState<string>("Buyer");
   const [businessNumber, setBusinessNumber] = useState<string>("");
 
-  const [isEmailFormatValid, setIsEmailFormatValid] = useState<boolean>(true);
+  const [isEmailFormatValid, setIsEmailFormatValid] = useState<boolean | null>(
+    null
+  );
   const [isPhoneFormatValid, setIsPhoneFormatValid] = useState<boolean>(true);
 
   const [isEmailValid, setIsEmailValid] = useState<boolean | null>(null);
@@ -206,7 +208,7 @@ const SignUpBox: React.FC = () => {
           확인
         </Button>
       </div>
-      {!isEmailFormatValid && (
+      {isEmailFormatValid === false && (
         <p className="text-red-500 mb-3">유효한 이메일을 입력하세요.</p>
       )}
       {isEmailFormatValid && isEmailValid === false && (
