@@ -21,8 +21,8 @@ public class StoreController {
 
     //메인 페이지 조회
     @GetMapping
-    public ResponseEntity<?> getAllStores() {
-        GetStoreResponse stores = storeService.getAllStores();
+    public ResponseEntity<?> getAllStores(@RequestParam(name = "page") int page) {
+        GetStoreResponse stores = storeService.getAllStores(page);
         return ResponseEntity.ok(stores);
     }
 

@@ -10,6 +10,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -73,12 +74,12 @@ public class SellerController {
     @GetMapping("/detail-review/{storeId}/{foodId}")
     public ResponseEntity<?> getProductReview(@PathVariable(name = "storeId") Long storeId,
         @PathVariable(name = "foodId") Long foodId,
-        @AuthenticationPrincipal CustomUserDetails customUserDetails) {
+        @AuthenticationPrincipal CustomUserDetails customUserDetails, @RequestParam(name = "page") int page) {
         if (!customUserDetails.getUserRole().getRole().equals("SELLER")) {
             throw new InvalidMemberRoleException();
         }
         Long userId = customUserDetails.getUserId();
-        return ResponseEntity.ok(sellerService.getProductReview(storeId, foodId, userId));
+        return ResponseEntity.ok(sellerService.getProductReview(storeId, foodId, userId, page));
     }
 
     @GetMapping("/all-product/{storeId}")

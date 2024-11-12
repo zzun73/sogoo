@@ -19,6 +19,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,8 +36,10 @@ public class StoreServiceImpl implements StoreService {
 
     //메인 페이지 조회
     @Transactional(readOnly = true)
-    public GetStoreResponse getAllStores() {
-        List<Store> getStores = storeRepository.findAll();
+    public GetStoreResponse getAllStores(int page) {
+        Pageable pageable = PageRequest.of(page - 1, 20);
+
+        List<Store> getStores = storeRepository.findAll(pageable).getContent();
 
         if (getStores.isEmpty()) {
             throw new StoreNotFoundException();
