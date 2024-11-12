@@ -42,6 +42,12 @@ const StoreList: React.FC = () => {
     setNowStorePage(page);
   };
 
+  const handleSearchKeydown = (event: React.KeyboardEvent) => {
+    if (event.key === "Enter") {
+      handleSearch();
+    }
+  };
+
   if (!stores) {
     return (
       <div className="flex w-full h-full justify-center items-center">
@@ -59,6 +65,7 @@ const StoreList: React.FC = () => {
           placeholder="검색 내용을 입력하세요"
           value={searchInfo}
           onChange={(e) => setSearchInfo(e.target.value)}
+          onKeyDown={handleSearchKeydown}
           sx={{ width: 10 / 12 }}
         />
         <Button
