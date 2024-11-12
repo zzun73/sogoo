@@ -1,5 +1,18 @@
 import type { StateCreator } from "zustand";
-import { useNavigate } from "react-router-dom";
+
+const INITIAL_STATE = {
+  accessToken: null,
+  memberInfo: null,
+  isLogin: false,
+  foodList: null,
+  storeId: null,
+  storeName: "",
+  subscribe: null,
+  selectedId: null,
+  selectedStoreId: null,
+  selectedSubscribeId: null,
+  searchKeyword: null,
+};
 
 export const createMemberSlice: StateCreator<RootState, [], [], MemberStore> = (
   set
@@ -30,8 +43,7 @@ export const createMemberSlice: StateCreator<RootState, [], [], MemberStore> = (
     set({ accessToken });
   },
   setLogout: () => {
-    set({ memberInfo: null, accessToken: null, isLogin: false });
-    localStorage.clear();
+    set(INITIAL_STATE);
   },
   setIsLogin: (isLogin: boolean) => {
     set({ isLogin });

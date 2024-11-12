@@ -40,7 +40,10 @@ const ScheduledProducts = ({ storeId }: ScheduledProductsProps) => {
   const list = useGetScheduledProduct(storeId);
 
   if (!storeId || !list) {
-    // return <SkeletonUI />;
+    return <SkeletonUI />;
+  }
+
+  if (!list.length) {
     return (
       <Box className="flex flex-col items-center justify-center w-full h-[300px]">
         <p className="text-lg font-bold">다음주 출고 예정인 상품이 없습니다.</p>
@@ -64,7 +67,7 @@ const ScheduledProducts = ({ storeId }: ScheduledProductsProps) => {
   return (
     <Box className="w-full h-[300px] flex flex-col justify-between">
       <p className="text-xl text-center font-bold">다음주 출고 예정 상품</p>
-      <div className="relative max-h-[230px] overflow-y-auto w-full">
+      <div className="relative h-[250px] overflow-y-auto w-full">
         <table className="w-full" border={1} cellPadding="5" cellSpacing="0">
           <thead className="sticky top-0 bg-gray-50">
             <tr>

@@ -26,11 +26,23 @@ const StoreList: React.FC = () => {
 
   const handleSearch = () => {
     setSearchKeyword(searchInfo);
+
+    if (searchInfo === "") {
+      alert("검색어를 입력해주세요.");
+      return;
+    }
+
     navigate("/store/search/result");
   };
 
   const handlePageChange = (event: React.ChangeEvent<unknown>, page: number) => {
     setNowStorePage(page);
+  };
+
+  const handleSearchKeydown = (event: React.KeyboardEvent) => {
+    if (event.key === "Enter") {
+      handleSearch();
+    }
   };
 
   if (!stores) {
@@ -50,6 +62,7 @@ const StoreList: React.FC = () => {
           placeholder="검색 내용을 입력하세요"
           value={searchInfo}
           onChange={(e) => setSearchInfo(e.target.value)}
+          onKeyDown={handleSearchKeydown}
           sx={{ width: 5 / 12, "& .MuiOutlinedInput-root": { borderRadius: "50px 0 0 50px" } }}
         />
         <Button variant="contained" sx={{ width: 1 / 12, height: "56px", borderRadius: "0 50px 50px 0", fontSize: "1rem" }} onClick={handleSearch}>
