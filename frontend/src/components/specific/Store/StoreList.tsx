@@ -5,6 +5,8 @@ import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import useRootStore from "../../../stores";
 import { useNavigate } from "react-router-dom";
+import Pagination from "@mui/material/Pagination";
+import Stack from "@mui/material/Stack";
 
 const StoreList: React.FC = () => {
   const navigate = useNavigate();
@@ -56,6 +58,21 @@ const StoreList: React.FC = () => {
           <StoreCard store={store} key={`store-${store.storeId}`} />
         ))}
       </div>
+
+      <Stack spacing={2} className="mt-10">
+        <Pagination
+          count={10}
+          showFirstButton
+          showLastButton
+          sx={{
+            "& .MuiPaginationItem-root": {
+              padding: "10px 20px", // 버튼 크기 조정
+              margin: "0 4px", // 버튼 간격 조정
+              fontSize: "1rem", // 텍스트 크기 조정
+            },
+          }}
+        />
+      </Stack>
     </div>
   );
 };
