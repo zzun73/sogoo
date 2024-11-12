@@ -58,6 +58,11 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
     int getCountFood(@Param("storeId") Long storeId, @Param("emotion") boolean emotion,
         @Param("foodId") Long foodId);
 
+    @Query("SELECT COALESCE(COUNT(r), 0) "
+        + "FROM Review r "
+        + "WHERE r.orderList.food.id = :foodId")
+    Long getCountFood(@Param("foodId") Long foodId);
+
     @Query("SELECT r FROM Review r " +
         "JOIN FETCH r.orderList ol " +
         "JOIN FETCH ol.order o " +

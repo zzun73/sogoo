@@ -294,7 +294,11 @@ public class ReviewServiceImpl implements ReviewService {
 
     @Override
     public ReviewCountResponse getFoodDetailCount(Long foodId) {
-        return null;
+        Long countFood = reviewRepository.getCountFood(foodId);
+        return ReviewCountResponse
+            .builder()
+            .reviewCount(countFood.intValue())
+            .build();
     }
 
     // ChatModel을 사용해 요약 생성
