@@ -29,6 +29,13 @@ const StoreList: React.FC = () => {
     navigate("/store/search/result");
   };
 
+  const handlePageChange = (
+    event: React.ChangeEvent<unknown>,
+    page: number
+  ) => {
+    setNowStorePage(page);
+  };
+
   if (!stores) {
     return (
       <div className="flex w-full h-full justify-center items-center">
@@ -66,6 +73,8 @@ const StoreList: React.FC = () => {
       <Stack spacing={2} className="mt-10">
         <Pagination
           count={totalPageCount}
+          page={nowStorePage}
+          onChange={handlePageChange}
           showFirstButton
           showLastButton
           sx={{
