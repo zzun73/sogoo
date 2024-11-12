@@ -49,4 +49,8 @@ public class Order extends BaseEntity {
         this.member = member;
         this.store = store;
     }
+
+    public void updateTotalPrice(int totalPrice) {
+        this.price = totalPrice;
+    }
 }
