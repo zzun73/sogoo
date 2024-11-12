@@ -232,7 +232,7 @@ public class SellerServiceImpl implements SellerService {
 
             products.add(ProductDto
                     .builder()
-                    .price(((Number) object[1]).longValue())
+                    .price(productPrice)
                     .productCnt((int) object[0])
                     .productName((String) object[2])
                     .salesSum(productCount * productPrice.intValue())
