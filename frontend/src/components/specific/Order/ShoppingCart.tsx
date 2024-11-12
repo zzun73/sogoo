@@ -8,13 +8,13 @@ const ShoppingCart = () => {
       <div className="flex flex-col gap-4">
         <div className="min-w-[800px] flex flex-col gap-2">
           <div className="flex flex-col w-full p-8 rounded-t-3xl bg-white">
-            <h3 className="text-xl font-bold">🧾 구독 상품</h3>
+            <h3 className="text-xl font-bold">🎂 구독 상품</h3>
           </div>
           <SubscribeCart />
         </div>
         <div className="min-w-[800px] flex flex-col gap-2">
           <div className="flex flex-col gap-8 w-full p-8 rounded-t-3xl bg-white">
-            <h3 className="text-xl font-bold">🧾 반찬 상품</h3>
+            <h3 className="text-xl font-bold">🍰 반찬 상품</h3>
           </div>
           <FoodCart />
         </div>
