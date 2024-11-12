@@ -16,5 +16,5 @@ public interface StoreService {
 
     SellerStoresResponse getAllSellerStores(Long userId);
 
-    StoreCountResponse getStoreCount(Long storeId);
+    StoreCountResponse getStoreCount();
 }

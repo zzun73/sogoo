@@ -121,8 +121,11 @@ public class StoreServiceImpl implements StoreService {
     }
 
     @Override
-    public StoreCountResponse getStoreCount(Long storeId) {
-
-        return null;
+    public StoreCountResponse getStoreCount() {
+        int count = (int) storeRepository.count();
+        return StoreCountResponse
+            .builder()
+            .storeCount(count)
+            .build();
     }
 }
