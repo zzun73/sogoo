@@ -32,6 +32,6 @@ export default {
    * @param storeId 가게 id
    */
   getAllFoods: async (storeId: StoreId) => {
-    return axios.get<GetAllFoodsResponse>(`/seller/foods/${storeId}`);
+    return axios.get<GetAllFoodsResponse>(`/member/seller/foods/${storeId}`);
   },
 };

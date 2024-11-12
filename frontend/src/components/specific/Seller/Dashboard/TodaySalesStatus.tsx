@@ -31,9 +31,15 @@ const SkeletonUI = () => {
 
 const TodaySalesStatus = ({ storeId }: TodaySalesProps) => {
   const list = useGetTodaySales(storeId);
-  console.log(list);
   if (!list) {
     return <SkeletonUI />;
+  }
+  if (!list.length) {
+    return (
+      <Box className="flex flex-col items-center justify-center w-full h-[300px]">
+        <p className="text-lg font-bold">당일 판매된 상품이 없습니다.</p>
+      </Box>
+    );
   }
 
   const updatedList = list.map((item, idx) => {
@@ -59,7 +65,7 @@ const TodaySalesStatus = ({ storeId }: TodaySalesProps) => {
   return (
     <Box className="w-full h-[300px] flex flex-col justify-between">
       <p className="text-xl text-center font-bold">당일 매출 현황</p>
-      <div className="max-h-[230px] overflow-y-auto w-full">
+      <div className="h-[250px] overflow-y-auto w-full">
         <table className="w-full" border={1} cellPadding="5" cellSpacing="0">
           <thead className="sticky top-0 bg-gray-50">
             <tr>

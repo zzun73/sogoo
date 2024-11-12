@@ -33,7 +33,7 @@ const ChoiceStore = () => {
       const firstStoreId = stores[0].storeId;
       setSelectedStoreId(firstStoreId);
     }
-  }, [stores]);
+  }, [stores, setSelectedStoreId]);
 
   const handleStoreClick = (storeId: number) => {
     setSelectedStoreId(storeId);
@@ -45,7 +45,7 @@ const ChoiceStore = () => {
   };
 
   return (
-    <div className="gap-y-5 w-full flex justify-between items-center py-5 px-[200px]">
+    <div className="gap-y-5 w-full flex justify-between items-center py-5 px-[200px] min-w-[1100px]">
       <div className="flex space-x-2">
         {stores && stores.length > 0 ? (
           stores.map((store) => (

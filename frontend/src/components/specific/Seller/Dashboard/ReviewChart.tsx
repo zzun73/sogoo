@@ -3,6 +3,7 @@ import Chart, { ChartOptions, TooltipItem } from "chart.js/auto";
 import Box from "../../../common/Box";
 import { useGetReviewList } from "../../../../queries/queries";
 import { Skeleton } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 const SkeletonUI = () => {
   return (
@@ -29,6 +30,7 @@ interface ReviewChartProps {
 
 const ReviewChart = ({ storeId }: ReviewChartProps) => {
   const chartRef = useRef<HTMLCanvasElement | null>(null);
+  const navigate = useNavigate();
   const reviewSummary = useGetReviewList(storeId);
 
   useEffect(() => {
@@ -95,12 +97,25 @@ const ReviewChart = ({ storeId }: ReviewChartProps) => {
       </Box>
     );
   }
+
+  const goToReviewList = () => {
+    navigate("/seller/reviews");
+  };
   return (
-    <Box className="flex flex-col justify-between w-full h-[300px] gap-y-3">
+    <Box className="relative flex flex-col w-full h-[300px] gap-y-3">
+      <button
+        onClick={goToReviewList}
+        className="text-sm font-bold absolute top-5 right-5"
+      >
+        전체 리뷰 보기
+      </button>
       <p className="text-xl text-center font-bold">리뷰 감정 분석</p>
-      <div className="flex h-2/3 items-center">
+      <div className="flex h-[200px] items-center">
         <canvas ref={chartRef} id="sentimentChart" className="w-full h-full" />
       </div>
+      <p className="text-base text-center text-gray-500">
+        긍정 : {positiveCnt} | 부정 : {negativeCnt}
+      </p>
     </Box>
   );
 };
