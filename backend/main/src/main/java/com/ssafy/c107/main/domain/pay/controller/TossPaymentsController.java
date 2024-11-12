@@ -43,8 +43,7 @@ public class TossPaymentsController {
         log.info("autoBillingRequest: {}",autoBillingRequest.toString());
 
         String result = tossPaymentsService.prepareBillingAuth(customUserDetails.getUserId(), autoBillingRequest);
-        log.info("카드 등록: {}", result);
-        return ResponseEntity.ok("구독 신청이 완료되었습니다.");
+        return ResponseEntity.ok(result);
     }
 
     private static void validateMemberRoleBuyer(CustomUserDetails customUserDetails) {

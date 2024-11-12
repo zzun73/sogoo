@@ -52,6 +52,7 @@ public class MemberSubscribe extends BaseEntity {
     }
 
     public void completePayment() {
+        this.status = SubscribeStatus.SUBSCRIBE;
         this.paymentStatus = PaymentStatus.COMPLETE;
         this.endDate = LocalDateTime.of(LocalDate.now().plusDays(31), LocalTime.of(6, 0)); // 결제일 기준 + 31일 오전 6시
 //        this.endDate = LocalDateTime.now().plusMinutes(1);
@@ -59,5 +60,10 @@ public class MemberSubscribe extends BaseEntity {
 
     public void cancelSubscription() {
         this.status = SubscribeStatus.CANCELED;
+        this.paymentStatus = PaymentStatus.FAIL;
+    }
+
+    public void expireSubscription() {
+        this.paymentStatus = PaymentStatus.NECESSARY;
     }
 }
