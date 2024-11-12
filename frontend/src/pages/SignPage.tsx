@@ -24,16 +24,16 @@ const SignPage = () => {
         <div className="flex w-full justify-center mb-10">
           <div
             onClick={() => setClickedLogin(true)}
-            className={`w-1/2 h-10 border-2 rounded flex justify-center items-center ${
-              clickedLogin ? "border-blue-500" : "border-inherit"
+            className={`w-1/2 h-10 border-2 rounded flex justify-center items-center rounded-l-full ${
+              clickedLogin ? "border-main-800 bg-main-600 text-white" : "border-inherit"
             } cursor-pointer`}
           >
             로그인
           </div>
           <div
             onClick={() => setClickedLogin(false)}
-            className={`w-1/2 h-10 border-2 rounded flex justify-center items-center ${
-              !clickedLogin ? "border-blue-500" : "border-inherit"
+            className={`w-1/2 h-10 border-2 rounded flex justify-center items-center rounded-r-full ${
+              !clickedLogin ? "border-main-800 bg-main-600 text-white" : "border-inherit"
             } cursor-pointer`}
           >
             회원가입
