@@ -37,6 +37,11 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
         "ORDER BY r.createdAt DESC ")
     Page<Review> findReviewByStoreId(@Param("storeId") Long storeId, Pageable pageable);
 
+    @Query("SELECT COALESCE(COUNT(r),0) "
+        + "FROM Review r "
+        + "WHERE r.orderList.order.store.id = :storeId ")
+    Long countByStoreId(@Param("storeId") Long storeId);
+
     Page<Review> findAllByOrderList_Food_Id(Long id, Pageable pageable);
 
     @Query("SELECT COALESCE(COUNT(r), 0) "

@@ -59,6 +59,6 @@ public class ReviewController {
 
     @GetMapping("buyer/count/{storeId}")
     public ResponseEntity<?> countStoreReviews(@PathVariable Long storeId) {
-        return null;
+        return ResponseEntity.ok(reviewService.getStoreReviewCount(storeId));
     }
 }

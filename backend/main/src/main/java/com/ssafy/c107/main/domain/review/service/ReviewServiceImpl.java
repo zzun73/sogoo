@@ -285,7 +285,11 @@ public class ReviewServiceImpl implements ReviewService {
 
     @Override
     public ReviewCountResponse getStoreReviewCount(Long storeId) {
-        return null;
+        Long reviewCounts = reviewRepository.countByStoreId(storeId);
+        return ReviewCountResponse
+            .builder()
+            .reviewCount(reviewCounts.intValue())
+            .build();
     }
 
     // ChatModel을 사용해 요약 생성
