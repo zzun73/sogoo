@@ -96,7 +96,8 @@ public class SellerServiceImpl implements SellerService {
         //구독자 수 가져오기
         List<SubscribeStatus> statuses = Arrays.asList(SubscribeStatus.SUBSCRIBE,
                 SubscribeStatus.CANCEL_SCHEDULE);
-        int subscribeCount = memberSubscribeRepository.getSubscribeMembers(storeId, statuses).intValue();
+        Long subscribeCountLong = memberSubscribeRepository.getSubscribeMembers(storeId,statuses);
+        int subscribeCount = subscribeCountLong != null ? subscribeCountLong.intValue() : 0; // 안전하게 int로 변환
 
         return SalesStatusResponse
                 .builder()
@@ -226,12 +227,15 @@ public class SellerServiceImpl implements SellerService {
 
         //해당 구독 상품의 가격과 총 가격 가져오기
         for (Object[] object : todaySubscribeSales) {
+            int productCount = ((Number) object[0]).intValue();
+            Long productPrice = ((Number) object[1]).longValue();
+
             products.add(ProductDto
                     .builder()
                     .price(((Number) object[1]).longValue())
                     .productCnt((int) object[0])
                     .productName((String) object[2])
-                    .salesSum((int) object[0] * (int) object[1])
+                    .salesSum(productCount * productPrice.intValue())
                     .build());
         }
 
