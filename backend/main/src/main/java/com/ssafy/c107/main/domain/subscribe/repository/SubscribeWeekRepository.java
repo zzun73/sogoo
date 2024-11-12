@@ -9,7 +9,7 @@ import org.springframework.data.repository.query.Param;
 
 public interface SubscribeWeekRepository extends JpaRepository<SubscribeWeek, Long> {
 
-    @Query("SELECT sw FROM SubscribeWeek sw WHERE sw.subscribe.id = :subscribeId AND :nextDay BETWEEN sw.createdAt AND sw.endDate")
+    @Query("SELECT sw FROM SubscribeWeek sw WHERE sw.subscribe.id = :subscribeId AND :nextDay BETWEEN sw.startDate AND sw.endDate")
     SubscribeWeek findNextWeek(@Param("subscribeId") Long subscribeId,@Param("nextDay") LocalDate nextDay);
 
     @Query("SELECT sw "
