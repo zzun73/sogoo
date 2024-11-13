@@ -7,6 +7,7 @@ import {
   useGetFoodReviews,
   useGetStoreReviews,
   useGetBuyerAllReviewCounts,
+  useGetBuyerSelectedReviewCounts,
 } from "../../../../queries/queries";
 import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
@@ -19,11 +20,14 @@ const FoodReviews = () => {
   const foodReviews = useGetFoodReviews(selectedFoodId);
 
   const allReviewCount = useGetBuyerAllReviewCounts(Number(id))?.reviewCount;
+  const selectedReviewCount =
+    useGetBuyerSelectedReviewCounts(selectedFoodId)?.reviewCount;
   const totalPageCount = allReviewCount ? Math.ceil(allReviewCount / 20) : 1;
 
   console.log(totalReviews);
   console.log(foodReviews);
   console.log(allReviewCount);
+  console.log(selectedReviewCount);
 
   const handleClick = (event: SelectChangeEvent) => {
     console.log("click", Number(event.target.value));
