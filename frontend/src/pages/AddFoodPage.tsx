@@ -137,10 +137,10 @@ const AddFood: React.FC = () => {
           />
           <Button
             variant="contained"
-            sx={{ width: "fit-content", alignSelf: "center" }}
+            sx={{ width: "200px", alignSelf: "center" }}
             onClick={initiateAddFood}
           >
-            등 록 하 기
+            등록하기
           </Button>
         </div>
       </div>

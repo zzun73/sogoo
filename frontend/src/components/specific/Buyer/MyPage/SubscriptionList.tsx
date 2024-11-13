@@ -1,11 +1,5 @@
 import React from "react";
-import {
-  Card,
-  CardActionArea,
-  CardContent,
-  CardMedia,
-  Typography,
-} from "@mui/material";
+import { Card, CardContent, CardMedia, Typography } from "@mui/material";
 import EmptySection from "./EmptySection";
 import { ImCancelCircle } from "react-icons/im";
 import { useMutation, useQueryClient } from "@tanstack/react-query";

@@ -69,7 +69,7 @@ const Menus: React.FC = () => {
   return (
     <div className="w-[1100px] flex flex-col gap-8 mb-10">
       <h2 className="font-shilla text-5xl text-center">판매 상품 관리</h2>
-      <div className="">
+      <div>
         <div className="w-full h-40 flex flex-col justify-center rounded-t-3xl bg-white mb-4 px-10">
           <h1 className="text-xl font-bold mb-7">내 상품 목록</h1>
           <div className="w-full flex justify-between">

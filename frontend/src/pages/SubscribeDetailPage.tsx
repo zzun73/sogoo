@@ -8,11 +8,7 @@ import formatters from "../utils/formatters";
 
 const SubscribeDetail: React.FC = () => {
   const subscribeId = useRootStore().selectedSubscribeId;
-
   const itemDetailInfo = useGetSubscribeDetail(subscribeId!);
-
-  console.log(itemDetailInfo);
-
   const navigate = useNavigate();
 
   const goToBack = () => {
@@ -20,8 +16,9 @@ const SubscribeDetail: React.FC = () => {
   };
 
   return (
-    <div className="w-full flex flex-col flex-grow">
-      <div className="my-10 mx-[200px]">
+    <div className="w-[1100px] flex flex-col gap-8 mb-10">
+      <h2 className="font-shilla text-5xl text-center">판매 상품 관리</h2>
+      <div>
         <div className="w-full flex flex-col justify-center rounded-3xl bg-white mb-4 p-10">
           <h1 className="text-xl font-bold mb-5">
             {itemDetailInfo.subscribeName}
@@ -30,7 +27,6 @@ const SubscribeDetail: React.FC = () => {
             id="subscribeDetailDescription"
             label="상품 설명"
             value={itemDetailInfo.subscribeDescription}
-            InputLabelProps={{ shrink: true }}
             slotProps={{
               input: {
                 readOnly: true,
@@ -81,7 +77,7 @@ const SubscribeDetail: React.FC = () => {
             sx={{ width: "fit-content", alignSelf: "center" }}
             onClick={goToBack}
           >
-            돌 아 가 기
+            돌아가기
           </Button>
         </div>
       </div>
