@@ -355,6 +355,21 @@ const useGetBuyerSelectedReviewCounts = (foodId: FoodId) => {
   return reviewCount;
 };
 
+/**
+ * Pagination 위해 판매자 메뉴리뷰 컴포넌트에서 반찬별 리뷰 개수 불러오기
+ * @param storeId 가게 id
+ * @param foodId 메뉴 id
+ */
+const useGetSellerMenuReviewCounts = (storeId: StoreId, foodId: FoodId) => {
+  const { data } = useQuery({
+    queryKey: keys.getSellerMenuReviewCounts(storeId, foodId),
+    queryFn: () => sogoo.getSellerMenuReviewCounts(storeId, foodId),
+  });
+
+  const reviewCount = data ? data.data : null;
+  return reviewCount;
+};
+
 export {
   useCheckEmail,
   useCheckSeller,
@@ -382,4 +397,5 @@ export {
   useGetStoreCounts,
   useGetBuyerAllReviewCounts,
   useGetBuyerSelectedReviewCounts,
+  useGetSellerMenuReviewCounts,
 };

@@ -173,3 +173,7 @@ interface BuyerAllReviewCountResult {
 interface BuyerSelectedReviewCountResult {
   reviewCount?: number | null;
 }
+
+interface SellerMenuReviewCountResult {
+  reviewCount?: number | null;
+}

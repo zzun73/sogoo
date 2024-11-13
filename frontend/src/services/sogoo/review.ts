@@ -49,4 +49,15 @@ export default {
       `/review/buyer/food/count/${foodId}`
     );
   },
+
+  /**
+   * Pagination 위해 반찬별 리뷰 개수 불러오기 (판매자용)
+   * @param storeId 가게 id
+   * @param foodId 반찬 id
+   */
+  getSellerMenuReviewCounts: async (storeId: StoreId, foodId: FoodId) => {
+    return axios.get<SellerMenuReviewCountResult>(
+      `/member/seller/detail-review/count/${storeId}/${foodId}`
+    );
+  },
 };
