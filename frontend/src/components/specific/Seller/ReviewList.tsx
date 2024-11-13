@@ -1,6 +1,9 @@
 import Box from "../../common/Box";
 import FoodSelect from "./Review/FoodSelect";
-import { useGetProductReview } from "../../../queries/queries";
+import {
+  useGetProductReview,
+  useGetSellerMenuReviewCounts,
+} from "../../../queries/queries";
 import useRootStore from "../../../stores";
 import ReviewCard from "./Review/ReviewCard";
 import ReviewSummary from "./Review/ReviewSummary";
@@ -19,8 +22,16 @@ const ReviewList = () => {
     nowPage
   );
 
-  const reviewCount = 40; // 차후 리뷰 개수 반환해주는 api 완성되면 수정 예정
+  console.log(selectedStoreId);
+  console.log(selectedFoodId);
+
+  const reviewCount = useGetSellerMenuReviewCounts(
+    selectedStoreId!,
+    selectedFoodId
+  )?.reviewCount;
   const pageCount = reviewCount ? Math.ceil(reviewCount / 20) : 1;
+
+  console.log(reviewCount);
 
   const handleClick = (event: SelectChangeEvent) => {
     setSelectedelectedFoodId(Number(event.target.value));
@@ -63,8 +74,8 @@ const ReviewList = () => {
         />
         <ReviewSummary summary={chart} />
         <div className="w-full flex flex-col justify-center items-center">
-          {reviews.map((review) => (
-            <ReviewCard review={review} />
+          {reviews.map((review, idx) => (
+            <ReviewCard review={review} key={idx} />
           ))}
         </div>
         <Stack spacing={2} className="mt-10">
