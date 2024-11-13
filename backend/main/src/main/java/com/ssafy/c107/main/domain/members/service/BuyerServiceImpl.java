@@ -83,7 +83,7 @@ public class BuyerServiceImpl implements BuyerService {
                     .subscribeName(subscribe.getName())
                     .subscribePrice(subscribe.getPrice())
                     .storeId(subscribe.getStore().getId())
-                    .storeName(subscribe.getStore().getName())
+                    .storeImg(subscribe.getStore().getImg())
                     .isSubscriptionActive(false)
                     .build());
         }

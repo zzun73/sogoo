@@ -137,16 +137,17 @@ public class TossPaymentsServiceImpl implements TossPaymentsService {
 
     private MemberSubscribe createOrUpdateSubscription(Member member, Long subscribeId, String billingKey) {
         Subscribe subscribe = subscribeRepository.findById(subscribeId).orElseThrow(SubscribeNotFoundException::new);
-        MemberSubscribe subscription = memberSubscribeRepository.findByMember_IdAndSubscribe_Id(member.getId(), subscribe.getId())
-                .orElse(MemberSubscribe.builder()
-                        .member(member)
-                        .subscribe(subscribe)
-                        .status(SubscribeStatus.SUBSCRIBE)
-                        .paymentStatus(PaymentStatus.NECESSARY)
-                        .billingKey(billingKey)
-                        .build()
-                );
-        return memberSubscribeRepository.save(subscription);
+        return memberSubscribeRepository.findByMember_IdAndSubscribe_Id(member.getId(), subscribe.getId())
+                .orElseGet(() -> {
+                    MemberSubscribe newSubscription = MemberSubscribe.builder()
+                            .member(member)
+                            .subscribe(subscribe)
+                            .status(SubscribeStatus.SUBSCRIBE)
+                            .paymentStatus(PaymentStatus.NECESSARY)
+                            .billingKey(billingKey)
+                            .build();
+                    return memberSubscribeRepository.save(newSubscription); // 저장된 새 구독 반환
+                });
     }
 
     private AutoBillingDto createAutoBillingDto(Member member, AutoBillingRequest autoBillingRequest) {
