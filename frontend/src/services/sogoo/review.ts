@@ -15,9 +15,12 @@ export default {
   /**
    * 가게 상세페이지 - 개별 반찬 리뷰
    * @param foodId 반찬 id
+   * @param page 페이지 번호
    */
-  getFoodReviews: (foodId: FoodId) => {
-    return axios.get<GetStoreReviewsResponse>(`/review/buyer/food/${foodId}`);
+  getFoodReviews: (foodId: FoodId, page: PageNumber) => {
+    return axios.get<GetStoreReviewsResponse>(
+      `/review/buyer/food/${foodId}?page=${page}`
+    );
   },
   /**
    * 가게 상세페이지 - 리뷰 요약
