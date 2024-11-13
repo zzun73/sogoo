@@ -66,4 +66,12 @@ public class MemberSubscribe extends BaseEntity {
     public void expireSubscription() {
         this.paymentStatus = PaymentStatus.NECESSARY;
     }
+
+    public void updateStatusToCanceled() {
+        this.status = SubscribeStatus.CANCELED;
+    }
+
+    public void updateStatusToCancelScheduled() {
+        this.status = SubscribeStatus.CANCEL_SCHEDULE;
+    }
 }

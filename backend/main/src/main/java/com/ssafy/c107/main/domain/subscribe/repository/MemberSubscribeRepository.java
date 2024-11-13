@@ -34,4 +34,6 @@ public interface MemberSubscribeRepository extends JpaRepository<MemberSubscribe
     Optional<MemberSubscribe> findByMember_IdAndSubscribe_Id(Long memberId, Long subscribeId);
 
     List<MemberSubscribe> findAllByStatusAndEndDateBefore(@Param("status") SubscribeStatus status, @Param("endDate") LocalDateTime endDate);
+
+    Optional<MemberSubscribe> findByIdAndMember_Id(Long memberSubscribeId, Long memberId);
 }
