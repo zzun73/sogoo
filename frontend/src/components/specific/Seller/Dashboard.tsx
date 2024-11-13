@@ -16,15 +16,18 @@ const Dashboard: React.FC = () => {
   }
 
   return (
-    <div className="flex flex-col gap-y-5 mx-[200px] min-w-[1100px] md-5">
-      <SalesOverview storeId={selectedStoreId} />
-      <div className="grid grid-cols-2 gap-x-3 w-full">
-        <MonthlySales storeId={selectedStoreId} />
-        <ScheduledProducts storeId={selectedStoreId} />
-      </div>
-      <div className="grid grid-cols-2 gap-x-3 w-full">
-        <TodaySalesStatus storeId={selectedStoreId} />
-        <ReviewChart storeId={selectedStoreId} />
+    <div className="flex flex-col gap-8 mx-[200px] min-w-[1100px] mb-10">
+      <h2 className="font-shilla text-5xl text-center">대시보드</h2>
+      <div className="flex flex-col gap-4">
+        <SalesOverview storeId={selectedStoreId} />
+        <div className="grid grid-cols-2 gap-4 w-full">
+          <MonthlySales storeId={selectedStoreId} />
+          <ScheduledProducts storeId={selectedStoreId} />
+        </div>
+        <div className="grid grid-cols-2 gap-4 w-full">
+          <TodaySalesStatus storeId={selectedStoreId} />
+          <ReviewChart storeId={selectedStoreId} />
+        </div>
       </div>
     </div>
   );
