@@ -11,6 +11,7 @@ import FoodDetailModal from "./MenuComponents/FoodDetailModal";
 import { useNavigate } from "react-router-dom";
 import { useGetAllMenus } from "../../../queries/queries";
 import useRootStore from "../../../stores";
+import formatters from "../../../utils/formatters";
 
 const Menus: React.FC = () => {
   const storeId = useRootStore().selectedStoreId;
@@ -158,9 +159,15 @@ const Menus: React.FC = () => {
                                     marginRight: 5,
                                   }}
                                 >
-                                  {subscribe.subscribeBeforePrice}
+                                  {formatters.formatToCurrency(
+                                    subscribe.subscribeBeforePrice
+                                  )}
                                 </span>
-                                (월 {subscribe.subscribePrice} 원)
+                                (월{" "}
+                                {formatters.formatToCurrency(
+                                  subscribe.subscribePrice
+                                )}
+                                )
                               </>
                             }
                             secondary={
@@ -229,7 +236,9 @@ const Menus: React.FC = () => {
                           </Avatar>
                         </ListItemAvatar>
                         <ListItemText
-                          primary={`${food.foodName} (${food.foodPrice}원)`}
+                          primary={`${
+                            food.foodName
+                          } (${formatters.formatToCurrency(food.foodPrice)})`}
                           secondary={food.foodDescription}
                         />
                       </ListItem>
