@@ -27,8 +27,6 @@ const FoodTradeList = ({ foodTrades }: FoodTradeListProps) => {
                 sx={{
                   width: "100%",
                   minHeight: "150px",
-                  boxShadow:
-                    "0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23)",
                 }}
               >
                 <CardActionArea
