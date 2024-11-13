@@ -85,8 +85,7 @@ public class SellerController {
 
     @GetMapping("/detail-review/count/{storeId}/{foodId}")
     public ResponseEntity<?> getProductReviewCount(Long storeId, Long foodId,
-        @AuthenticationPrincipal CustomUserDetails customUserDetails,
-        @RequestParam(name = "page") int page) {
+        @AuthenticationPrincipal CustomUserDetails customUserDetails) {
         if (!customUserDetails.getUserRole().getRole().equals("SELLER")) {
             throw new InvalidMemberRoleException();
         }
