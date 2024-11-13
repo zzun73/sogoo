@@ -1,6 +1,7 @@
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import formatters from "../../../../utils/formatters";
 
 interface SubscribeCarouselData {
   subscribeProducts: SubscribeProductsData[];
@@ -49,7 +50,11 @@ const SubscribeCarousel: React.FC<SubscribeCarouselData> = ({
                         <h1 className="text-lg font-bold">{food.foodName}</h1>
                         <p className="text-base">{food.foodDescription}</p>
                       </div>
-                      <h1 className="text-lg font-bold">{food.foodPrice}</h1>
+                      <div className="w-20">
+                        <h1 className="text-lg font-bold">
+                          {formatters.formatToCurrency(food.foodPrice)}
+                        </h1>
+                      </div>
                     </div>
                   );
                 })}

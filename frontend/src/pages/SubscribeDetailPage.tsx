@@ -4,6 +4,7 @@ import SubscribeCarousel from "../components/specific/Seller/MenuComponents/Subs
 import useRootStore from "../stores";
 import { useNavigate } from "react-router-dom";
 import Button from "@mui/material/Button";
+import formatters from "../utils/formatters";
 
 const SubscribeDetail: React.FC = () => {
   const subscribeId = useRootStore().selectedSubscribeId;
@@ -43,7 +44,9 @@ const SubscribeDetail: React.FC = () => {
           <TextField
             id="subscribeDetailBeforePrice"
             label="구독 전 상품 가격 총합"
-            value={itemDetailInfo.subscribeBeforePrice}
+            value={formatters.formatToCurrency(
+              itemDetailInfo.subscribeBeforePrice
+            )}
             InputLabelProps={{ shrink: true }}
             slotProps={{
               input: {
@@ -55,7 +58,7 @@ const SubscribeDetail: React.FC = () => {
           <TextField
             id="subscribeDetailPrice"
             label="구독 가격"
-            value={itemDetailInfo.subscribePrice}
+            value={formatters.formatToCurrency(itemDetailInfo.subscribePrice)}
             InputLabelProps={{ shrink: true }}
             slotProps={{
               input: {
