@@ -187,7 +187,8 @@ const ReviewManagement = ({ reviews }: ReviewManagementProps) => {
                           label="리뷰를 작성해 주세요. (300자 이내)"
                           sx={{
                             "& .MuiInputBase-root": {
-                              height: "230px", // 원하는 높이 값
+                              height: "230px",
+                              alignItems: "flex-start",
                             },
                           }}
                           value={
