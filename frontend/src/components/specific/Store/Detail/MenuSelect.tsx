@@ -16,6 +16,7 @@ import useRootStore from "../../../../stores";
 import { useGetStoreItems } from "../../../../queries/queries";
 import formatters from "../../../../utils/formatters";
 import { toast } from "react-toastify";
+import ConfirmToast from "../../../common/confirmToast";
 
 interface MenuSelectProps {
   storeImg: string;
@@ -123,7 +124,7 @@ const MenuSelect = ({ storeImg, storeName }: MenuSelectProps) => {
     setStoreName,
   } = useRootStore();
 
-  const goToCart = () => {
+  const goToCart = async () => {
     // 현재 장바구니에 담긴 상품의 storeId와 비교
     if (storeId && storeId !== currentStoreId) {
       toast.error("장바구니에는 한 가게의 상품만 담을 수 있습니다.");
@@ -152,7 +153,17 @@ const MenuSelect = ({ storeImg, storeName }: MenuSelectProps) => {
       setFoodList(foodItems);
     }
     setStoreName(storeName);
-    if (confirm("페이지를 이동하시겠습니까?")) {
+
+    const result = await ConfirmToast({
+      message: "장바구니로 이동하시겠습니까?",
+      confirmText: "이동",
+      cancelText: "취소",
+      toastOptions: {
+        position: "top-center",
+        theme: "light",
+      },
+    });
+    if (result) {
       navigate("/orders/cart");
     }
   };
