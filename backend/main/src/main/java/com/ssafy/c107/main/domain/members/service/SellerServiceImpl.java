@@ -24,6 +24,7 @@ import com.ssafy.c107.main.domain.order.entity.OrderList;
 import com.ssafy.c107.main.domain.order.entity.OrderType;
 import com.ssafy.c107.main.domain.order.repository.OrderListRepository;
 import com.ssafy.c107.main.domain.order.repository.OrderRepository;
+import com.ssafy.c107.main.domain.review.dto.response.ReviewCountResponse;
 import com.ssafy.c107.main.domain.review.entity.Review;
 import com.ssafy.c107.main.domain.review.exception.SummeryNotFoundException;
 import com.ssafy.c107.main.domain.review.repository.ReviewRepository;
@@ -430,6 +431,11 @@ public class SellerServiceImpl implements SellerService {
                 .builder()
                 .foods(foods)
                 .build();
+    }
+
+    @Override
+    public ReviewCountResponse getProductReviewCount(Long storeId, Long userId, Long foodId) {
+        return null;
     }
 
     LocalDate getnextMonday() {

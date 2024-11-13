@@ -8,6 +8,7 @@ import com.ssafy.c107.main.domain.members.dto.response.SalesStatusResponse;
 import com.ssafy.c107.main.domain.members.dto.response.SellerMenuResponse;
 import com.ssafy.c107.main.domain.members.dto.response.SellerReviewAllResponse;
 import com.ssafy.c107.main.domain.members.dto.response.TodaySalesResponse;
+import com.ssafy.c107.main.domain.review.dto.response.ReviewCountResponse;
 
 public interface SellerService {
 
@@ -26,4 +27,6 @@ public interface SellerService {
     SellerMenuResponse getAllProduct(Long storeId, Long userId);
 
     FoodListResponse getAllFood(Long storeId, Long userId);
+
+    ReviewCountResponse getProductReviewCount(Long storeId, Long userId, Long foodId);
 }
