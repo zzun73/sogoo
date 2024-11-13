@@ -48,7 +48,7 @@ const MenuSelect = ({ storeImg, storeName }: MenuSelectProps) => {
       selectedItems.find((item) => item.category === "subscribe")
     ) {
       toast.error("구독 상품은 1개만 선택 가능합니다.");
-      setCategory("");
+      // setCategory("");
       return;
     }
 
@@ -59,7 +59,7 @@ const MenuSelect = ({ storeImg, storeName }: MenuSelectProps) => {
       )
     ) {
       toast.error("이미 추가된 상품입니다.");
-      setCategory("");
+      // setCategory("");
       return;
     }
 
@@ -75,7 +75,7 @@ const MenuSelect = ({ storeImg, storeName }: MenuSelectProps) => {
       ]);
     }
     setSelectedItemId("");
-    setCategory("");
+    // setCategory("");
   };
 
   const renderOptions = () => {
@@ -177,21 +177,15 @@ const MenuSelect = ({ storeImg, storeName }: MenuSelectProps) => {
           </MenuItem>
         </Select>
       </FormControl>
-      {category && (
-        <FormControl className="w-full">
-          <Select
-            value={selectedItemId}
-            onChange={handleItemSelect}
-            displayEmpty
-          >
-            <MenuItem value="">
-              <em>옵션 2 선택하기</em>
-            </MenuItem>
-            {renderOptions()}
-          </Select>
-        </FormControl>
-      )}
-      <List className="max-h-[300px] overflow-y-auto w-full overscroll-auto">
+      <FormControl className="w-full">
+        <Select value={selectedItemId} onChange={handleItemSelect} displayEmpty>
+          <MenuItem value="">
+            <em>옵션 2 선택하기</em>
+          </MenuItem>
+          {renderOptions()}
+        </Select>
+      </FormControl>
+      <List className="max-h-[200px] overflow-y-auto w-full overscroll-auto">
         {selectedItems.map((item) => (
           <ListItem
             key={`${item.category}${item.id}`}
