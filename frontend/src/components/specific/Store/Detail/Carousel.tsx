@@ -40,7 +40,7 @@ const Carousel = ({ weeklyFood }: WeeklyProps) => {
   return (
     <div className="w-[850px] mx-auto">
       <hr />
-      <div className="m-5 pb-8 px-10">
+      <div className="m-5 px-10">
         <Slider {...settings}>
           {weeklyFood.map((item: WeeklyFood) => (
             <SubscribeSlider key={`${item.subscribeRound}주차`} week={item} />
