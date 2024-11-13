@@ -3,6 +3,7 @@ import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
+import formatters from "../../../../utils/formatters";
 
 const style = {
   position: "absolute",
@@ -83,7 +84,11 @@ const FoodDetailModal: React.FC<FoodDetailModalProps> = ({
         <TextField
           id="foodDetailPrice"
           label="가격"
-          defaultValue={food?.foodPrice}
+          defaultValue={
+            food?.foodPrice !== undefined
+              ? formatters.formatToCurrency(food.foodPrice)
+              : "가격 정보 없음"
+          }
           slotProps={{
             input: {
               readOnly: true,
