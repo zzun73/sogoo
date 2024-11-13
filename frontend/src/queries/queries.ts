@@ -257,11 +257,12 @@ const useGetStoreReviews = (storeId: StoreId, page: PageNumber) => {
 /**
  * 가게 상세페이지 - 개별 반찬 리뷰
  * @param foodId 반찬 id
+ * @param page 페이지 번호
  */
-const useGetFoodReviews = (foodId: FoodId) => {
+const useGetFoodReviews = (foodId: FoodId, page: PageNumber) => {
   const { data } = useQuery({
-    queryKey: keys.getFoodReviews(foodId),
-    queryFn: () => sogoo.getFoodReviews(foodId),
+    queryKey: keys.getFoodReviews(foodId, page),
+    queryFn: () => sogoo.getFoodReviews(foodId, page),
   });
   const foodReviews = data?.data.reviews || null;
   return foodReviews;

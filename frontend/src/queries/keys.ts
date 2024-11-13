@@ -60,7 +60,12 @@ const keys = {
     storeId,
     page,
   ],
-  getFoodReviews: (foodId: FoodId) => [...keys.review(), "foodReviews", foodId],
+  getFoodReviews: (foodId: FoodId, page: PageNumber) => [
+    ...keys.review(),
+    "foodReviews",
+    foodId,
+    page,
+  ],
   getReviewSummary: (storeId: StoreId) => [
     ...keys.review(),
     "ReviewSummary",
