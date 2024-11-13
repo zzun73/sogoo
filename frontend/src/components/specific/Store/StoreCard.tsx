@@ -9,7 +9,7 @@ const StoreCard = ({ store }: StoreProps) => {
   const { storeId, name, description, img } = store;
   return (
     <Link to={`/store/${storeId}`}>
-      <Card className="hover:scale-[1.02]">
+      <Card className="hover:scale-[1.02] border-2 border-slate-200">
         <CardMedia
           component="img"
           image={img}
