@@ -82,11 +82,10 @@ const keys = {
     "storeItems",
     storeId,
   ],
-  getSearchResult: (query: MenuName, page: PageNumber) => [
+  getSearchResult: (query: MenuName) => [
     ...keys.store(),
     "searchResult",
     query,
-    page,
   ],
   getAllFoods: (storeId: StoreId) => [...keys.food(), "allFoods", storeId],
   getStoreCounts: () => [...keys.store(), "storeCounts"],

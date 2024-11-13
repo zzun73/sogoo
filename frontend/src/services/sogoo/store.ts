@@ -46,12 +46,9 @@ export default {
   /**
    * 검색 결과 불러오기
    * @param query 검색할 메뉴
-   * @param page 페이지
    */
-  getSearchResult: async (query: MenuName, page: PageNumber) => {
-    return axios.get<SearchResult>(
-      `/elastic/search?query=${query}&page=${page}`
-    );
+  getSearchResult: async (query: MenuName) => {
+    return axios.get<SearchResult>(`/elastic/search?query=${query}`);
   },
 
   /**
