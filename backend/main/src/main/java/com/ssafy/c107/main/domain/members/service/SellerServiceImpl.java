@@ -283,8 +283,8 @@ public class SellerServiceImpl implements SellerService {
     public SellerReviewAllResponse getAllReview(Long storeId, Long userId) {
         memberValidator.validStoreAndMember(storeId, userId);
 
-        int positiveCnt = reviewRepository.getCount(storeId, true);
-        int negativeCnt = reviewRepository.getCount(storeId, false);
+        int positiveCnt = reviewRepository.getCount(storeId, true).intValue();
+        int negativeCnt = reviewRepository.getCount(storeId, false).intValue();
         return SellerReviewAllResponse
             .builder()
             .storeId(storeId)
@@ -300,8 +300,8 @@ public class SellerServiceImpl implements SellerService {
         //전체 상품일 때
         if (foodId == -1) {
             //차트 정보 가져오기
-            int positiveCnt = reviewRepository.getCount(storeId, true);
-            int negativeCnt = reviewRepository.getCount(storeId, false);
+            int positiveCnt = reviewRepository.getCount(storeId, true).intValue();
+            int negativeCnt = reviewRepository.getCount(storeId, false).intValue();
             Store store = storeRepository.findById(storeId)
                 .orElseThrow(StoreNotFoundException::new);
             List<ReviewDetail> reviewDetails = new ArrayList<>();
@@ -336,8 +336,8 @@ public class SellerServiceImpl implements SellerService {
         } else {
             //상품일 때
             //차트 정보 가져오기
-            int positiveCnt = reviewRepository.getCountFood(storeId, true, foodId);
-            int negativeCnt = reviewRepository.getCountFood(storeId, false, foodId);
+            int positiveCnt = reviewRepository.getCountFood(storeId, true, foodId).intValue();
+            int negativeCnt = reviewRepository.getCountFood(storeId, false, foodId).intValue();
             Food food = foodRepository.findById(foodId).orElseThrow(FoodNotFoundException::new);
 
             //리뷰 정보 가져오기
