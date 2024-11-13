@@ -259,7 +259,7 @@ const useGetStoreReviews = (storeId: StoreId, page: PageNumber) => {
  * @param foodId 반찬 id
  */
 const useGetFoodReviews = (foodId: FoodId) => {
-  const { data, refetch } = useQuery({
+  const { data } = useQuery({
     queryKey: keys.getFoodReviews(foodId),
     queryFn: () => sogoo.getFoodReviews(foodId),
   });
@@ -335,6 +335,20 @@ const useGetBuyerAllReviewCounts = (storeId: StoreId) => {
   return reviewCount;
 };
 
+/**
+ * Pagination 위해 가게 상세페이지에서 선택한 반찬 리뷰 개수 불러오기
+ * @param foodId 메뉴 id
+ */
+const useGetBuyerSelectedReviewCounts = (foodId: FoodId) => {
+  const { data } = useQuery({
+    queryKey: keys.getBuyerSelectedReviewCounts(foodId),
+    queryFn: () => sogoo.getBuyerSelectedReviewCounts(foodId),
+  });
+
+  const reviewCount = data ? data.data : null;
+  return reviewCount;
+};
+
 export {
   useCheckEmail,
   useCheckSeller,
@@ -361,4 +375,5 @@ export {
   useGetAllFoods,
   useGetStoreCounts,
   useGetBuyerAllReviewCounts,
+  useGetBuyerSelectedReviewCounts,
 };

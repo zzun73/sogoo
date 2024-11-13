@@ -89,6 +89,11 @@ const keys = {
     "buyerAllReviewCounts",
     storeId,
   ],
+  getBuyerSelectedReviewCounts: (foodId: FoodId) => [
+    ...keys.review(),
+    "buyerSelectedReviewCounts",
+    foodId,
+  ],
 };
 
 export default keys;

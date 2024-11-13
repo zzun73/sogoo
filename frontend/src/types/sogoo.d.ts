@@ -169,3 +169,7 @@ type LoginResponse = LoginResponseData;
 interface BuyerAllReviewCountResult {
   reviewCount?: number | null;
 }
+
+interface BuyerSelectedReviewCountResult {
+  reviewCount?: number | null;
+}
