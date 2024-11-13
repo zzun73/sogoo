@@ -16,6 +16,7 @@ import useRootStore from "../../../../stores";
 import { useGetStoreItems } from "../../../../queries/queries";
 import formatters from "../../../../utils/formatters";
 import { toast } from "react-toastify";
+import ConfirmToast from "../../../common/confirmToast";
 
 interface MenuSelectProps {
   storeImg: string;
@@ -48,7 +49,7 @@ const MenuSelect = ({ storeImg, storeName }: MenuSelectProps) => {
       selectedItems.find((item) => item.category === "subscribe")
     ) {
       toast.error("구독 상품은 1개만 선택 가능합니다.");
-      setCategory("");
+      // setCategory("");
       return;
     }
 
@@ -59,7 +60,7 @@ const MenuSelect = ({ storeImg, storeName }: MenuSelectProps) => {
       )
     ) {
       toast.error("이미 추가된 상품입니다.");
-      setCategory("");
+      // setCategory("");
       return;
     }
 
@@ -75,7 +76,7 @@ const MenuSelect = ({ storeImg, storeName }: MenuSelectProps) => {
       ]);
     }
     setSelectedItemId("");
-    setCategory("");
+    // setCategory("");
   };
 
   const renderOptions = () => {
@@ -123,7 +124,7 @@ const MenuSelect = ({ storeImg, storeName }: MenuSelectProps) => {
     setStoreName,
   } = useRootStore();
 
-  const goToCart = () => {
+  const goToCart = async () => {
     // 현재 장바구니에 담긴 상품의 storeId와 비교
     if (storeId && storeId !== currentStoreId) {
       toast.error("장바구니에는 한 가게의 상품만 담을 수 있습니다.");
@@ -152,7 +153,17 @@ const MenuSelect = ({ storeImg, storeName }: MenuSelectProps) => {
       setFoodList(foodItems);
     }
     setStoreName(storeName);
-    if (confirm("페이지를 이동하시겠습니까?")) {
+
+    const result = await ConfirmToast({
+      message: "장바구니로 이동하시겠습니까?",
+      confirmText: "이동",
+      cancelText: "취소",
+      toastOptions: {
+        position: "top-center",
+        theme: "light",
+      },
+    });
+    if (result) {
       navigate("/orders/cart");
     }
   };
@@ -177,21 +188,15 @@ const MenuSelect = ({ storeImg, storeName }: MenuSelectProps) => {
           </MenuItem>
         </Select>
       </FormControl>
-      {category && (
-        <FormControl className="w-full">
-          <Select
-            value={selectedItemId}
-            onChange={handleItemSelect}
-            displayEmpty
-          >
-            <MenuItem value="">
-              <em>옵션 2 선택하기</em>
-            </MenuItem>
-            {renderOptions()}
-          </Select>
-        </FormControl>
-      )}
-      <List className="max-h-[300px] overflow-y-auto w-full overscroll-auto">
+      <FormControl className="w-full">
+        <Select value={selectedItemId} onChange={handleItemSelect} displayEmpty>
+          <MenuItem value="">
+            <em>옵션 2 선택하기</em>
+          </MenuItem>
+          {renderOptions()}
+        </Select>
+      </FormControl>
+      <List className="max-h-[200px] overflow-y-auto w-full overscroll-auto">
         {selectedItems.map((item) => (
           <ListItem
             key={`${item.category}${item.id}`}
