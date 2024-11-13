@@ -302,12 +302,11 @@ const useGetAllFoods = (storeId: StoreId) => {
 /**
  * 검색 결과 불러오기
  * @param query 검색할 메뉴
- * @param page 불러올 페이지
  */
-const useGetSearchResult = (query: MenuName, page: PageNumber) => {
+const useGetSearchResult = (query: MenuName) => {
   const { data } = useQuery({
-    queryKey: keys.getSearchResult(query, page),
-    queryFn: () => sogoo.getSearchResult(query, page),
+    queryKey: keys.getSearchResult(query),
+    queryFn: () => sogoo.getSearchResult(query),
   });
 
   const searchResult = data ? data.data : [];

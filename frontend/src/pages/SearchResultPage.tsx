@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { useGetSearchResult } from "../queries/queries";
 import useRootStore from "../stores";
 import { useNavigate } from "react-router-dom";
@@ -8,12 +7,10 @@ const SearchResultPage: React.FC = () => {
   const navigate = useNavigate();
 
   const searchKeyword = useRootStore().searchKeyword;
-  const [pageNumber] = useState<number>(1);
 
-  const result = useGetSearchResult(
-    searchKeyword ?? "",
-    pageNumber
-  ) as SearchResult;
+  console.log(searchKeyword);
+
+  const result = useGetSearchResult(searchKeyword || "") as SearchResult | null;
 
   console.log(result);
 
