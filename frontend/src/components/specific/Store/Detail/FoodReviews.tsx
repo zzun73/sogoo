@@ -14,13 +14,12 @@ import Stack from "@mui/material/Stack";
 const FoodReviews = () => {
   const { id } = useParams();
   const [selectedFoodId, setSelectedFoodId] = useState(-1);
-  const totalReviews = useGetStoreReviews(Number(id));
+  const [nowAllReviewPage, setNowAllReviewPage] = useState<number>(1);
+  const totalReviews = useGetStoreReviews(Number(id), nowAllReviewPage);
   const foodReviews = useGetFoodReviews(selectedFoodId);
 
   const allReviewCount = useGetBuyerAllReviewCounts(Number(id))?.reviewCount;
   const totalPageCount = allReviewCount ? Math.ceil(allReviewCount / 20) : 1;
-
-  const [nowAllReviewPage, setNowAllReviewPage] = useState<number>(1);
 
   console.log(totalReviews);
   console.log(foodReviews);
@@ -47,9 +46,11 @@ const FoodReviews = () => {
       );
     }
     return (
-      <div>
-        <FoodSelect selectedId={selectedFoodId} handleClick={handleClick} />
-        <div className="flex flex-col gap-y-8 m-3">
+      <div className="w-full flex flex-col justify-center items-center">
+        <div className="w-full">
+          <FoodSelect selectedId={selectedFoodId} handleClick={handleClick} />
+        </div>
+        <div className="w-full flex flex-col gap-y-8 m-3">
           {totalReviews.map((review) => (
             <ReviewCard review={review} key={review.reviewId} />
           ))}

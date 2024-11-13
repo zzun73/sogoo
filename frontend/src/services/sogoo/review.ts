@@ -1,14 +1,14 @@
 import axios from "../../configs/axios";
-import { useGetBuyerAllReviewCounts } from "../../queries/queries";
 
 export default {
   /**
    * 가게 상세페이지 - 전체 리뷰
    * @param storeId 가게 id
+   * @param page 페이지 번호
    */
-  getStoreReviews: (storeId: StoreId) => {
+  getStoreReviews: (storeId: StoreId, page: PageNumber) => {
     return axios.get<GetStoreReviewsResponse>(
-      `/review/buyer/${storeId}?page=${storeId}`
+      `/review/buyer/${storeId}?page=${page}`
     );
   },
 
@@ -33,7 +33,7 @@ export default {
    */
   getBuyerAllReviewCounts: async (storeId: StoreId) => {
     return axios.get<BuyerAllReviewCountResult>(
-      `/store/buyer/count/${storeId}`
+      `/review/buyer/count/${storeId}`
     );
   },
 };

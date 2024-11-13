@@ -242,11 +242,12 @@ const useGetReviewSummary = (storeId: StoreId) => {
  * 가게 상세페이지 - 전체 리뷰
  * @errorArray 에러시 빈배열
  * @param storeId 가게 id
+ * @param page 페이지 번호
  */
-const useGetStoreReviews = (storeId: StoreId) => {
+const useGetStoreReviews = (storeId: StoreId, page: PageNumber) => {
   const { data } = useQuery({
-    queryKey: keys.getStoreReviews(storeId),
-    queryFn: () => sogoo.getStoreReviews(storeId),
+    queryKey: keys.getStoreReviews(storeId, page),
+    queryFn: () => sogoo.getStoreReviews(storeId, page),
   });
   console.log("reviews", data?.data.reviews);
   const reviews = data ? data.data.reviews : null;
