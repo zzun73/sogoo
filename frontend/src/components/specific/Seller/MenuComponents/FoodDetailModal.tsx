@@ -97,7 +97,7 @@ const FoodDetailModal: React.FC<FoodDetailModalProps> = ({
           sx={{ width: "100%", marginBottom: "20px" }}
         />
         <Button variant="contained" onClick={onClose}>
-          닫 기
+          닫기
         </Button>
       </Box>
     </Modal>
