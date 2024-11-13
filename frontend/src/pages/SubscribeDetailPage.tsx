@@ -44,9 +44,13 @@ const SubscribeDetail: React.FC = () => {
           <TextField
             id="subscribeDetailBeforePrice"
             label="구독 전 상품 가격 총합"
-            value={formatters.formatToCurrency(
-              itemDetailInfo.subscribeBeforePrice
-            )}
+            value={
+              itemDetailInfo.subscribeBeforePrice !== undefined
+                ? formatters.formatToCurrency(
+                    itemDetailInfo.subscribeBeforePrice
+                  )
+                : "가격 정보 없음"
+            }
             InputLabelProps={{ shrink: true }}
             slotProps={{
               input: {
@@ -58,7 +62,11 @@ const SubscribeDetail: React.FC = () => {
           <TextField
             id="subscribeDetailPrice"
             label="구독 가격"
-            value={formatters.formatToCurrency(itemDetailInfo.subscribePrice)}
+            value={
+              itemDetailInfo.subscribePrice !== undefined
+                ? formatters.formatToCurrency(itemDetailInfo.subscribePrice)
+                : "가격 정보 없음"
+            }
             InputLabelProps={{ shrink: true }}
             slotProps={{
               input: {
