@@ -23,7 +23,7 @@ const StoreContent = () => {
   };
 
   return (
-    <div className="w-full">
+    <div className="w-full flex flex-col justify-center items-center">
       <TabBar selectedTab={selectedTab} handleTab={handleTab} />
       <Content />
     </div>
