@@ -74,12 +74,24 @@ public class SellerController {
     @GetMapping("/detail-review/{storeId}/{foodId}")
     public ResponseEntity<?> getProductReview(@PathVariable(name = "storeId") Long storeId,
         @PathVariable(name = "foodId") Long foodId,
-        @AuthenticationPrincipal CustomUserDetails customUserDetails, @RequestParam(name = "page") int page) {
+        @AuthenticationPrincipal CustomUserDetails customUserDetails,
+        @RequestParam(name = "page") int page) {
         if (!customUserDetails.getUserRole().getRole().equals("SELLER")) {
             throw new InvalidMemberRoleException();
         }
         Long userId = customUserDetails.getUserId();
         return ResponseEntity.ok(sellerService.getProductReview(storeId, foodId, userId, page));
+    }
+
+    @GetMapping("/detail-review/count/{storeId}/{foodId}")
+    public ResponseEntity<?> getProductReviewCount(Long storeId, Long foodId,
+        @AuthenticationPrincipal CustomUserDetails customUserDetails,
+        @RequestParam(name = "page") int page) {
+        if (!customUserDetails.getUserRole().getRole().equals("SELLER")) {
+            throw new InvalidMemberRoleException();
+        }
+        Long userId = customUserDetails.getUserId();
+        return ResponseEntity.ok(sellerService.getProductReviewCount(storeId, userId, foodId));
     }
 
     @GetMapping("/all-product/{storeId}")
