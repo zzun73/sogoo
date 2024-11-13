@@ -247,27 +247,27 @@ public class SellerServiceImpl implements SellerService {
             storeId);
 
         //해당 주문의 상품을 돌면서 반찬의 가격 가져와서 개수 곱해가주고 넣기
-        Map<String, Integer> map = new HashMap<>();
+        Map<Long, Integer> map = new HashMap<>();
         for (Order order : orders) {
             List<OrderList> orderLists = orderListRepository.findAllByOrder_Id(order.getId());
             for (OrderList orderList : orderLists) {
-                String foodName = orderList.getFood().getName();
-                if (!map.containsKey(foodName)) {
-                    map.put(foodName, orderList.getCount());
+                Long foodId = orderList.getFood().getId();
+                if (!map.containsKey(foodId)) {
+                    map.put(foodId, orderList.getCount());
                 } else {
-                    map.put(foodName, map.get(foodName) + orderList.getCount());
+                    map.put(foodId, map.get(foodId) + orderList.getCount());
                 }
             }
         }
 
-        for (String foodName : map.keySet()) {
-            Food food = foodRepository.findByName(foodName).orElseThrow(FoodNotFoundException::new);
+        for (Long foodId : map.keySet()) {
+            Food food = foodRepository.findById(foodId).orElseThrow(FoodNotFoundException::new);
             products.add(ProductDto
                 .builder()
-                .productName(foodName)
-                .productCnt(map.get(foodName))
+                .productName(food.getName())
+                .productCnt(map.get(foodId))
                 .price(Long.parseLong(String.valueOf(food.getPrice())))
-                .salesSum(food.getPrice() * map.get(foodName))
+                .salesSum(food.getPrice() * map.get(foodId))
                 .build());
         }
 
