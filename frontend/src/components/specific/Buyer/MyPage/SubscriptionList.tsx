@@ -62,63 +62,50 @@ const SubscriptionList = ({ subscriptions }: SubscriptionListProps) => {
                 sx={{
                   width: "100%",
                   minHeight: "150px",
+                  display: "flex",
+                  justifyContent: "space-between",
                 }}
               >
-                <CardActionArea
-                  sx={{ display: "flex", justifyContent: "left" }}
+                <CardMedia
+                  component="img"
+                  image={item.storeImg}
+                  alt={item.storeName}
+                  sx={{ width: "180px", height: "150px", objectFit: "cover" }}
+                />
+                <CardContent
+                  sx={{
+                    height: "150px",
+                    flex: "1 1 0%",
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "center",
+                  }}
                 >
-                  <CardMedia
-                    component="img"
-                    image={item.storeImg}
-                    alt={item.storeName}
-                    sx={{ width: "180px", height: "150px", objectFit: "cover" }}
-                  />
-                  <CardContent
-                    sx={{
-                      height: "150px",
-                      width: "100%",
-                      display: "flex",
-                      flexDirection: "column",
-                      justifyContent: "center",
-                    }}
-                  >
-                    <div className="flex justify-between">
-                      <Typography gutterBottom variant="h5" component="div">
-                        {item.subscribeName}
-                      </Typography>
-                      {item.isSubscriptionActive && (
-                        <button
-                          onClick={() =>
-                            handleCancelSubscribe(item.subscribeId)
-                          }
-                        >
-                          <ImCancelCircle />
-                        </button>
-                      )}
-                    </div>
-                    <Typography
-                      variant="body2"
-                      sx={{ color: "text.secondary" }}
-                    >
-                      매장명 | {item.storeName}
+                  <div className="flex justify-between">
+                    <Typography gutterBottom variant="h5" component="div">
+                      {item.subscribeName}
                     </Typography>
-                    <Typography
-                      variant="body2"
-                      sx={{ color: "text.secondary" }}
-                    >
-                      구독 상태 |{" "}
-                      {item.isSubscriptionActive
-                        ? "구독 진행 중"
-                        : "구독 취소 예정"}
-                    </Typography>
-                    <Typography
-                      variant="body2"
-                      sx={{ color: "text.secondary" }}
-                    >
-                      결제 금액 | {item.subscribePrice}원
-                    </Typography>
-                  </CardContent>
-                </CardActionArea>
+                    {item.isSubscriptionActive && (
+                      <button
+                        onClick={() => handleCancelSubscribe(item.subscribeId)}
+                      >
+                        <ImCancelCircle />
+                      </button>
+                    )}
+                  </div>
+                  <Typography variant="body2" sx={{ color: "text.secondary" }}>
+                    매장명 | {item.storeName}
+                  </Typography>
+                  <Typography variant="body2" sx={{ color: "text.secondary" }}>
+                    구독 상태 |{" "}
+                    {item.isSubscriptionActive
+                      ? "구독 진행 중"
+                      : "구독 취소 예정"}
+                  </Typography>
+                  <Typography variant="body2" sx={{ color: "text.secondary" }}>
+                    결제 금액 | {item.subscribePrice}원
+                  </Typography>
+                </CardContent>
               </Card>
             ))
           ) : (

@@ -27,49 +27,38 @@ const FoodTradeList = ({ foodTrades }: FoodTradeListProps) => {
                 sx={{
                   width: "100%",
                   minHeight: "150px",
+                  display: "flex",
+                  justifyContent: "space-between",
                 }}
               >
-                <CardActionArea
-                  sx={{ display: "flex", justifyContent: "space-between" }}
+                <CardMedia
+                  component="img"
+                  image={item.foodImg}
+                  alt={item.foodName}
+                  sx={{ width: "180px", height: "150px", objectFit: "cover" }}
+                />
+                <CardContent
+                  sx={{
+                    height: "150px",
+                    flex: "1 1 0%",
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "center",
+                  }}
                 >
-                  <CardMedia
-                    component="img"
-                    image={item.foodImg}
-                    alt={item.foodName}
-                    sx={{ width: "180px", height: "150px", objectFit: "cover" }}
-                  />
-                  <CardContent
-                    sx={{
-                      height: "150px",
-                      flex: "1 1 0%",
-                      display: "flex",
-                      flexDirection: "column",
-                      justifyContent: "center",
-                    }}
-                  >
-                    <Typography gutterBottom variant="h5" component="div">
-                      {item.foodName}
-                    </Typography>
-                    <Typography
-                      variant="body2"
-                      sx={{ color: "text.secondary" }}
-                    >
-                      매장명 | {item.storeName}
-                    </Typography>
-                    <Typography
-                      variant="body2"
-                      sx={{ color: "text.secondary" }}
-                    >
-                      주문상태 | {item.orderStatus}
-                    </Typography>
-                    <Typography
-                      variant="body2"
-                      sx={{ color: "text.secondary" }}
-                    >
-                      결제 금액 | {item.price}원
-                    </Typography>
-                  </CardContent>
-                </CardActionArea>
+                  <Typography gutterBottom variant="h5" component="div">
+                    {item.foodName}
+                  </Typography>
+                  <Typography variant="body2" sx={{ color: "text.secondary" }}>
+                    매장명 | {item.storeName}
+                  </Typography>
+                  <Typography variant="body2" sx={{ color: "text.secondary" }}>
+                    주문상태 | {item.orderStatus}
+                  </Typography>
+                  <Typography variant="body2" sx={{ color: "text.secondary" }}>
+                    결제 금액 | {item.price}원
+                  </Typography>
+                </CardContent>
               </Card>
             ))
           ) : (
