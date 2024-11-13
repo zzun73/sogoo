@@ -141,4 +141,9 @@ public class GlobalExceptionHandler {
     public ResponseEntity<String> handleSubscriptionNotFoundForMemberException(SubscriptionNotFoundForMemberException e) {
         return ResponseEntity.status(e.getStatus()).body(e.getMessage());
     }
+
+    @ExceptionHandler(AlreadyInSubscribeCancelScheduledStatusException.class)
+    public ResponseEntity<String> handleAlreadyInSubscribeCancelScheduledStatusException(AlreadyInSubscribeCancelScheduledStatusException e) {
+        return ResponseEntity.status(e.getStatus()).body(e.getMessage());
+    }
 }
