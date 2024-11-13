@@ -93,8 +93,8 @@ public class ElasticSearchServiceImpl implements ElasticSearchService {
     }
 
     @Override
-    public SearchResponse getStores(String query, int page) {
-        Pageable pageable = PageRequest.of(page - 1, 20);
+    public SearchResponse getStores(String query) {
+        Pageable pageable = PageRequest.of(0, 100);
 
         Page<StoreSearchDocument> searchResult = storeSearchRepository.findByStoreNameOrFoodName(
             query, pageable);

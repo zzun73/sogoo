@@ -18,7 +18,8 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
         "JOIN FETCH r.orderList ol " +
         "JOIN FETCH ol.order o " +
         "JOIN FETCH o.store s " +
-        "WHERE s.id = :storeId")
+        "WHERE s.id = :storeId "
+        + "ORDER BY r.createdAt DESC ")
     List<Review> findAllByStoreId(@Param("storeId") Long storeId);
 
     @Query("SELECT r FROM Review r " +
@@ -48,14 +49,14 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
         + "FROM Review r "
         + "WHERE r.orderList.order.store.id = :storeId "
         + "AND r.emotion = :emotion ")
-    int getCount(@Param("storeId") Long storeId, @Param("emotion") boolean emotion);
+    Long getCount(@Param("storeId") Long storeId, @Param("emotion") boolean emotion);
 
     @Query("SELECT COALESCE(COUNT(r), 0) "
         + "FROM Review r "
         + "WHERE r.orderList.order.store.id = :storeId "
         + "AND r.emotion = :emotion "
         + "AND r.orderList.food.id = :foodId ")
-    int getCountFood(@Param("storeId") Long storeId, @Param("emotion") boolean emotion,
+    Long getCountFood(@Param("storeId") Long storeId, @Param("emotion") boolean emotion,
         @Param("foodId") Long foodId);
 
     @Query("SELECT COALESCE(COUNT(r), 0) "
@@ -68,7 +69,8 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
         "JOIN FETCH ol.order o " +
         "JOIN FETCH ol.food f " +
         "WHERE o.store.id = :storeId "
-        + "AND f.id = :foodId ")
+        + "AND f.id = :foodId "
+        + "ORDER BY r.createdAt DESC")
     List<Review> findReviewByStoreIdAndFoodId(@Param("storeId") Long storeId,
         @Param("foodId") Long foodId);
 
@@ -77,7 +79,8 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
         "JOIN FETCH ol.order o " +
         "JOIN FETCH ol.food f " +
         "WHERE o.store.id = :storeId "
-        + "AND f.id = :foodId ")
+        + "AND f.id = :foodId "
+        + "ORDER BY r.createdAt DESC")
     Page<Review> findReviewByStoreIdAndFoodId(@Param("storeId") Long storeId,
         @Param("foodId") Long foodId, Pageable pageable);
 }
