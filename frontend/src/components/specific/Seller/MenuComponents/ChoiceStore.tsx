@@ -45,7 +45,7 @@ const ChoiceStore = () => {
   };
 
   return (
-    <div className="gap-y-5 w-full flex justify-between items-center py-5 px-[200px] min-w-[1100px]">
+    <div className="min-w-[1100px] flex justify-between items-center py-5">
       <div className="flex space-x-2">
         {stores && stores.length > 0 ? (
           stores.map((store) => (
@@ -70,7 +70,7 @@ const ChoiceStore = () => {
         )}
 
         <Button
-          variant="outlined"
+          variant="text"
           sx={{ minWidth: "150px", minHeight: "50px" }}
           onClick={handleStoreModalOpen}
         >
@@ -84,7 +84,7 @@ const ChoiceStore = () => {
           onClose={handleStoreModalClose}
         />
       </div>
-      <Button variant="contained" onClick={goToBack}>
+      <Button variant="outlined" onClick={goToBack}>
         뒤로가기
       </Button>
     </div>

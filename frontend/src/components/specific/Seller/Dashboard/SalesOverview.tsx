@@ -78,12 +78,12 @@ const SalesOverview = ({ storeId }: SalesOverviewProps) => {
       <div className="flex flex-row gap-x-2">
         <CiDeliveryTruck className="w-8 h-8" />
         <div className="flex flex-row justify-between w-full items-end">
-          <div className="flex flex-row gap-x-2 items-end">
+          <div className="flex flex-row gap-x-4 items-end">
             <p className="text-xl font-bold">판매 현황</p>
-            <p className="text-sm text-gray-500">{currentDate}</p>
+            <p className="text-sm text-gray-500">기준일 | {currentDate}</p>
           </div>
           <Button onClick={handleNavigate} variant="contained" size="small">
-            판매상품 관리
+            판매 상품 관리
           </Button>
         </div>
       </div>

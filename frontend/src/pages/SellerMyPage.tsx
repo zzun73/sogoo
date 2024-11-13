@@ -16,7 +16,7 @@ const SellerMyPage = () => {
   }, [navigate, isLogin, memberInfo?.role]);
 
   return (
-    <div className="min-h-dvh w-full bg-sub-100">
+    <div className="flex flex-col items-center w-full bg-sub-100">
       <ChoiceStore />
       <Outlet />
     </div>

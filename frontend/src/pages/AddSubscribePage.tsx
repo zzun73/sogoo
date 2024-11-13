@@ -132,11 +132,9 @@ const AddSubscribe: React.FC = () => {
   };
 
   return (
-    <div className="w-full flex flex-col flex-grow">
-      <div className="flex flex-col justify-center items-center my-10 mx-[200px]">
-        <h1 className="font-shilla text-5xl font-bold mb-5">
-          구독 상품 등록하기
-        </h1>
+    <div className="w-[1100px] flex flex-col">
+      <div className="flex flex-col justify-center items-center gap-8 mb-10">
+        <h2 className="font-shilla text-5xl text-center">구독 상품 등록</h2>
         <div className="w-full flex flex-col justify-center items-center rounded-3xl bg-white p-10">
           <TextField
             required
@@ -210,10 +208,10 @@ const AddSubscribe: React.FC = () => {
           />
           <Button
             variant="contained"
-            sx={{ width: "fit-content", alignSelf: "center" }}
+            sx={{ width: "200px", alignSelf: "center" }}
             onClick={initiateAddSubscribe}
           >
-            등 록 하 기
+            등록하기
           </Button>
         </div>
       </div>
