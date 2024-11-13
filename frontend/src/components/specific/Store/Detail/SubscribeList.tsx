@@ -45,7 +45,7 @@ const SubscribeList = () => {
   }
 
   return (
-    <div className="flex flex-col gap-y-5 min-h-80 mx-auto mt-5">
+    <div className="flex flex-col items-center gap-y-5 min-h-80 mx-auto mt-5 w-full">
       {subscribes.map((sub) => (
         <SubscribeInfo sub={sub} key={`sub-${sub.subscribeName}`} />
       ))}

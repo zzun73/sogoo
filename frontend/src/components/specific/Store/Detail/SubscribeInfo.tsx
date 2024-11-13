@@ -20,14 +20,13 @@ interface SubInfoProps {
 
 const SubscribeInfo = ({ sub }: SubInfoProps) => {
   return (
-    <Accordion sx={{ width: "90%" }}>
+    <Accordion sx={{ width: "100%" }}>
       <AccordionSummary
         expandIcon={<ExpandMoreIcon />}
         aria-controls="panel1-content"
         id="panel1-header"
-        sx={{ marginTop: "20px" }}
       >
-        <div>
+        <div className="flex flex-col gap-4">
           <p className="text-2xl font-bold">{sub.subscribeName}</p>
           <p className="text-base">{sub.subscribeDescription}</p>
         </div>
