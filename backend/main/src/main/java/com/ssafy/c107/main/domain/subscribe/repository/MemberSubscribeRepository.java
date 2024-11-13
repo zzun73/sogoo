@@ -2,8 +2,10 @@ package com.ssafy.c107.main.domain.subscribe.repository;
 
 import com.ssafy.c107.main.domain.subscribe.entity.MemberSubscribe;
 import com.ssafy.c107.main.domain.subscribe.entity.PaymentStatus;
+import com.ssafy.c107.main.domain.subscribe.entity.Subscribe;
 import com.ssafy.c107.main.domain.subscribe.entity.SubscribeStatus;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,4 +30,10 @@ public interface MemberSubscribeRepository extends JpaRepository<MemberSubscribe
             "JOIN FETCH ms.subscribe s " +
             "WHERE ms.status = :status AND ms.paymentStatus = :paymentStatus")
     List<MemberSubscribe> findActiveSubscriptions(@Param("status") SubscribeStatus status, @Param("paymentStatus") PaymentStatus paymentStatus);
+
+    Optional<MemberSubscribe> findByMember_IdAndSubscribe_Id(Long memberId, Long subscribeId);
+
+    List<MemberSubscribe> findAllByStatusAndEndDateBefore(@Param("status") SubscribeStatus status, @Param("endDate") LocalDateTime endDate);
+
+    Optional<MemberSubscribe> findByIdAndMember_Id(Long memberSubscribeId, Long memberId);
 }
