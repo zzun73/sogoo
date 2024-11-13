@@ -28,7 +28,7 @@ interface SubscribeItem {
   storeId: number;
   storeImg: string;
   storeName: string;
-  SubscribePeriod: string;
+  isSubscriptionActive: boolean;
 }
 
 interface FoodTradeItem {

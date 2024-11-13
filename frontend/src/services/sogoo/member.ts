@@ -48,6 +48,13 @@ export default {
   },
 
   /**
+   * 구매자 구독 취소
+   */
+  cancelSubscribe: async (memberSubscribeId: number) => {
+    return axios.post(`/subscribe/cancel/${memberSubscribeId}`);
+  },
+
+  /**
    * 구매자 리뷰 등록
    */
   registerReview: async (orderListId: number, data: FormData) => {

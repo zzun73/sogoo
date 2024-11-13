@@ -30,7 +30,7 @@ const SubscribeCart = () => {
   }
 
   return (
-    <div className="w-full rounded-b-3xl bg-white my-3 flex flex-col gap-4 pt-3">
+    <div className="w-full rounded-b-3xl bg-white flex flex-col gap-4 pt-3">
       {/* 주문 상품 */}
       {subscribe && (
         <ListItem key={subscribe.id} className="flex items-center py-3 px-2">
