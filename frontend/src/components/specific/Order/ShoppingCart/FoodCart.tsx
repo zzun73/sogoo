@@ -1,12 +1,24 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { ListItem, ListItemText, IconButton, Checkbox, Button } from "@mui/material";
+import {
+  ListItem,
+  ListItemText,
+  IconButton,
+  Checkbox,
+  Button,
+} from "@mui/material";
 import { Remove, Add, Close } from "@mui/icons-material";
 import useRootStore from "../../../../stores";
 import { HiOutlineSparkles } from "react-icons/hi2";
 
 const FoodCart = () => {
-  const { foodList, deleteSelectedList, changeFoodCount, setSelectedId, selectedId } = useRootStore();
+  const {
+    foodList,
+    deleteSelectedList,
+    changeFoodCount,
+    setSelectedId,
+    selectedId,
+  } = useRootStore();
   const [checked, setChecked] = useState<number[]>([]);
 
   useEffect(() => {
@@ -30,7 +42,9 @@ const FoodCart = () => {
    * */
   const goToOrder = () => {
     setSelectedId(checked);
-    navigate(`/orders/form`, { state: { isSubscription: false, accessRoute: location.pathname } });
+    navigate(`/orders/form`, {
+      state: { isSubscription: false, accessRoute: location.pathname },
+    });
   };
   if (!foodList) {
     return (
@@ -46,11 +60,28 @@ const FoodCart = () => {
       {foodList &&
         foodList.map((item) => (
           <ListItem key={item.id} className="flex items-center py-3">
-            <Checkbox onChange={() => handleChecked(item.id)} checked={checked.includes(item.id)} />
-            <img src={item.image} alt={item.name} className="w-16 h-16 rounded-lg mr-3" />
-            <ListItemText primary={item.name} secondary={<span className="text-lg font-bold">{item.price.toLocaleString()}원</span>} />
+            <Checkbox
+              onChange={() => handleChecked(item.id)}
+              checked={checked.includes(item.id)}
+            />
+            <img
+              src={item.image}
+              alt={item.name}
+              className="w-16 h-16 rounded-lg mr-3"
+            />
+            <ListItemText
+              primary={item.name}
+              secondary={
+                <span className="text-lg font-bold">
+                  {item.price.toLocaleString()}원
+                </span>
+              }
+            />
             <div className="flex items-center">
-              <IconButton onClick={() => changeFoodCount(item.id, -1)} disabled={item.count === 1}>
+              <IconButton
+                onClick={() => changeFoodCount(item.id, -1)}
+                disabled={item.count === 1}
+              >
                 <Remove />
               </IconButton>
               <span>{item.count}</span>
@@ -63,7 +94,9 @@ const FoodCart = () => {
             </IconButton>
           </ListItem>
         ))}
-      <Button onClick={goToOrder}>구매하기</Button>
+      <Button size="large" onClick={goToOrder}>
+        구매하기
+      </Button>
     </div>
   );
 };

@@ -19,7 +19,6 @@ const SignInBox = () => {
     onSuccess: async (response) => {
       setLogin(response.data.userInfo);
       setAccessToken(response.headers.authorization.split(" ")[1]);
-      console.log(response.data.userInfo.name);
       navigate("/");
       toast(`${response.data.userInfo.name}님, 반갑습니다!`);
     },
