@@ -15,7 +15,9 @@ const SubscribeCart = () => {
    * 구독 구매 페이지 이동
    * */
   const goToOrder = () => {
-    navigate(`/orders/form`, { state: { isSubscription: true, accessRoute: location.pathname } });
+    navigate(`/orders/form`, {
+      state: { isSubscription: true, accessRoute: location.pathname },
+    });
   };
 
   if (!subscribe) {
@@ -33,13 +35,23 @@ const SubscribeCart = () => {
       {subscribe && (
         <ListItem key={subscribe.id} className="flex items-center py-3 px-2">
           {" "}
-          <img src={subscribe.image} alt={subscribe.name} className="w-16 h-16 rounded-lg mr-3" />
+          <img
+            src={subscribe.image}
+            alt={subscribe.name}
+            className="w-16 h-16 rounded-lg mr-3"
+          />
           <ListItemText
             primary={subscribe.name}
             secondary={
               <>
-                <span className="text-lg font-bold">{subscribe.price.toLocaleString()}원</span>
-                {subscribe.beforePrice && <span className="line-through text-sm text-gray-500 ml-2">{subscribe.beforePrice.toLocaleString()}원</span>}
+                <span className="text-lg font-bold">
+                  {subscribe.price.toLocaleString()}원
+                </span>
+                {subscribe.beforePrice && (
+                  <span className="line-through text-sm text-gray-500 ml-2">
+                    {subscribe.beforePrice.toLocaleString()}원
+                  </span>
+                )}
               </>
             }
           />
@@ -48,7 +60,9 @@ const SubscribeCart = () => {
           </IconButton>
         </ListItem>
       )}
-      <Button onClick={goToOrder}>구독하기</Button>
+      <Button size="large" onClick={goToOrder}>
+        구독하기
+      </Button>
     </div>
   );
 };
