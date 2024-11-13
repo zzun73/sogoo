@@ -21,11 +21,13 @@ import com.ssafy.c107.main.domain.subscribe.entity.MemberSubscribe;
 import com.ssafy.c107.main.domain.subscribe.entity.Subscribe;
 import com.ssafy.c107.main.domain.subscribe.entity.SubscribeStatus;
 import com.ssafy.c107.main.domain.subscribe.repository.MemberSubscribeRepository;
+
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -45,45 +47,45 @@ public class BuyerServiceImpl implements BuyerService {
     public BuyerResponse getBuyerMyPage(Long userid) {
         //사용자 정보 가져오기
         Member member = memberRepository.findByIdAndWithDrawalStatus(userid,
-            WithDrawalStatus.ACTIVE).orElseThrow(
-            MemberNotFoundException::new);
+                WithDrawalStatus.ACTIVE).orElseThrow(
+                MemberNotFoundException::new);
 
         //사용자 구독정보 가져오기
         List<SubscribesResponse> subscribes = new ArrayList<>();
 
         //구독중
         List<MemberSubscribe> memberSubscribes = memberSubscribeRepository.findAllByMember_IdAndStatus(
-            member.getId(),
-            SubscribeStatus.SUBSCRIBE);
+                member.getId(),
+                SubscribeStatus.SUBSCRIBE);
         for (MemberSubscribe memberSubscribe : memberSubscribes) {
             Subscribe subscribe = memberSubscribe.getSubscribe();
             subscribes.add(SubscribesResponse
-                .builder()
-                .subscribeId(memberSubscribe.getId())
-                .subscribeName(subscribe.getName())
-                .subscribePrice(subscribe.getPrice())
-                .subscribePeriod(subscribe.getCreatedAt())
-                .storeId(subscribe.getStore().getId())
-                .storeName(subscribe.getStore().getName())
-                .storeImg(subscribe.getStore().getImg())
-                .build());
+                    .builder()
+                    .subscribeId(memberSubscribe.getId())
+                    .subscribeName(subscribe.getName())
+                    .subscribePrice(subscribe.getPrice())
+                    .storeId(subscribe.getStore().getId())
+                    .storeName(subscribe.getStore().getName())
+                    .storeImg(subscribe.getStore().getImg())
+                    .isSubscriptionActive(true)
+                    .build());
         }
 
         //취소예정
         List<MemberSubscribe> cancelScheduledSubscribes = memberSubscribeRepository.findAllByMember_IdAndStatus(
-            member.getId(),
-            SubscribeStatus.CANCEL_SCHEDULE);
+                member.getId(),
+                SubscribeStatus.CANCEL_SCHEDULE);
         for (MemberSubscribe memberSubscribe : cancelScheduledSubscribes) {
             Subscribe subscribe = memberSubscribe.getSubscribe();
             subscribes.add(SubscribesResponse
-                .builder()
-                .subscribeId(memberSubscribe.getId())
-                .subscribeName(subscribe.getName())
-                .subscribePrice(subscribe.getPrice())
-                .subscribePeriod(subscribe.getCreatedAt())
-                .storeId(subscribe.getStore().getId())
-                .storeName(subscribe.getStore().getName())
-                .build());
+                    .builder()
+                    .subscribeId(memberSubscribe.getId())
+                    .subscribeName(subscribe.getName())
+                    .subscribePrice(subscribe.getPrice())
+                    .storeId(subscribe.getStore().getId())
+                    .storeName(subscribe.getStore().getName())
+                    .isSubscriptionActive(false)
+                    .build());
         }
 
         //사용자 반찬구매 내역 가져오기
@@ -92,22 +94,22 @@ public class BuyerServiceImpl implements BuyerService {
         List<ReviewsResponse> reviews = new ArrayList<>();
 
         List<Order> orders = orderRepository.findAllByMember_IdOrderByCreatedAtDesc(
-            member.getId());
+                member.getId());
 
         for (Order order : orders) {
             List<OrderList> orderLists = orderListRepository.findAllByOrder_Id(order.getId());
             for (OrderList orderList : orderLists) {
                 Food food = orderList.getFood();
                 foodTrades.add(FoodTradesResponse
-                    .builder()
-                    .foodId(food.getId())
-                    .foodName(food.getName())
-                    .foodImg(food.getImg())
-                    .price(orderList.getCount() * food.getPrice())
-                    .storeId(food.getStore().getId())
-                    .storeName(food.getStore().getName())
-                    .orderStatus("배송완료")
-                    .build());
+                        .builder()
+                        .foodId(food.getId())
+                        .foodName(food.getName())
+                        .foodImg(food.getImg())
+                        .price(orderList.getCount() * food.getPrice())
+                        .storeId(food.getStore().getId())
+                        .storeName(food.getStore().getName())
+                        .orderStatus("배송완료")
+                        .build());
 
                 //주문 목록중에 리뷰를 판별해서 넣어줌
                 Optional<Review> or = reviewRepository.findByOrderList_Id(orderList.getId());
@@ -116,41 +118,41 @@ public class BuyerServiceImpl implements BuyerService {
                 if (or.isPresent()) {
                     Review review = or.get();
                     reviews.add(ReviewsResponse
-                        .builder()
-                        .foodId(food.getId())
-                        .foodName(food.getName())
-                        .foodImg(food.getImg())
-                        .reviewStatus(true)
-                        .orderListId(orderList.getId())
-                        .review(BuyerReviewDto
-                            .builder()
-                            .reviewComment(review.getComment())
-                            .reviewId(review.getId())
-                            .reviewImg(review.getImg())
-                            .build())
-                        .build());
-                } else {
-                    //리뷰가 없는데 구매일 7일 이내일 경우
-                    if (isWithinSevenDays(orderList.getCreatedAt())) {
-                        reviews.add(ReviewsResponse
                             .builder()
                             .foodId(food.getId())
                             .foodName(food.getName())
                             .foodImg(food.getImg())
-                            .reviewStatus(false)
+                            .reviewStatus(true)
                             .orderListId(orderList.getId())
+                            .review(BuyerReviewDto
+                                    .builder()
+                                    .reviewComment(review.getComment())
+                                    .reviewId(review.getId())
+                                    .reviewImg(review.getImg())
+                                    .build())
                             .build());
+                } else {
+                    //리뷰가 없는데 구매일 7일 이내일 경우
+                    if (isWithinSevenDays(orderList.getCreatedAt())) {
+                        reviews.add(ReviewsResponse
+                                .builder()
+                                .foodId(food.getId())
+                                .foodName(food.getName())
+                                .foodImg(food.getImg())
+                                .reviewStatus(false)
+                                .orderListId(orderList.getId())
+                                .build());
                     }
                 }
             }
         }
 
         return BuyerResponse
-            .builder()
-            .subscribes(subscribes)
-            .foodTrades(foodTrades)
-            .reviews(reviews)
-            .build();
+                .builder()
+                .subscribes(subscribes)
+                .foodTrades(foodTrades)
+                .reviews(reviews)
+                .build();
     }
 
     private boolean isWithinSevenDays(LocalDateTime createdAt) {

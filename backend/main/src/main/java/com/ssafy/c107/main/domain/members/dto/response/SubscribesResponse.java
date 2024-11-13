@@ -1,6 +1,5 @@
 package com.ssafy.c107.main.domain.members.dto.response;
 
-import java.time.LocalDateTime;
 import lombok.Builder;
 import lombok.Data;
 
@@ -13,6 +12,6 @@ public class SubscribesResponse {
     private int subscribePrice;
     private Long storeId;
     private String storeName;
-    private LocalDateTime subscribePeriod;
     private String storeImg;
+    private boolean isSubscriptionActive;
 }
