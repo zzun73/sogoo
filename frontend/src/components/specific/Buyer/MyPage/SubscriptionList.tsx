@@ -1,5 +1,11 @@
 import React from "react";
-import { Card, CardActionArea, CardContent, CardMedia, Typography } from "@mui/material";
+import {
+  Card,
+  CardActionArea,
+  CardContent,
+  CardMedia,
+  Typography,
+} from "@mui/material";
 import EmptySection from "./EmptySection";
 
 interface SubscriptionListProps {
@@ -21,27 +27,44 @@ const SubscriptionList = ({ subscriptions }: SubscriptionListProps) => {
                 sx={{
                   width: "100%",
                   minHeight: "150px",
-                  boxShadow: "0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23)",
                 }}
               >
-                <CardActionArea sx={{ display: "flex", justifyContent: "left" }}>
+                <CardActionArea
+                  sx={{ display: "flex", justifyContent: "left" }}
+                >
                   <CardMedia
                     component="img"
                     image={item.storeImg}
                     alt={item.storeName}
                     sx={{ width: "180px", height: "150px", objectFit: "cover" }}
                   />
-                  <CardContent sx={{ height: "150px", display: "flex", flexDirection: "column", justifyContent: "center" }}>
+                  <CardContent
+                    sx={{
+                      height: "150px",
+                      display: "flex",
+                      flexDirection: "column",
+                      justifyContent: "center",
+                    }}
+                  >
                     <Typography gutterBottom variant="h5" component="div">
                       {item.subscribeName}
                     </Typography>
-                    <Typography variant="body2" sx={{ color: "text.secondary" }}>
+                    <Typography
+                      variant="body2"
+                      sx={{ color: "text.secondary" }}
+                    >
                       매장명 | {item.storeName}
                     </Typography>
-                    <Typography variant="body2" sx={{ color: "text.secondary" }}>
+                    <Typography
+                      variant="body2"
+                      sx={{ color: "text.secondary" }}
+                    >
                       구독 기간 | {item.SubscribePeriod}
                     </Typography>
-                    <Typography variant="body2" sx={{ color: "text.secondary" }}>
+                    <Typography
+                      variant="body2"
+                      sx={{ color: "text.secondary" }}
+                    >
                       결제 금액 | {item.subscribePrice}원
                     </Typography>
                   </CardContent>
