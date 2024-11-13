@@ -53,10 +53,6 @@ public class TossPaymentsServiceImpl implements TossPaymentsService {
     private final MemberSubscribeRepository memberSubscribeRepository;
     private final SubscribePayRepository subscribePayRepository;
 
-
-//    private final QuartzConfig quartzConfig;
-
-
     // 결제 승인 요청을 처리
     @Override
     public String confirmPayment(Long memberId, PayDto payDto) {
@@ -111,32 +107,46 @@ public class TossPaymentsServiceImpl implements TossPaymentsService {
                 "customerKey", autoBillingRequest.getCustomerKey()
         );
         try {
+
+            // 1. 빌링키 발급
             ResponseEntity<BillingResponse> response = tossPaymentsClient.issueBillingKey(body);
-            log.info("response: {}", response);
-
-            BillingResponse billingResponse = response.getBody();
-            log.info("billingResponse: {}", billingResponse);
-
-            // 빌링키 업데이트
-            String billingKey = Objects.requireNonNull(billingResponse).getBillingKey();
-            log.info("billingKey: {}", billingKey);
-
+            String billingKey = Objects.requireNonNull(response.getBody()).getBillingKey();
             Member member = memberRepository.findById(memberId).orElseThrow(MemberNotFoundException::new);
 
-            // 자동 결제 진행
+            // 2. 자동 결제 진행
             AutoBillingDto autoBillingDto = createAutoBillingDto(member, autoBillingRequest);
-            processSubscription(member, autoBillingDto, autoBillingRequest.getSubscribeId(), billingKey);
+            boolean billingSuccess = executeAutoBilling(memberId, autoBillingDto, billingKey);
 
-            // TODO: 첫 결제 성공 후 Quartz 스케줄 설정
-//            MemberSubscribe subscription = memberSubscribeRepository.findByMember_Id(memberId)
-//                    .orElseThrow(() -> new RuntimeException("Subscription not found for member: " + memberId));
-//
-//            quartzConfig.scheduleAutoBillingJob(subscription.getId(), subscription.getEndDate());
-
-            return "Billing key 발급 및 첫 구독 결제 성공";
+            // 3. 첫 결제 결과 처리
+            MemberSubscribe subscription = createOrUpdateSubscription(member, autoBillingRequest.getSubscribeId(), billingKey);
+            if (billingSuccess) {
+                subscription.completePayment();
+                memberSubscribeRepository.save(subscription);
+                return "구독 신청이 성공적으로 완료되었습니다.";
+            } else {
+                // 첫 결제 실패 시 구독 상태를 실패로 업데이트
+                subscription.cancelSubscription();
+                memberSubscribeRepository.save(subscription);
+                return "결제 실패로 인해 구독 신청이 취소되었습니다.";
+            }
         } catch (Exception e) {
             throw new BillingAuthFailedException();
         }
+    }
+
+
+    private MemberSubscribe createOrUpdateSubscription(Member member, Long subscribeId, String billingKey) {
+        Subscribe subscribe = subscribeRepository.findById(subscribeId).orElseThrow(SubscribeNotFoundException::new);
+        MemberSubscribe subscription = memberSubscribeRepository.findByMember_IdAndSubscribe_Id(member.getId(), subscribe.getId())
+                .orElse(MemberSubscribe.builder()
+                        .member(member)
+                        .subscribe(subscribe)
+                        .status(SubscribeStatus.SUBSCRIBE)
+                        .paymentStatus(PaymentStatus.NECESSARY)
+                        .billingKey(billingKey)
+                        .build()
+                );
+        return memberSubscribeRepository.save(subscription);
     }
 
     private AutoBillingDto createAutoBillingDto(Member member, AutoBillingRequest autoBillingRequest) {
@@ -153,33 +163,6 @@ public class TossPaymentsServiceImpl implements TossPaymentsService {
                 .build();
     }
 
-    private void processSubscription(Member member, AutoBillingDto autoBillingDto, Long subscribeId, String billingKey) {
-        MemberSubscribe memberSubscribe = createMemberSubscribe(member, subscribeId, billingKey);
-        boolean billingSuccess = executeAutoBilling(member.getId(), autoBillingDto, billingKey);
-
-        if (billingSuccess) {
-            memberSubscribe.completePayment();
-        } else {
-            log.error("자동 결제 실패");
-            throw new BillingChargeFailedException();
-        }
-    }
-
-    private MemberSubscribe createMemberSubscribe(Member member, Long subscribeId, String billingKey) {
-        Subscribe subscribe = subscribeRepository.findById(subscribeId).orElseThrow(SubscribeNotFoundException::new);
-
-        MemberSubscribe memberSubscribe = MemberSubscribe.builder()
-                .subscribe(subscribe)
-                .paymentStatus(PaymentStatus.NECESSARY)
-                .member(member)
-                .status(SubscribeStatus.SUBSCRIBE)
-                .billingKey(billingKey)
-                .build();
-
-        return memberSubscribeRepository.save(memberSubscribe);
-    }
-
-
     @Override
     public boolean executeAutoBilling(Long memberId, AutoBillingDto autoBillingDto, String billingKey) {
         Map<String, Object> body = Map.of(
@@ -193,9 +176,8 @@ public class TossPaymentsServiceImpl implements TossPaymentsService {
 
         try {
             ResponseEntity<Map<String, Object>> response = tossPaymentsClient.autoBilling(billingKey, body);
+            boolean success = response.getStatusCode().is2xxSuccessful() && "DONE".equals(response.getBody().get("status"));
 
-            Map<String, Object> responseBody = response.getBody();
-            boolean success = response.getStatusCode().is2xxSuccessful() && "DONE".equals(responseBody.get("status"));
             if (success) {
                 // 결제 성공 시 결제 내역 저장 및 다음 결제일 갱신
                 MemberSubscribe subscription = memberSubscribeRepository.findByMember_Id(memberId)
@@ -204,10 +186,9 @@ public class TossPaymentsServiceImpl implements TossPaymentsService {
                 SubscribePay subscribePay = SubscribePay.builder().memberSubscribe(subscription).build();
                 subscribePayRepository.save(subscribePay);
 
-                // 결제 성공 시 다음 결제일 설정 및 Quartz 스케줄 갱신
+                // 결제 성공
                 subscription.completePayment();
                 memberSubscribeRepository.save(subscription);
-//                quartzConfig.scheduleAutoBillingJob(subscription.getId(), subscription.getEndDate());
             }
             return success;
         } catch (Exception e) {
