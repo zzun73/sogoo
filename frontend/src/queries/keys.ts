@@ -36,11 +36,12 @@ const keys = {
   ],
   getTodaySales: (storeId: StoreId) => [...keys.store(), "todaySales", storeId],
   getReviewList: (storeId: StoreId) => [...keys.store(), "reviewList", storeId],
-  getProductReview: (storeId: StoreId, foodId: FoodId) => [
+  getProductReview: (storeId: StoreId, foodId: FoodId, page: PageNumber) => [
     ...keys.store(),
     "productReview",
     storeId,
     foodId,
+    page,
   ],
   getAllMenus: (storeId: StoreId) => [...keys.member(), "allMenus", storeId],
   getStoreDetail: (storeId: StoreId) => [

@@ -143,11 +143,16 @@ const useGetReviewList = (storeId: StoreId) => {
  * 판매자 마이페이지(상품 리뷰)
  * @param storeId 가게 id
  * @param foodId 상품 id, -1일때 전체 리뷰
+ * @param page 페이지 번호
  */
-const useGetProductReview = (storeId: StoreId, foodId: FoodId) => {
+const useGetProductReview = (
+  storeId: StoreId,
+  foodId: FoodId,
+  page: PageNumber
+) => {
   const { data } = useQuery({
-    queryKey: keys.getProductReview(storeId, foodId),
-    queryFn: () => sogoo.getProductReview(storeId, foodId),
+    queryKey: keys.getProductReview(storeId, foodId, page),
+    queryFn: () => sogoo.getProductReview(storeId, foodId, page),
   });
 
   const reviews = data?.data || null;

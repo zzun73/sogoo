@@ -114,10 +114,15 @@ export default {
    * 판매자 마이페이지(상품 리뷰)
    * @param storeId 가게 id
    * @param foodId 상품 id
+   * @param page 페이지 번호
    */
-  getProductReview: async (storeId: StoreId, foodId: FoodId) => {
+  getProductReview: async (
+    storeId: StoreId,
+    foodId: FoodId,
+    page: PageNumber
+  ) => {
     return axios.get<GetProductReviewResponse>(
-      `/member/seller/detail-review/${storeId}/${foodId}`
+      `/member/seller/detail-review/${storeId}/${foodId}?page=${page}`
     );
   },
 };
