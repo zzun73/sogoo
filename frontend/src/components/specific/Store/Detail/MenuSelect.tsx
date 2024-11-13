@@ -16,7 +16,7 @@ import useRootStore from "../../../../stores";
 import { useGetStoreItems } from "../../../../queries/queries";
 import formatters from "../../../../utils/formatters";
 import { toast } from "react-toastify";
-import ConfirmToast from "../../../common/confirmToast";
+import ConfirmToast from "../../../common/ConfirmToast";
 
 interface MenuSelectProps {
   storeImg: string;
