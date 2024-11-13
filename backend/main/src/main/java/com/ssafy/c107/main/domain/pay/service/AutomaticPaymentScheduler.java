@@ -37,6 +37,7 @@ public class AutomaticPaymentScheduler {
                     // 자동 결제 서비스 호출
                     boolean billingSuccess = tossPaymentsService.executeAutoBilling(
                             memberSubscribe.getMember().getId(),
+                            memberSubscribe.getSubscribe().getId(),
                             AutoBillingDto.builder()
                                     .customerKey(memberSubscribe.getMember().getUuid())
                                     .amount(memberSubscribe.getSubscribe().getPrice())

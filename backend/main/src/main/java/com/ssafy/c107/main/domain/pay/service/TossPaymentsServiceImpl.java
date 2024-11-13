@@ -115,7 +115,7 @@ public class TossPaymentsServiceImpl implements TossPaymentsService {
 
             // 2. 자동 결제 진행
             AutoBillingDto autoBillingDto = createAutoBillingDto(member, autoBillingRequest);
-            boolean billingSuccess = executeAutoBilling(memberId, autoBillingDto, billingKey);
+            boolean billingSuccess = executeAutoBilling(memberId, autoBillingRequest.getSubscribeId(), autoBillingDto, billingKey);
 
             // 3. 첫 결제 결과 처리
             MemberSubscribe subscription = createOrUpdateSubscription(member, autoBillingRequest.getSubscribeId(), billingKey);
@@ -164,7 +164,7 @@ public class TossPaymentsServiceImpl implements TossPaymentsService {
     }
 
     @Override
-    public boolean executeAutoBilling(Long memberId, AutoBillingDto autoBillingDto, String billingKey) {
+    public boolean executeAutoBilling(Long memberId, Long subscribeId, AutoBillingDto autoBillingDto, String billingKey) {
         Map<String, Object> body = Map.of(
                 "amount", autoBillingDto.getAmount(),
                 "customerKey", autoBillingDto.getCustomerKey(),
@@ -180,7 +180,7 @@ public class TossPaymentsServiceImpl implements TossPaymentsService {
 
             if (success) {
                 // 결제 성공 시 결제 내역 저장 및 다음 결제일 갱신
-                MemberSubscribe subscription = memberSubscribeRepository.findByMember_Id(memberId)
+                MemberSubscribe subscription = memberSubscribeRepository.findByMember_IdAndSubscribe_Id(memberId, subscribeId)
                         .orElseThrow(() -> new RuntimeException("Subscription not found for member: " + memberId));
 
                 SubscribePay subscribePay = SubscribePay.builder().memberSubscribe(subscription).build();
