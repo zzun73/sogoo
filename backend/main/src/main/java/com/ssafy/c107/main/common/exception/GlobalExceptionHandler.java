@@ -13,9 +13,7 @@ import com.ssafy.c107.main.domain.pay.exception.BillingChargeFailedException;
 import com.ssafy.c107.main.domain.pay.exception.ConfirmPaymentFailedException;
 import com.ssafy.c107.main.domain.review.exception.*;
 import com.ssafy.c107.main.domain.store.exception.StoreNotFoundException;
-import com.ssafy.c107.main.domain.subscribe.exception.MemberSubscribeNotFoundException;
-import com.ssafy.c107.main.domain.subscribe.exception.SubscribeNotFoundException;
-import com.ssafy.c107.main.domain.subscribe.exception.SubscribeWeekNotFoundException;
+import com.ssafy.c107.main.domain.subscribe.exception.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -131,6 +129,16 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(OrderCreationFailedException.class)
     public ResponseEntity<String> handleOrderCreationFailedException(OrderCreationFailedException e) {
+        return ResponseEntity.status(e.getStatus()).body(e.getMessage());
+    }
+
+    @ExceptionHandler(CannotCancelAfterEndDateException.class)
+    public ResponseEntity<String> handleCannotCancelAfterEndDateException(CannotCancelAfterEndDateException e) {
+        return ResponseEntity.status(e.getStatus()).body(e.getMessage());
+    }
+
+    @ExceptionHandler(SubscriptionNotFoundForMemberException.class)
+    public ResponseEntity<String> handleSubscriptionNotFoundForMemberException(SubscriptionNotFoundForMemberException e) {
         return ResponseEntity.status(e.getStatus()).body(e.getMessage());
     }
 }
