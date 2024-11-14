@@ -124,47 +124,92 @@ const MenuSelect = ({ storeImg, storeName }: MenuSelectProps) => {
     setStoreName,
   } = useRootStore();
 
+  /**
+   * 장바구니에 상품 담기
+   * @dev 로직 설명
+   * - 장바구니에 상품 없을 때 : 그냥 담기
+   * - 장바구니에 상품이 있을 떄
+   *  - 현재 매장과 일치
+   *    - 개수 추가 후 메뉴 선택 초기화
+   *  - 현재 매장과 불일치
+   *    - 기존 매장 유지 선택 : return으로 종료
+   *    - 초기화 후 상품 추가 선택 : storeId 갱신, 기존 items 초기화 후
+   */
   const goToCart = async () => {
-    // 현재 장바구니에 담긴 상품의 storeId와 비교
+    // 다른 매장의 상품이 있는 경우 처리
     if (storeId && storeId !== currentStoreId) {
-      toast.error("장바구니에는 한 가게의 상품만 담을 수 있습니다.");
+      const confirmResetCart = await ConfirmToast({
+        message:
+          "다른 매장의 상품이 있습니다. 장바구니를 비우고 새로운 상품을 담으시겠습니까?",
+        confirmText: "비우기",
+        cancelText: "취소",
+        toastOptions: {
+          position: "top-center",
+          theme: "light",
+        },
+      });
+
+      if (!confirmResetCart) {
+        return;
+      }
+
+      // 장바구니 초기화
+      setStoreId(null);
+      setStoreName("");
+      setSubscribe(null);
+      setFoodList([]);
+    }
+
+    // 선택된 상품 유효성 검증
+    if (selectedItems.length === 0) {
+      toast.error("선택된 상품이 없습니다.");
       return;
     }
-    // 장바구니에 상품이 없으면 현재 storeId로 설정
-    if (!storeId) {
-      setStoreId(currentStoreId);
-    }
 
-    // 구독 상품 추가
-    const subItem = selectedItems.find((item) => item.category === "subscribe");
-    if (subItem) {
-      if (subscribe) {
-        toast.error("구독 상품은 1개만 선택 가능합니다.");
-        return;
-      } else {
+    try {
+      // 구독 상품 처리
+      const subItem = selectedItems.find(
+        (item) => item.category === "subscribe"
+      );
+      if (subItem) {
+        if (subscribe) {
+          toast.error("구독 상품은 1개만 선택 가능합니다.");
+          return;
+        }
         setSubscribe(subItem);
       }
+
+      // 일반 상품 처리
+      const foodItems = selectedItems.filter(
+        (item) => item.category === "foods"
+      );
+      if (foodItems.length > 0) {
+        setFoodList(foodItems);
+      }
+
       setStoreId(currentStoreId);
-    }
+      setStoreName(storeName);
 
-    // 개별 상품(foodList) 추가
-    const foodItems = selectedItems.filter((item) => item.category === "foods");
-    if (foodItems.length) {
-      setFoodList(foodItems);
-    }
-    setStoreName(storeName);
+      // 장바구니 페이지 이동 확인
+      const confirmGoToCart = await ConfirmToast({
+        message: "장바구니로 이동하시겠습니까?",
+        confirmText: "이동",
+        cancelText: "계속 쇼핑하기",
+        toastOptions: {
+          position: "top-center",
+          theme: "light",
+        },
+      });
 
-    const result = await ConfirmToast({
-      message: "장바구니로 이동하시겠습니까?",
-      confirmText: "이동",
-      cancelText: "취소",
-      toastOptions: {
-        position: "top-center",
-        theme: "light",
-      },
-    });
-    if (result) {
-      navigate("/orders/cart");
+      // 장바구니 이동
+      if (confirmGoToCart) {
+        navigate("/orders/cart");
+      }
+
+      setSelectedItems([]);
+    } catch (error) {
+      toast.error("장바구니 담기에 실패했습니다. 다시 시도해주세요.");
+      console.error("장바구니 담기 실패:", error);
     }
   };
 
