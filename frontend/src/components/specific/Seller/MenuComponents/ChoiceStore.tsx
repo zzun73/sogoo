@@ -29,11 +29,12 @@ const ChoiceStore = () => {
   const stores: StoreInfo[] | undefined = results.stores;
 
   useEffect(() => {
+    if (selectedStoreId) return;
     if (stores && stores.length > 0) {
       const firstStoreId = stores[0].storeId;
       setSelectedStoreId(firstStoreId);
     }
-  }, [stores, setSelectedStoreId]);
+  }, [stores, selectedStoreId, setSelectedStoreId]);
 
   const handleStoreClick = (storeId: number) => {
     setSelectedStoreId(storeId);
