@@ -10,7 +10,7 @@ import org.springframework.data.jpa.repository.Query;
 
 public interface StoreRepository extends JpaRepository<Store, Long> {
 
-    @Query("SELECT s.id, s.name " +
+    @Query("SELECT s " +
             "FROM Store s " +
             "WHERE s.member.id = :memberId " +
             "ORDER BY s.id ASC")
