@@ -256,7 +256,7 @@
 
             // 반찬에 해당하는 리뷰 조회
             Pageable pageable = PageRequest.of(page - 1, 20);
-            List<Review> reviews = reviewRepository.findAllByOrderList_Food_Id(foodId, pageable).getContent();
+            List<Review> reviews = reviewRepository.findAllByOrderList_Food_IdOrderByCreatedAtDesc(foodId, pageable).getContent();
 
             // 리뷰 목록을 Dto로 변환
             List<FoodReviewDto> reviewDtos = reviews.stream()

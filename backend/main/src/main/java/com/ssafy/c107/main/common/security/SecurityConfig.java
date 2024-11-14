@@ -9,6 +9,7 @@ import com.ssafy.c107.main.domain.members.repository.TokenRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.Arrays;
 import java.util.Collections;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -33,6 +34,11 @@ public class SecurityConfig {
     private final AuthenticationConfiguration authenticationConfiguration;
     private final JWTUtil jwtUtil;
     private final MemberRepository memberRepository;
+
+    @Value("${spring.jwt.time.access}")
+    private Long ACCESS_EXPIRE_TIME;
+    @Value("${spring.jwt.time.refresh}")
+    private Long REFRESH_EXPIRE_TIME;
 
     public SecurityConfig(AuthenticationConfiguration authenticationConfiguration,
         JWTUtil jwtUtil, MemberRepository memberRepository) {
@@ -106,7 +112,7 @@ public class SecurityConfig {
         http
             .addFilterAt(
                 new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil,
-                    memberRepository),
+                    memberRepository, ACCESS_EXPIRE_TIME, REFRESH_EXPIRE_TIME),
                 UsernamePasswordAuthenticationFilter.class);
 
         http

@@ -21,10 +21,10 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -41,6 +41,11 @@ public class MemberController {
     private final MemberRepository memberRepository;
     private final JWTUtil jwtUtil;
     private final TokenRepository tokenRepository;
+
+    @Value("${spring.jwt.time.access}")
+    private Long ACCESS_EXPIRE_TIME;
+    @Value("${spring.jwt.time.refresh}")
+    private Long REFRESH_EXPIRE_TIME;
 
     @PostMapping("/email-check")
     public ResponseEntity<?> emailCheck(@RequestBody EmailCheckRequest emailCheckDto) {
@@ -137,10 +142,10 @@ public class MemberController {
                 MemberNotFoundException::new);
 
         //make new JWT
-        String newAccess = jwtUtil.createJwt("access", email, member.getRole(), 600000L,
+        String newAccess = jwtUtil.createJwt("access", email, member.getRole(), ACCESS_EXPIRE_TIME,
             member.getId());
         String newRefresh = jwtUtil.createRefreshToken(member.getId(), "refresh", email,
-            member.getRole(), 86400000L, member.getId());
+            member.getRole(), REFRESH_EXPIRE_TIME, member.getId());
 
         //response
         response.setHeader("Authorization", "Bearer " + newAccess);
