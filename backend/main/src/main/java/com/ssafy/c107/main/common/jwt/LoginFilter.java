@@ -30,14 +30,19 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
     private MemberRepository memberRepository;
     private final JWTUtil jwtUtil;
     private final ObjectMapper objectMapper;
+    private final Long ACCESS_EXPIRE_TIME;
+    private final Long REFRESH_EXPIRE_TIME;
 
     public LoginFilter(AuthenticationManager authenticationManager, JWTUtil jwtUtil,
-        MemberRepository memberRepository) {
+        MemberRepository memberRepository, Long ACCESS_EXPIRE_TIME,
+        Long REFRESH_EXPIRE_TIME) {
         this.authenticationManager = authenticationManager;
         this.jwtUtil = jwtUtil;
         this.memberRepository = memberRepository;
         this.objectMapper = new ObjectMapper();
         setFilterProcessesUrl("/member/login");
+        this.ACCESS_EXPIRE_TIME = ACCESS_EXPIRE_TIME;
+        this.REFRESH_EXPIRE_TIME = REFRESH_EXPIRE_TIME;
     }
 
     @Override
@@ -83,9 +88,9 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
             MemberNotFoundException::new);
 
         //토큰 생성
-        String access = jwtUtil.createJwt("access", email, member.getRole(), 1800000L,
+        String access = jwtUtil.createJwt("access", email, member.getRole(), ACCESS_EXPIRE_TIME,
             member.getId());
-        String refresh = jwtUtil.createRefreshToken(member.getId(),"refresh", email, member.getRole(), 86400000L,
+        String refresh = jwtUtil.createRefreshToken(member.getId(),"refresh", email, member.getRole(), REFRESH_EXPIRE_TIME,
             member.getId());
 
         //응답 생성
