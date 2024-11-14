@@ -95,7 +95,9 @@ public class SecurityConfig {
                 .requestMatchers("/health-check", "/member/sign-up", "/member/login",
                     "/member/logout", "/member/email-check", "/member/seller-check",
                     "/member/reissue", "/elastic/search", "/store/count", "/store",
-                    "/review/buyer/count/**", "/review/buyer/food/count/**")               //인가부분
+                    "/review/buyer/count/**", "/review/buyer/food/count/**",
+                        "store/count", "/store**"
+                        )               //인가부분
                 .permitAll()
                 .anyRequest().authenticated());
 
