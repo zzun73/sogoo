@@ -14,7 +14,7 @@ public interface StoreRepository extends JpaRepository<Store, Long> {
             "FROM Store s " +
             "WHERE s.member.id = :memberId " +
             "ORDER BY s.id ASC")
-    List<Store> findAllByMember_Id(@Param("memberId") Long memberId);
+    List<Store> findAllByMember_Id(@Param("userId") Long memberId);
 
     @Query("SELECT s "
         + "FROM Store s ")
