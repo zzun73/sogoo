@@ -19,6 +19,14 @@ const SearchResult: React.FC = () => {
 
   console.log(storeData);
 
+  if (!storeData || storeData.length === 0) {
+    return (
+      <div className="w-full flex justify-center">
+        <h1 className="text-xl font-bold">검색 결과가 존재하지 않습니다.</h1>
+      </div>
+    );
+  }
+
   return (
     <div className="w-full flex flex-col items-center">
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-4 gap-y-8">
