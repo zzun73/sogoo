@@ -39,7 +39,7 @@ interface SelectedItem extends Item {
 interface StoreStore {
   selectedStoreId: number | null;
   setSelectedStoreId: (selectedStoreId: SelectedStoreId) => void;
-  searchKeyword: string | null;
+  searchKeyword: string;
   setSearchKeyword: (searchKeyword: MenuName) => void;
 }
 
