@@ -20,6 +20,10 @@ export const createCartSlice: StateCreator<RootState, [], [], CartStore> = (
   // 구독 정보 설정
   setSubscribe: (subInfo) => {
     set((state) => {
+      if (subInfo === null) {
+        return { subscribe: null };
+      }
+
       const newState = { ...state, subscribe: subInfo };
 
       // subscribe와 foodList가 동시에 null인 경우 storeId를 null로 설정
@@ -33,6 +37,10 @@ export const createCartSlice: StateCreator<RootState, [], [], CartStore> = (
   // 장바구니 목록 설정
   setFoodList: (foodList) => {
     set((state) => {
+      if (foodList.length === 0) {
+        return { foodList: null };
+      }
+
       const updatedFoodList = [...(state.foodList ?? [])];
 
       foodList.forEach((newItem) => {
