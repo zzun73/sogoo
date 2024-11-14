@@ -98,7 +98,11 @@ public class MemberController {
         //get refresh token
         String refresh = null;
         Cookie[] cookies = request.getCookies();
-        log.info("{}", cookies.length);
+
+        if (cookies == null || cookies.length == 0) {
+            log.info("No cookies found in request");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("No cookies present in request");
+        }
 
         for (Cookie cookie : cookies) {
             log.info("cookie name: {}", cookie.getName());
