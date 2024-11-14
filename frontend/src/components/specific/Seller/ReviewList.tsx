@@ -51,8 +51,8 @@ const ReviewList = () => {
 
   if (!selectedReviews) {
     return (
-      <div className="mx-[200px]">
-        <h2 className="text-2xl font-shilla text-center my-2">후기 목록</h2>
+      <div className="flex flex-col gap-8 w-[1100px]">
+        <h2 className="font-shilla text-5xl text-center">리뷰 모아 보기</h2>
         <Box className="min-h-[500px] flex justify-center items-center">
           <p className="text-lg font-bold text-center">
             작성된 후기가 없습니다.
@@ -64,8 +64,8 @@ const ReviewList = () => {
 
   const { chart, reviews } = selectedReviews;
   return (
-    <div className="mx-[200px] min-w-[1100px]">
-      <h2 className="text-3xl font-shilla text-center mb-3">후기 목록</h2>
+    <div className="flex flex-col gap-8 w-[1100px]">
+      <h2 className="font-shilla text-5xl text-center">리뷰 모아 보기</h2>
       <Box className="w-full min-h-[400px] flex flex-col justify-center items-center mb-10">
         <FoodSelect
           storeId={selectedStoreId!}
