@@ -12,7 +12,7 @@ const FoodTradeList = ({ foodTrades }: FoodTradeListProps) => {
       <div className="flex flex-col gap-8 w-full p-8 rounded-t-3xl bg-white">
         <h3 className="text-xl font-semibold">반찬 주문</h3>
       </div>
-      <div className="flex flex-col gap-8 w-full h-full p-8 rounded-b-3xl bg-white">
+      <div className="flex flex-col justify-end gap-8 w-full h-full p-8 rounded-b-3xl bg-white">
         <div className="max-h-[600px] p-1 flex flex-col gap-y-2 overflow-y-auto">
           {foodTrades.length > 0 ? (
             foodTrades.map((item, idx) => (
