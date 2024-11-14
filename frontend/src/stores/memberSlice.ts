@@ -11,7 +11,7 @@ const INITIAL_STATE = {
   selectedId: null,
   selectedStoreId: null,
   selectedSubscribeId: null,
-  searchKeyword: null,
+  searchKeyword: "",
 };
 
 export const createMemberSlice: StateCreator<RootState, [], [], MemberStore> = (
