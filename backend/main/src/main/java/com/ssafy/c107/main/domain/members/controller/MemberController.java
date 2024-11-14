@@ -93,18 +93,27 @@ public class MemberController {
 
     @PostMapping("/reissue")
     public ResponseEntity<?> reissue(HttpServletRequest request, HttpServletResponse response) {
+        log.info("=================Request Reissue================================");
+
         //get refresh token
         String refresh = null;
         Cookie[] cookies = request.getCookies();
+        log.info("{}", cookies.length);
+
         for (Cookie cookie : cookies) {
+            log.info("cookie name: {}", cookie.getName());
 
             if (cookie.getName().equals("refresh")) {
+                log.info("token name == refresh refresh token value: {}", cookie.getValue());
 
                 refresh = cookie.getValue();
             }
         }
+        log.info("compare: {}", refresh);
+
 
         if (refresh == null) {
+            log.info("refresh is null");
 
             //response status code
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("refresh token null");
@@ -112,7 +121,9 @@ public class MemberController {
 
         //expired check
         try {
-            jwtUtil.isExpired(refresh);
+            Boolean expired = jwtUtil.isExpired(refresh);
+            log.info("expire check result : {}", expired);
+
         } catch (ExpiredJwtException e) {
 
             //response status code
@@ -121,16 +132,21 @@ public class MemberController {
 
         // 토큰이 refresh인지 확인 (발급시 페이로드에 명시)
         String category = jwtUtil.getCategory(refresh);
+        log.info("category: {}", category);
 
         if (!category.equals("refresh")) {
+            log.info("category: {} ", category);
 
             //response status code
             return new ResponseEntity<>("invalid refresh token", HttpStatus.BAD_REQUEST);
         }
 
         boolean isExist = tokenRepository.existsByRefreshToken(refresh);
+        log.info("isExist: {}", isExist);
 
         if (!isExist) {
+            log.info("refresh token is null");
+
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("invalid refresh token");
         }
 
@@ -150,6 +166,8 @@ public class MemberController {
         //response
         response.setHeader("Authorization", "Bearer " + newAccess);
         response.addCookie(createCookie("refresh", newRefresh));
+        log.info("new refresh token: {}", newRefresh);
+
         return ResponseEntity.ok().build();
     }
 
