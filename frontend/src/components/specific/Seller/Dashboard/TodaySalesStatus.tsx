@@ -1,6 +1,7 @@
 import Box from "../../../common/Box";
 import { useGetTodaySales } from "../../../../queries/queries";
 import { Skeleton } from "@mui/material";
+import { CiCreditCard2 } from "react-icons/ci";
 
 interface TodaySalesProps {
   storeId: number;
@@ -36,8 +37,9 @@ const TodaySalesStatus = ({ storeId }: TodaySalesProps) => {
   }
   if (!list.length) {
     return (
-      <Box className="flex flex-col items-center justify-center w-full h-[300px]">
-        <p className="text-lg font-bold">당일 판매된 상품이 없습니다.</p>
+      <Box className="flex flex-col items-center justify-center gap-4 w-full h-[300px]">
+        <CiCreditCard2 className="text-5xl text-gray-700" />
+        <p className="text-lg text-gray-700">당일 판매된 상품이 없습니다.</p>
       </Box>
     );
   }

@@ -1,6 +1,7 @@
 import Box from "../../../common/Box";
 import { useGetScheduledProduct } from "../../../../queries/queries";
 import { Skeleton } from "@mui/material";
+import { CiDeliveryTruck } from "react-icons/ci";
 interface ScheduledProductsProps {
   storeId: number;
 }
@@ -45,8 +46,11 @@ const ScheduledProducts = ({ storeId }: ScheduledProductsProps) => {
 
   if (!list.length) {
     return (
-      <Box className="flex flex-col items-center justify-center w-full h-[300px]">
-        <p className="text-lg font-bold">다음주 출고 예정인 상품이 없습니다.</p>
+      <Box className="flex flex-col items-center justify-center gap-4 w-full h-[300px]">
+        <CiDeliveryTruck className="text-5xl text-gray-700" />
+        <p className="text-lg text-gray-700">
+          다음주 출고 예정인 상품이 없습니다.
+        </p>
       </Box>
     );
   }

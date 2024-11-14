@@ -48,23 +48,25 @@ const ChoiceStore = () => {
     <div className="min-w-[1100px] flex justify-between items-center py-5">
       <div className="flex space-x-2">
         {stores && stores.length > 0 ? (
-          stores.map((store) => (
-            <Button
-              key={store.storeId}
-              variant={
-                selectedStoreId === store.storeId ? "contained" : "outlined"
-              }
-              sx={{
-                minWidth: "100px",
-                minHeight: "50px",
-              }}
-              onClick={() => handleStoreClick(store.storeId)}
-            >
-              <Typography sx={{ fontSize: "18px", margin: 0 }}>
-                {store.storeName}
-              </Typography>
-            </Button>
-          ))
+          <div className="max-w-[850px] overflow-x-scroll whitespace-nowrap space-x-1">
+            {stores.map((store) => (
+              <Button
+                key={store.storeId}
+                variant={
+                  selectedStoreId === store.storeId ? "contained" : "outlined"
+                }
+                sx={{
+                  minWidth: "100px",
+                  minHeight: "50px",
+                }}
+                onClick={() => handleStoreClick(store.storeId)}
+              >
+                <Typography sx={{ fontSize: "18px", margin: 0 }}>
+                  {store.storeName}
+                </Typography>
+              </Button>
+            ))}
+          </div>
         ) : (
           <></>
         )}

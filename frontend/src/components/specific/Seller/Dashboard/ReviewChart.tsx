@@ -3,6 +3,7 @@ import Chart, { ChartOptions, TooltipItem } from "chart.js/auto";
 import Box from "../../../common/Box";
 import { useGetReviewList } from "../../../../queries/queries";
 import { Skeleton } from "@mui/material";
+import { PiChatCircleTextLight } from "react-icons/pi";
 import { useNavigate } from "react-router-dom";
 
 const SkeletonUI = () => {
@@ -92,8 +93,9 @@ const ReviewChart = ({ storeId }: ReviewChartProps) => {
   const { positiveCnt, negativeCnt } = reviewSummary;
   if (positiveCnt + negativeCnt == 0) {
     return (
-      <Box className="flex flex-col items-center justify-center w-full h-[300px]">
-        <p className="text-lg font-bold">작성된 리뷰가 없습니다.</p>
+      <Box className="flex flex-col items-center justify-center gap-4 w-full h-[300px]">
+        <PiChatCircleTextLight className="text-5xl text-gray-700" />
+        <p className="text-lg text-gray-700">작성된 리뷰가 없습니다.</p>
       </Box>
     );
   }
