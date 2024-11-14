@@ -54,16 +54,16 @@ public class MemberController {
     @PostMapping("/sign-up")
     public ResponseEntity<?> signUp(@RequestBody SignUpRequest signUpDto) {
         memberService.signUp(Member
-            .builder()
-            .name(signUpDto.getName())
-            .birth(signUpDto.getBirth())
-            .phoneNumber(signUpDto.getPhoneNumber())
-            .role(signUpDto.getRole().equals("Buyer") ? MemberRole.BUYER : MemberRole.SELLER)
-            .password(signUpDto.getPassword())
-            .email(signUpDto.getEmail())
-            .withDrawalStatus(WithDrawalStatus.ACTIVE)
-            .address(signUpDto.getAddress())
-            .build());
+                .builder()
+                .name(signUpDto.getName())
+                .birth(signUpDto.getBirth())
+                .phoneNumber(signUpDto.getPhoneNumber())
+                .role(signUpDto.getRole().equals("Buyer") ? MemberRole.BUYER : MemberRole.SELLER)
+                .password(signUpDto.getPassword())
+                .email(signUpDto.getEmail())
+                .withDrawalStatus(WithDrawalStatus.ACTIVE)
+                .address(signUpDto.getAddress())
+                .build());
         return ResponseEntity.ok("회원가입 완료핑");
     }
 
@@ -79,8 +79,8 @@ public class MemberController {
 
     @PutMapping("/update-address")
     public ResponseEntity<?> updateAddress(@RequestBody UpdateAddressRequest updateAddressDto,
-        @AuthenticationPrincipal
-        CustomUserDetails customUserDetails) {
+                                           @AuthenticationPrincipal
+                                           CustomUserDetails customUserDetails) {
         Long userId = customUserDetails.getUserId();
         memberService.changeAddress(userId, updateAddressDto.getAddress());
         return ResponseEntity.ok("주소 변경을 완료했습니다.");
@@ -88,26 +88,31 @@ public class MemberController {
 
     @PostMapping("/reissue")
     public ResponseEntity<?> reissue(HttpServletRequest request, HttpServletResponse response) {
+        log.info("=================Request Reissue================================");
         //get refresh token
         String refresh = null;
         Cookie[] cookies = request.getCookies();
+        log.info("{}", cookies.length);
         for (Cookie cookie : cookies) {
-
+            log.info("cookie name: {}", cookie.getName());
             if (cookie.getName().equals("refresh")) {
-
+                log.info("token name == refresh refresh token value: {}", cookie.getValue());
                 refresh = cookie.getValue();
             }
         }
 
-        if (refresh == null) {
+        log.info("compare: {}", refresh);
 
+        if (refresh == null) {
+            log.info("refresh is null");
             //response status code
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("refresh token null");
         }
 
         //expired check
         try {
-            jwtUtil.isExpired(refresh);
+            Boolean expired = jwtUtil.isExpired(refresh);
+            log.info("expire check result : {}", expired);
         } catch (ExpiredJwtException e) {
 
             //response status code
@@ -116,35 +121,37 @@ public class MemberController {
 
         // 토큰이 refresh인지 확인 (발급시 페이로드에 명시)
         String category = jwtUtil.getCategory(refresh);
-
+        log.info("category: {}", category);
         if (!category.equals("refresh")) {
-
+            log.info("category: {} ", category);
             //response status code
             return new ResponseEntity<>("invalid refresh token", HttpStatus.BAD_REQUEST);
         }
 
         boolean isExist = tokenRepository.existsByRefreshToken(refresh);
-
+        log.info("isExist: {}", isExist);
         if (!isExist) {
+            log.info("refresh token is null");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("invalid refresh token");
         }
 
         String email = jwtUtil.getEmail(refresh);
         String role = jwtUtil.getRole(refresh);
         Member member = memberRepository.findByEmailAndWithDrawalStatus(email,
-                WithDrawalStatus.ACTIVE)
-            .orElseThrow(
-                MemberNotFoundException::new);
+                        WithDrawalStatus.ACTIVE)
+                .orElseThrow(
+                        MemberNotFoundException::new);
 
         //make new JWT
         String newAccess = jwtUtil.createJwt("access", email, member.getRole(), 600000L,
-            member.getId());
+                member.getId());
         String newRefresh = jwtUtil.createRefreshToken(member.getId(), "refresh", email,
-            member.getRole(), 86400000L, member.getId());
+                member.getRole(), 86400000L, member.getId());
 
         //response
         response.setHeader("Authorization", "Bearer " + newAccess);
         response.addCookie(createCookie("refresh", newRefresh));
+        log.info("new refresh token: {}", newRefresh);
         return ResponseEntity.ok().build();
     }
 
