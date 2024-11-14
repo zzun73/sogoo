@@ -95,7 +95,7 @@ const ReviewSummary = ({ summary }: SummaryProps) => {
         </div>
         <div className="flex flex-col gap-y-5">
           <p className="text-xl text-center">AI 리뷰 분석</p>
-          <div className="flex items-center border rounded-lg border-main-400 h-[200px] mx-5 p-3 overflow-y-visible">
+          <div className="flex items-center border rounded-lg border-main-400 h-[200px] mx-5 p-3 overflow-y-scroll">
             <p>
               {aiSummary !== "없음" ? aiSummary : "AI 리뷰를 생성중입니다."}
             </p>
