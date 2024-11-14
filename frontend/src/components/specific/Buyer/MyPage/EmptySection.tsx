@@ -1,4 +1,8 @@
-import { HiOutlineShoppingBag, HiOutlineSparkles, HiOutlineChatBubbleLeftRight } from "react-icons/hi2";
+import {
+  HiOutlineShoppingBag,
+  HiOutlineSparkles,
+  HiOutlineChatBubbleLeftRight,
+} from "react-icons/hi2";
 
 type EmptySectionType = "subscription" | "foodTrade" | "review";
 
@@ -27,7 +31,9 @@ const EmptySection = ({ type }: EmptySectionProps) => {
       description: "맛있는 반찬을 주문해보세요!",
     },
     review: {
-      icon: <HiOutlineChatBubbleLeftRight className="w-12 h-12 text-gray-400" />,
+      icon: (
+        <HiOutlineChatBubbleLeftRight className="w-12 h-12 text-gray-400" />
+      ),
       title: "작성한 리뷰가 없습니다",
       description: "상품 리뷰를 작성하고 반찬 개선에 기여해 보세요!",
     },
