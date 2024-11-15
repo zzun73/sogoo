@@ -42,6 +42,7 @@ public class Store extends BaseEntity {
 
     private String img;
 
+    @Column(columnDefinition = "TEXT")
     private String summary;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)

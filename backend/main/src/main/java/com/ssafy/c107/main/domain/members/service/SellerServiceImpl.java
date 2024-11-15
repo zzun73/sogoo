@@ -476,6 +476,23 @@ public class SellerServiceImpl implements SellerService {
         return summary;
     }
 
+    // ChatModel을 사용해 요약 생성
+    private String createFeedBackWithAI(String content) {
+        // ChatModel을 통해 AI 호출 및 요약 생성
+        String summary = chatClient
+                .prompt()
+                .system("반찬을 시켜먹는 사람들이 쓴 리뷰 입니다. 이 리뷰들을 읽고 " +
+                        "전체적인 피드백을 간단하게 요약 해주세요 " +
+                        "(ex: 무슨 반찬이 너무 짜다 or 무슨 반찬이 양이 적다)")
+                .user(content)
+                .call()
+                .content();
+        if (summary.isEmpty()) {
+            throw new SummeryNotFoundException();
+        }
+        return summary;
+    }
+
     // 매주 월요일마다 모든 상품 리뷰 요약을 갱신하는 스케줄링 메소드
     @Scheduled(cron = "0 0 4 * * MON")
     @Transactional
@@ -509,7 +526,7 @@ public class SellerServiceImpl implements SellerService {
             .collect(Collectors.joining(" "));
 
         // AI 요약 생성
-        String summary = createSummaryWithAI(reviewContent);
+        String summary = createFeedBackWithAI(reviewContent);
 
         // Store 엔티티의 summary 필드에 업데이트
         Store store = storeRepository.findById(storeId)
