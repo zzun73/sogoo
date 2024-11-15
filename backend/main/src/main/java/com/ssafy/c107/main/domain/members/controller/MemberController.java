@@ -59,16 +59,16 @@ public class MemberController {
     @PostMapping("/sign-up")
     public ResponseEntity<?> signUp(@RequestBody SignUpRequest signUpDto) {
         memberService.signUp(Member
-                .builder()
-                .name(signUpDto.getName())
-                .birth(signUpDto.getBirth())
-                .phoneNumber(signUpDto.getPhoneNumber())
-                .role(signUpDto.getRole().equals("Buyer") ? MemberRole.BUYER : MemberRole.SELLER)
-                .password(signUpDto.getPassword())
-                .email(signUpDto.getEmail())
-                .withDrawalStatus(WithDrawalStatus.ACTIVE)
-                .address(signUpDto.getAddress())
-                .build());
+            .builder()
+            .name(signUpDto.getName())
+            .birth(signUpDto.getBirth())
+            .phoneNumber(signUpDto.getPhoneNumber())
+            .role(signUpDto.getRole().equals("Buyer") ? MemberRole.BUYER : MemberRole.SELLER)
+            .password(signUpDto.getPassword())
+            .email(signUpDto.getEmail())
+            .withDrawalStatus(WithDrawalStatus.ACTIVE)
+            .address(signUpDto.getAddress())
+            .build());
         return ResponseEntity.ok("회원가입 완료핑");
     }
 
@@ -84,8 +84,8 @@ public class MemberController {
 
     @PutMapping("/update-address")
     public ResponseEntity<?> updateAddress(@RequestBody UpdateAddressRequest updateAddressDto,
-                                           @AuthenticationPrincipal
-                                           CustomUserDetails customUserDetails) {
+        @AuthenticationPrincipal
+        CustomUserDetails customUserDetails) {
         Long userId = customUserDetails.getUserId();
         memberService.changeAddress(userId, updateAddressDto.getAddress());
         return ResponseEntity.ok("주소 변경을 완료했습니다.");
@@ -102,7 +102,8 @@ public class MemberController {
         log.info("request: {}", request);
         if (cookies == null || cookies.length == 0) {
             log.info("No cookies found in request");
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("No cookies present in request");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body("No cookies present in request");
         }
 
         for (Cookie cookie : cookies) {
@@ -115,7 +116,6 @@ public class MemberController {
             }
         }
         log.info("compare: {}", refresh);
-
 
         if (refresh == null) {
             log.info("refresh is null");
@@ -158,15 +158,13 @@ public class MemberController {
         String email = jwtUtil.getEmail(refresh);
         String role = jwtUtil.getRole(refresh);
         Member member = memberRepository.findByEmailAndWithDrawalStatus(email,
-                        WithDrawalStatus.ACTIVE)
-                .orElseThrow(
-                        MemberNotFoundException::new);
+            WithDrawalStatus.ACTIVE).orElseThrow(MemberNotFoundException::new);
 
         //make new JWT
         String newAccess = jwtUtil.createJwt("access", email, member.getRole(), ACCESS_EXPIRE_TIME,
-                member.getId());
+            member.getId());
         String newRefresh = jwtUtil.createRefreshToken(member.getId(), "refresh", email,
-                member.getRole(), REFRESH_EXPIRE_TIME, member.getId());
+            member.getRole(), REFRESH_EXPIRE_TIME, member.getId());
 
         //response
         response.setHeader("Authorization", "Bearer " + newAccess);
