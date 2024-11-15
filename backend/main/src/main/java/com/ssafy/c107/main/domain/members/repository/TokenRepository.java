@@ -8,6 +8,4 @@ public interface TokenRepository extends CrudRepository<Token, Long> {
     boolean existsByRefreshToken(String refreshToken);
 
     void deleteByRefreshToken(String refreshToken);
-
-    Token findByRefreshToken(String refreshToken);
 }
