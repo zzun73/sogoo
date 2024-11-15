@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
-import { v7 as uuidv7 } from "uuid";
 import {
   loadTossPayments,
   TossPaymentsWidgets,
 } from "@tosspayments/tosspayments-sdk";
 import useRootStore from "../../../../stores";
+import { generateOrderNumber } from "../../../../utils/generateOrderNumber";
 import { toast } from "react-toastify";
 
 const NORMAL_CLIENT_KEY = import.meta.env.VITE_TOSS_PAYMENTS_NORMAL_CLIENT_KEY;
@@ -68,7 +68,7 @@ const TossPaymentsCheckout = ({ orderData }: TossPaymentsCheckoutProps) => {
           <button
             className="w-2/3 px-[22px] py-[11px] rounded-lg bg-[#3282f6] text-[#f9fcff]"
             onClick={async () => {
-              const orderId = uuidv7();
+              const orderId = generateOrderNumber("ORD", 8);
 
               try {
                 await widgets?.requestPayment({

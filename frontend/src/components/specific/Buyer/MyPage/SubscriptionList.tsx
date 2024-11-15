@@ -79,7 +79,7 @@ const SubscriptionList = ({ subscriptions }: SubscriptionListProps) => {
                     <Typography gutterBottom variant="h5" component="div">
                       {item.subscribeName}
                     </Typography>
-                    {item.isSubscriptionActive && (
+                    {item.subscriptionActive && (
                       <button
                         onClick={() => handleCancelSubscribe(item.subscribeId)}
                       >
@@ -92,7 +92,7 @@ const SubscriptionList = ({ subscriptions }: SubscriptionListProps) => {
                   </Typography>
                   <Typography variant="body2" sx={{ color: "text.secondary" }}>
                     구독 상태 |{" "}
-                    {item.isSubscriptionActive
+                    {item.subscriptionActive
                       ? "구독 진행 중"
                       : "구독 취소 예정"}
                   </Typography>
