@@ -96,11 +96,11 @@ const StoreList: React.FC = () => {
           }}
           onClick={handleKeywordReset}
         >
-          검색어 초기화
+          초기화
         </Button>
       </div>
 
-      {searchKeyword === "" ? (
+      {stores || searchKeyword === "" ? (
         <div className="w-full flex flex-col items-center">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-4 gap-y-8">
             {stores?.map((store) => (
