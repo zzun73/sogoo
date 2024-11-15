@@ -3,8 +3,8 @@ import "aos/dist/aos.css";
 import CustomCarousel from "../components/common/Carousel";
 import ImageCard from "../components/specific/LandingPage/ImageCard";
 // 정적 이미지
-import Meat1 from "../assets/landingPage/meat1.jpg";
-import Kimchi1 from "../assets/landingPage/kimchi1.jpg";
+import CarouselImg1 from "../assets/LandingPage/carousel1.jpg"
+import CarouselImg2 from "../assets/LandingPage/carousel2.jpg"
 import Food1 from "../assets/landingPage/food1.png";
 import Food2 from "../assets/landingPage/food2.png";
 import Food3 from "../assets/landingPage/food3.png";
@@ -23,15 +23,15 @@ const LandingPage = () => {
   const carouselItems = [
     {
       id: 1,
-      image: Meat1,
-      title: "한판 떡갈비",
-      description: "흰 쌀밥과 떡갈비 하나면 끼니 하나 뚝딱",
+      image: CarouselImg1,
+      title: "",
+      description: "",
     },
     {
       id: 2,
-      image: Kimchi1,
-      title: "오마이 갓김치",
-      description: "엄마가 갓 무쳐준 김치의 맛을 그대로 느껴보세요!",
+      image: CarouselImg2,
+      title: "",
+      description: "",
     },
   ];
 
