@@ -4,7 +4,7 @@ import Typography from "@mui/material/Typography";
 import RegisterStoreModal from "./RegisterStoreModal";
 import { useGetMyStores } from "../../../../queries/queries";
 import useRootStore from "../../../../stores";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { toast } from "react-toastify";
 
 interface StoreInfo {
@@ -17,6 +17,7 @@ const ChoiceStore = () => {
   const [openStoreModal, setOpenStoreModal] = useState(false);
 
   const navigate = useNavigate();
+  const location = useLocation();
 
   const handleStoreModalClose = () => {
     setOpenStoreModal(false);
@@ -49,6 +50,9 @@ const ChoiceStore = () => {
     }
     setOpenStoreModal(true);
   };
+
+  const isSellerPage = location.pathname === "/seller";
+
   return (
     <div className="min-w-[1100px] flex justify-between items-center py-5">
       <div className="flex space-x-2">
@@ -89,9 +93,11 @@ const ChoiceStore = () => {
           onClose={handleStoreModalClose}
         />
       </div>
-      <Button variant="outlined" onClick={goToBack}>
-        뒤로가기
-      </Button>
+      {!isSellerPage && (
+        <Button variant="outlined" onClick={goToBack}>
+          뒤로가기
+        </Button>
+      )}
     </div>
   );
 };
