@@ -357,6 +357,7 @@ public class SellerServiceImpl implements SellerService {
                     .foodName(foodName)
                     .comment(review.getComment())
                     .memberEmail(memberEmail)
+                    .emotion(review.isEmotion())
                     .build());
             }
             return ReviewDetailResponse
