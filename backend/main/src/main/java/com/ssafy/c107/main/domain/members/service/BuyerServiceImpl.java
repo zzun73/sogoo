@@ -67,7 +67,7 @@ public class BuyerServiceImpl implements BuyerService {
                     .storeId(subscribe.getStore().getId())
                     .storeName(subscribe.getStore().getName())
                     .storeImg(subscribe.getStore().getImg())
-                    .isSubscriptionActive(true)
+                    .subscriptionActive(true)
                     .build());
         }
 
@@ -80,11 +80,12 @@ public class BuyerServiceImpl implements BuyerService {
             subscribes.add(SubscribesResponse
                     .builder()
                     .subscribeId(memberSubscribe.getId())
+                    .storeName(subscribe.getStore().getName())
                     .subscribeName(subscribe.getName())
                     .subscribePrice(subscribe.getPrice())
                     .storeId(subscribe.getStore().getId())
                     .storeImg(subscribe.getStore().getImg())
-                    .isSubscriptionActive(false)
+                    .subscriptionActive(false)
                     .build());
         }
 
