@@ -17,8 +17,6 @@ const TossPaymentsBillingCheckoutSuccess = () => {
   const customerKey = searchParams.get("customerKey")!;
   const authKey = searchParams.get("authKey")!;
   const subscribeId = Number(searchParams.get("subscribeId")!);
-  // const storeId = Number(searchParams.get("storeId")!);
-  // const redirectPath = searchParams.get("redirectPath");
 
   useEffect(() => {
     if (!isConfirmed) {

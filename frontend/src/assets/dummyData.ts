@@ -384,7 +384,7 @@ const buyerMyPageData: BuyerDetailInfo = {
       storeImg:
         "https://cdn.pixabay.com/photo/2019/01/25/21/35/restaurant-3955372_1280.jpg",
       storeName: "마리앤베이커리",
-      isSubscriptionActive: true,
+      subscriptionActive: true,
     },
     {
       subscribeId: 2,
@@ -394,7 +394,7 @@ const buyerMyPageData: BuyerDetailInfo = {
       storeImg:
         "https://cdn.pixabay.com/photo/2019/01/25/21/35/restaurant-3955372_1280.jpg",
       storeName: "그린키친",
-      isSubscriptionActive: true,
+      subscriptionActive: true,
     },
     {
       subscribeId: 3,
@@ -404,7 +404,7 @@ const buyerMyPageData: BuyerDetailInfo = {
       storeImg:
         "https://cdn.pixabay.com/photo/2019/01/25/21/35/restaurant-3955372_1280.jpg",
       storeName: "맛있는도시락",
-      isSubscriptionActive: false,
+      subscriptionActive: false,
     },
   ],
   foodTrades: [
