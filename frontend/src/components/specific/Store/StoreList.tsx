@@ -52,7 +52,7 @@ const StoreList: React.FC = () => {
   if (!stores) {
     return (
       <div className="flex w-full h-full justify-center items-center">
-        <p>등록된 가게가 없습니다.</p>
+        <p className="text-2xl font-bold">등록된 가게가 없습니다.</p>
       </div>
     );
   }
