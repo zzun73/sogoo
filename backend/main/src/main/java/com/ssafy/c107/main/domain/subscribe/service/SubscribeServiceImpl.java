@@ -30,6 +30,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -63,6 +64,7 @@ public class SubscribeServiceImpl implements SubscribeService {
         // 주차별 구독 정보 설정
         List<SubscribeWeekDto> subscribeWeeks = subscribe.getSubscribeWeeks()
                 .stream()
+                .sorted(Comparator.comparing(SubscribeWeek::getRound))
                 .map(subscribeWeek -> {
                     SubscribeWeekDto subscribeWeekDto = new SubscribeWeekDto();
                     subscribeWeekDto.setSubscribeDate(subscribeWeek.getDate().toString());
