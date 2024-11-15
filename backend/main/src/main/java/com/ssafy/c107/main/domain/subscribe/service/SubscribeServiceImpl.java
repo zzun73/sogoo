@@ -30,6 +30,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -48,51 +49,63 @@ public class SubscribeServiceImpl implements SubscribeService {
         if (memberRole.equals("Seller")) {
             throw new InvalidMemberRoleException();
         }
-        // 조인 쿼리를 사용해 구독 상품과 연관된 모든 데이터를 한 번에 가져옴.
-        Subscribe subscribe = subscribeRepository.findSubscribeWithDetailsByStoreId(storeId)
-                .orElseThrow(SubscribeNotFoundException::new);
 
-        // SubscribeDetailDto 생성 및 기본 정보 설정
-        SubscribeDetailDto subscribeDetailDto = new SubscribeDetailDto();
-        subscribeDetailDto.setSubscribeId(subscribe.getId());
-        subscribeDetailDto.setSubscribeName(subscribe.getName());
-        subscribeDetailDto.setSubscribePrice(subscribe.getPrice());
-        subscribeDetailDto.setSubscribeDescription(subscribe.getDescription());
-        subscribeDetailDto.setSubscribeBeforePrice(subscribe.getBeforePrice());
+        // 여러 개의 Subscribe를 가져오도록 수정
+        List<Subscribe> subscribes = subscribeRepository.findSubscribeWithDetailsByStoreId(storeId);
+        if (subscribes.isEmpty()) {
+            throw new SubscribeNotFoundException();
+        }
 
-        // 주차별 구독 정보 설정
-        List<SubscribeWeekDto> subscribeWeeks = subscribe.getSubscribeWeeks()
+        // Subscribe 리스트를 DTO로 변환
+        List<SubscribeDetailDto> subscribeDetailDtos = subscribes
                 .stream()
-                .map(subscribeWeek -> {
-                    SubscribeWeekDto subscribeWeekDto = new SubscribeWeekDto();
-                    subscribeWeekDto.setSubscribeDate(subscribeWeek.getDate().toString());
-                    subscribeWeekDto.setSubscribeRound(subscribeWeek.getRound());
+                .map(subscribe -> {
+                    // SubscribeDetailDto 생성 및 기본 정보 설정
+                    SubscribeDetailDto subscribeDetailDto = new SubscribeDetailDto();
+                    subscribeDetailDto.setSubscribeId(subscribe.getId());
+                    subscribeDetailDto.setSubscribeName(subscribe.getName());
+                    subscribeDetailDto.setSubscribePrice(subscribe.getPrice());
+                    subscribeDetailDto.setSubscribeDescription(subscribe.getDescription());
+                    subscribeDetailDto.setSubscribeBeforePrice(subscribe.getBeforePrice());
 
-                    // 주차별 반찬 정보 설정
-                    List<FoodDto> foodDtos = subscribeWeek.getWeeklyFoods()
+                    // 주차별 구독 정보 설정
+                    List<SubscribeWeekDto> subscribeWeeks = subscribe.getSubscribeWeeks()
                             .stream()
-                            .map(weeklyFood -> {
-                                FoodDto foodDto = new FoodDto();
-                                foodDto.setFoodId(weeklyFood.getFood().getId());
-                                foodDto.setFoodName(weeklyFood.getFood().getName());
-                                foodDto.setFoodDescription(weeklyFood.getFood().getDescription());
-                                foodDto.setFoodImg(weeklyFood.getFood().getImg());
-                                return foodDto;
+                            .sorted(Comparator.comparing(SubscribeWeek::getRound)) // 주차별 정렬
+                            .map(subscribeWeek -> {
+                                SubscribeWeekDto subscribeWeekDto = new SubscribeWeekDto();
+                                subscribeWeekDto.setSubscribeDate(subscribeWeek.getDate().toString());
+                                subscribeWeekDto.setSubscribeRound(subscribeWeek.getRound());
+
+                                // 주차별 반찬 정보 설정
+                                List<FoodDto> foodDtos = subscribeWeek.getWeeklyFoods()
+                                        .stream()
+                                        .map(weeklyFood -> {
+                                            FoodDto foodDto = new FoodDto();
+                                            foodDto.setFoodId(weeklyFood.getFood().getId());
+                                            foodDto.setFoodName(weeklyFood.getFood().getName());
+                                            foodDto.setFoodDescription(weeklyFood.getFood().getDescription());
+                                            foodDto.setFoodImg(weeklyFood.getFood().getImg());
+                                            return foodDto;
+                                        }).collect(Collectors.toList());
+
+                                subscribeWeekDto.setFoods(foodDtos);
+                                return subscribeWeekDto;
                             }).collect(Collectors.toList());
 
-                    subscribeWeekDto.setFoods(foodDtos);
-                    return subscribeWeekDto;
-                }).collect(Collectors.toList());
+                    // 주차별 구독 정보 리스트 설정
+                    subscribeDetailDto.setWeeklyFood(subscribeWeeks);
 
-        // 주차별 구독 정보 리스트 설정
-        subscribeDetailDto.setWeeklyFood(subscribeWeeks);
+                    return subscribeDetailDto;
+                }).collect(Collectors.toList());
 
         // 최종 응답 Dto 생성
         GetSubscribeResponse getSubscribeResponse = new GetSubscribeResponse();
-        getSubscribeResponse.setSubscribes(List.of(subscribeDetailDto));
+        getSubscribeResponse.setSubscribes(subscribeDetailDtos);
 
         return getSubscribeResponse;
     }
+
 
     // 구독 상품 추가
     public void AppendSubscribe(Long storeId, Long memberId, String memberRole, AppendSubscribeRequest requestDto) {
