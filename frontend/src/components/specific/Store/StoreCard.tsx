@@ -22,9 +22,15 @@ const StoreCard = ({ store }: StoreProps) => {
         <CardContent sx={{ padding: "10px" }}>
           <Typography
             variant="body2"
-            sx={{ color: "text.secondary", minHeight: "30px" }}
+            sx={{
+              color: "text.secondary",
+              minHeight: "30px",
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+              whiteSpace: "nowrap",
+            }}
           >
-            <p className="truncate text-base px-1">{description}</p>
+            <span className="truncate text-base px-1">{description}</span>
           </Typography>
         </CardContent>
       </Card>
