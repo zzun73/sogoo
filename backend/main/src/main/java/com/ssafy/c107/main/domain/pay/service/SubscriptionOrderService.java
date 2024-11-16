@@ -3,6 +3,7 @@ package com.ssafy.c107.main.domain.pay.service;
 import com.ssafy.c107.main.common.entity.WeeklyFood;
 import com.ssafy.c107.main.domain.food.repository.WeeklyFoodRepository;
 import com.ssafy.c107.main.domain.members.entity.Member;
+import com.ssafy.c107.main.domain.order.entity.DeliveryStatus;
 import com.ssafy.c107.main.domain.order.entity.Order;
 import com.ssafy.c107.main.domain.order.entity.OrderList;
 import com.ssafy.c107.main.domain.order.entity.OrderType;
@@ -42,10 +43,11 @@ public class SubscriptionOrderService {
         if (!subscribeWeeks.isEmpty()) {
             // 새로운 주문 생성
             Order order = Order.builder()
-                    .orderType(OrderType.SUBSCRIBE)
-                    .member(member)
-                    .store(store)
-                    .build();
+                .orderType(OrderType.SUBSCRIBE)
+                .member(member)
+                .deliveryStatus(DeliveryStatus.DELIVERY_COMPLETED)
+                .store(store)
+                .build();
             orderRepository.save(order);
 
             for (SubscribeWeek subscribeWeek : subscribeWeeks) {

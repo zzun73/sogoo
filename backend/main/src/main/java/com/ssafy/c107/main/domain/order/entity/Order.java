@@ -33,6 +33,9 @@ public class Order extends BaseEntity {
 
     private int price;
 
+    @Enumerated(EnumType.STRING)
+    private DeliveryStatus deliveryStatus;
+
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "member_id")
     private Member member;
@@ -43,11 +46,12 @@ public class Order extends BaseEntity {
 
 
     @Builder
-    public Order(OrderType orderType, int price, Member member, Store store) {
+    public Order(OrderType orderType, int price, Member member, Store store, DeliveryStatus deliveryStatus) {
         this.orderType = orderType;
         this.price = price;
         this.member = member;
         this.store = store;
+        this.deliveryStatus = deliveryStatus;
     }
 
     public void updateTotalPrice(int totalPrice) {

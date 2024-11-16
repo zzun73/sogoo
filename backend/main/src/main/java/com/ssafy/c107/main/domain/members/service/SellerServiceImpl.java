@@ -501,7 +501,8 @@ public class SellerServiceImpl implements SellerService {
     @Override
     public void downloadExcel(Long storeId, Long userId) {
         memberValidator.validStoreAndMember(storeId, userId);
-        
+
+        //해당 가게에
     }
 
     LocalDate getnextMonday() {
