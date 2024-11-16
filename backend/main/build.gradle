@@ -37,6 +37,9 @@ dependencies {
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	implementation 'org.springframework.boot:spring-boot-starter-data-elasticsearch'
 
+//	이메일전송
+	implementation 'org.springframework.boot:spring-boot-starter-mail'
+
 	implementation 'org.ini4j:ini4j:0.5.4'
 	implementation 'commons-codec:commons-codec:1.9'
 

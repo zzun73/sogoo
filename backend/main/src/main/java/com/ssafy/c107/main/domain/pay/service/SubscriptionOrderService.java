@@ -15,6 +15,8 @@ import com.ssafy.c107.main.domain.subscribe.entity.SubscribeWeek;
 import com.ssafy.c107.main.domain.subscribe.repository.SubscribeWeekRepository;
 import java.util.ArrayList;
 import lombok.RequiredArgsConstructor;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,6 +32,7 @@ public class SubscriptionOrderService {
     private final OrderListRepository orderListRepository;
     private final SubscribeWeekRepository subscribeWeekRepository;
     private final WeeklyFoodRepository weeklyFoodRepository;
+    private final JavaMailSender emailSender;
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void createOrderForSubscription(MemberSubscribe memberSubscribe) {
@@ -96,7 +99,25 @@ public class SubscriptionOrderService {
                 for (WeeklyFood weeklyFood : weeklyFoods) {
                     foods.add(weeklyFood.getFood());
                 }
+
+                sendFood(foods, member);
             }
         }
+    }
+
+    void sendFood(List<Food> foods, Member member) {
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setTo(member.getEmail());
+        message.setSubject(member.getName() + "님이 다음주에 받으실 반찬입니다.");
+        message.setText(makeText(foods));
+        emailSender.send(message);
+    }
+
+    String makeText(List<Food> foods) {
+        String text = "다음주 메뉴입니다. \n";
+        for (Food food : foods) {
+            text += food.getName() + " : " + food.getDescription() + "\n";
+        }
+        return text;
     }
 }
