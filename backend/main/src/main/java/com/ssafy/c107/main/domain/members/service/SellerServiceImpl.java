@@ -1,6 +1,7 @@
 package com.ssafy.c107.main.domain.members.service;
 
 import com.ssafy.c107.main.common.entity.WeeklyFood;
+import com.ssafy.c107.main.domain.food.dto.FoodDto;
 import com.ssafy.c107.main.domain.food.entity.Food;
 import com.ssafy.c107.main.domain.food.exception.FoodNotFoundException;
 import com.ssafy.c107.main.domain.food.repository.FoodRepository;
@@ -24,6 +25,7 @@ import com.ssafy.c107.main.domain.order.entity.OrderList;
 import com.ssafy.c107.main.domain.order.entity.OrderType;
 import com.ssafy.c107.main.domain.order.repository.OrderListRepository;
 import com.ssafy.c107.main.domain.order.repository.OrderRepository;
+import com.ssafy.c107.main.domain.review.dto.FoodReviewDto;
 import com.ssafy.c107.main.domain.review.dto.response.ReviewCountResponse;
 import com.ssafy.c107.main.domain.review.entity.Review;
 import com.ssafy.c107.main.domain.review.exception.SummeryNotFoundException;
@@ -285,12 +287,51 @@ public class SellerServiceImpl implements SellerService {
 
         int positiveCnt = reviewRepository.getCount(storeId, true).intValue();
         int negativeCnt = reviewRepository.getCount(storeId, false).intValue();
-        return SellerReviewAllResponse
-            .builder()
-            .storeId(storeId)
-            .positiveCnt(positiveCnt)
-            .negativeCnt(negativeCnt)
-            .build();
+
+        // 긍정률이 높은 음식 리뷰를 가져와서 음식 이름만 추출하고 중복 제거
+        Pageable top5Pageable = PageRequest.of(0, 5);
+        List<Review> positiveReviews = reviewRepository.findTop5PositiveReviewsByStoreId(storeId, top5Pageable);
+        List<String> positiveFoodNames = positiveReviews.stream()
+                .map(review -> review.getOrderList().getFood().getName())
+                .distinct()
+                .collect(Collectors.toList());
+
+        // 중복 제거 후 5개 미만일 경우 추가로 가져와서 5개를 채우기
+        if (positiveFoodNames.size() < 5) {
+            List<Review> additionalReviews = reviewRepository.findTop5PositiveReviewsByStoreId(storeId, PageRequest.of(1, 5));
+            List<String> additionalFoodNames = additionalReviews.stream()
+                    .map(review -> review.getOrderList().getFood().getName())
+                    .filter(name -> !positiveFoodNames.contains(name))
+                    .limit(5 - positiveFoodNames.size())
+                    .collect(Collectors.toList());
+            positiveFoodNames.addAll(additionalFoodNames);
+        }
+
+        // 부정률이 높은 음식 리뷰를 가져와서 음식 이름만 추출하고 중복 제거
+        List<Review> negativeReviews = reviewRepository.findTop5NegativeReviewsByStoreId(storeId, top5Pageable);
+        List<String> negativeFoodNames = negativeReviews.stream()
+                .map(review -> review.getOrderList().getFood().getName())
+                .distinct()
+                .collect(Collectors.toList());
+
+        // 중복 제거 후 5개 미만일 경우 추가로 가져와서 5개를 채우기
+        if (negativeFoodNames.size() < 5) {
+            List<Review> additionalNegativeReviews = reviewRepository.findTop5NegativeReviewsByStoreId(storeId, PageRequest.of(1, 5));
+            List<String> additionalNegativeFoodNames = additionalNegativeReviews.stream()
+                    .map(review -> review.getOrderList().getFood().getName())
+                    .filter(name -> !negativeFoodNames.contains(name))
+                    .limit(5 - negativeFoodNames.size())
+                    .collect(Collectors.toList());
+            negativeFoodNames.addAll(additionalNegativeFoodNames);
+        }
+
+        return SellerReviewAllResponse.builder()
+                .storeId(storeId)
+                .positiveCnt(positiveCnt)
+                .negativeCnt(negativeCnt)
+                .positiveLankList(positiveFoodNames) // 긍정률이 높은 음식 이름 리스트 추가
+                .negativeLankList(negativeFoodNames) // 부정률이 높은 음식 이름 리스트 추가
+                .build();
     }
 
     @Override
@@ -357,6 +398,7 @@ public class SellerServiceImpl implements SellerService {
                     .foodName(foodName)
                     .comment(review.getComment())
                     .memberEmail(memberEmail)
+                    .emotion(review.isEmotion())
                     .build());
             }
             return ReviewDetailResponse

@@ -17,7 +17,7 @@ public interface SubscribeRepository extends JpaRepository<Subscribe, Long> {
             "WHERE st.id = :storeId " +
             "order by sw.round"
     )
-    Optional<Subscribe> findSubscribeWithDetailsByStoreId(Long storeId);
+    List<Subscribe> findSubscribeWithDetailsByStoreId(Long storeId);
 
     List<Subscribe> findAllByStore_Id(Long id);
 

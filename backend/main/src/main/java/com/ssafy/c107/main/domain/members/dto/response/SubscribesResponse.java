@@ -13,5 +13,5 @@ public class SubscribesResponse {
     private Long storeId;
     private String storeName;
     private String storeImg;
-    private boolean isSubscriptionActive;
+    private boolean subscriptionActive;
 }

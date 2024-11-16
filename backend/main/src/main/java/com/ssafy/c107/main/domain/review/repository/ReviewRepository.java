@@ -83,4 +83,10 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
         + "ORDER BY r.createdAt DESC")
     Page<Review> findReviewByStoreIdAndFoodId(@Param("storeId") Long storeId,
         @Param("foodId") Long foodId, Pageable pageable);
+
+    @Query("SELECT r FROM Review r JOIN FETCH r.orderList ol JOIN FETCH ol.food f JOIN FETCH ol.order o JOIN FETCH o.store s WHERE s.id = :storeId ORDER BY r.positive DESC")
+    List<Review> findTop5PositiveReviewsByStoreId(@Param("storeId") Long storeId, Pageable pageable);
+
+    @Query("SELECT r FROM Review r JOIN FETCH r.orderList ol JOIN FETCH ol.food f JOIN FETCH ol.order o JOIN FETCH o.store s WHERE s.id = :storeId ORDER BY r.negative DESC")
+    List<Review> findTop5NegativeReviewsByStoreId(@Param("storeId") Long storeId, Pageable pageable);
 }
