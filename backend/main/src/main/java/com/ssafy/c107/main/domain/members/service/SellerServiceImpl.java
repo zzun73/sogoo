@@ -498,6 +498,12 @@ public class SellerServiceImpl implements SellerService {
         }
     }
 
+    @Override
+    public void downloadExcel(Long storeId, Long userId) {
+        memberValidator.validStoreAndMember(storeId, userId);
+        
+    }
+
     LocalDate getnextMonday() {
         LocalDate today = LocalDate.now();
         return today.with(TemporalAdjusters.next(DayOfWeek.MONDAY));

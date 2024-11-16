@@ -29,4 +29,6 @@ public interface SellerService {
     FoodListResponse getAllFood(Long storeId, Long userId);
 
     ReviewCountResponse getProductReviewCount(Long storeId, Long userId, Long foodId);
+
+    void downloadExcel(Long storeId, Long userId);
 }
