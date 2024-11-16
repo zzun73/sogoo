@@ -112,4 +112,14 @@ public class SellerController {
         Long userId = customUserDetails.getUserId();
         return ResponseEntity.ok(sellerService.getAllFood(storeId, userId));
     }
+
+    @GetMapping("/download/{storeId}")
+    public ResponseEntity<?> downloadExcel(@PathVariable Long storeId,
+        @AuthenticationPrincipal CustomUserDetails customUserDetails) {
+        if (!customUserDetails.getUserRole().getRole().equals("SELLER")) {
+            throw new InvalidMemberRoleException();
+        }
+        Long userId = customUserDetails.getUserId();
+        return null;
+    }
 }
