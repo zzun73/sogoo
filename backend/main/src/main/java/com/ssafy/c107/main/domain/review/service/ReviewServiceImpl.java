@@ -136,15 +136,20 @@
                     double openAiResult = openAiFuture.get();
 
                     double finalPositiveRate = (openAiResult * 0.7) + (kobertResult * 0.3);
+                    double finalNegativeRate = 100.0 - finalPositiveRate;
                     boolean emotion = finalPositiveRate >= 50.0;
 
                     log.info("최종 긍정 확률: {}%", finalPositiveRate);
+                    log.info("최종 부정 확률: {}%", finalNegativeRate);
+
                     String commentText = badWordFiltering.change(createReviewInfoRequest.getComment());
                     Review review = Review.builder()
                             .orderList(orderList)
                             .comment(commentText)
                             .img(S3imageUrl)
                             .emotion(emotion)
+                            .positive(finalPositiveRate)
+                            .negative(finalNegativeRate)
                             .build();
 
                     reviewRepository.save(review);
@@ -157,6 +162,7 @@
                 }
             });
         }
+
 
         // 매일 새벽 4시에 AI 요약 생성 및 저장
         @Scheduled(cron = "0 0 4 * * *")
@@ -318,8 +324,13 @@
 
         // OpenAI 응답에서 긍정 비율을 추출하는 메서드 예시
         private Double extractPositiveRateFromSummary(String summary) {
-            // 예를 들어 summary가 "긍정 70%" 같은 형식이라면 숫자만 추출하는 로직
-            String percentageString = summary.replaceAll("[^0-9]", "");
-            return Double.parseDouble(percentageString);
+            try {
+                // 예: "긍정: 92.3%" 형태의 문자열에서 숫자 부분만 추출
+                String percentageString = summary.replaceAll("[^0-9\\.]", ""); // 소수점을 포함한 숫자만 남김
+                return Double.parseDouble(percentageString);
+            } catch (NumberFormatException e) {
+                log.error("긍정 비율 파싱 중 오류 발생: {}", e.getMessage());
+                throw new ReviewAnalysisProcessingException(); // 적절한 예외를 던져서 문제 발생 시 처리
+            }
         }
     }
