@@ -27,6 +27,7 @@ const SubscribeDetail: React.FC = () => {
             id="subscribeDetailDescription"
             label="상품 설명"
             value={itemDetailInfo.subscribeDescription}
+            InputLabelProps={{ shrink: true }}
             slotProps={{
               input: {
                 readOnly: true,
