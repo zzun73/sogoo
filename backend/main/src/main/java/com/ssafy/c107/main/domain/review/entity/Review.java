@@ -35,15 +35,21 @@ public class Review extends BaseEntity {
 
     private boolean emotion;
 
+    private Double positive;
+
+    private Double negative;
+
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "list_id")
     private OrderList orderList;
 
     @Builder
-    public Review(String comment, String img, boolean emotion, OrderList orderList) {
+    public Review(String comment, String img, boolean emotion, OrderList orderList,Double positive, Double negative) {
         this.comment = comment;
         this.img = img;
         this.emotion = emotion;
         this.orderList = orderList;
+        this.positive = positive;
+        this.negative = negative;
     }
 }
