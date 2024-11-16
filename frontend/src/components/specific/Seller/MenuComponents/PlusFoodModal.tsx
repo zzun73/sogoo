@@ -65,6 +65,21 @@ const PlusFoodModal: React.FC<PlusFoodProps> = ({
     event.preventDefault();
   };
 
+  const handleAddFood = (food: FoodInfo) => {
+    if (selectedFoods.length >= 3) {
+      toast.error("한 주차에 상품은 최대 3개까지만 등록할 수 있습니다.");
+      return;
+    }
+
+    if (!selectedFoods.some((selected) => selected.foodId === food.foodId)) {
+      setSelectedFoods((prev) => [...prev, food]);
+
+      setFoods((prevFoods) =>
+        prevFoods.filter((f) => f.foodId !== food.foodId)
+      );
+    }
+  };
+
   const handleRemoveSelectedFood = (foodId: number) => {
     const food = selectedFoods.find((f) => f.foodId === foodId);
     if (food) {
@@ -118,6 +133,7 @@ const PlusFoodModal: React.FC<PlusFoodProps> = ({
             key={food.foodId}
             draggable
             onDragStart={(event) => handleDragStart(event, food)}
+            onClick={() => handleAddFood(food)}
             className="flex items-center w-full h-30 border border-slate-400 rounded mb-3 px-3"
           >
             <img
