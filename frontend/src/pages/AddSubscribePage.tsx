@@ -203,7 +203,18 @@ const AddSubscribe: React.FC = () => {
             id="addSubscribePrice"
             label="판매가"
             variant="outlined"
-            onChange={(e) => setSubscribePrice(Number(e.target.value))}
+            value={subscribePrice}
+            onChange={(e) => {
+              const inputPrice = Number(e.target.value);
+              if (inputPrice > subscribeBeforePrice) {
+                toast.warn(
+                  "판매가는 원가를 초과할 수 없습니다. 원가로 설정됩니다."
+                );
+                setSubscribePrice(subscribeBeforePrice);
+              } else {
+                setSubscribePrice(inputPrice);
+              }
+            }}
             sx={{ width: "100%", marginBottom: "20px" }}
           />
           <Button
