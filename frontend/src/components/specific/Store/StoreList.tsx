@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import StoreCard from "./StoreCard";
 import { useGetStoreCounts, useGetStoreList } from "../../../queries/queries";
 import Button from "@mui/material/Button";
@@ -8,9 +8,11 @@ import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
 import { toast } from "react-toastify";
 import SearchResult from "./Detail/SearchResult";
+import RecommendStoreModal from "./RecommendedStoreModal";
 
 const StoreList: React.FC = () => {
   const [nowStorePage, setNowStorePage] = useState<number>(1);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const { searchKeyword, setSearchKeyword } = useRootStore();
 
@@ -21,6 +23,12 @@ const StoreList: React.FC = () => {
   const totalPageCount = storeCount ? Math.ceil(storeCount / 20) : 1;
 
   const [searchInfo, setSearchInfo] = useState<string>(searchKeyword);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setIsModalOpen((prev) => !prev);
+    }, 3000);
+  }, []);
 
   const handleSearch = () => {
     if (searchInfo === "") {
@@ -59,6 +67,10 @@ const StoreList: React.FC = () => {
 
   return (
     <div className="w-full flex flex-col justify-center items-center">
+      <RecommendStoreModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+      />
       <div className="w-11/12 flex justify-between items-center mb-10">
         <div className="w-5/6 flex justify-center items-center">
           <TextField
