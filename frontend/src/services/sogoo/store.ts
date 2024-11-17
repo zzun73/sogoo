@@ -57,4 +57,12 @@ export default {
   getStoreCounts: async () => {
     return axios.get<StoreCountResult>(`/store/count`);
   },
+
+  /**
+   * 베스트 & 워스트 Top 5 랭킹 리스트 불러오기
+   * @param storeId 가게 id
+   */
+  getMenuRankList: async (storeId: StoreId) => {
+    return axios.get<MenuRankList>(`/member/seller/store-review/${storeId}`);
+  },
 };

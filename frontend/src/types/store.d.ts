@@ -66,4 +66,12 @@ interface StoreCountResult {
   storeCount?: number | null;
 }
 
+interface MenuRankList {
+  storeId: number;
+  positiveCnt: number;
+  negativeCnt: number;
+  positiveLankList: FoodName[];
+  negativeLankList: FoodName[];
+}
+
 type RootState = MemberStore & CartStore & StoreStore & SubscribeStore;
