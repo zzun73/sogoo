@@ -105,6 +105,11 @@ const keys = {
     storeId,
     foodId,
   ],
+  getMenuRankList: (storeId: StoreId) => [
+    ...keys.store(),
+    "menuRankList",
+    storeId,
+  ],
 };
 
 export default keys;

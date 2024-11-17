@@ -369,6 +369,20 @@ const useGetSellerMenuReviewCounts = (storeId: StoreId, foodId: FoodId) => {
   return reviewCount;
 };
 
+/**
+ * 베스트 & 워스트 Top 5 랭킹 리스트 불러오기
+ * @param storeId 가게 id
+ */
+const useGetMenuRankList = (storeId: StoreId) => {
+  const { data } = useQuery({
+    queryKey: keys.getMenuRankList(storeId),
+    queryFn: () => sogoo.getMenuRankList(storeId),
+  });
+
+  const rankList = data ? data.data : null;
+  return rankList;
+};
+
 export {
   useCheckEmail,
   useCheckSeller,
@@ -397,4 +411,5 @@ export {
   useGetBuyerAllReviewCounts,
   useGetBuyerSelectedReviewCounts,
   useGetSellerMenuReviewCounts,
+  useGetMenuRankList,
 };
