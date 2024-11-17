@@ -82,9 +82,14 @@ const SalesOverview = ({ storeId }: SalesOverviewProps) => {
             <p className="text-xl font-bold">판매 현황</p>
             <p className="text-sm text-gray-500">기준일 | {currentDate}</p>
           </div>
-          <Button onClick={handleNavigate} variant="contained" size="small">
-            판매 상품 관리
-          </Button>
+          <div className="space-x-3">
+            <Button variant="contained" size="small">
+              출고 물품 빼기
+            </Button>
+            <Button onClick={handleNavigate} variant="contained" size="small">
+              판매 상품 관리
+            </Button>
+          </div>
         </div>
       </div>
       <div className="flex flex-row mx-2 justify-between gap-x-3 h-20">
