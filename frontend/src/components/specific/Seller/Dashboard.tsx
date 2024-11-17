@@ -3,6 +3,7 @@ import MonthlySales from "./Dashboard/MonthlySales";
 import ScheduledProducts from "./Dashboard/ScheduledProduct";
 import TodaySalesStatus from "./Dashboard/TodaySalesStatus";
 import ReviewChart from "./Dashboard/ReviewChart";
+import BestAndWorst from "./Dashboard/BestAndWorst";
 import useRootStore from "../../../stores";
 
 const Dashboard: React.FC = () => {
@@ -26,7 +27,14 @@ const Dashboard: React.FC = () => {
         </div>
         <div className="grid grid-cols-2 gap-4 w-full">
           <TodaySalesStatus storeId={selectedStoreId} />
-          <ReviewChart storeId={selectedStoreId} />
+          <div className="flex w-full space-x-4">
+            <div className="w-3/5">
+              <ReviewChart storeId={selectedStoreId} />
+            </div>
+            <div className="w-2/5">
+              <BestAndWorst storeId={selectedStoreId} />
+            </div>
+          </div>
         </div>
       </div>
     </div>
