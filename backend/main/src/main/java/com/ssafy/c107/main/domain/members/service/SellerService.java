@@ -9,6 +9,7 @@ import com.ssafy.c107.main.domain.members.dto.response.SellerMenuResponse;
 import com.ssafy.c107.main.domain.members.dto.response.SellerReviewAllResponse;
 import com.ssafy.c107.main.domain.members.dto.response.TodaySalesResponse;
 import com.ssafy.c107.main.domain.review.dto.response.ReviewCountResponse;
+import java.io.IOException;
 
 public interface SellerService {
 
@@ -30,5 +31,5 @@ public interface SellerService {
 
     ReviewCountResponse getProductReviewCount(Long storeId, Long userId, Long foodId);
 
-    void downloadExcel(Long storeId, Long userId);
+    byte[] downloadExcel(Long storeId, Long userId) throws IOException;
 }

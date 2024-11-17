@@ -46,7 +46,8 @@ public class Order extends BaseEntity {
 
 
     @Builder
-    public Order(OrderType orderType, int price, Member member, Store store, DeliveryStatus deliveryStatus) {
+    public Order(OrderType orderType, int price, Member member, Store store,
+        DeliveryStatus deliveryStatus) {
         this.orderType = orderType;
         this.price = price;
         this.member = member;
@@ -56,5 +57,9 @@ public class Order extends BaseEntity {
 
     public void updateTotalPrice(int totalPrice) {
         this.price = totalPrice;
+    }
+
+    public void deliverSuccess() {
+        this.deliveryStatus = DeliveryStatus.DELIVERY_COMPLETED;
     }
 }
