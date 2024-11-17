@@ -107,9 +107,9 @@ const ReviewChart = ({ storeId }: ReviewChartProps) => {
     <Box className="relative flex flex-col w-full h-[300px] gap-y-3">
       <button
         onClick={goToReviewList}
-        className="text-sm font-bold absolute top-5 right-5"
+        className="text-sm font-bold absolute top-5 right-5 border-2 border-slate-400 rounded px-1"
       >
-        전체 리뷰 보기
+        전체 리뷰
       </button>
       <p className="text-xl text-center font-bold">리뷰 감정 분석</p>
       <div className="flex h-[200px] items-center">
