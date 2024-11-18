@@ -8,6 +8,10 @@ import { useNavigate } from "react-router-dom";
 import { useGetSalesOverview } from "../../../../queries/queries";
 import { Skeleton } from "@mui/material";
 
+import { useMutation } from "@tanstack/react-query";
+import { AxiosError } from "axios";
+import sogoo from "../../../../services/sogoo";
+
 const SkeletonUI = () => {
   return (
     <Box className="flex flex-col gap-y-4">
@@ -62,6 +66,21 @@ interface SalesOverviewProps {
 
 const SalesOverview = ({ storeId }: SalesOverviewProps) => {
   const navigate = useNavigate();
+
+  const { mutate: handleDownload } = useMutation({
+    mutationFn: (storeId: StoreId) => sogoo.getDeliveryOrdersFile(storeId),
+    onSuccess: async (response) => {
+      if (response == 200) {
+        console.log("다운로드 성공", response);
+      }
+    },
+    onError: (error: AxiosError) => console.error("다운로드 실패", error),
+  });
+
+  const initiateDownloadFile = () => {
+    handleDownload(storeId);
+  };
+
   const overview = useGetSalesOverview(storeId);
   if (!overview) {
     return <SkeletonUI />;
@@ -83,7 +102,11 @@ const SalesOverview = ({ storeId }: SalesOverviewProps) => {
             <p className="text-sm text-gray-500">기준일 | {currentDate}</p>
           </div>
           <div className="space-x-3">
-            <Button variant="contained" size="small">
+            <Button
+              onClick={initiateDownloadFile}
+              variant="contained"
+              size="small"
+            >
               출고 물품 빼기
             </Button>
             <Button onClick={handleNavigate} variant="contained" size="small">
