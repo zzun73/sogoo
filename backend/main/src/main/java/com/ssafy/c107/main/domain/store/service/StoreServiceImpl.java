@@ -93,24 +93,24 @@ public class StoreServiceImpl implements StoreService {
 
         //가게 등록
         Store store = storeRepository.save(Store
-                .builder()
-                .name(addStoreRequest.getName())
-                .address(addStoreRequest.getAddress())
-                .img(imgUrl)
-                .description(addStoreRequest.getDescription())
-                .member(member)
-                .summary("없음")
-                .build());
+            .builder()
+            .name(addStoreRequest.getName())
+            .address(addStoreRequest.getAddress())
+            .img(imgUrl)
+            .description(addStoreRequest.getDescription())
+            .member(member)
+            .summary("없음")
+            .build());
 
         storeSearchRepository.save(StoreSearchDocument
-                .builder()
-                .id(store.getId())
-                .storeName(addStoreRequest.getName())
-                .address(addStoreRequest.getAddress())
-                .img(imgUrl)
-                .description(addStoreRequest.getDescription())
-                .foods(new ArrayList<>())
-                .build());
+            .builder()
+            .id(store.getId())
+            .storeName(addStoreRequest.getName())
+            .address(addStoreRequest.getAddress())
+            .img(imgUrl)
+            .description(addStoreRequest.getDescription())
+            .foods(new ArrayList<>())
+            .build());
     }
 
     @Override
@@ -119,24 +119,24 @@ public class StoreServiceImpl implements StoreService {
         List<Store> stores = storeRepository.findAllByMember_Id(userId);
         for (Store store : stores) {
             result.add(SellerStoreDto
-                    .builder()
-                    .storeId(store.getId())
-                    .storeName(store.getName())
-                    .build());
+                .builder()
+                .storeId(store.getId())
+                .storeName(store.getName())
+                .build());
         }
         return SellerStoresResponse
-                .builder()
-                .stores(result)
-                .build();
+            .builder()
+            .stores(result)
+            .build();
     }
 
     @Override
     public StoreCountResponse getStoreCount() {
         int count = (int) storeRepository.count();
         return StoreCountResponse
-                .builder()
-                .storeCount(count)
-                .build();
+            .builder()
+            .storeCount(count)
+            .build();
     }
 
     @Override
@@ -198,14 +198,30 @@ public class StoreServiceImpl implements StoreService {
         // 가게가 3개 미만인 경우 전체 가게 목록을 가져오기
         if (storeOrderCounts.size() < 3) {
             List<Store> allStores = storeRepository.findAll();
-            for (Store store : allStores) {
-                result.add(StoreDetailDto
+            if (allStores.size() < 3) {
+                result = allStores.subList(0, allStores.size()).stream()
+                    .map(store -> StoreDetailDto
+                        .builder()
+                        .storeId(store.getId())
+                        .storeImg(store.getImg())
+                        .storeDescription(store.getDescription())
+                        .storeName(store.getName())
+                        .build()).toList();
+
+                return StoreRecommendResponse
                     .builder()
-                    .storeId(store.getId())
-                    .storeName(store.getName())
-                    .storeDescription(store.getDescription())
-                    .storeImg(store.getImg())
-                    .build());
+                    .stores(result)
+                    .build();
+            } else {
+                for (Store store : allStores.subList(0, 3)) {
+                    result.add(StoreDetailDto
+                        .builder()
+                        .storeId(store.getId())
+                        .storeName(store.getName())
+                        .storeDescription(store.getDescription())
+                        .storeImg(store.getImg())
+                        .build());
+                }
             }
         } else {
             Map<Long, Long> top3StoreOrderCounts = storeOrderCounts.entrySet().stream()
