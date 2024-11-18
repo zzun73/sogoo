@@ -36,7 +36,18 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
         + "WHERE o.orderType = :orderType " +
         "AND DATE_TRUNC('day', o.createdAt) = DATE_TRUNC('day', CURRENT_TIMESTAMP)"
         + "AND o.store.id = :storeId ")
-    List<Order> findByOrderTypeAndCreatedAtToday(@Param("orderType") OrderType orderType, @Param("storeId") Long storeId);
+    List<Order> findByOrderTypeAndCreatedAtToday(@Param("orderType") OrderType orderType,
+        @Param("storeId") Long storeId);
 
     List<Order> findByStore_IdAndDeliveryStatus(Long storeId, DeliveryStatus deliveryStatus);
+
+    @Query("SELECT DISTINCT o "
+        + "FROM Order o "
+        + "JOIN FETCH o.member m "
+        + "JOIN FETCH o.orderLists ol "
+        + "JOIN FETCH ol.food "
+        + "WHERE o.store.id = :storeId "
+        + "AND o.deliveryStatus = :statuss")
+    List<Order> findOrderWithDetailsForExcel(@Param("storeId") Long storeId,
+        @Param("status") DeliveryStatus status);
 }

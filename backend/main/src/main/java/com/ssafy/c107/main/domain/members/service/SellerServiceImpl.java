@@ -513,25 +513,32 @@ public class SellerServiceImpl implements SellerService {
     }
 
     @Override
-    @Transactional
+    @Transactional(readOnly = true)
     public byte[] downloadExcel(Long storeId, Long userId) throws IOException {
         memberValidator.validStoreAndMember(storeId, userId);
 
         //해당 가게의 배송 전 물품 가져오기
-        List<Order> orders = orderRepository.findByStore_IdAndDeliveryStatus(
+        List<Order> orders = orderRepository.findOrderWithDetailsForExcel(
             storeId, DeliveryStatus.BEFORE_DELIVERY);
 
-        Path desktopPath = Paths.get(System.getProperty("user.home"), "Desktop");
-
         //엑셀에 적기
-        return createExcelBytes(orders);
+        byte[] excelBytes = createExcelBytes(orders);
+
+        updateOrderStatus(orders);
+
+        return excelBytes;
+    }
+
+    @Transactional
+    public void updateOrderStatus(List<Order> orders) {
+        for (Order order : orders) {
+            order.deliverSuccess();
+        }
     }
 
     private byte[] createExcelBytes(List<Order> orders) throws IOException {
-        try (
-            Workbook workbook = new XSSFWorkbook();
-            ByteArrayOutputStream baos = new ByteArrayOutputStream()
-        ) {
+        try (Workbook workbook = new XSSFWorkbook();
+            ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
             Sheet sheet = workbook.createSheet("주문 목록");
 
             // 스타일 설정
@@ -554,27 +561,18 @@ public class SellerServiceImpl implements SellerService {
             int rowNum = 1;
             for (Order order : orders) {
                 Row row = sheet.createRow(rowNum++);
-
-                // 이메일
                 row.createCell(0).setCellValue(order.getMember().getName());
-
-                // 주소
                 row.createCell(1).setCellValue(order.getMember().getAddress());
 
-                // 주문 상품 목록
-                List<OrderList> orderList = orderListRepository.findAllByOrder_Id(order.getId());
-                String orderDetails = orderList.stream()
+                // OrderList는 이미 페치 조인으로 로딩되어 있어야 함
+                String orderDetails = order.getOrderLists().stream()
                     .map(item -> String.format("%s (%d개)",
                         item.getFood().getName(),
                         item.getCount()))
                     .collect(Collectors.joining(", "));
+
                 row.createCell(2).setCellValue(orderDetails);
-
-                // 총 주문금액
                 row.createCell(3).setCellValue(order.getPrice());
-
-                //배송완료로 상태 변환하기
-                order.deliverSuccess();
             }
 
             // 컬럼 너비 자동 조정
@@ -582,7 +580,6 @@ public class SellerServiceImpl implements SellerService {
                 sheet.autoSizeColumn(i);
             }
 
-            // 워크북을 바이트 배열로 변환
             workbook.write(baos);
             return baos.toByteArray();
         }

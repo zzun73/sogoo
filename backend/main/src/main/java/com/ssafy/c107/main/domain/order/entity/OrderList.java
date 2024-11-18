@@ -2,6 +2,7 @@ package com.ssafy.c107.main.domain.order.entity;
 
 import com.ssafy.c107.main.common.entity.BaseEntity;
 import com.ssafy.c107.main.domain.food.entity.Food;
+import com.ssafy.c107.main.domain.store.entity.Store;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -36,6 +37,13 @@ public class OrderList extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "food_id")
     private Food food;
+
+    public void setOrder(Order order) {
+        this.order = order;
+        if (order.getOrderLists().contains(this)) {
+            order.getOrderLists().add(this);
+        }
+    }
 
     @Builder
     public OrderList(int count, int price, Order order, Food food) {
