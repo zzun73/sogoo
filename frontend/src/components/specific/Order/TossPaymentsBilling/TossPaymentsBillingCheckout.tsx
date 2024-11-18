@@ -46,7 +46,7 @@ const TossPaymentsBillingCheckout = ({
         "/orders/billing/success?" +
         `&amount=${orderData?.amount}` +
         `&orderId=${orderId}` +
-        `&orderName=${orderData?.orderName}` +
+        // `&orderName=${orderData?.orderName}` +
         `&subscribeId=${orderData?.subscribeId}`,
       failUrl: window.location.origin + "/orders/fail",
       customerEmail: orderData?.customerEmail,

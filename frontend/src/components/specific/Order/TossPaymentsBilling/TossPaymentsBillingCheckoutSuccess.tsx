@@ -12,7 +12,7 @@ const TossPaymentsBillingCheckoutSuccess = () => {
   const [searchParams] = useSearchParams();
 
   const orderId = searchParams.get("orderId");
-  const orderName = searchParams.get("orderName");
+  // const orderName = searchParams.get("orderName");
   const amount = Number(searchParams.get("amount"));
   const customerKey = searchParams.get("customerKey")!;
   const authKey = searchParams.get("authKey")!;
@@ -115,7 +115,7 @@ const TossPaymentsBillingCheckoutSuccess = () => {
                 {formatters.formatPhoneNumber(memberInfo?.phoneNumber)}
               </span>
             </div>
-            <div className="flex justify-between">
+            {/* <div className="flex justify-between">
               <span className="font-semibold text-[#333d48] text-base">
                 구매 상품명
               </span>
@@ -125,7 +125,7 @@ const TossPaymentsBillingCheckoutSuccess = () => {
               >
                 {orderName}
               </span>
-            </div>
+            </div> */}
             <div className="flex justify-between">
               <span className="font-semibold text-[#333d48] text-base">
                 결제 금액
