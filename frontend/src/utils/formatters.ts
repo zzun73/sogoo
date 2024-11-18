@@ -98,6 +98,14 @@ const formatMonthData = (data: FormatMonthProps | null): number[] => {
   return sortedData;
 };
 
+const formatAgeGroup = (date: string): number => {
+  const birthYear = Number(date.slice(0, 4));
+  const currentDate = new Date();
+  const currentYear = currentDate.getFullYear();
+  const range = Math.floor((currentYear - birthYear + 1) / 10) * 10;
+  return range;
+};
+
 export default {
   formatToDate,
   formatToCurrency,
@@ -105,4 +113,5 @@ export default {
   formatPhoneNumber,
   formatMonthLabels,
   formatMonthData,
+  formatAgeGroup,
 };
