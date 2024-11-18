@@ -25,6 +25,7 @@ interface SignUpForm {
   address: Address;
   role: Role;
   businessNumber: BusinessNumber;
+  range: number;
 }
 
 interface LoginForm {
