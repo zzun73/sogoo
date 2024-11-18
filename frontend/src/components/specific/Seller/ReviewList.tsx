@@ -35,6 +35,7 @@ const ReviewList = () => {
 
   const handleClick = (event: SelectChangeEvent) => {
     setSelectedelectedFoodId(Number(event.target.value));
+    setNowPage(1);
     console.log(Number(event.target.value));
   };
 
