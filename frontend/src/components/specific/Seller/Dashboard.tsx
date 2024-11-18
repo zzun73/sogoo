@@ -17,7 +17,7 @@ const Dashboard: React.FC = () => {
   }
 
   return (
-    <div className="flex flex-col gap-8 mx-[200px] min-w-[1100px] mb-10">
+    <div className="flex flex-col gap-8 mx-[200px] w-[1100px] mb-10">
       <h2 className="font-shilla text-5xl text-center">대시보드</h2>
       <div className="flex flex-col gap-4">
         <SalesOverview storeId={selectedStoreId} />
