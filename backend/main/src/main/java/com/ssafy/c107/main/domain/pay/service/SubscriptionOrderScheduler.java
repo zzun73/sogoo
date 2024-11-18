@@ -29,6 +29,7 @@ public class SubscriptionOrderScheduler {
         for (MemberSubscribe memberSubscribe : activeSubscriptions) {
             try {
                 subscriptionOrderService.createOrderForSubscription(memberSubscribe);
+                subscriptionOrderService.sendEmail(memberSubscribe);
             } catch (Exception e) {
                 // 개별 구독 실패 시 로그 남기기
                 log.error("Failed to create order for subscription: {}", memberSubscribe.getId());
