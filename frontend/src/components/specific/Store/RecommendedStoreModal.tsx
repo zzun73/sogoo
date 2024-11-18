@@ -24,6 +24,17 @@ const RecommendStoreModal = ({
     navigate(`/store/${storeId}`);
   };
 
+  const calculateAgeGroup = (birth?: string): string => {
+    if (!birth) return "알 수 없음";
+    const currentYear = new Date().getFullYear();
+    const birthYear = parseInt(birth.slice(0, 4), 10);
+    const age = currentYear - birthYear;
+    const ageGroup = Math.floor(age / 10) * 10;
+    return `${ageGroup}대`;
+  };
+
+  const age = calculateAgeGroup(memberInfo?.birth ?? "");
+
   if (error) {
     console.error("Error fetching recommended stores:", error);
   }
@@ -32,7 +43,7 @@ const RecommendStoreModal = ({
     <Modal isOpen={isOpen} onClose={onClose}>
       <div className="p-6">
         <h2 className="text-xl font-bold mb-4">
-          {memberInfo && `${memberInfo.name} 님을 위한 `}매장 추천
+          {memberInfo && `${age}를 위한 `}매장 추천
         </h2>
 
         {isLoading ? (
