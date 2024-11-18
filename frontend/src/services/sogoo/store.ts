@@ -67,6 +67,41 @@ export default {
   },
 
   /**
+   * 배달 주문 리스트 출력하기
+   * @param storeId 가게 id
+   */
+  getDeliveryOrdersFile: async (storeId: StoreId) => {
+    try {
+      const response = await axios.get(`/member/seller/download/${storeId}`, {
+        responseType: "blob",
+      });
+
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const a = document.createElement("a");
+      a.href = url;
+
+      const contentDisposition = response.headers["content-disposition"];
+      const fileName = contentDisposition
+        ? decodeURIComponent(
+            contentDisposition.split("filename=")[1].replace(/['"]/g, "")
+          )
+        : "delivery_orders.xlsx";
+
+      a.download = fileName;
+      document.body.appendChild(a);
+      a.click();
+
+      window.URL.revokeObjectURL(url);
+      document.body.removeChild(a);
+
+      return response.status;
+    } catch (error) {
+      console.error("Download error:", error);
+      return error;
+    }
+  };
+
+  /**
    * 사용자 맞춤 추천 매장
    */
   getRecommendedStores: async () => {
