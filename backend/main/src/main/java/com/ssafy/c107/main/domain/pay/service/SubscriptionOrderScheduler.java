@@ -21,7 +21,7 @@ public class SubscriptionOrderScheduler {
     private final SubscriptionOrderService subscriptionOrderService;
 
     // 매주 월요일 오전 9시
-    @Scheduled(cron = "0 0 9 * * MON")
+    @Scheduled(cron = "0 0 4 * * * ")
     public void createWeeklySubscriptionOrders() {
         List<MemberSubscribe> activeSubscriptions = memberSubscribeRepository.findActiveSubscriptions(
                 SubscribeStatus.SUBSCRIBE, PaymentStatus.COMPLETE);
