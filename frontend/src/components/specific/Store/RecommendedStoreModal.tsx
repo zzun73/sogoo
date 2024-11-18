@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import Modal from "../../common/Modal";
+import useRootStore from "../../../stores";
 
 interface RecommendStoreModalProps {
   isOpen: boolean;
@@ -17,6 +18,7 @@ const RecommendStoreModal = ({
   isLoading,
 }: RecommendStoreModalProps) => {
   const navigate = useNavigate();
+  const { memberInfo } = useRootStore();
 
   const goToStoreDetail = (storeId: number) => {
     navigate(`/store/${storeId}`);
@@ -29,7 +31,9 @@ const RecommendStoreModal = ({
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <div className="p-6">
-        <h2 className="text-2xl font-bold mb-4">추천 매장</h2>
+        <h2 className="text-2xl font-bold mb-4">
+          {memberInfo && `${memberInfo.name} 님을 위한 `}매장 추천
+        </h2>
 
         {isLoading ? (
           <div className="flex justify-center items-center h-40">
