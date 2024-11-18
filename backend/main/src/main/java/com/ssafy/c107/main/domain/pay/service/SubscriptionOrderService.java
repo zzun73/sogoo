@@ -109,15 +109,39 @@ public class SubscriptionOrderService {
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(member.getEmail());
         message.setSubject(member.getName() + "님이 다음주에 받으실 반찬입니다.");
-        message.setText(makeText(foods));
+        message.setText(makeHtmlContent(foods));
         emailSender.send(message);
     }
 
-    String makeText(List<Food> foods) {
-        String text = "다음주 메뉴입니다. \n";
+    String makeHtmlContent(List<Food> foods) {
+        StringBuilder html = new StringBuilder();
+        html.append("<!DOCTYPE html>");
+        html.append("<html>");
+        html.append("<head>");
+        html.append("<style>");
+        html.append("table { border-collapse: collapse; width: 100%; }");
+        html.append("th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }");
+        html.append("th { background-color: #f4f4f4; }");
+        html.append("img { max-width: 200px; height: auto; }");
+        html.append("</style>");
+        html.append("</head>");
+        html.append("<body>");
+        html.append("<h2>다음주 메뉴입니다.</h2>");
+        html.append("<table>");
+        html.append("<tr><th>사진</th><th>메뉴명</th><th>설명</th></tr>");
+
         for (Food food : foods) {
-            text += food.getName() + " : " + food.getDescription() + "\n";
+            html.append("<tr>");
+            html.append("<td><img src='").append(food.getImg()).append("' alt='").append(food.getName()).append("'></td>");
+            html.append("<td>").append(food.getName()).append("</td>");
+            html.append("<td>").append(food.getDescription()).append("</td>");
+            html.append("</tr>");
         }
-        return text;
+
+        html.append("</table>");
+        html.append("</body>");
+        html.append("</html>");
+
+        return html.toString();
     }
 }
