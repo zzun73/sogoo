@@ -72,9 +72,6 @@ public class SellerController {
     @GetMapping("/store-review/{storeId}")
     public ResponseEntity<?> getReviewAll(@PathVariable(name = "storeId") Long storeId,
         @AuthenticationPrincipal CustomUserDetails customUserDetails) {
-        if (!customUserDetails.getUserRole().getRole().equals("SELLER")) {
-            throw new InvalidMemberRoleException();
-        }
         Long userId = customUserDetails.getUserId();
         return ResponseEntity.ok(sellerService.getAllReview(storeId, userId));
     }

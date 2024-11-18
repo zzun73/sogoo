@@ -8,5 +8,5 @@ public interface FoodService {
 
     FoodAllResponse findAllFood(Long storeId, String memberRole);
 
-    FoodAllResponse detailFoodAll(Long storeId, String memberRole);
+    FoodAllResponse detailFoodAll(Long storeId);
 }
