@@ -102,7 +102,9 @@ public class SecurityConfig {
                     "/member/logout", "/member/email-check", "/member/seller-check",
                     "/member/reissue", "/elastic/search", "/store/count", "/store",
                     "/review/buyer/count/**", "/review/buyer/food/count/**",
-                        "store/count", "/store**"
+                        "/store/count", "/store**","food/dishes/**","/review/buyer/**",
+                        "/subscribe/all/**","/subscribe/list/**","/member/seller/store-review/**",
+                        "/elastic/**"
                         )               //인가부분
                 .permitAll()
                 .anyRequest().authenticated());

@@ -45,11 +45,7 @@ public class SubscribeServiceImpl implements SubscribeService {
 
     // 반찬가게 상세페이지(구독 상품 목록 조회)
     @Transactional(readOnly = true)
-    public GetSubscribeResponse getSubscribe(Long storeId, String memberRole) {
-        if (memberRole.equals("Seller")) {
-            throw new InvalidMemberRoleException();
-        }
-
+    public GetSubscribeResponse getSubscribe(Long storeId) {
         // 여러 개의 Subscribe를 가져오도록 수정
         List<Subscribe> subscribes = subscribeRepository.findSubscribeWithDetailsByStoreId(storeId);
         if (subscribes.isEmpty()) {
@@ -205,10 +201,7 @@ public class SubscribeServiceImpl implements SubscribeService {
 
     // 반찬가게 상세페이지[구매자용](개별반찬,구독 상품)
     @Transactional(readOnly = true)
-    public AllSubscribeAndFoodResponse allSubscribeAndFood(Long storeId, String memberRole) {
-        if (memberRole.equals("Seller")) {
-            throw new InvalidMemberRoleException();
-        }
+    public AllSubscribeAndFoodResponse allSubscribeAndFood(Long storeId) {
 
         Store store = storeRepository.findById(storeId)
                 .orElseThrow(StoreNotFoundException::new);

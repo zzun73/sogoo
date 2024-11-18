@@ -6,11 +6,11 @@ import com.ssafy.c107.main.domain.subscribe.dto.response.GetSubscribeResponse;
 import com.ssafy.c107.main.domain.subscribe.dto.response.SubscribeDetailResponse;
 
 public interface SubscribeService {
-    GetSubscribeResponse getSubscribe(Long id, String memberRole);
+    GetSubscribeResponse getSubscribe(Long id);
 
     void AppendSubscribe(Long storeId, Long memberId, String memberRole, AppendSubscribeRequest requestDto);
 
     SubscribeDetailResponse detailSubscribe(Long id);
 
-    AllSubscribeAndFoodResponse allSubscribeAndFood(Long storeId, String memberRole);
+    AllSubscribeAndFoodResponse allSubscribeAndFood(Long storeId);
 }

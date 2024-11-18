@@ -82,12 +82,7 @@ public class FoodServiceImpl implements FoodService {
 
     // 반찬가게 상세페이지[구매자용](개별반찬)
     @Transactional(readOnly = true)
-    public FoodAllResponse detailFoodAll(Long storeId, String memberRole) {
-        // 판매자 접근 제한
-        if (memberRole.equals("Seller")) {
-            throw new InvalidMemberRoleException();
-        }
-
+    public FoodAllResponse detailFoodAll(Long storeId) {
         // 반찬 가져오기
         FoodAllResponse response = getAllFood(storeId);
         return response;

@@ -21,9 +21,8 @@ public class SubscribeController {
 
     // 반찬가게 상세페이지(구독 상품 목록 조회)
     @GetMapping("/list/{storeId}")
-    public ResponseEntity<?> getSubscribe(@PathVariable Long storeId,
-                                          @AuthenticationPrincipal CustomUserDetails customUserDetails) {
-        GetSubscribeResponse response = subscribeService.getSubscribe(storeId, customUserDetails.getUserRole().getRole());
+    public ResponseEntity<?> getSubscribe(@PathVariable Long storeId) {
+        GetSubscribeResponse response = subscribeService.getSubscribe(storeId);
         return ResponseEntity.ok(response);
     }
 
@@ -45,9 +44,8 @@ public class SubscribeController {
 
     // 반찬가게 상세페이지[구매자용](개별반찬,구독 상품)
     @GetMapping("/all/{storeId}")
-    public ResponseEntity<?> allSubscribeAndFood(@PathVariable Long storeId,
-                                                 @AuthenticationPrincipal CustomUserDetails customUserDetails) {
-        AllSubscribeAndFoodResponse response = subscribeService.allSubscribeAndFood(storeId, customUserDetails.getUserRole().getRole());
+    public ResponseEntity<?> allSubscribeAndFood(@PathVariable Long storeId) {
+        AllSubscribeAndFoodResponse response = subscribeService.allSubscribeAndFood(storeId);
         return ResponseEntity.ok(response);
     }
 }

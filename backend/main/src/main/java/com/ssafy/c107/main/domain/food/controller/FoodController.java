@@ -37,9 +37,8 @@ public class FoodController {
 
     // 반찬가게 상세페이지[구매자용](개별반찬)
     @GetMapping("/dishes/{storeId}")
-    public ResponseEntity<?> detailFoodAll(@PathVariable Long storeId,
-                                           @AuthenticationPrincipal CustomUserDetails userDetails) {
-        FoodAllResponse response = foodService.detailFoodAll(storeId, userDetails.getUserRole().getRole());
+    public ResponseEntity<?> detailFoodAll(@PathVariable Long storeId) {
+        FoodAllResponse response = foodService.detailFoodAll(storeId);
         return ResponseEntity.ok(response);
     }
 }
