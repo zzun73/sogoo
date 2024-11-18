@@ -29,4 +29,12 @@ public interface SubscribeWeekRepository extends JpaRepository<SubscribeWeek, Lo
         "WHERE s.id = :subscribeId AND sw.startDate = :startDate")
     List<SubscribeWeek> findBySubscribeIdAndStartDate(@Param("subscribeId") Long subscribeId,
         @Param("startDate") LocalDate startDate);
+
+    @Query("SELECT sw "
+        + "FROM SubscribeWeek sw "
+        + "WHERE sw.round = :round "
+        + "AND sw.subscribe.id = :subscribeId "
+        + "AND EXTRACT(MONTH FROM sw.startDate) = EXTRACT(MONTH FROM CURRENT_DATE) "
+        + "AND EXTRACT(YEAR FROM sw.startDate) = EXTRACT(YEAR FROM CURRENT_DATE)")
+    Optional<SubscribeWeek> findSubscribeWeekRound(@Param("round") int round, @Param("subscribeId") Long subscribeId);
 }
