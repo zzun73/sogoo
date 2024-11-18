@@ -43,8 +43,6 @@ import com.ssafy.c107.main.domain.subscribe.repository.SubscribeRepository;
 import com.ssafy.c107.main.domain.subscribe.repository.SubscribeWeekRepository;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -519,15 +517,9 @@ public class SellerServiceImpl implements SellerService {
     public byte[] downloadExcel(Long storeId, Long userId) throws IOException {
         memberValidator.validStoreAndMember(storeId, userId);
 
-        log.info("들어옴!");
-
         //해당 가게의 배송 전 물품 가져오기
         List<Order> orders = orderRepository.findOrderWithDetailsForExcel(
             storeId, DeliveryStatus.BEFORE_DELIVERY);
-
-        for (Order order : orders) {
-            log.info("order : {}", order.toString());
-        }
 
         //엑셀에 적기
         byte[] excelBytes = createExcelBytes(orders);
@@ -568,7 +560,6 @@ public class SellerServiceImpl implements SellerService {
             // 데이터 입력
             int rowNum = 1;
             for (Order order : orders) {
-                log.info("order : {}", order.toString());
                 Row row = sheet.createRow(rowNum++);
                 row.createCell(0).setCellValue(order.getMember().getName());
                 row.createCell(1).setCellValue(order.getMember().getAddress());
