@@ -117,6 +117,7 @@ public class BuyerServiceImpl implements BuyerService {
                     .build());
 
                 //주문 목록중에 리뷰를 판별해서 넣어줌
+                if (order.getDeliveryStatus() == DeliveryStatus.BEFORE_DELIVERY) continue;
                 Optional<Review> or = reviewRepository.findByOrderList_Id(orderList.getId());
 
                 //리뷰가 써진 경우
