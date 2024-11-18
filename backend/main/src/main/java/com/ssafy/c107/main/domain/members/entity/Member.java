@@ -1,6 +1,9 @@
 package com.ssafy.c107.main.domain.members.entity;
 
 import com.ssafy.c107.main.common.entity.BaseEntity;
+import com.ssafy.c107.main.domain.order.entity.Order;
+import com.ssafy.c107.main.domain.order.entity.OrderList;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -8,9 +11,11 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 
+import java.util.List;
 import java.util.UUID;
 
 import lombok.AccessLevel;
@@ -60,6 +65,16 @@ public class Member extends BaseEntity {
 
     @Column(nullable = false)
     private int range;
+
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
+    private List<Order> orders;
+
+    public void addOrder(Order order) {
+        this.orders.add(order);
+        if (order.getMember() != this) {
+            order.setMember(this);
+        }
+    }
 
     @Builder
     public Member(String name, String email, String password,
