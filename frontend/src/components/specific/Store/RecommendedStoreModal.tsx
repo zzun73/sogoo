@@ -31,7 +31,7 @@ const RecommendStoreModal = ({
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <div className="p-6">
-        <h2 className="text-2xl font-bold mb-4">
+        <h2 className="text-xl font-bold mb-4">
           {memberInfo && `${memberInfo.name} 님을 위한 `}매장 추천
         </h2>
 
