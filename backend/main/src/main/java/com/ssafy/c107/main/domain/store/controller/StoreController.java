@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/store")
 @RequiredArgsConstructor
 public class StoreController {
+
     private final StoreService storeService;
 
     //메인 페이지 조회
@@ -46,7 +47,8 @@ public class StoreController {
     }
 
     @GetMapping("/mystore")
-    public ResponseEntity<?> getMyStore(@AuthenticationPrincipal CustomUserDetails customUserDetails) {
+    public ResponseEntity<?> getMyStore(
+        @AuthenticationPrincipal CustomUserDetails customUserDetails) {
         if (customUserDetails.getUserRole().getRole().equals("Buyer")) {
             throw new InvalidMemberRoleException();
         }
@@ -56,5 +58,11 @@ public class StoreController {
     @GetMapping("/count")
     public ResponseEntity<?> getStoreCount() {
         return ResponseEntity.ok(storeService.getStoreCount());
+    }
+
+    @GetMapping("/recommend")
+    public ResponseEntity<?> getStoreRecommend(@AuthenticationPrincipal CustomUserDetails customUserDetails) {
+        Long userId = customUserDetails.getUserId();
+        return ResponseEntity.ok(storeService.getStoreRecommend());
     }
 }
