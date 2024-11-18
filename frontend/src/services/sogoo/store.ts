@@ -99,7 +99,7 @@ export default {
       console.error("Download error:", error);
       return error;
     }
-  };
+  },
 
   /**
    * 사용자 맞춤 추천 매장
