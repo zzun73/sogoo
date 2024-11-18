@@ -13,14 +13,25 @@ interface SellerReviewProps {
 const ReviewCard = ({ review }: SellerReviewProps) => {
   const { img, memberEmail, foodName, comment, emotion } = review;
 
-  console.log(emotion);
+  const maskEmail = (email: string): string => {
+    const [localPart, domain] = email.split("@");
+    if (localPart.length <= 3) {
+      return `${localPart}@${domain}`;
+    }
+    const visiblePart = localPart.slice(0, 3);
+    const maskedPart = "*".repeat(localPart.length - 3);
+    return `${visiblePart}${maskedPart}@${domain}`;
+  };
+
+  const maskedEmail = maskEmail(memberEmail);
+
   return (
     <Card className="flex flex-row gap-x-3 w-full mb-5 border-2 border-slate-200">
       <div className="flex w-full p-5">
         <img src={img} className="w-24 h-24" />
         <div className="w-full flex justify-between items-center ms-5">
           <div className="w-11/12 flex flex-col justify-evenly items-start ms-5">
-            <p>{memberEmail}</p>
+            <p>{maskedEmail}</p>
             <p className="font-bold">{foodName}</p>
             <p className="text-sm">{comment}</p>
           </div>
