@@ -37,6 +37,9 @@ dependencies {
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	implementation 'org.springframework.boot:spring-boot-starter-data-elasticsearch'
 
+//	이메일전송
+	implementation 'org.springframework.boot:spring-boot-starter-mail'
+
 	implementation 'org.ini4j:ini4j:0.5.4'
 	implementation 'commons-codec:commons-codec:1.9'
 
@@ -53,6 +56,10 @@ dependencies {
 
 	// AI integration
 	implementation "org.springframework.ai:spring-ai-openai-spring-boot-starter:0.8.0-SNAPSHOT"
+
+	//excel
+	implementation 'org.apache.poi:poi:5.2.5'              // Excel 2003 (.xls) 지원
+	implementation 'org.apache.poi:poi-ooxml:5.2.5'        // Excel 2007+ (.xlsx) 지원
 
 	// 욕설 필터링
 	implementation 'io.github.vaneproject:badwordfiltering:1.0.0'

@@ -1,5 +1,6 @@
 package com.ssafy.c107.main.domain.order.repository;
 
+import com.ssafy.c107.main.domain.order.entity.DeliveryStatus;
 import com.ssafy.c107.main.domain.order.entity.Order;
 import com.ssafy.c107.main.domain.order.entity.OrderType;
 import java.time.LocalDateTime;
@@ -35,5 +36,16 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
         + "WHERE o.orderType = :orderType " +
         "AND DATE_TRUNC('day', o.createdAt) = DATE_TRUNC('day', CURRENT_TIMESTAMP)"
         + "AND o.store.id = :storeId ")
-    List<Order> findByOrderTypeAndCreatedAtToday(@Param("orderType") OrderType orderType, @Param("storeId") Long storeId);
+    List<Order> findByOrderTypeAndCreatedAtToday(@Param("orderType") OrderType orderType,
+        @Param("storeId") Long storeId);
+
+    @Query("SELECT DISTINCT o "
+        + "FROM Order o "
+        + "JOIN FETCH o.member m "
+        + "JOIN FETCH o.orderLists ol "
+        + "JOIN FETCH ol.food "
+        + "WHERE o.store.id = :storeId "
+        + "AND o.deliveryStatus = :status")
+    List<Order> findOrderWithDetailsForExcel(@Param("storeId") Long storeId,
+        @Param("status") DeliveryStatus status);
 }
