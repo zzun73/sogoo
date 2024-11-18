@@ -15,6 +15,7 @@ import sogoo from "../../../services/sogoo";
 import { useNavigate } from "react-router-dom";
 import useRootStore from "../../../stores";
 import { toast } from "react-toastify";
+import formatters from "../../../utils/formatters";
 
 // 정규식 패턴 정의
 const emailPattern = /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/;
@@ -133,6 +134,7 @@ const SignUpBox: React.FC = () => {
           address,
           role,
           businessNumber: role === "Seller" ? businessNumber : null,
+          range: formatters.formatAgeGroup(birth),
         };
         handleSignUp(signUpForm);
       }
