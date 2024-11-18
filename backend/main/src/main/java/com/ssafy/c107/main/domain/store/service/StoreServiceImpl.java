@@ -15,9 +15,11 @@ import com.ssafy.c107.main.domain.store.dto.response.StoreCountResponse;
 import com.ssafy.c107.main.domain.store.entity.Store;
 import com.ssafy.c107.main.domain.store.exception.StoreNotFoundException;
 import com.ssafy.c107.main.domain.store.repository.StoreRepository;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
@@ -51,7 +53,7 @@ public class StoreServiceImpl implements StoreService {
             dto.setStoreId(store.getId());
             dto.setName(store.getName());
             dto.setDescription(store.getDescription());
-            dto.setImg(store.getImg());
+            dto.setImg(fileService.getAppropriateFileUrl(store.getImg()));
             return dto;
         }).collect(Collectors.toList());
 
@@ -69,7 +71,7 @@ public class StoreServiceImpl implements StoreService {
         dto.setStoreId(store.getId());
         dto.setName(store.getName());
         dto.setDescription(store.getDescription());
-        dto.setImg(store.getImg());
+        dto.setImg(fileService.getAppropriateFileUrl(store.getImg()));
 
         return dto;
     }
@@ -83,24 +85,24 @@ public class StoreServiceImpl implements StoreService {
 
         //가게 등록
         Store store = storeRepository.save(Store
-            .builder()
-            .name(addStoreRequest.getName())
-            .address(addStoreRequest.getAddress())
-            .img(imgUrl)
-            .description(addStoreRequest.getDescription())
-            .member(member)
-            .summary("없음")
-            .build());
+                .builder()
+                .name(addStoreRequest.getName())
+                .address(addStoreRequest.getAddress())
+                .img(imgUrl)
+                .description(addStoreRequest.getDescription())
+                .member(member)
+                .summary("없음")
+                .build());
 
         storeSearchRepository.save(StoreSearchDocument
-            .builder()
-            .id(store.getId())
-            .storeName(addStoreRequest.getName())
-            .address(addStoreRequest.getAddress())
-            .img(imgUrl)
-            .description(addStoreRequest.getDescription())
-            .foods(new ArrayList<>())
-            .build());
+                .builder()
+                .id(store.getId())
+                .storeName(addStoreRequest.getName())
+                .address(addStoreRequest.getAddress())
+                .img(imgUrl)
+                .description(addStoreRequest.getDescription())
+                .foods(new ArrayList<>())
+                .build());
     }
 
     @Override
@@ -109,23 +111,23 @@ public class StoreServiceImpl implements StoreService {
         List<Store> stores = storeRepository.findAllByMember_Id(userId);
         for (Store store : stores) {
             result.add(SellerStoreDto
-                .builder()
-                .storeId(store.getId())
-                .storeName(store.getName())
-                .build());
+                    .builder()
+                    .storeId(store.getId())
+                    .storeName(store.getName())
+                    .build());
         }
         return SellerStoresResponse
-            .builder()
-            .stores(result)
-            .build();
+                .builder()
+                .stores(result)
+                .build();
     }
 
     @Override
     public StoreCountResponse getStoreCount() {
         int count = (int) storeRepository.count();
         return StoreCountResponse
-            .builder()
-            .storeCount(count)
-            .build();
+                .builder()
+                .storeCount(count)
+                .build();
     }
 }

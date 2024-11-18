@@ -1,6 +1,7 @@
 package com.ssafy.c107.main.domain.members.service;
 
 
+import com.ssafy.c107.main.common.aws.FileService;
 import com.ssafy.c107.main.domain.food.entity.Food;
 import com.ssafy.c107.main.domain.members.dto.BuyerReviewDto;
 import com.ssafy.c107.main.domain.members.dto.response.BuyerResponse;
@@ -42,6 +43,7 @@ public class BuyerServiceImpl implements BuyerService {
     private final OrderRepository orderRepository;
     private final OrderListRepository orderListRepository;
     private final ReviewRepository reviewRepository;
+    private final FileService fileService;
 
     @Override
     public BuyerResponse getBuyerMyPage(Long userid) {
@@ -66,7 +68,7 @@ public class BuyerServiceImpl implements BuyerService {
                     .subscribePrice(subscribe.getPrice())
                     .storeId(subscribe.getStore().getId())
                     .storeName(subscribe.getStore().getName())
-                    .storeImg(subscribe.getStore().getImg())
+                    .storeImg(fileService.getAppropriateFileUrl(subscribe.getStore().getImg()))
                     .subscriptionActive(true)
                     .build());
         }
@@ -84,7 +86,7 @@ public class BuyerServiceImpl implements BuyerService {
                     .subscribeName(subscribe.getName())
                     .subscribePrice(subscribe.getPrice())
                     .storeId(subscribe.getStore().getId())
-                    .storeImg(subscribe.getStore().getImg())
+                    .storeImg(fileService.getAppropriateFileUrl(subscribe.getStore().getImg()))
                     .subscriptionActive(false)
                     .build());
         }
@@ -105,7 +107,7 @@ public class BuyerServiceImpl implements BuyerService {
                         .builder()
                         .foodId(food.getId())
                         .foodName(food.getName())
-                        .foodImg(food.getImg())
+                        .foodImg(fileService.getAppropriateFileUrl(food.getImg()))
                         .price(orderList.getCount() * food.getPrice())
                         .storeId(food.getStore().getId())
                         .storeName(food.getStore().getName())
@@ -122,14 +124,14 @@ public class BuyerServiceImpl implements BuyerService {
                             .builder()
                             .foodId(food.getId())
                             .foodName(food.getName())
-                            .foodImg(food.getImg())
+                            .foodImg(fileService.getAppropriateFileUrl(food.getImg()))
                             .reviewStatus(true)
                             .orderListId(orderList.getId())
                             .review(BuyerReviewDto
                                     .builder()
                                     .reviewComment(review.getComment())
                                     .reviewId(review.getId())
-                                    .reviewImg(review.getImg())
+                                    .reviewImg(fileService.getAppropriateFileUrl(review.getImg()))
                                     .build())
                             .build());
                 } else {
@@ -139,7 +141,7 @@ public class BuyerServiceImpl implements BuyerService {
                                 .builder()
                                 .foodId(food.getId())
                                 .foodName(food.getName())
-                                .foodImg(food.getImg())
+                                .foodImg(fileService.getAppropriateFileUrl(food.getImg()))
                                 .reviewStatus(false)
                                 .orderListId(orderList.getId())
                                 .build());

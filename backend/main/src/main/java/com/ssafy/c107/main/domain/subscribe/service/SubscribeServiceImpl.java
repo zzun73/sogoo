@@ -1,5 +1,6 @@
 package com.ssafy.c107.main.domain.subscribe.service;
 
+import com.ssafy.c107.main.common.aws.FileService;
 import com.ssafy.c107.main.common.entity.WeeklyFood;
 import com.ssafy.c107.main.domain.food.dto.FoodAllDto;
 import com.ssafy.c107.main.domain.food.dto.FoodAllSubscribeDto;
@@ -42,6 +43,7 @@ public class SubscribeServiceImpl implements SubscribeService {
     private final StoreRepository storeRepository;
     private final FoodRepository foodRepository;
     private final SubscribeWeekRepository subscribeWeekRepository;
+    private final FileService fileService;
 
     // 반찬가게 상세페이지(구독 상품 목록 조회)
     @Transactional(readOnly = true)
@@ -85,7 +87,7 @@ public class SubscribeServiceImpl implements SubscribeService {
                                             foodDto.setFoodId(weeklyFood.getFood().getId());
                                             foodDto.setFoodName(weeklyFood.getFood().getName());
                                             foodDto.setFoodDescription(weeklyFood.getFood().getDescription());
-                                            foodDto.setFoodImg(weeklyFood.getFood().getImg());
+                                            foodDto.setFoodImg(fileService.getAppropriateFileUrl(weeklyFood.getFood().getImg()));
                                             return foodDto;
                                         }).collect(Collectors.toList());
 
@@ -234,7 +236,7 @@ public class SubscribeServiceImpl implements SubscribeService {
                     dto.setId(food.getId());
                     dto.setName(food.getName());
                     dto.setPrice(food.getPrice());
-                    dto.setImage(food.getImg());
+                    dto.setImage(fileService.getAppropriateFileUrl(food.getImg()));
 
                     return dto;
                 }).collect(Collectors.toList());

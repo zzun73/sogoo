@@ -1,5 +1,6 @@
 package com.ssafy.c107.main.domain.elasticsearch.service;
 
+import com.ssafy.c107.main.common.aws.FileService;
 import com.ssafy.c107.main.domain.elasticsearch.dto.FoodInfoDetail;
 import com.ssafy.c107.main.domain.elasticsearch.dto.SearchDetail;
 import com.ssafy.c107.main.domain.elasticsearch.dto.response.SearchResponse;
@@ -10,8 +11,10 @@ import com.ssafy.c107.main.domain.food.entity.Food;
 import com.ssafy.c107.main.domain.store.entity.Store;
 import com.ssafy.c107.main.domain.store.repository.StoreRepository;
 import jakarta.transaction.Transactional;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
@@ -26,7 +29,7 @@ public class ElasticSearchServiceImpl implements ElasticSearchService {
 
     private final StoreSearchRepository storeSearchRepository;
     private final StoreRepository storeRepository;
-
+    private final FileService fileService;
 //    @EventListener(ApplicationReadyEvent.class)
 //    @Transactional
 //    void postConstruct() {
@@ -73,20 +76,20 @@ public class ElasticSearchServiceImpl implements ElasticSearchService {
         for (Store store : stores) {
             List<Food> foods = store.getFoods();
             List<FoodInfo> foodInfo = foods.stream().map(food -> FoodInfo.builder()
-                    .foodName(food.getName())
-                    .price(food.getPrice())
-                    .description(food.getDescription())
-                    .build())
-                .toList();
+                            .foodName(food.getName())
+                            .price(food.getPrice())
+                            .description(food.getDescription())
+                            .build())
+                    .toList();
 
             StoreSearchDocument document = StoreSearchDocument.builder()
-                .id(store.getId())
-                .storeName(store.getName())
-                .address(store.getAddress())
-                .description(store.getDescription())
-                .img(store.getImg())
-                .foods(foodInfo)
-                .build();
+                    .id(store.getId())
+                    .storeName(store.getName())
+                    .address(store.getAddress())
+                    .description(store.getDescription())
+                    .img(store.getImg())
+                    .foods(foodInfo)
+                    .build();
 
             storeSearchRepository.save(document);
         }
@@ -97,7 +100,7 @@ public class ElasticSearchServiceImpl implements ElasticSearchService {
         Pageable pageable = PageRequest.of(0, 100);
 
         Page<StoreSearchDocument> searchResult = storeSearchRepository.findByStoreNameOrFoodName(
-            query, pageable);
+                query, pageable);
 
         List<StoreSearchDocument> stores = searchResult.getContent();
 
@@ -105,23 +108,23 @@ public class ElasticSearchServiceImpl implements ElasticSearchService {
 
         for (StoreSearchDocument store : stores) {
             results.add(SearchDetail
-                .builder()
-                .storeId(store.getId())
-                .storeAddress(store.getAddress())
-                .storeDescription(store.getDescription())
-                .storeImg(store.getImg())
-                .storeName(store.getStoreName())
-                .foods(store.getFoods().stream().map(food -> FoodInfoDetail
                     .builder()
-                    .foodDescription(food.getDescription())
-                    .foodPrice(food.getPrice())
-                    .foodName(food.getFoodName())
-                    .build()).toList())
-                .build());
+                    .storeId(store.getId())
+                    .storeAddress(store.getAddress())
+                    .storeDescription(store.getDescription())
+                    .storeImg(store.getImg())
+                    .storeName(store.getStoreName())
+                    .foods(store.getFoods().stream().map(food -> FoodInfoDetail
+                            .builder()
+                            .foodDescription(food.getDescription())
+                            .foodPrice(food.getPrice())
+                            .foodName(food.getFoodName())
+                            .build()).toList())
+                    .build());
         }
         return SearchResponse
-            .builder()
-            .stores(results)
-            .build();
+                .builder()
+                .stores(results)
+                .build();
     }
 }

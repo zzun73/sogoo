@@ -12,8 +12,10 @@ import com.ssafy.c107.main.domain.members.exception.InvalidMemberRoleException;
 import com.ssafy.c107.main.domain.store.entity.Store;
 import com.ssafy.c107.main.domain.store.exception.StoreNotFoundException;
 import com.ssafy.c107.main.domain.store.repository.StoreRepository;
+
 import java.util.List;
 import java.util.stream.Collectors;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -38,31 +40,31 @@ public class FoodServiceImpl implements FoodService {
 
         // 가게 정보 불러오기
         Store store = storeRepository.findById(storeId)
-            .orElseThrow(StoreNotFoundException::new);
+                .orElseThrow(StoreNotFoundException::new);
 
         String S3imageUrl = fileService.saveFile(request.getImg());
 
         // food에 정보 등록
         Food food = Food.builder()
-            .name(request.getFoodName())
-            .price(request.getFoodPrice())
-            .description(request.getFoodDescription())
-            .img(S3imageUrl)
-            .store(store)
-            .build();
+                .name(request.getFoodName())
+                .price(request.getFoodPrice())
+                .description(request.getFoodDescription())
+                .img(S3imageUrl)
+                .store(store)
+                .build();
 
         foodRepository.save(food);
 
         StoreSearchDocument document = storeSearchRepository.findById(store.getId())
-            .orElseThrow(StoreNotFoundException::new);
+                .orElseThrow(StoreNotFoundException::new);
 
         document.addFood(StoreSearchDocument
-            .FoodInfo
-            .builder()
-            .foodName(request.getFoodName())
-            .price(request.getFoodPrice())
-            .description(request.getFoodDescription())
-            .build());
+                .FoodInfo
+                .builder()
+                .foodName(request.getFoodName())
+                .price(request.getFoodPrice())
+                .description(request.getFoodDescription())
+                .build());
 
         storeSearchRepository.save(document);
     }
@@ -97,22 +99,22 @@ public class FoodServiceImpl implements FoodService {
     public FoodAllResponse getAllFood(Long storeId) {
         // 가게 조회
         Store store = storeRepository.findById(storeId)
-            .orElseThrow(StoreNotFoundException::new);
+                .orElseThrow(StoreNotFoundException::new);
 
         // 해당 가게에 포함된 반찬 조회
         List<Food> foods = foodRepository.findByStore(store);
 
         // FoodAllDto로 변환
         List<FoodAllDto> foodAllLists = foods.stream()
-            .map(food -> {
-                FoodAllDto foodAllDto = new FoodAllDto();
-                foodAllDto.setFoodId(food.getId());
-                foodAllDto.setFoodName(food.getName());
-                foodAllDto.setFoodDescription(food.getDescription());
-                foodAllDto.setFoodPrice(food.getPrice());
-                foodAllDto.setFoodImg(food.getImg());
-                return foodAllDto;
-            }).collect(Collectors.toList());
+                .map(food -> {
+                    FoodAllDto foodAllDto = new FoodAllDto();
+                    foodAllDto.setFoodId(food.getId());
+                    foodAllDto.setFoodName(food.getName());
+                    foodAllDto.setFoodDescription(food.getDescription());
+                    foodAllDto.setFoodPrice(food.getPrice());
+                    foodAllDto.setFoodImg(fileService.getAppropriateFileUrl(food.getImg()));
+                    return foodAllDto;
+                }).collect(Collectors.toList());
 
         // FoodAllResponse로 변환
         FoodAllResponse foodAllResponse = new FoodAllResponse();
