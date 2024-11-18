@@ -4,6 +4,7 @@ import com.ssafy.c107.main.common.entity.WeeklyFood;
 import com.ssafy.c107.main.domain.food.entity.Food;
 import com.ssafy.c107.main.domain.food.repository.WeeklyFoodRepository;
 import com.ssafy.c107.main.domain.members.entity.Member;
+import com.ssafy.c107.main.domain.order.entity.DeliveryStatus;
 import com.ssafy.c107.main.domain.order.entity.Order;
 import com.ssafy.c107.main.domain.order.entity.OrderList;
 import com.ssafy.c107.main.domain.order.entity.OrderType;
@@ -50,6 +51,7 @@ public class SubscriptionOrderService {
             Order order = Order.builder()
                 .orderType(OrderType.SUBSCRIBE)
                 .member(member)
+                .deliveryStatus(DeliveryStatus.DELIVERY_COMPLETED)
                 .store(store)
                 .build();
             orderRepository.save(order);

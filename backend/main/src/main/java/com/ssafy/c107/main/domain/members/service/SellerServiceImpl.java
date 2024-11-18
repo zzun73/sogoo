@@ -1,7 +1,6 @@
 package com.ssafy.c107.main.domain.members.service;
 
 import com.ssafy.c107.main.common.entity.WeeklyFood;
-import com.ssafy.c107.main.domain.food.dto.FoodDto;
 import com.ssafy.c107.main.domain.food.entity.Food;
 import com.ssafy.c107.main.domain.food.exception.FoodNotFoundException;
 import com.ssafy.c107.main.domain.food.repository.FoodRepository;
@@ -20,12 +19,12 @@ import com.ssafy.c107.main.domain.members.dto.response.SalesStatusResponse;
 import com.ssafy.c107.main.domain.members.dto.response.SellerMenuResponse;
 import com.ssafy.c107.main.domain.members.dto.response.SellerReviewAllResponse;
 import com.ssafy.c107.main.domain.members.dto.response.TodaySalesResponse;
+import com.ssafy.c107.main.domain.order.entity.DeliveryStatus;
 import com.ssafy.c107.main.domain.order.entity.Order;
 import com.ssafy.c107.main.domain.order.entity.OrderList;
 import com.ssafy.c107.main.domain.order.entity.OrderType;
 import com.ssafy.c107.main.domain.order.repository.OrderListRepository;
 import com.ssafy.c107.main.domain.order.repository.OrderRepository;
-import com.ssafy.c107.main.domain.review.dto.FoodReviewDto;
 import com.ssafy.c107.main.domain.review.dto.response.ReviewCountResponse;
 import com.ssafy.c107.main.domain.review.entity.Review;
 import com.ssafy.c107.main.domain.review.exception.SummeryNotFoundException;
@@ -41,7 +40,10 @@ import com.ssafy.c107.main.domain.subscribe.repository.MemberSubscribeRepository
 import com.ssafy.c107.main.domain.subscribe.repository.SubscribePayRepository;
 import com.ssafy.c107.main.domain.subscribe.repository.SubscribeRepository;
 import com.ssafy.c107.main.domain.subscribe.repository.SubscribeWeekRepository;
-
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -56,9 +58,17 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.FillPatternType;
+import org.apache.poi.ss.usermodel.HorizontalAlignment;
+import org.apache.poi.ss.usermodel.IndexedColors;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -290,48 +300,52 @@ public class SellerServiceImpl implements SellerService {
 
         // 긍정률이 높은 음식 리뷰를 가져와서 음식 이름만 추출하고 중복 제거
         Pageable top5Pageable = PageRequest.of(0, 5);
-        List<Review> positiveReviews = reviewRepository.findTop5PositiveReviewsByStoreId(storeId, top5Pageable);
+        List<Review> positiveReviews = reviewRepository.findTop5PositiveReviewsByStoreId(storeId,
+            top5Pageable);
         List<String> positiveFoodNames = positiveReviews.stream()
-                .map(review -> review.getOrderList().getFood().getName())
-                .distinct()
-                .collect(Collectors.toList());
+            .map(review -> review.getOrderList().getFood().getName())
+            .distinct()
+            .collect(Collectors.toList());
 
         // 중복 제거 후 5개 미만일 경우 추가로 가져와서 5개를 채우기
         if (positiveFoodNames.size() < 5) {
-            List<Review> additionalReviews = reviewRepository.findTop5PositiveReviewsByStoreId(storeId, PageRequest.of(1, 5));
+            List<Review> additionalReviews = reviewRepository.findTop5PositiveReviewsByStoreId(
+                storeId, PageRequest.of(1, 5));
             List<String> additionalFoodNames = additionalReviews.stream()
-                    .map(review -> review.getOrderList().getFood().getName())
-                    .filter(name -> !positiveFoodNames.contains(name))
-                    .limit(5 - positiveFoodNames.size())
-                    .collect(Collectors.toList());
+                .map(review -> review.getOrderList().getFood().getName())
+                .filter(name -> !positiveFoodNames.contains(name))
+                .limit(5 - positiveFoodNames.size())
+                .collect(Collectors.toList());
             positiveFoodNames.addAll(additionalFoodNames);
         }
 
         // 부정률이 높은 음식 리뷰를 가져와서 음식 이름만 추출하고 중복 제거
-        List<Review> negativeReviews = reviewRepository.findTop5NegativeReviewsByStoreId(storeId, top5Pageable);
+        List<Review> negativeReviews = reviewRepository.findTop5NegativeReviewsByStoreId(storeId,
+            top5Pageable);
         List<String> negativeFoodNames = negativeReviews.stream()
-                .map(review -> review.getOrderList().getFood().getName())
-                .distinct()
-                .collect(Collectors.toList());
+            .map(review -> review.getOrderList().getFood().getName())
+            .distinct()
+            .collect(Collectors.toList());
 
         // 중복 제거 후 5개 미만일 경우 추가로 가져와서 5개를 채우기
         if (negativeFoodNames.size() < 5) {
-            List<Review> additionalNegativeReviews = reviewRepository.findTop5NegativeReviewsByStoreId(storeId, PageRequest.of(1, 5));
+            List<Review> additionalNegativeReviews = reviewRepository.findTop5NegativeReviewsByStoreId(
+                storeId, PageRequest.of(1, 5));
             List<String> additionalNegativeFoodNames = additionalNegativeReviews.stream()
-                    .map(review -> review.getOrderList().getFood().getName())
-                    .filter(name -> !negativeFoodNames.contains(name))
-                    .limit(5 - negativeFoodNames.size())
-                    .collect(Collectors.toList());
+                .map(review -> review.getOrderList().getFood().getName())
+                .filter(name -> !negativeFoodNames.contains(name))
+                .limit(5 - negativeFoodNames.size())
+                .collect(Collectors.toList());
             negativeFoodNames.addAll(additionalNegativeFoodNames);
         }
 
         return SellerReviewAllResponse.builder()
-                .storeId(storeId)
-                .positiveCnt(positiveCnt)
-                .negativeCnt(negativeCnt)
-                .positiveLankList(positiveFoodNames) // 긍정률이 높은 음식 이름 리스트 추가
-                .negativeLankList(negativeFoodNames) // 부정률이 높은 음식 이름 리스트 추가
-                .build();
+            .storeId(storeId)
+            .positiveCnt(positiveCnt)
+            .negativeCnt(negativeCnt)
+            .positiveLankList(positiveFoodNames) // 긍정률이 높은 음식 이름 리스트 추가
+            .negativeLankList(negativeFoodNames) // 부정률이 높은 음식 이름 리스트 추가
+            .build();
     }
 
     @Override
@@ -498,6 +512,86 @@ public class SellerServiceImpl implements SellerService {
         }
     }
 
+    @Override
+    @Transactional
+    public byte[] downloadExcel(Long storeId, Long userId) throws IOException {
+        memberValidator.validStoreAndMember(storeId, userId);
+
+        log.info("들어옴!");
+
+        //해당 가게의 배송 전 물품 가져오기
+        List<Order> orders = orderRepository.findOrderWithDetailsForExcel(
+            storeId, DeliveryStatus.BEFORE_DELIVERY);
+
+        for (Order order : orders) {
+            log.info("order : {}", order.toString());
+        }
+
+        //엑셀에 적기
+        byte[] excelBytes = createExcelBytes(orders);
+
+        updateOrderStatus(orders);
+
+        return excelBytes;
+    }
+
+    @Transactional
+    public void updateOrderStatus(List<Order> orders) {
+        for (Order order : orders) {
+            order.deliverSuccess();
+        }
+    }
+
+    private byte[] createExcelBytes(List<Order> orders) throws IOException {
+        try (Workbook workbook = new XSSFWorkbook();
+            ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
+            Sheet sheet = workbook.createSheet("주문 목록");
+
+            // 스타일 설정
+            CellStyle headerStyle = workbook.createCellStyle();
+            headerStyle.setFillForegroundColor(IndexedColors.GREY_25_PERCENT.getIndex());
+            headerStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+            headerStyle.setAlignment(HorizontalAlignment.CENTER);
+
+            // 헤더 생성
+            Row headerRow = sheet.createRow(0);
+            String[] headers = {"이메일", "주소", "주문 상품 목록", "총 주문금액"};
+
+            for (int i = 0; i < headers.length; i++) {
+                Cell cell = headerRow.createCell(i);
+                cell.setCellValue(headers[i]);
+                cell.setCellStyle(headerStyle);
+            }
+
+            // 데이터 입력
+            int rowNum = 1;
+            for (Order order : orders) {
+                log.info("order : {}", order.toString());
+                Row row = sheet.createRow(rowNum++);
+                row.createCell(0).setCellValue(order.getMember().getName());
+                row.createCell(1).setCellValue(order.getMember().getAddress());
+
+                // OrderList는 이미 페치 조인으로 로딩되어 있어야 함
+                String orderDetails = order.getOrderLists().stream()
+                    .map(item -> String.format("%s (%d개)",
+                        item.getFood().getName(),
+                        item.getCount()))
+                    .collect(Collectors.joining(", "));
+
+                row.createCell(2).setCellValue(orderDetails);
+                row.createCell(3).setCellValue(order.getPrice());
+            }
+
+            // 컬럼 너비 자동 조정
+            for (int i = 0; i < headers.length; i++) {
+                sheet.autoSizeColumn(i);
+            }
+
+            workbook.write(baos);
+            return baos.toByteArray();
+        }
+    }
+
     LocalDate getnextMonday() {
         LocalDate today = LocalDate.now();
         return today.with(TemporalAdjusters.next(DayOfWeek.MONDAY));
@@ -522,13 +616,13 @@ public class SellerServiceImpl implements SellerService {
     private String createFeedBackWithAI(String content) {
         // ChatModel을 통해 AI 호출 및 요약 생성
         String summary = chatClient
-                .prompt()
-                .system("반찬을 시켜먹는 사람들이 쓴 리뷰 입니다. 이 리뷰들을 읽고 " +
-                        "전체적인 피드백을 간단하게 요약 해주세요 " +
-                        "(ex: 무슨 반찬이 너무 짜다 or 무슨 반찬이 양이 적다)")
-                .user(content)
-                .call()
-                .content();
+            .prompt()
+            .system("반찬을 시켜먹는 사람들이 쓴 리뷰 입니다. 이 리뷰들을 읽고 " +
+                "전체적인 피드백을 간단하게 요약 해주세요 " +
+                "(ex: 무슨 반찬이 너무 짜다 or 무슨 반찬이 양이 적다)")
+            .user(content)
+            .call()
+            .content();
         if (summary.isEmpty()) {
             throw new SummeryNotFoundException();
         }
