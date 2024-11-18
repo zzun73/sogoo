@@ -128,31 +128,37 @@ const PlusFoodModal: React.FC<PlusFoodProps> = ({
               />
             ))}
         </div>
-        {foods?.map((food: FoodInfo) => (
-          <div
-            key={food.foodId}
-            draggable
-            onDragStart={(event) => handleDragStart(event, food)}
-            onClick={() => handleAddFood(food)}
-            className="flex items-center w-full h-30 border border-slate-400 rounded mb-3 px-3"
-          >
-            <img
-              src={food.foodImg}
-              alt={`${food.foodName} 이미지`}
-              className="w-20 h-20"
-            />
-            <div className="w-full flex justify-between items-center ms-3">
-              <div className="flex flex-col">
-                <p className="text-xl font-bold">{food.foodName}</p>
-                <p className="text-base text-slate-400">
-                  {food.foodDescription}
-                </p>
+        <div className="flex flex-col w-full h-80 overflow-y-scroll">
+          {foods?.map((food: FoodInfo) => (
+            <div
+              key={food.foodId}
+              draggable
+              onDragStart={(event) => handleDragStart(event, food)}
+              onClick={() => handleAddFood(food)}
+              className="flex items-center w-full h-30 border border-slate-400 rounded mb-3 px-3"
+            >
+              <img
+                src={food.foodImg}
+                alt={`${food.foodName} 이미지`}
+                className="w-20 h-20"
+              />
+              <div className="w-full flex justify-between items-center ms-3">
+                <div className="flex flex-col">
+                  <p className="text-xl font-bold">{food.foodName}</p>
+                  <p className="text-base text-slate-400">
+                    {food.foodDescription}
+                  </p>
+                </div>
+                <p>{food.foodPrice}원</p>
               </div>
-              <p>{food.foodPrice}원</p>
             </div>
-          </div>
-        ))}
-        <Button variant="contained" onClick={onClose}>
+          ))}
+        </div>
+        <Button
+          variant="contained"
+          onClick={onClose}
+          sx={{ marginTop: "20px" }}
+        >
           등록완료
         </Button>
       </Box>
