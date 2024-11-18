@@ -87,8 +87,10 @@ const FoodReviews = () => {
 
   if (!foodReviews || !foodReviews.length) {
     return (
-      <div>
-        <FoodSelect selectedId={selectedFoodId} handleClick={handleClick} />
+      <div className="w-full flex flex-col justify-center items-center">
+        <div className="w-full">
+          <FoodSelect selectedId={selectedFoodId} handleClick={handleClick} />
+        </div>
         <div className="flex flex-col gap-y-5 min-h-80 mt-5 w-11/12 justify-center items-center">
           <p className="text-lg font-bold">리뷰가 존재하지 않습니다.</p>
         </div>
