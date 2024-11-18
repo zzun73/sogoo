@@ -1,6 +1,10 @@
 import { useEffect, useState } from "react";
 import StoreCard from "./StoreCard";
-import { useGetRecommendedStore, useGetStoreCounts, useGetStoreList } from "../../../queries/queries";
+import {
+  useGetRecommendedStore,
+  useGetStoreCounts,
+  useGetStoreList,
+} from "../../../queries/queries";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import useRootStore from "../../../stores";
@@ -14,7 +18,7 @@ const StoreList: React.FC = () => {
   const [nowStorePage, setNowStorePage] = useState<number>(1);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const { searchKeyword, setSearchKeyword } = useRootStore();
+  const { searchKeyword, setSearchKeyword, memberInfo } = useRootStore();
 
   const stores = useGetStoreList(nowStorePage);
 
@@ -24,7 +28,12 @@ const StoreList: React.FC = () => {
 
   const [searchInfo, setSearchInfo] = useState<string>(searchKeyword);
 
-  const { data: recommendedStores, isLoading, isFetched, error } = useGetRecommendedStore();
+  const {
+    data: recommendedStores,
+    isLoading,
+    isFetched,
+    error,
+  } = useGetRecommendedStore();
 
   useEffect(() => {
     if (isFetched && !error && recommendedStores) {
@@ -69,13 +78,13 @@ const StoreList: React.FC = () => {
 
   return (
     <div className="w-full flex flex-col justify-center items-center">
-      <RecommendStoreModal
+      {memberInfo?.role === "BUYER" && <RecommendStoreModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         recommendedStores={recommendedStores}
         error={error}
         isLoading={isLoading}
-      />
+      />}
       <div className="w-11/12 flex justify-between items-center mb-10">
         <div className="w-5/6 flex justify-center items-center">
           <TextField
