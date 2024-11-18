@@ -1,10 +1,18 @@
 package com.ssafy.c107.main.domain.members.controller;
 
 import com.ssafy.c107.main.domain.members.dto.CustomUserDetails;
+import com.ssafy.c107.main.domain.members.exception.CreateExcelException;
 import com.ssafy.c107.main.domain.members.exception.InvalidMemberRoleException;
 import com.ssafy.c107.main.domain.members.service.SellerService;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -84,7 +92,8 @@ public class SellerController {
     }
 
     @GetMapping("/detail-review/count/{storeId}/{foodId}")
-    public ResponseEntity<?> getProductReviewCount(@PathVariable Long storeId, @PathVariable Long foodId,
+    public ResponseEntity<?> getProductReviewCount(@PathVariable Long storeId,
+        @PathVariable Long foodId,
         @AuthenticationPrincipal CustomUserDetails customUserDetails) {
         if (!customUserDetails.getUserRole().getRole().equals("SELLER")) {
             throw new InvalidMemberRoleException();
@@ -111,5 +120,37 @@ public class SellerController {
         }
         Long userId = customUserDetails.getUserId();
         return ResponseEntity.ok(sellerService.getAllFood(storeId, userId));
+    }
+
+    @GetMapping("/download/{storeId}")
+    public ResponseEntity<?> downloadExcel(@PathVariable Long storeId,
+        @AuthenticationPrincipal CustomUserDetails customUserDetails) {
+        if (!customUserDetails.getUserRole().getRole().equals("SELLER")) {
+            throw new InvalidMemberRoleException();
+        }
+        Long userId = customUserDetails.getUserId();
+
+        byte[] excelBytes;
+
+        try {
+            excelBytes = sellerService.downloadExcel(storeId, userId);
+        } catch (Exception e) {
+            throw new CreateExcelException();
+        }
+
+        // 현재 날짜를 파일명에 포함
+        String fileName = "delivery_orders_" +
+            LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss")) +
+            ".xlsx";
+
+        // 한글 파일명을 위한 인코딩
+        String encodedFileName = URLEncoder.encode(fileName, StandardCharsets.UTF_8);
+
+        // HTTP 헤더 설정
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+        headers.setContentDispositionFormData("attachment", encodedFileName);
+
+        return new ResponseEntity<>(excelBytes, headers, HttpStatus.OK);
     }
 }

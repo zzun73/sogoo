@@ -2,6 +2,7 @@ package com.ssafy.c107.main.common.exception;
 
 import com.ssafy.c107.main.common.aws.InvalidS3Exception;
 import com.ssafy.c107.main.domain.food.exception.FoodNotFoundException;
+import com.ssafy.c107.main.domain.members.exception.CreateExcelException;
 import com.ssafy.c107.main.domain.members.exception.InvalidMemberRoleException;
 import com.ssafy.c107.main.domain.members.exception.MemberExistException;
 import com.ssafy.c107.main.domain.members.exception.MemberNotFoundException;
@@ -144,6 +145,11 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(AlreadyInSubscribeCancelScheduledStatusException.class)
     public ResponseEntity<String> handleAlreadyInSubscribeCancelScheduledStatusException(AlreadyInSubscribeCancelScheduledStatusException e) {
+        return ResponseEntity.status(e.getStatus()).body(e.getMessage());
+    }
+
+    @ExceptionHandler(CreateExcelException.class)
+    public ResponseEntity<String> handleCreateExcelException(CreateExcelException e) {
         return ResponseEntity.status(e.getStatus()).body(e.getMessage());
     }
 }

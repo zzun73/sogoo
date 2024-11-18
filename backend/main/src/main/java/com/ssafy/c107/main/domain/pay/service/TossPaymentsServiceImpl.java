@@ -6,6 +6,7 @@ import com.ssafy.c107.main.domain.food.repository.FoodRepository;
 import com.ssafy.c107.main.domain.members.entity.Member;
 import com.ssafy.c107.main.domain.members.exception.MemberNotFoundException;
 import com.ssafy.c107.main.domain.members.repository.MemberRepository;
+import com.ssafy.c107.main.domain.order.entity.DeliveryStatus;
 import com.ssafy.c107.main.domain.order.entity.Order;
 import com.ssafy.c107.main.domain.order.entity.OrderList;
 import com.ssafy.c107.main.domain.order.entity.OrderType;
@@ -78,12 +79,13 @@ public class TossPaymentsServiceImpl implements TossPaymentsService {
 
         // 주문 생성
         Order savedOrder = orderRepository.save(
-                Order.builder()
-                        .orderType(OrderType.FOOD)
-                        .price(payDto.getAmount())
-                        .member(member)
-                        .store(store)
-                        .build()
+            Order.builder()
+                .orderType(OrderType.FOOD)
+                .price(payDto.getAmount())
+                .member(member)
+                .deliveryStatus(DeliveryStatus.BEFORE_DELIVERY)
+                .store(store)
+                .build()
         );
 
         // 주문 목록 생성
