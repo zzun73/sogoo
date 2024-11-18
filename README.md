@@ -32,6 +32,7 @@
 <img src="https://img.shields.io/badge/Visual Studio Code-007ACC?style=for-the-badge&logo=Visual Studio Code&logoColor=white">
 <img src="https://img.shields.io/badge/Vite_5.3.1-646CFF?style=for-the-badge&logo=Vite&logoColor=white"> 
 <img src="https://img.shields.io/badge/React_18.3.1-61DAFB?style=for-the-badge&logo=React&logoColor=white"> 
+<img src="https://img.shields.io/badge/React Query_5.59.16-FF4154?style=for-the-badge&logo=React Query&logoColor=white"> 
 <img src="https://img.shields.io/badge/Typescript_5.2.2-3178C6?style=for-the-badge&logo=Typescript&logoColor=white">
 <img src="https://img.shields.io/badge/Tailwind CSS_3.4.4-06B6D4?style=for-the-badge&logo=Tailwind CSS&logoColor=white"> 
 <img src="https://img.shields.io/badge/zustand-000000?style=for-the-badge&logo=&logoColor=white">
