@@ -58,10 +58,13 @@ public class Member extends BaseEntity {
     @Column(nullable = false)
     private String uuid;
 
+    @Column(nullable = false)
+    private int range;
+
     @Builder
     public Member(String name, String email, String password,
                   String phoneNumber, String birth, String address, WithDrawalStatus withDrawalStatus,
-                  MemberRole role) {
+                  MemberRole role, int range) {
         this.name = name;
         this.email = email;
         this.password = password;
@@ -70,6 +73,7 @@ public class Member extends BaseEntity {
         this.address = address;
         this.withDrawalStatus = withDrawalStatus;
         this.role = role;
+        this.range = range;
     }
 
     public void updateId(Long id) {
