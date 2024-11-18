@@ -68,6 +68,7 @@ public class MemberController {
             .email(signUpDto.getEmail())
             .withDrawalStatus(WithDrawalStatus.ACTIVE)
             .address(signUpDto.getAddress())
+            .range(signUpDto.getRange())
             .build());
         return ResponseEntity.ok("회원가입 완료핑");
     }

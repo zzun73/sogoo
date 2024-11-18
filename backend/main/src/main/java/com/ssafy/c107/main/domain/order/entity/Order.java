@@ -53,6 +53,13 @@ public class Order extends BaseEntity {
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     List<OrderList> orderLists;
 
+    public void setMember(Member member) {
+        this.member = member;
+        if (member.getOrders().contains(this)) {
+            member.getOrders().add(this);
+        }
+    }
+
     public void addOrderList(OrderList orderList) {
         this.orderLists.add(orderList);
         if (orderList.getOrder() != this) {
