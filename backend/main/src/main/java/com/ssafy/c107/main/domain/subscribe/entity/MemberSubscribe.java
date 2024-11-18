@@ -4,9 +4,7 @@ import com.ssafy.c107.main.common.entity.BaseEntity;
 import com.ssafy.c107.main.domain.members.entity.Member;
 import jakarta.persistence.*;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -54,8 +52,8 @@ public class MemberSubscribe extends BaseEntity {
     public void completePayment() {
         this.status = SubscribeStatus.SUBSCRIBE;
         this.paymentStatus = PaymentStatus.COMPLETE;
-        this.endDate = LocalDateTime.of(LocalDate.now().plusDays(31), LocalTime.of(6, 0)); // 결제일 기준 + 31일 오전 6시
-//        this.endDate = LocalDateTime.now().plusMinutes(1);
+//        this.endDate = LocalDateTime.of(LocalDate.now().plusDays(31), LocalTime.of(6, 0)); // 결제일 기준 + 31일 오전 6시
+        this.endDate = LocalDateTime.now().plusSeconds(30);
     }
 
     public void cancelSubscription() {
