@@ -18,7 +18,7 @@ import { toast } from "react-toastify";
 
 // 정규식 패턴 정의
 const emailPattern = /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/;
-const phonePattern = /^01([0|1|6|7|8|9])(\d{3,4})(\d{4})$/;
+const phonePattern = /^01([0|1|6|7|8|9])(\d{4})(\d{4})$/;
 
 const SignUpBox: React.FC = () => {
   const navigate = useNavigate();
