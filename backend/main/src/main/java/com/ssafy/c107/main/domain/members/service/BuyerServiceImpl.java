@@ -12,6 +12,7 @@ import com.ssafy.c107.main.domain.members.entity.Member;
 import com.ssafy.c107.main.domain.members.entity.WithDrawalStatus;
 import com.ssafy.c107.main.domain.members.exception.MemberNotFoundException;
 import com.ssafy.c107.main.domain.members.repository.MemberRepository;
+import com.ssafy.c107.main.domain.order.entity.DeliveryStatus;
 import com.ssafy.c107.main.domain.order.entity.Order;
 import com.ssafy.c107.main.domain.order.entity.OrderList;
 import com.ssafy.c107.main.domain.order.repository.OrderListRepository;
@@ -104,15 +105,16 @@ public class BuyerServiceImpl implements BuyerService {
             for (OrderList orderList : orderLists) {
                 Food food = orderList.getFood();
                 foodTrades.add(FoodTradesResponse
-                        .builder()
-                        .foodId(food.getId())
-                        .foodName(food.getName())
-                        .foodImg(fileService.getAppropriateFileUrl(food.getImg()))
-                        .price(orderList.getCount() * food.getPrice())
-                        .storeId(food.getStore().getId())
-                        .storeName(food.getStore().getName())
-                        .orderStatus("배송완료")
-                        .build());
+                    .builder()
+                    .foodId(food.getId())
+                    .foodName(food.getName())
+                    .foodImg(fileService.getAppropriateFileUrl(food.getImg()))
+                    .price(orderList.getCount() * food.getPrice())
+                    .storeId(food.getStore().getId())
+                    .storeName(food.getStore().getName())
+                    .orderStatus(order.getDeliveryStatus() == DeliveryStatus.BEFORE_DELIVERY ? "배송중"
+                        : "배송완료")
+                    .build());
 
                 //주문 목록중에 리뷰를 판별해서 넣어줌
                 Optional<Review> or = reviewRepository.findByOrderList_Id(orderList.getId());
