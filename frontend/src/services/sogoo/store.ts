@@ -65,4 +65,11 @@ export default {
   getMenuRankList: async (storeId: StoreId) => {
     return axios.get<MenuRankList>(`/member/seller/store-review/${storeId}`);
   },
+
+  /**
+   * 사용자 맞춤 추천 매장
+   */
+  getRecommendedStores: async () => {
+    return axios.get<RecommendedStoresArray>("/store/recommend");
+  },
 };

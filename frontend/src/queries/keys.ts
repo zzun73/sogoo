@@ -5,6 +5,7 @@ const keys = {
   food: () => [keys.all, "food"],
   subscribe: () => [keys.all, "subscribe"],
   review: () => [keys.all, "review"],
+  recommend: () => [keys.all, "recommend"],
   checkEmail: (email: Email) => [...keys.member(), "email", email],
   checkSeller: (businessNumber: BusinessNumber) => [
     ...keys.member(),
@@ -110,6 +111,7 @@ const keys = {
     "menuRankList",
     storeId,
   ],
+  getRecommendedStores: () => [...keys.store(), "recommendedStores"],
 };
 
 export default keys;

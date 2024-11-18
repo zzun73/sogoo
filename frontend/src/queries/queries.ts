@@ -383,6 +383,18 @@ const useGetMenuRankList = (storeId: StoreId) => {
   return rankList;
 };
 
+const useGetRecommendedStore = () => {
+  const { data, isLoading, isFetched, error } = useQuery({
+    queryKey: keys.getRecommendedStores(),
+    queryFn: () => sogoo.getRecommendedStores(),
+  });
+
+  const recommendedStores = data
+    ? { data: data.data.stores, isLoading, isFetched, error }
+    : { data: null, isLoading, isFetched, error };
+  return recommendedStores;
+};
+
 export {
   useCheckEmail,
   useCheckSeller,
@@ -412,4 +424,5 @@ export {
   useGetBuyerSelectedReviewCounts,
   useGetSellerMenuReviewCounts,
   useGetMenuRankList,
+  useGetRecommendedStore,
 };
