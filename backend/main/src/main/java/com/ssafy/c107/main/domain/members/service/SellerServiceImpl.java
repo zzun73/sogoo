@@ -513,7 +513,7 @@ public class SellerServiceImpl implements SellerService {
     }
 
     @Override
-    @Transactional(readOnly = true)
+    @Transactional
     public byte[] downloadExcel(Long storeId, Long userId) throws IOException {
         memberValidator.validStoreAndMember(storeId, userId);
 

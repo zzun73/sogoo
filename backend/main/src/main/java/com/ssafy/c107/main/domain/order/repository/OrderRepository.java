@@ -47,7 +47,7 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
         + "JOIN FETCH o.orderLists ol "
         + "JOIN FETCH ol.food "
         + "WHERE o.store.id = :storeId "
-        + "AND o.deliveryStatus = :statuss")
+        + "AND o.deliveryStatus = :status")
     List<Order> findOrderWithDetailsForExcel(@Param("storeId") Long storeId,
         @Param("status") DeliveryStatus status);
 }
