@@ -132,9 +132,12 @@ public class SellerController {
 
         byte[] excelBytes;
 
+        log.info("userId : {}", userId);
+
         try {
             excelBytes = sellerService.downloadExcel(storeId, userId);
         } catch (Exception e) {
+            log.info("error message : {}", e.getMessage());
             throw new CreateExcelException();
         }
 

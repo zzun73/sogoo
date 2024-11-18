@@ -517,6 +517,8 @@ public class SellerServiceImpl implements SellerService {
     public byte[] downloadExcel(Long storeId, Long userId) throws IOException {
         memberValidator.validStoreAndMember(storeId, userId);
 
+        log.info("들어옴!");
+
         //해당 가게의 배송 전 물품 가져오기
         List<Order> orders = orderRepository.findOrderWithDetailsForExcel(
             storeId, DeliveryStatus.BEFORE_DELIVERY);
