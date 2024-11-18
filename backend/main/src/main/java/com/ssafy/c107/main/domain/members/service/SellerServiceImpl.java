@@ -521,6 +521,10 @@ public class SellerServiceImpl implements SellerService {
         List<Order> orders = orderRepository.findOrderWithDetailsForExcel(
             storeId, DeliveryStatus.BEFORE_DELIVERY);
 
+        for (Order order : orders) {
+            log.info("order : {}", order.toString());
+        }
+
         //엑셀에 적기
         byte[] excelBytes = createExcelBytes(orders);
 
@@ -560,6 +564,7 @@ public class SellerServiceImpl implements SellerService {
             // 데이터 입력
             int rowNum = 1;
             for (Order order : orders) {
+                log.info("order : {}", order.toString());
                 Row row = sheet.createRow(rowNum++);
                 row.createCell(0).setCellValue(order.getMember().getName());
                 row.createCell(1).setCellValue(order.getMember().getAddress());
