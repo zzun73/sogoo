@@ -48,7 +48,7 @@ const RecommendStoreModal = ({
             {recommendedStores?.map((store: RecommendedStore) => (
               <div
                 key={store.storeId}
-                className="flex items-start space-x-4 p-4 border rounded-lg bg-white hover:shadow-md hover:bg-slate-50 transition-shadow cursor-pointer"
+                className="flex items-start space-x-4 p-4 border rounded-lg bg-white hover:shadow-lg hover:bg-slate-50 transition-shadow cursor-pointer"
                 onClick={() => goToStoreDetail(store.storeId)}
               >
                 <img
