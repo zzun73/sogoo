@@ -17,7 +17,12 @@ interface CustomCarouselProps {
   autoplaySpeed?: number;
 }
 
-const CustomCarousel: React.FC<CustomCarouselProps> = ({ items, autoplay = true, speed = 500, autoplaySpeed = 4000 }) => {
+const CustomCarousel: React.FC<CustomCarouselProps> = ({
+  items,
+  autoplay = true,
+  speed = 500,
+  autoplaySpeed = 4000,
+}) => {
   const settings = {
     dots: true,
     infinite: true,
@@ -34,8 +39,12 @@ const CustomCarousel: React.FC<CustomCarouselProps> = ({ items, autoplay = true,
     <div className="relative">
       <Slider {...settings}>
         {items.map((item) => (
-          <div key={item.id} className="relative h-[650px]">
-            <img src={item.image} alt={item.title} className="w-full h-full object-cover" />
+          <div key={item.id} className="relative h-[700px]">
+            <img
+              src={item.image}
+              alt={item.title}
+              className="w-full h-full object-cover"
+            />
             {item.description && (
               <div className="absolute bottom-0 left-0 right-0 p-5 bg-gradient-to-t from-black/70 to-transparent text-white">
                 <h2 className="text-xl font-bold mb-2">{item.title}</h2>
