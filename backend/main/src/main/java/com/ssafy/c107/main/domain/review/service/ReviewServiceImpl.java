@@ -40,6 +40,8 @@ import org.springframework.web.client.RestTemplate;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -325,9 +327,15 @@ public class ReviewServiceImpl implements ReviewService {
     // OpenAI 응답에서 긍정 비율을 추출하는 메서드 예시
     private Double extractPositiveRateFromSummary(String summary) {
         try {
-            // 예: "긍정: 92.3%" 형태의 문자열에서 숫자 부분만 추출
-            String percentageString = summary.replaceAll("[^0-9\\.]", ""); // 소수점을 포함한 숫자만 남김
-            return Double.parseDouble(percentageString);
+            // 예: "긍정: 92.3%" 형태의 문자열에서 숫자 부분만 추출하도록 수정
+            Pattern pattern = Pattern.compile("긍정:\\s*(\\d+(\\.\\d+)?)%"); // "긍정: 숫자%" 형식을 찾는 정규식
+            Matcher matcher = pattern.matcher(summary);
+            if (matcher.find()) {
+                String percentageString = matcher.group(1);
+                return Double.parseDouble(percentageString);
+            } else {
+                throw new NumberFormatException("긍정 비율을 찾을 수 없습니다.");
+            }
         } catch (NumberFormatException e) {
             log.error("긍정 비율 파싱 중 오류 발생: {}", e.getMessage());
             throw new ReviewAnalysisProcessingException(); // 적절한 예외를 던져서 문제 발생 시 처리
