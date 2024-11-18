@@ -63,6 +63,6 @@ public class StoreController {
     @GetMapping("/recommend")
     public ResponseEntity<?> getStoreRecommend(@AuthenticationPrincipal CustomUserDetails customUserDetails) {
         Long userId = customUserDetails.getUserId();
-        return null;
+        return ResponseEntity.ok(storeService.getStoreRecommend());
     }
 }
