@@ -166,4 +166,16 @@ public class StoreServiceImpl implements StoreService {
             .stores(result)
             .build();
     }
+
+    @Override
+    public StoreRecommendResponse getStoreRecommendById(Long id) {
+        //사용자의 연령대 가져오기
+        Member member = memberRepository.findById(id).orElseThrow(MemberNotFoundException::new);
+        int memberRange = member.getRange();
+
+        //해당 연령대가 많이 구매하는 가게 목록 가져오기
+
+        //3개 return
+        return null;
+    }
 }

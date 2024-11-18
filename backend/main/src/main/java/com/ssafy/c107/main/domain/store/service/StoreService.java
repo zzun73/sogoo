@@ -20,4 +20,6 @@ public interface StoreService {
     StoreCountResponse getStoreCount();
 
     StoreRecommendResponse getStoreRecommend();
+
+    StoreRecommendResponse getStoreRecommendById(Long id);
 }
