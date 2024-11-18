@@ -33,6 +33,10 @@ public interface MemberSubscribeRepository extends JpaRepository<MemberSubscribe
 
     Optional<MemberSubscribe> findByMember_IdAndSubscribe_Id(Long memberId, Long subscribeId);
 
+    @Query("SELECT ms FROM MemberSubscribe ms " +
+            "JOIN FETCH ms.member " +
+            "JOIN FETCH ms.subscribe " +
+            "WHERE ms.status = :status AND ms.endDate < :endDate")
     List<MemberSubscribe> findAllByStatusAndEndDateBefore(@Param("status") SubscribeStatus status, @Param("endDate") LocalDateTime endDate);
 
     Optional<MemberSubscribe> findByIdAndMember_Id(Long memberSubscribeId, Long memberId);

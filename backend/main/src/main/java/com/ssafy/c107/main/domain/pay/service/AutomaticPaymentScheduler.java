@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -22,18 +23,20 @@ public class AutomaticPaymentScheduler {
     private final MemberSubscribeRepository memberSubscribeRepository;
     private final TossPaymentsService tossPaymentsService;
 
-    @Scheduled(cron = "0 0 7 * * *")
+    //    @Scheduled(cron = "0 0 7 * * *")
+    @Scheduled(cron = "0 */1 * * * *") // 매 1분마다 실행
     public void processScheduledBilling() {
         log.info("============Starting scheduled billing============");
 
         // 구독 상태가 SUBSCRIBE 종료 날짜(endDate)가 지난 구독 목록을 조회
         List<MemberSubscribe> memberSubscribes = memberSubscribeRepository.findAllByStatusAndEndDateBefore(
                 SubscribeStatus.SUBSCRIBE, LocalDateTime.now());
-
+        log.info("memberSubscribes.size  :{}", memberSubscribes.size());
         for (MemberSubscribe memberSubscribe : memberSubscribes) {
             // 각 구독의 결제 상태가 NECESSARY인지 확인 (결제가 필요한 상태만 처리)
             if (memberSubscribe.getPaymentStatus() == PaymentStatus.NECESSARY) {
                 try {
+                    log.info("memberSubscribe.getId(): {}", memberSubscribe.getId());
                     // 자동 결제 서비스 호출
                     boolean billingSuccess = tossPaymentsService.executeAutoBilling(
                             memberSubscribe.getMember().getId(),

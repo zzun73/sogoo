@@ -26,7 +26,7 @@ public class FileController {
     // 파일 다운로드 URL 반환
     @GetMapping("/{filename}")
     public ResponseEntity<UrlResource> downloadFile(@PathVariable String filename) throws MalformedURLException {
-        UrlResource urlResource = new UrlResource(fileService.getFileUrl(filename));
+        UrlResource urlResource = new UrlResource(fileService.getOriginalFileUrl(filename));
         String contentDisposition = "attachment; filename=\"" + filename + "\"";
 
         return ResponseEntity.ok()
