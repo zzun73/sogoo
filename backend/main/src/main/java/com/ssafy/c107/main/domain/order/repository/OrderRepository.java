@@ -39,8 +39,6 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
     List<Order> findByOrderTypeAndCreatedAtToday(@Param("orderType") OrderType orderType,
         @Param("storeId") Long storeId);
 
-    List<Order> findByStore_IdAndDeliveryStatus(Long storeId, DeliveryStatus deliveryStatus);
-
     @Query("SELECT DISTINCT o "
         + "FROM Order o "
         + "JOIN FETCH o.member m "
