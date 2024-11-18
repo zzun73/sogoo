@@ -561,7 +561,7 @@ public class SellerServiceImpl implements SellerService {
             int rowNum = 1;
             for (Order order : orders) {
                 Row row = sheet.createRow(rowNum++);
-                row.createCell(0).setCellValue(order.getMember().getName());
+                row.createCell(0).setCellValue(order.getMember().getEmail());
                 row.createCell(1).setCellValue(order.getMember().getAddress());
 
                 // OrderList는 이미 페치 조인으로 로딩되어 있어야 함
