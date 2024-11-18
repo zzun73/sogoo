@@ -74,4 +74,14 @@ interface MenuRankList {
   negativeLankList: FoodName[];
 }
 
+interface RecommendedStore {
+  storeId: number;
+  storeName: string;
+  storeDescription: string;
+  storeImg: string;
+}
+interface RecommendedStoresArray {
+  stores: RecommendedStore[];
+}
+
 type RootState = MemberStore & CartStore & StoreStore & SubscribeStore;

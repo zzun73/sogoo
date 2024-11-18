@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import StoreCard from "./StoreCard";
-import { useGetStoreCounts, useGetStoreList } from "../../../queries/queries";
+import { useGetRecommendedStore, useGetStoreCounts, useGetStoreList } from "../../../queries/queries";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import useRootStore from "../../../stores";
@@ -24,11 +24,13 @@ const StoreList: React.FC = () => {
 
   const [searchInfo, setSearchInfo] = useState<string>(searchKeyword);
 
+  const { data: recommendedStores, isLoading, isFetched, error } = useGetRecommendedStore();
+
   useEffect(() => {
-    setTimeout(() => {
-      setIsModalOpen((prev) => !prev);
-    }, 3000);
-  }, []);
+    if (isFetched && !error && recommendedStores) {
+      setIsModalOpen(true);
+    }
+  }, [isFetched, error, recommendedStores]);
 
   const handleSearch = () => {
     if (searchInfo === "") {
@@ -70,6 +72,9 @@ const StoreList: React.FC = () => {
       <RecommendStoreModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
+        recommendedStores={recommendedStores}
+        error={error}
+        isLoading={isLoading}
       />
       <div className="w-11/12 flex justify-between items-center mb-10">
         <div className="w-5/6 flex justify-center items-center">
