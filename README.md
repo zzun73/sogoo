@@ -27,7 +27,6 @@
 <img src="https://img.shields.io/badge/PostgreSQL-blue?style=for-the-badge&logo=PostgreSQL&logoColor=white">
 <img src="https://img.shields.io/badge/Elasticsearch-005571?style=for-the-badge&logo=Elasticsearch&logoColor=white">
 
-
 ### **Frontend**
 
 <img src="https://img.shields.io/badge/Visual Studio Code-007ACC?style=for-the-badge&logo=Visual Studio Code&logoColor=white">
@@ -66,7 +65,6 @@
 - [기능명세서](./docs/기능명세서.md)
 - [와이어프레임](./docs/와이어프레임.md)
 - [API명세서](./docs/API명세서.md)
-- [블록체인명세서](./docs/블록체인명세서.md)
 - [ERD](./docs/ERD.md)
 - [목업](./docs/목업.md)
 - [아키텍처](./docs/아키텍처.md)
@@ -74,8 +72,8 @@
 ## 🍴 프로젝트 결과물
 
 - [포팅매뉴얼](./exec/)
-- [중간발표자료](./docs/꼬북집_중간발표_PPT.pdf)
-- [최종발표자료](./docs/꼬북집_최종발표_PPT.pdf)
+- [중간발표자료](./docs/SSAFY_11기_자율_C107_중간발표.pdf)
+- [최종발표자료](./docs/SSAFY_11기_자율_C107_최종발표.pdf)
 
 ## 🍴 기능 및 화면 구성
 
