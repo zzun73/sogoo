@@ -138,6 +138,21 @@ public class StoreServiceImpl implements StoreService {
 
         Collections.shuffle(stores);
 
+        if (stores.size() < 3) {
+            List<StoreDetailDto> result = stores.subList(0, stores.size()).stream().map(store -> StoreDetailDto
+                .builder()
+                .storeId(store.getId())
+                .storeImg(store.getImg())
+                .storeDescription(store.getDescription())
+                .storeName(store.getName())
+                .build()).toList();
+
+            return StoreRecommendResponse
+                .builder()
+                .stores(result)
+                .build();
+        }
+        
         List<StoreDetailDto> result = stores.subList(0, 3).stream().map(store -> StoreDetailDto
             .builder()
             .storeId(store.getId())
