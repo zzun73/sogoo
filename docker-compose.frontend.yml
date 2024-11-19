@@ -1,0 +1,20 @@
+services:
+  frontend:
+    image: zzun73/sogoo-front:latest
+    container_name: sogoo-front
+    ports:
+      - "5173:80" 
+    env_file: /home/ubuntu/sogoo/.env
+    networks:
+      - sogoo-network
+    restart: always
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+networks:
+  sogoo-network:
+    driver: bridge
