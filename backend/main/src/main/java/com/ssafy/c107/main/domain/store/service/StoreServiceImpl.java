@@ -194,6 +194,7 @@ public class StoreServiceImpl implements StoreService {
                 () -> new TreeMap<Long, Long>(Comparator.reverseOrder()),  // 타입 명시
                 Collectors.counting()
             ));
+        Store unni = storeRepository.findById(1L).orElseThrow(StoreNotFoundException::new);
 
         // 가게가 3개 미만인 경우 전체 가게 목록을 가져오기
         if (storeOrderCounts.size() < 3) {
@@ -213,7 +214,14 @@ public class StoreServiceImpl implements StoreService {
                     .stores(result)
                     .build();
             } else {
-                for (Store store : allStores.subList(0, 3)) {
+                result.add(StoreDetailDto
+                    .builder()
+                    .storeId(unni.getId())
+                    .storeImg(unni.getImg())
+                    .storeDescription(unni.getDescription())
+                    .storeName(unni.getName())
+                    .build());
+                for (Store store : allStores.subList(0, 2)) {
                     result.add(StoreDetailDto
                         .builder()
                         .storeId(store.getId())
@@ -225,7 +233,7 @@ public class StoreServiceImpl implements StoreService {
             }
         } else {
             Map<Long, Long> top3StoreOrderCounts = storeOrderCounts.entrySet().stream()
-                .limit(3)
+                .limit(2)
                 .collect(Collectors.toMap(
                     Map.Entry::getKey,
                     Map.Entry::getValue,
@@ -234,6 +242,13 @@ public class StoreServiceImpl implements StoreService {
                 ));
 
             //상위 3개 가게 정보 가져오기
+            result.add(StoreDetailDto
+                .builder()
+                .storeId(unni.getId())
+                .storeName(unni.getName())
+                .storeDescription(unni.getDescription())
+                .storeImg(unni.getImg())
+                .build());
             for (Long storeId : top3StoreOrderCounts.keySet()) {
                 Store store = storeRepository.findById(storeId)
                     .orElseThrow(StoreNotFoundException::new);
